@@ -98,7 +98,7 @@
         data: () => ({
             cdnURL: config.cdnURL,
             changeProgress: false,
-            validate: false,
+            validated: false,
             departments: [],
             editedItem: {
                 id: null,
@@ -167,3 +167,10 @@
         }
     }
 </script>
+
+<style scoped>
+.file-link{
+    cursor: pointer;
+    text-decoration: underline;
+}
+</style>

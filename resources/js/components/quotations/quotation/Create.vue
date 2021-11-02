@@ -24,7 +24,7 @@
                                             item-text="name"
                                             prepend-icon="mdi-alpha-d-circle"
                                             label="Department"
-                                            placeholder="Select brand ..."
+                                            placeholder="Select department ..."
                                             required
                                             :rules="rules"
                                             solo
@@ -53,7 +53,7 @@
                                             <CIcon name="cil-check-circle"/>
                                             Submit
                                         </CButton>
-                                        <CButton size="sm" color="danger" :to="'/quotations'">
+                                        <CButton size="sm" color="danger" :to="'/quotations/'">
                                             <CIcon name="cil-ban"/>
                                             Cancel
                                         </CButton>

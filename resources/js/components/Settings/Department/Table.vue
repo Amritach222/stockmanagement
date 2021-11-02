@@ -73,6 +73,8 @@
                                                 <v-select
                                                     v-model="editedItem.head_of_department"
                                                     :items="users"
+                                                    item-value="id"
+                                                    item-text="name"
                                                     label="Head Of Department"
                                                     outlined
                                                 ></v-select>
@@ -210,7 +212,7 @@ export default {
             }
         },
         async loadUser() {
-            let res = await ApiServices.selectList('user');
+            let res = await ApiServices.userIndex('user');
             if (res.success === true) {
                 this.tableLoad = false;
                 this.users = res.data;

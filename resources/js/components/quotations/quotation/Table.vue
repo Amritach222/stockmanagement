@@ -65,25 +65,34 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.link="{ item }">
-<!--                <img :src=cdnURL+item.link-->
-<!--                     v-if="item.link"-->
-<!--                     style="width: 50px; height: 50px; object-fit: cover;"-->
-<!--                     v-on:click="openImage(item.link)"/>-->
-
-<!--                <img :src="baseURL+'images/placeholder.jpg'"-->
-<!--                     v-else-->
-<!--                     style="width: 50px; height: 50px; object-fit: cover"-->
-<!--                />-->
+                <CButton size="sm" color="primary" class="file-link" v-if="item.link"
+                       v-on:click="openImage(item.link)"> Open
+                    File
+                </CButton>
+                <p v-else>
+                    No files added.
+                </p>
             </template>
             <template v-slot:item.department_id="{ item }">
                 {{ item.department.name }}
             </template>
-<!--            <template v-slot:item.category="{ item }">-->
-<!--                {{ item.category.name }}-->
-<!--            </template>-->
+                        <template v-slot:item.status="{ item }">
+                            <CButton size="sm" color="secondary" v-if="item.status == 'Pending'">
+                                {{ item.status }}
+                            </CButton>
+                            <CButton size="sm" color="warning" v-else-if="item.status == 'Reviewed'">
+                                {{ item.status }}
+                            </CButton>
+                            <CButton size="sm" color="success" v-else-if="item.status == 'Approved'">
+                                {{ item.status }}
+                            </CButton>
+                            <CButton size="sm" color="danger" v-else-if="item.status == 'Rejected'">
+                                {{ item.status }}
+                            </CButton>
+                        </template>
             <template v-slot:item.actions="{ item }">
                 <router-link
-                    :to="'/departments/edit/'+item.id"
+                    :to="'/quotations/edit/'+item.id"
                 >
                     <v-icon
                         small
@@ -122,35 +131,21 @@ export default {
         dialogDelete: false,
         headers: [
             {text: 'Id', align: 'start', sortable: true, value: 'id'},
+            {text: 'Reference No.', value: 'reference_no'},
             {text: 'Department', value: 'department_id'},
-            {text: 'Image', value: 'link', sortable: false},
+            {text: 'File', value: 'link', sortable: false},
+            {text: 'Status', value: 'status', sortable: false},
             // {text: 'Brand', value: 'brand', sortable: false},
             // {text: 'Category', value: 'category', sortable: false},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         quotations: [],
-        editedIndex: -1,
-        editedItem: {
-            id: null,
-            department_id: '',
-            file: [],
-            note: '',
-        },
-        defaultItem: {
-            id: null,
-            department_id: '',
-            file: [],
-            note: '',
-        },
-        rules: [
-            value => !!value || 'Required.',
-        ],
         tableLoad: false
     }),
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Add Department' : 'Edit Department'
+            return this.editedIndex === -1 ? 'Add Quotation' : 'Edit Quotation'
         },
     },
 
@@ -185,7 +180,7 @@ export default {
         },
 
         deleteItem(item) {
-            this.editedIndex = this.products.indexOf(item)
+            this.editedIndex = this.quotations.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
         },
@@ -219,7 +214,12 @@ export default {
 }
 </script>
 
-
 <style scoped>
-
+.file-link {
+    cursor: pointer;
+    text-decoration: underline;
+    margin-top: 6px;
+    font-size: 14px;
+    font-weight: 400;
+}
 </style>

@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MailSettingSeeder::class);
         $this->call(SmsSettingSeeder::class);
         $this->call(MailTemplateSeeder::class);
+        $this->call(ModelSeeder::class);
     }
 }

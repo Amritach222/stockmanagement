@@ -101,6 +101,7 @@ class DateConverter
     private $_nep_date = array('year' => '', 'month' => '', 'date' => '', 'day' => '', 'nmonth' => '', 'num_day' => '');
     private $_eng_date = array('year' => '', 'month' => '', 'date' => '', 'day' => '', 'emonth' => '', 'num_day' => '');
     public $debug_info = "";
+
     /**
      * Return day
      *

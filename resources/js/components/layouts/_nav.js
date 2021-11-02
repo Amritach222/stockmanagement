@@ -113,6 +113,21 @@ export default [
             },
             {
                 _name: 'CSidebarNavDropdown',
+                name: 'Quotations',
+                icon: 'cil-star',
+                items: [
+                    {
+                        name: 'Quotation',
+                        to: '/quotations'
+                    },
+                    // {
+                    //     name: 'Quotation',
+                    //     to: '/expenses'
+                    // },
+                ]
+            },
+            {
+                _name: 'CSidebarNavDropdown',
                 name: 'Settings',
                 icon: 'cil-bell',
                 items: [

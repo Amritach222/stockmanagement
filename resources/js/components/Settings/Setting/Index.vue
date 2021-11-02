@@ -204,7 +204,7 @@
                 }
             },
             async fiscalYear() {
-                let res = await ApiServices.selectList('fiscalYear');
+                let res = await ApiServices.fiscalYearIndex('fiscalYear');
                 if (res.success === true) {
                     this.options = res.data;
                 }
