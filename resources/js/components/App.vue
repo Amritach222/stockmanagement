@@ -91,16 +91,16 @@
         width: 150px;
         margin-right: 65px;
     }
+
+    .file-link{
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
     .c-app {
         display: flex;
         flex-direction: row;
         max-height: 100vh !important;
     }
-    /*.c-header {*/
-    /*    margin-left: 257px !important;*/
-    /*}*/
-    .file-link{
-        cursor: pointer;
-        text-decoration: underline;
-    }
+
 </style>
