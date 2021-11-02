@@ -65,26 +65,29 @@
                                             id="transaction_type"
                                             :items="['Cash', 'Cheque', 'OnlineTransaction']"
                                             prepend-icon="mdi-swap-horizontal"
+                                            v-on:change="transaction"
                                             solo
                                         ></v-select>
-                                        <v-select
-                                            v-model="editedItem.bank_account_id"
-                                            label="Bank Account"
-                                            :items="bankAccounts"
-                                            :item-text="bankAccount => bankAccount.bank_name + ' - ' + bankAccount.account_name"
-                                            item-value="id"
-                                            prepend-icon="mdi-bank"
-                                            class="hide"
-                                            solo
-                                        ></v-select>
-                                        <v-text-field
-                                            v-model="editedItem.cheque_no"
-                                            label="Cheque No."
-                                            type="number"
-                                            prepend-icon="mdi-checkbook"
-                                            class="hide"
-                                            solo
-                                        ></v-text-field>
+                                        <div v-if="this.bank_account">
+                                            <v-select
+                                                v-model="editedItem.bank_account_id"
+                                                label="Bank Account"
+                                                :items="bankAccounts"
+                                                :item-text="bankAccount => bankAccount.bank_name + ' - ' + bankAccount.account_name"
+                                                item-value="id"
+                                                prepend-icon="mdi-bank"
+                                                solo
+                                            ></v-select>
+                                        </div>
+                                        <div v-if="this.cheque">
+                                            <v-text-field
+                                                v-model="editedItem.cheque_no"
+                                                label="Cheque No."
+                                                type="number"
+                                                prepend-icon="mdi-checkbook"
+                                                solo
+                                            ></v-text-field>
+                                        </div>
                                         <v-text-field
                                             v-model="editedItem.note"
                                             label="Note"
@@ -123,9 +126,9 @@
                                             <CIcon name="cil-check-circle"/>
                                             Submit
                                         </CButton>
-                                        <CButton type="reset" size="sm" color="danger">
+                                        <CButton type="reset" size="sm" color="danger" :to="'/expenses/'">
                                             <CIcon name="cil-ban"/>
-                                            Reset
+                                            Cancel
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -164,12 +167,14 @@ export default {
             file: [],
         },
         cdnURL: config.cdnURL,
-        validated: false,
         departments: [],
         users: [],
         bankAccounts: [],
         expenseCategories: [],
+        validated: false,
         changeProgress: false,
+        bank_account: false,
+        cheque: false,
         error: {
             user_id: '',
             department_id: '',
@@ -229,6 +234,16 @@ export default {
             let res = await ApiServices.expenseCategoryIndex();
             if (res.success === true) {
                 this.expenseCategories = res.data;
+            }
+        },
+
+        async transaction() {
+            this.bank_account = false;
+            this.cheque = false;
+            if (this.editedItem.transaction_type === 'OnlineTransaction') {
+                this.bank_account = true;
+            } else if (this.editedItem.transaction_type === 'Cheque') {
+                this.cheque = true;
             }
         },
 

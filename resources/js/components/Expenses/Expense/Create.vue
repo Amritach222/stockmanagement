@@ -65,26 +65,29 @@
                                             id="transaction_type"
                                             :items="['Cash', 'Cheque', 'OnlineTransaction']"
                                             prepend-icon="mdi-swap-horizontal"
+                                            v-on:change="transaction"
                                             solo
                                         ></v-select>
-                                        <v-select
-                                            v-model="bank_account_id"
-                                            label="Bank Account"
-                                            :items="bankAccounts"
-                                            :item-text="bankAccount => bankAccount.bank_name + ' - ' + bankAccount.account_name"
-                                            item-value="id"
-                                            class="hide"
-                                            prepend-icon="mdi-bank"
-                                            solo
-                                        ></v-select>
-                                        <v-text-field
-                                            v-model="cheque_no"
-                                            label="Cheque No."
-                                            type="number"
-                                            class="hide"
-                                            prepend-icon="mdi-checkbook"
-                                            solo
-                                        ></v-text-field>
+                                        <div v-if="bank_account">
+                                            <v-select
+                                                v-model="bank_account_id"
+                                                label="Bank Account"
+                                                :items="bankAccounts"
+                                                :item-text="bankAccount => bankAccount.bank_name + ' - ' + bankAccount.account_name"
+                                                item-value="id"
+                                                prepend-icon="mdi-bank"
+                                                solo
+                                            ></v-select>
+                                        </div>
+                                        <div v-if="cheque">
+                                            <v-text-field
+                                                v-model="cheque_no"
+                                                label="Cheque No."
+                                                type="number"
+                                                prepend-icon="mdi-checkbook"
+                                                solo
+                                            ></v-text-field>
+                                        </div>
                                         <v-text-field
                                             v-model="note"
                                             label="Note"
@@ -143,12 +146,14 @@ export default {
         expense_category_id: '',
         note: '',
         file: [],
-        validated: false,
         departments: [],
         users: [],
         bankAccounts: [],
         expenseCategories: [],
+        validated: false,
         createProgress: false,
+        bank_account: false,
+        cheque: false,
         error: {
             user_id: '',
             department_id: '',
@@ -196,6 +201,16 @@ export default {
             let res = await ApiServices.expenseCategoryIndex();
             if (res.success === true) {
                 this.expenseCategories = res.data;
+            }
+        },
+
+        async transaction() {
+            this.bank_account = false;
+            this.cheque = false;
+            if(this.transaction_type === 'OnlineTransaction'){
+                this.bank_account = true;
+            }else if(this.transaction_type === 'Cheque'){
+                this.cheque = true;
             }
         },
 
@@ -247,6 +262,7 @@ export default {
         },
     }
 }
+
 </script>
 <style scoped>
 .hide {
