@@ -1,0 +1,28 @@
+{
+    "name": "samundra/file",
+    "description": "This will save file in desired loaction.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "samundra adhikari",
+            "email": "samundra.adh@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+            "intervention/image ": "^2.5.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Samundra\\File\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SamundraFileServiceProvider"
+            ]
+        }
+    }
+}

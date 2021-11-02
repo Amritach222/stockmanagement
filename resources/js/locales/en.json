@@ -1,0 +1,43 @@
+{
+    "dashboard": "Dashboard",
+    "register": "Register",
+    "login": "Login",
+    "username": "Username",
+    "name": "Name",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "middle_name": "Middle Name",
+    "mobile": "Mobile Number",
+    "address": "Address",
+    "email": "Email",
+    "username-or-email": "Username or Email",
+    "enter-username-or-email": "Enter username or email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "createAccount": "Create Account",
+    "reset": "Reset Password",
+    "forgot": "Forgot Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "confirmPassword": "Confirm Password",
+    "languageChangedTo": "Language changed to English",
+    "signInToYourAccount": "Sign in to your Account",
+    "validation": {
+        "required": "This field is required!",
+        "morethan": "Password must have 8 or more characters",
+        "uppercase": "Must have one uppercase character",
+        "numeric": "Must have one number",
+        "special": "Must have one special character [!@#$%:]",
+        "sameNewPassword": "Must be same as new Password entered",
+        "samePassword": "Must be same as Password entered",
+        "email": "Must be a valid email address"
+    },
+    "button": {
+        "login": "LOGIN",
+        "logout": "LOGOUT",
+        "reset": "RESET",
+        "createAccount": "REGISTER"
+    },
+    "toAccessAcc": "To access your account, please identify yourself by providing the information requested in the fields below, then click Login. If you are not registered yet, click New user and follow the instructions to create an account."
+}

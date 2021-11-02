@@ -1,0 +1,147 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Events\ActivityLogEvent;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\PurchaseProductRequest;
+use App\Http\Resources\PurchaseProduct as PurchaseProductResource;
+use App\Models\Item;
+use App\Models\ItemVariant;
+use App\Models\Purchase;
+use App\Models\PurchaseProduct;
+use App\Models\Tax;
+use Illuminate\Http\Request;
+
+class PurchaseProductController extends Controller
+{
+    public function index()
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['success'] = true;
+            $data['data'] = PurchaseProductResource::collection(PurchaseProduct::all());
+        } catch (\Exception $e) {
+            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+
+    public function create()
+    {
+
+    }
+
+    public function store(PurchaseProductRequest $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['success'] = true;
+            $values = $request->all();
+            if ($request->quantity === null) {
+                $values['quantity'] = 1;
+            }
+            $purchase = Purchase::findOrFail($request->purchase_id);
+            $item = Item::findOrFail($request->item_id);
+            if ($request->item_variant_id != null) {
+                $variant = ItemVariant::findOrFail($request->item_variant_id);
+            }
+            $price = $variant->price ?? $item->cost_price;
+            $values['price'] = $price;
+            $values['total_price'] = $values['quantity'] * $price;
+            $purchaseProduct = new PurchaseProduct($values);
+            $purchaseProduct->save();
+            $purchaseProduct->taxCalculate();
+            $purchase->total();
+            event(new ActivityLogEvent('Add', 'Purchase Product', $purchaseProduct->id));
+            $data['message'] = "Purchase Product added successfully.";
+            $data['data'] = new PurchaseProductResource($purchaseProduct);
+        } catch (\Exception $e) {
+            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+
+    public function show($id)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['success'] = true;
+            $data['data'] = new PurchaseProductResource(PurchaseProduct::findOrFail($id));
+        } catch (\Exception $e) {
+            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+
+    public function edit($id)
+    {
+
+    }
+
+    public function update($id, PurchaseProductRequest $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['success'] = true;
+            $purchaseProduct = PurchaseProduct::findOrFail($id);
+            $purchase = Purchase::findOrFail($purchaseProduct->purchase_id);
+            $values = $request->all();
+            if ($request->item_id !== null) {
+                $item = Item::findOrFail($request->item_id);
+            } else {
+                $item = $purchaseProduct->item;
+            }
+            if ($request->item_variant_id != null) {
+                $variant = ItemVariant::findOrFail($request->item_variant_id);
+            } elseif ($purchaseProduct->item_variant_id !== null) {
+                $variant = $purchaseProduct->itemVariant;
+            }
+            $price = $variant->price ?? $item->cost_price;
+            $values['price'] = $price;
+            if (($request->quantity !== null)) {
+                $values['total_price'] = $request->quantity * $price;
+            }
+            $purchaseProduct->update($values);
+            $purchaseProduct->taxCalculate();
+            $purchase->total();
+            if ($request->purchase_id !== null) {
+                $purchase1 = Purchase::findOrFail($request->purchase_id);
+                $purchase1->total();
+            }
+            event(new ActivityLogEvent('Edit', 'Purchase Product', $purchaseProduct->id));
+            $data['message'] = "Updated successfully.";
+            $data['data'] = new PurchaseProductResource($purchaseProduct);
+        } catch (\Exception $e) {
+            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+
+    public function destroy($id)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['success'] = true;
+            $purchaseProduct = PurchaseProduct::findOrFail($id);
+            $purchase = $purchaseProduct->purchase;
+            $purchaseProduct->delete();
+            $purchase->total();
+            event(new ActivityLogEvent('Delete', 'Purchase Product', $id));
+            $data['message'] = "Deleted successfully.";
+        } catch (\Exception $e) {
+            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+}

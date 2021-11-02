@@ -1,0 +1,142 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Events\ActivityLogEvent;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\TransferRequest;
+use App\Http\Resources\Transfer as TransferResource;
+use App\Models\Item;
+use App\Models\ItemVariant;
+use App\Models\Transfer;
+use Illuminate\Http\Request;
+
+class TransferController extends Controller
+{
+    public function index()
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['success'] = true;
+            $data['data'] = TransferResource::collection(Transfer::all());
+        } catch (\Exception $e) {
+            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+
+    public function create()
+    {
+
+    }
+
+    public function store(TransferRequest $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['success'] = true;
+            $values = $request->all();
+            if ($request->total_quantity === null) {
+                $values['total_quantity'] = 1;
+            }
+            $values['user_id'] = auth()->user()->id;
+            $item = Item::findOrFail($request->item_id);
+            if ($request->item_variant_id) {
+                $variant = ItemVariant::findOrFail($request->item_variant_id);
+            }
+            $price = $variant->price ?? $item->cost_price;
+            $values['total_cost'] = $values['total_quantity'] * $price;
+            $values['grand_total'] = $values['total_cost'] + $request->shipping_cost;
+            $transfer = new Transfer($values);
+            $transfer->save();
+            if($request->tax_id !== null){
+                $transfer->totalTax($request->tax_id);
+            }
+            event(new ActivityLogEvent('Add', 'Transfer', $transfer->id));
+            $data['message'] = "Transfer added successfully.";
+            $data['data'] = new TransferResource($transfer);
+        } catch (\Exception $e) {
+            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+
+    public function show($id)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['success'] = true;
+            $data['data'] = new TransferResource(Transfer::findOrFail($id));
+        } catch (\Exception $e) {
+            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+
+    public function edit($id)
+    {
+
+    }
+
+    public function update($id, TransferRequest $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['success'] = true;
+            $transfer = Transfer::findOrFail($id);
+            $values = $request->all();
+            if ($request->item_id !== null) {
+                $item = Item::findOrFail($request->item_id);
+            } else {
+                $item = Item::findOrFail($transfer->item_id);
+            }
+            if ($request->item_variant_id != null) {
+                $variant = ItemVariant::findOrFail($request->item_variant_id);
+            } elseif ($transfer->item_variant_id !== null) {
+                $variant = ItemVariant::findOrFail($transfer->item_variant_id);
+            }
+            $price = $variant->price ?? $item->cost_price;
+            if (($request->total_quantity !== null)) {
+                $values['total_cost'] = $request->total_quantity * $price;
+                $values['grand_total'] = $values['total_cost'] + $request->shipping_cost + $transfer->total_tax;
+            } else {
+                $values['grand_total'] = $transfer->total_cost + $request->shipping_cost + $transfer->total_tax;
+            }
+            $transfer->update($values);
+            if($request->tax_id !== null){
+                $transfer->totalTax($request->tax_id);
+            }
+            event(new ActivityLogEvent('Edit', 'Transfer', $transfer->id));
+            $data['message'] = "Updated successfully.";
+            $data['data'] = new TransferResource($transfer);
+        } catch (\Exception $e) {
+            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+
+    public function destroy($id)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['success'] = true;
+            $transfer = Transfer::findOrFail($id);
+            $transfer->delete();
+            event(new ActivityLogEvent('Delete', 'Transfer', $id));
+            $data['message'] = "Deleted successfully.";
+        } catch (\Exception $e) {
+            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+}

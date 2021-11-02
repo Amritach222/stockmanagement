@@ -1,0 +1,107 @@
+<template>
+    <CRow>
+        <CCol sm="12">
+            <CCard>
+                <CCardHeader>
+                    <strong>Add</strong> Budget Extend
+                    <v-progress-circular
+                        v-if="createProgress"
+                        indeterminate
+                        color="white"
+                        size="30"
+                    ></v-progress-circular>
+                </CCardHeader>
+                <CForm>
+                    <CCardBody>
+                        <CSelect
+                            v-model="department_id"
+                            name="department_id"
+                            description="Please select a department."
+                            autocomplete=""
+                            label="Department"
+                            placeholder="Select a department..."
+                            required
+                            @keyup="clearError('department_id')"
+                            @keyup.enter="create"
+                            :rules="rules.department_id"
+                        />
+                        <CInput
+                            v-model="amount"
+                            type="number"
+                            name="amount"
+                            description="Please enter the request amount."
+                            autocomplete=""
+                            label="Amount"
+                            placeholder="Enter the amount..."
+                            required
+                            @keyup="clearError('amount')"
+                            @keyup.enter="create"
+                            :rules="rules.amount"
+                        />
+                    </CCardBody>
+                    <CCardFooter>
+                        <CButton type="submit" size="sm" color="primary" @click="create">
+                            <CIcon name="cil-check-circle"/>
+                            Submit
+                        </CButton>
+                        <CButton type="reset" size="sm" color="danger">
+                            <CIcon name="cil-ban"/>
+                            Reset
+                        </CButton>
+                    </CCardFooter>
+                </CForm>
+            </CCard>
+        </CCol>
+    </CRow>
+</template>
+
+<script>
+import store from "../../../store";
+import route from "../../../router";
+import i18n from "../../../i18n";
+
+export default {
+    name: "BudgetRequestCreate",
+
+    props: {
+        source: String,
+    },
+    data: () => ({
+        department_id: '',
+        amount: '',
+        createProgress: false,
+        error: {
+            department_id: '',
+            amount: '',
+        },
+        rules: {
+            department_id: [
+                val => (val || '').length > 0 || i18n.t('validation.required'),
+            ],
+            amount: [
+                val => (val || '').length > 0 || i18n.t('validation.required'),
+            ],
+        },
+    }),
+    methods: {
+        clearError(name) {
+            if (name === 'department_id') {
+                this.error.department_id = '';
+            }
+            if (name === 'amount') {
+                this.error.amount = '';
+            }
+        },
+        async create() {
+            this.createProgress = true;
+            store.state.budgets.department_id = this.department_id;
+            store.state.budgets.amount = this.amount;
+            let res = await store.dispatch('budgets/budgetRequestCreate');
+            this.createProgress = false;
+            if (res === true) {
+                route.replace('/index');
+            }
+        },
+    }
+}
+</script>
