@@ -8,6 +8,8 @@
         prepend-icon="mdi-web"
         item-text="Language"
         item-value="val"
+        hint="Select Language"
+        persistent-hint
     ></v-select>
 </template>
 

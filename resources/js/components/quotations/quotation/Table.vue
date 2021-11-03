@@ -8,7 +8,7 @@
             :headers="headers"
             :items="quotations"
             sort-by="id"
-            loading
+            :loading=tableLoad
             loading-text="Loading... Please wait..."
             :search="search"
         >
@@ -140,7 +140,7 @@ export default {
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         quotations: [],
-        tableLoad: false
+        tableLoad: true
     }),
 
     computed: {

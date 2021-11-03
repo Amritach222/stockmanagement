@@ -8,7 +8,7 @@
             :headers="headers"
             :items="budgets"
             sort-by="id"
-            loading
+            :loading=tableLoad
             loading-text="Loading... Please wait..."
             :search="search"
         >
@@ -133,7 +133,7 @@ export default {
         editedItem: {
             id: null,
         },
-        tableLoad: false
+        tableLoad: true
     }),
 
     watch: {
