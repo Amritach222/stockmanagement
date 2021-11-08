@@ -376,24 +376,24 @@ export default {
                 let res = await ApiServices.quotationCreate(data);
                 this.createProgress = false;
                 if (res.success === true) {
-                    await this.createProduct(res.data.id);
-                    // route.replace('/quotations/');
+                    if (this.quoProducts.length > 0) {
+                        await this.createProduct(res.data.id);
+                    } else {
+                        route.replace('/quotations/');
+                    }
                 }
             }
         },
 
-        async createProduct(id){
-           let ret = this.quoProducts.forEach(async function(key, value){
-               console.log(key, value)
+        async createProduct(id) {
+            for (var i = 0; i < this.quoProducts.length; i++) {
                 let productData = new FormData();
-                productData.append('item_id', parseInt(key.item_id, value));
-                productData.append('quantity', parseInt(key.quantity, value));
+                productData.append('item_id', parseInt(this.quoProducts[i].item_id));
+                productData.append('quantity', parseInt(this.quoProducts[i].quantity));
                 productData.append('quotation_id', parseInt(id));
                 let res = await ApiServices.quotationProductCreate(productData);
-            });
-           // this.quoProducts.forEach({
-           //
-           //  });
+            }
+            route.replace('/quotations/');
         },
 
         validate() {

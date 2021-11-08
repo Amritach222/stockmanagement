@@ -46,6 +46,7 @@ class QuotationProductController extends Controller
             }
             $price = $variant->price ?? $item->cost_price;
             $values['price'] = $price;
+            $values['tax_id'] = $item->tax_id;
             $quotationProduct = new QuotationProduct($values);
             $quotationProduct->save();
             $quotationProduct->taxCalculate();
@@ -98,8 +99,10 @@ class QuotationProductController extends Controller
             }
             $price = $variant->price ?? $item->cost_price;
             $values['price'] = $price;
+            $values['tax_id'] = $item->tax_id;
             $quotationProduct->update($values);
             $quotationProduct->taxCalculate();
+
             event(new ActivityLogEvent('Edit', 'Quotation Product', $quotationProduct->id));
             $data['message'] = "Updated successfully.";
             $data['data'] = new QuotationProductResource($quotationProduct);

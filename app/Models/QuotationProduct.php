@@ -43,8 +43,12 @@ class QuotationProduct extends Model
 
     public function taxCalculate()
     {
-        $taxValue = $this->taxAmount();
-        $this->grand_total = $this->quantity * $this->price + $taxValue + $this->shipping_cost;
+        if ($this->item->tax_method == 'Excluded') {
+            $taxValue = $this->taxAmount();
+            $this->grand_total = $this->quantity * $this->price + $taxValue + $this->shipping_cost;
+        } else {
+            $this->grand_total = $this->quantity * $this->price + $this->shipping_cost;
+        }
         $this->save();
     }
 }
