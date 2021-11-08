@@ -560,4 +560,8 @@ export default {
     async quotationProductDelete(id) {
         return await apiCall(DELETE, `api/quotation/quotationProducts/${id}`)
     },
+
+    async createVariant(data) {
+        return await apiCall(POST, `api/create-variants`, data)
+    },
 }

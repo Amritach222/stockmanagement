@@ -84,7 +84,25 @@ class ModelSeeder extends Seeder
         $item->save();
 
         $item = new ItemAttribute([
+            'name' => 'M',
+            'attribute_group_id' => $itemAG1->id
+        ]);
+        $item->save();
+
+        $item = new ItemAttribute([
+            'name' => 'L',
+            'attribute_group_id' => $itemAG1->id
+        ]);
+        $item->save();
+
+        $item = new ItemAttribute([
             'name' => 'Red',
+            'attribute_group_id' => $itemAG2->id
+        ]);
+        $item->save();
+
+        $item = new ItemAttribute([
+            'name' => 'Black',
             'attribute_group_id' => $itemAG2->id
         ]);
         $item->save();

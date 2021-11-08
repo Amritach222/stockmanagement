@@ -33,6 +33,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
 Route::group(['middleware' => 'auth:api'], function () {
 
     Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
+    Route::post('create-variants', [\App\Http\Controllers\Api\ItemController::class, 'createVariants']);
 
     Route::group(['prefix' => '/setting'], function () {
         Route::apiResource('brands', \App\Http\Controllers\Api\BrandController::class);

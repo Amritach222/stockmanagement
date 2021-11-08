@@ -118,8 +118,8 @@
                     </v-dialog>
                 </v-toolbar>
             </template>
-            <template v-slot:item.attribute_group_name="{ item }">
-                {{ item.attribute_group_name }}
+            <template v-slot:item.attribute_group_id="{ item }">
+                <p v-if="item.attribute_group_id">{{ item.attribute_group.name }}</p>
             </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
@@ -158,7 +158,7 @@ export default {
         headers: [
             {text: 'Id', align: 'start', sortable: false, value: 'id'},
             {text: 'Name', value: 'name'},
-            {text: 'Item Attribute Group', value: 'attribute_group_name'},
+            {text: 'Item Attribute Group', value: 'attribute_group_id'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         itemAttributes: [],
@@ -263,7 +263,7 @@ export default {
                     data.append('attribute_group_id', this.editedItem.attribute_group_id);
                     let res = await ApiServices.itemAttributeEdit(this.editedItem.id, data);
                     if (res.success === true) {
-                        Object.assign(this.itemAttributes[this.editedIndex], this.editedItem)
+                        Object.assign(this.itemAttributes[this.editedIndex], res.data)
                         this.$refs.form.reset();
                         this.close();
                     }
@@ -274,7 +274,7 @@ export default {
                     data.append('attribute_group_id', this.editedItem.attribute_group_id);
                     let res = await ApiServices.itemAttributeCreate(data);
                     if (res.success === true) {
-                        this.itemAttributes.push(this.editedItem);
+                        this.itemAttributes.push(res.data);
                         this.$refs.form.reset();
                         this.close()
                     }

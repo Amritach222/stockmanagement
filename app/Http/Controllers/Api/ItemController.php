@@ -7,8 +7,12 @@ use App\Helpers\CodeGenerator;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ItemRequest;
 use App\Http\Resources\Item as ItemResource;
+use App\Models\Attribute;
 use App\Models\File;
 use App\Models\Item;
+use App\Models\ItemAttribute;
+use App\Models\ItemAttributeGroup;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Samundra\File\SamundraFileHelper;
 
@@ -191,6 +195,78 @@ class ItemController extends Controller
             $data['message'] = "Deleted Successfully.";
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+
+    public function createVariants(Request $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+
+            $requestAttributeIds = $request->attribute_ids;
+
+            //Check if given attribute_ids are exiting id or not.
+            try {
+                for ($i = 0; $i < $request->count; $i++) {
+                    return $requestAttributeIds[$i];
+                    $attribute = Attribute::findOrFail($requestAttributeIds[$i]);
+                }
+            } catch (\Exception $exception) {
+                return response(['success' => false, "message" => trans('messages.error_server'), "data" => $exception], 500);
+            }
+
+            $attributeGroups = ItemAttributeGroup::whereHas('attributes', function ($q) use ($requestAttributeIds) {
+                $q->whereIn('id', $requestAttributeIds);
+            })->get();
+            foreach ($attributeGroups as $attributeGroup) {
+                $attributeGroup['attributes'] = ItemAttribute::where('attribute_group_id', $attributeGroup->id)
+                    ->whereIn('id', $requestAttributeIds)->get();
+            }
+
+            //Grouping attributes for variants
+//            $attrIdsArray = [];
+            $collection = [];
+            if (count($attributeGroups) == 3) {
+                $x = $attributeGroups[0]['attributes'];
+                $y = $attributeGroups[1]['attributes'];
+                $z = $attributeGroups[2]['attributes'];
+
+                for ($i = 0; $i < count($x); $i++) {
+                    for ($j = 0; $j < count($y); $j++) {
+                        for ($k = 0; $k < count($z); $k++) {
+                            $l = count($collection);
+//                            $attrIdsArray[] = [$x[$i]->id, $y[$j]->id, $z[$k]->id];
+                            $collection[$l]['attribute_ids'] = [$x[$i]->id, $y[$j]->id, $z[$k]->id];
+                            $collection[$l]['name'] = $x[$i]->name . ' - ' . $y[$j]->name . ' - ' . $z[$k]->name;
+                        }
+                    }
+                }
+            } elseif (count($attributeGroups) == 2) {
+                $x = $attributeGroups[0]['attributes'];
+                $y = $attributeGroups[1]['attributes'];
+                for ($i = 0; $i < count($x); $i++) {
+                    for ($j = 0; $j < count($y); $j++) {
+                        $l = count($collection);
+//                        $attrIdsArray[] = [$x[$i]->id, $y[$j]->id];
+                        $collection[$l]['attribute_ids'] = [$x[$i]->id, $y[$j]->id];
+                        $collection[$l]['name'] = $x[$i]->name . ' - ' . $y[$j]->name;
+                    }
+                }
+            } elseif (count($attributeGroups) == 1) {
+                $x = $attributeGroups[0]['attributes'];
+//                $attrIdsArray = $requestAttributeIds;
+                $l = count($collection);
+                $collection[$l]['attribute_ids'] = [$x[0]->id];
+                $collection[$l]['name'] = $x[0]->name;
+            }
+            $data['data'] = $collection;
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = "Error occurred.";
+            $data['data'] = $e;
         }
         return $data;
     }
