@@ -68,7 +68,7 @@
                                             type="text"
                                             name="fiscal_year_id"
                                             :items="options"
-                                            :item-text="option => option.from +' || '+ option.to"
+                                            item-text="name"
                                             item-value="id"
                                             description="Please select system current fiscal year."
                                             prepend-inner-icon="mdi-calendar-month"

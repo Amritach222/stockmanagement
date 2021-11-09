@@ -16,6 +16,7 @@ class FiscalYear extends JsonResource
     {
         return [
             'id' => $this->id,
+            'name' => $this->name,
             'from' => $this->from,
             'to' => $this->to
         ];

@@ -60,6 +60,17 @@
                                         <v-row>
                                             <v-col>
                                                 <v-text-field
+                                                    v-model="editedItem.name"
+                                                    label="Name"
+                                                    required
+                                                    outlined
+                                                    :rules="rules"
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col>
+                                                <v-text-field
                                                     v-model="editedItem.from"
                                                     type="date"
                                                     label="From"
@@ -160,6 +171,7 @@ export default {
         dialogDelete: false,
         headers: [
             {text: 'Id', align: 'start', sortable: false, value: 'id'},
+            {text: 'Name', value: 'name'},
             {text: 'From', value: 'from'},
             {text: 'To', value: 'to'},
             {text: 'Actions', value: 'actions', sortable: false},
@@ -168,6 +180,7 @@ export default {
         editedIndex: -1,
         editedItem: {
             id: null,
+            name: '',
             from: '',
             to: '',
         },
@@ -255,6 +268,7 @@ export default {
                 //edit goes here
                 this.progressL = true;
                 const data = new FormData();
+                data.append('name', this.editedItem.name);
                 data.append('from', this.editedItem.from);
                 data.append('to', this.editedItem.to);
                 let res = await ApiServices.fiscalYearEdit(this.editedItem.id, data);
@@ -269,6 +283,7 @@ export default {
                 if (this.validated) {
                     this.progressL = true;
                     const data = new FormData();
+                    data.append('name', this.editedItem.name);
                     data.append('from', this.editedItem.from);
                     data.append('to', this.editedItem.to);
                     let res = await ApiServices.fiscalYearCreate(data);

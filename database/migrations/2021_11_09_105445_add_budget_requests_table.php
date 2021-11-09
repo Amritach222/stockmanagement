@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFiscalYearsTable extends Migration
+class AddBudgetRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,7 @@ class AddFiscalYearsTable extends Migration
      */
     public function up()
     {
-        Schema::table('fiscal_years', function (Blueprint $table) {
-            $table->string('name')->nullable();
-        });
+        //
     }
 
     /**
@@ -25,8 +23,6 @@ class AddFiscalYearsTable extends Migration
      */
     public function down()
     {
-        Schema::table('fiscal_years', function (Blueprint $table) {
-            $table->dropColumn('name');
-        });
+        //
     }
 }

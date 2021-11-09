@@ -32,7 +32,7 @@
                                         <v-select
                                             v-model="fiscal_year_id"
                                             :items="fiscalYears"
-                                            :item-text="fiscalYear => fiscalYear.from +' || '+ fiscalYear.to"
+                                            item-text="name"
                                             item-value="id"
                                             label="Fiscal Year"
                                             placeholder="Select a fiscal year..."

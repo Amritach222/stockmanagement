@@ -141,6 +141,7 @@ class ModelSeeder extends Seeder
         $item->save();
 
         $item = new FiscalYear([
+            'name' => '77/78',
             'from' => '2020-7-14',
             'to' => '2021-7-13'
         ]);
@@ -187,11 +188,11 @@ class ModelSeeder extends Seeder
 
         $item = new BankAccount([
             'bank_name' => 'Nepal SBI Bank Ltd.',
-            'account_no'=>'102293009490',
-            'account_name'=>'RKD Holding',
-            'total_balance'=>3500000,
-            'current_balance'=>3300000,
-            'branch'=>'New Road',
+            'account_no' => '102293009490',
+            'account_name' => 'RKD Holding',
+            'total_balance' => 3500000,
+            'current_balance' => 3300000,
+            'branch' => 'New Road',
         ]);
         $item->save();
     }

@@ -9,7 +9,7 @@ class FiscalYear extends Model
 
     protected $table = 'fiscal_years';
     public $timestamps = true;
-    protected $fillable = array('from', 'to');
+    protected $fillable = array('name', 'from', 'to');
 
     public function budgets()
     {
