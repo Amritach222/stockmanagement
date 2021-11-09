@@ -206,17 +206,19 @@ class ItemController extends Controller
         $data['data'] = [];
         try {
 
-            $requestAttributeIds = $request->attribute_ids;
+//            $requestAttributeIds = json_decode($request->attribute_ids, true);
+
+            $requestAttributeIds = json_decode($request->attribute_ids);
 
             //Check if given attribute_ids are exiting id or not.
             try {
-                for ($i = 0; $i < $request->count; $i++) {
-                    return $requestAttributeIds[$i];
-                    $attribute = Attribute::findOrFail($requestAttributeIds[$i]);
+                for ($i=0; $i<count($requestAttributeIds); $i++) {
+                    $attribute = ItemAttribute::findOrFail($requestAttributeIds[$i]);
                 }
             } catch (\Exception $exception) {
                 return response(['success' => false, "message" => trans('messages.error_server'), "data" => $exception], 500);
             }
+
 
             $attributeGroups = ItemAttributeGroup::whereHas('attributes', function ($q) use ($requestAttributeIds) {
                 $q->whereIn('id', $requestAttributeIds);
@@ -239,6 +241,7 @@ class ItemController extends Controller
                         for ($k = 0; $k < count($z); $k++) {
                             $l = count($collection);
 //                            $attrIdsArray[] = [$x[$i]->id, $y[$j]->id, $z[$k]->id];
+                            $collection[$l]['attribute_group_ids'] = [$x[$i]->attribute_group_id, $y[$j]->attribute_group_id, $z[$k]->attribute_group_id];
                             $collection[$l]['attribute_ids'] = [$x[$i]->id, $y[$j]->id, $z[$k]->id];
                             $collection[$l]['name'] = $x[$i]->name . ' - ' . $y[$j]->name . ' - ' . $z[$k]->name;
                         }
@@ -251,6 +254,7 @@ class ItemController extends Controller
                     for ($j = 0; $j < count($y); $j++) {
                         $l = count($collection);
 //                        $attrIdsArray[] = [$x[$i]->id, $y[$j]->id];
+                        $collection[$l]['attribute_group_ids'] = [$x[$i]->attribute_group_id, $y[$j]->attribute_group_id];
                         $collection[$l]['attribute_ids'] = [$x[$i]->id, $y[$j]->id];
                         $collection[$l]['name'] = $x[$i]->name . ' - ' . $y[$j]->name;
                     }
@@ -259,6 +263,7 @@ class ItemController extends Controller
                 $x = $attributeGroups[0]['attributes'];
 //                $attrIdsArray = $requestAttributeIds;
                 $l = count($collection);
+                $collection[$l]['attribute_group_ids'] = [$x[0]->attribute_group_id];
                 $collection[$l]['attribute_ids'] = [$x[0]->id];
                 $collection[$l]['name'] = $x[0]->name;
             }

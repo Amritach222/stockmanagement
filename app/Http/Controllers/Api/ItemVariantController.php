@@ -43,61 +43,12 @@ class ItemVariantController extends Controller
             $data['success'] = true;
             $values = $request->all();
 
-
             $requestAttributeIds = json_decode($request->attribute_ids);
 
-            //Check if given attribute_ids are exiting id or not.
-            try {
-                foreach ($requestAttributeIds as $id){
-                    $attribute = Attribute::findOrFail($id);
-                }
-            }catch (\Exception $exception){
-                return response(['success' => false, "message" => trans('messages.error_server'), "data" => $exception], 500);
-            }
-
-            $attributeGroups = ItemAttributeGroup::whereHas('attributes', function ($q) use ($requestAttributeIds) {
-                $q->whereIn('id', $requestAttributeIds);
-            })->get();
-            foreach ($attributeGroups as $attributeGroup) {
-                $attributeGroup['attributes'] = ItemAttribute::where('attribute_group_id', $attributeGroup->id)
-                    ->whereIn('id', $requestAttributeIds)->get();
-            }
-
-            //Grouping attributes for variants
-            $attrIdsArray = [];
-            if (count($attributeGroups) == 3) {
-                $x = $attributeGroups[0]['attributes'];
-                $y = $attributeGroups[1]['attributes'];
-                $z = $attributeGroups[2]['attributes'];
-
-                for ($i = 0; $i < count($x); $i++) {
-                    for ($j = 0; $j < count($y); $j++) {
-                        for ($k = 0; $k < count($z); $k++) {
-                            $attrIdsArray[] = [$x[$i]->id, $y[$j]->id, $z[$k]->id];
-                        }
-                    }
-                }
-            } elseif (count($attributeGroups) == 2) {
-                $x = $attributeGroups[0]['attributes'];
-                $y = $attributeGroups[1]['attributes'];
-                for ($i = 0; $i < count($x); $i++) {
-                    for ($j = 0; $j < count($y); $j++) {
-                        $attrIdsArray[] = [$x[$i]->id, $y[$j]->id];
-                    }
-                }
-            } elseif (count($attributeGroups) == 1) {
-                $attrIdsArray = $requestAttributeIds;
-            }
-//            } else {
-//                return response(['success' => false, "message" => trans('messages.error_server'), "data" => []], 500);
-//            }
-
-            foreach ($attrIdsArray as $attrIds) {
-                $values['code']=CodeGenerator::code();
-                $itemVariant = new ItemVariant($values);
-                $itemVariant->save();
-                $itemVariant->attributes()->sync($attrIds);
-            }
+            $values['code'] = CodeGenerator::code();
+            $itemVariant = new ItemVariant($values);
+            $itemVariant->save();
+            $itemVariant->attributes()->sync($requestAttributeIds);
 
             event(new ActivityLogEvent('Add', 'Item Variant', $itemVariant->id));
             $data['message'] = "Item Variant added successfully.";

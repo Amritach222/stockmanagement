@@ -161,12 +161,12 @@
                                     <hr>
                                     <v-card>
                                         <v-card-title>
-                                            Products
+                                            Variants
                                             <v-spacer></v-spacer>
                                         </v-card-title>
                                         <v-data-table
                                             :headers="headers"
-                                            :items="quoProducts"
+                                            :items="variants"
                                             sort-by="id"
                                             loading
                                             loading-text="Loading... Please wait..."
@@ -205,7 +205,7 @@
                                                                 v-bind="attrs"
                                                                 v-on="on"
                                                             >
-                                                                Add New Product
+                                                                Add New Variants
                                                             </v-btn>
                                                         </template>
                                                         <v-card>
@@ -243,12 +243,12 @@
                                                                                 <!--                                                                                    label="Item Variant"-->
                                                                                 <!--                                                                                    outlined-->
                                                                                 <!--                                                                                ></v-select>-->
-<!--                                                                                <v-text-field-->
-<!--                                                                                    v-model="addQuoProduct.quantity"-->
-<!--                                                                                    label="Quantity"-->
-<!--                                                                                    type="number"-->
-<!--                                                                                    outlined-->
-<!--                                                                                ></v-text-field>-->
+                                                                                <!--                                                                                <v-text-field-->
+                                                                                <!--                                                                                    v-model="addQuoProduct.quantity"-->
+                                                                                <!--                                                                                    label="Quantity"-->
+                                                                                <!--                                                                                    type="number"-->
+                                                                                <!--                                                                                    outlined-->
+                                                                                <!--                                                                                ></v-text-field>-->
                                                                             </v-col>
                                                                         </v-row>
                                                                     </v-container>
@@ -265,6 +265,84 @@
                                                                         color="blue darken-1"
                                                                         text
                                                                         @click="close"
+                                                                    >
+                                                                        Cancel
+                                                                    </v-btn>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="variantAdd"
+                                                                    >
+                                                                        Save
+                                                                    </v-btn>
+                                                                </v-card-actions>
+                                                            </v-form>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <v-dialog
+                                                        v-model="editDialog"
+                                                        max-width="600px"
+                                                    >
+                                                        <v-card>
+                                                            <v-form ref="editForm">
+                                                                <v-card-title>
+                                                                    <span class="headline">{{ formTitle }}</span>
+                                                                </v-card-title>
+
+                                                                <v-card-text>
+                                                                    <v-container>
+                                                                        <v-row>
+                                                                            <v-col>
+                                                                                <v-select
+                                                                                    v-model="addVariant.attribute_group_ids"
+                                                                                    label="Attribute Groups"
+                                                                                    :items="itemAttributeGroups"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    disabled
+                                                                                    multiple
+                                                                                    required
+                                                                                    outlined
+                                                                                ></v-select>
+                                                                                <v-select
+                                                                                    v-model="addVariant.attribute_ids"
+                                                                                    label="Attributes"
+                                                                                    :items="itemAttributes"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    disabled
+                                                                                    multiple
+                                                                                    required
+                                                                                    outlined
+                                                                                ></v-select>
+                                                                                <v-text-field
+                                                                                    v-model="addVariant.quantity"
+                                                                                    label="Quantity"
+                                                                                    type="number"
+                                                                                    outlined
+                                                                                ></v-text-field>
+                                                                                <v-text-field
+                                                                                    v-model="addVariant.price"
+                                                                                    label="Price"
+                                                                                    type="number"
+                                                                                    outlined
+                                                                                ></v-text-field>
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                    </v-container>
+                                                                </v-card-text>
+
+                                                                <v-card-actions>
+                                                                    <v-progress-linear
+                                                                        v-if="progressL"
+                                                                        indeterminate
+                                                                        color="green"
+                                                                    ></v-progress-linear>
+                                                                    <v-spacer></v-spacer>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="editClose"
                                                                     >
                                                                         Cancel
                                                                     </v-btn>
@@ -369,11 +447,12 @@ export default {
         search: '',
         progressL: false,
         dialog: false,
+        editDialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Item', value: 'item_name'},
-            // {text: 'Item Variant', value: 'item_variant_id'},
-            {text: 'Quantity', value: 'quantity', sortable: false},
+            {text: 'Attributes', value: 'name'},
+            {text: 'Quantity', value: 'quantity'},
+            {text: 'Price', value: 'price'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         tableLoad: false,
@@ -468,7 +547,7 @@ export default {
         editItem(item) {
             this.editedIndex = this.variants.indexOf(item)
             this.addVariant = Object.assign({}, item)
-            this.dialog = true
+            this.editDialog = true
         },
 
         deleteItem(item) {
@@ -485,6 +564,15 @@ export default {
         close() {
             this.progressL = false;
             this.dialog = false;
+            this.$nextTick(() => {
+                this.addVariant = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            });
+        },
+
+        editClose() {
+            this.progressL = false;
+            this.editDialog = false;
             this.$nextTick(() => {
                 this.addVariant = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
@@ -531,24 +619,25 @@ export default {
 
         async variantAdd() {
             if (this.editedIndex > -1) {
-                let res = await ApiServices.itemShow(this.addQuoProduct.item_id);
-                Object.assign(this.quoProducts[this.editedIndex], {
-                    'item_id': this.addQuoProduct.item_id,
-                    'item_name': res.data.name,
-                    'item_variant_id': this.addQuoProduct.item_variant_id,
-                    'quantity': this.addQuoProduct.quantity
+                Object.assign(this.variants[this.editedIndex], {
+                    'quantity': this.addVariant.quantity,
+                    'price': this.addVariant.price
                 })
+                this.$refs.editForm.reset();
+                this.editClose()
             } else {
                 const data = new FormData();
-                data.append('attribute_ids', this.addVariant.attribute_ids);
+                data.append('attribute_ids', JSON.stringify(this.addVariant.attribute_ids));
                 data.append('count', parseInt(this.addVariant.attribute_ids.length));
                 let res = await ApiServices.createVariant(data);
-                if(res.success === true) {
-                    this.variants.push(res.data);
+                if (res.success === true) {
+                    for (var i = 0; i < res.data.length; i++) {
+                        this.variants.push(res.data[i]);
+                    }
                 }
+                this.$refs.form.reset();
+                this.close()
             }
-            this.$refs.form.reset();
-            this.close()
         },
 
 
@@ -572,8 +661,26 @@ export default {
             let res = await ApiServices.itemCreate(data);
             this.createProgress = false;
             if (res.success === true) {
-                route.replace('/items/');
+                if(this.variants.length >0){
+                    let rtn = this.createVariant(res.data.id);
+                }else {
+                    route.replace('/items/');
+                }
             }
+        },
+
+        async createVariant(id) {
+            this.createProgress = true;
+            const data = new FormData();
+            for(var i=0; i<this.variants.length; i++) {
+                data.append('attribute_ids', JSON.stringify(this.variants[i].attribute_ids));
+                data.append('price', parseInt(this.variants[i].price));
+                data.append('quantity', parseInt(this.variants[i].quantity));
+                data.append('item_id', id);
+
+                let res = await ApiServices.itemVariantCreate(data);
+            }
+            route.replace('/items/');
         },
     }
 }

@@ -183,6 +183,244 @@
                                             solo
                                         />
                                     </v-form>
+                                    <hr>
+                                    <v-card>
+                                        <v-card-title>
+                                            Variants
+                                            <v-spacer></v-spacer>
+                                        </v-card-title>
+                                        <v-data-table
+                                            :headers="headers"
+                                            :items="variants"
+                                            sort-by="id"
+                                            loading
+                                            loading-text="Loading... Please wait..."
+                                            :search="search"
+                                        >
+                                            <template v-slot:top>
+                                                <v-toolbar
+                                                    flat
+                                                >
+                                                    <v-row>
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="4"
+                                                            md="6"
+                                                            lg="8"
+                                                        >
+                                                            <v-text-field
+                                                                v-model="search"
+                                                                append-icon="mdi-magnify"
+                                                                label="Search"
+                                                                solo
+                                                                hide-details
+                                                                max-width="100px"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-dialog
+                                                        v-model="dialog"
+                                                        max-width="600px"
+                                                    >
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-btn
+                                                                color="green"
+                                                                dark
+                                                                class="mb-2"
+                                                                v-bind="attrs"
+                                                                v-on="on"
+                                                            >
+                                                                Add New Variants
+                                                            </v-btn>
+                                                        </template>
+                                                        <v-card>
+                                                            <v-form ref="form">
+                                                                <v-card-title>
+                                                                    <span class="headline">{{ formTitle }}</span>
+                                                                </v-card-title>
+
+                                                                <v-card-text>
+                                                                    <v-container>
+                                                                        <v-row>
+                                                                            <v-col>
+                                                                                <v-select
+                                                                                    v-model="addVariant.attribute_group_ids"
+                                                                                    label="Attribute Groups"
+                                                                                    :items="itemAttributeGroups"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    multiple
+                                                                                    required
+                                                                                    outlined
+                                                                                ></v-select>
+                                                                                <v-select
+                                                                                    v-model="addVariant.attribute_ids"
+                                                                                    label="Attributes"
+                                                                                    :items="itemAttributes"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    multiple
+                                                                                    required
+                                                                                    outlined
+                                                                                ></v-select>
+                                                                                <!--                                                                                <v-select-->
+                                                                                <!--                                                                                    v-model="addQuoProduct.item_variant_id"-->
+                                                                                <!--                                                                                    label="Item Variant"-->
+                                                                                <!--                                                                                    outlined-->
+                                                                                <!--                                                                                ></v-select>-->
+                                                                                <!--                                                                                <v-text-field-->
+                                                                                <!--                                                                                    v-model="addQuoProduct.quantity"-->
+                                                                                <!--                                                                                    label="Quantity"-->
+                                                                                <!--                                                                                    type="number"-->
+                                                                                <!--                                                                                    outlined-->
+                                                                                <!--                                                                                ></v-text-field>-->
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                    </v-container>
+                                                                </v-card-text>
+
+                                                                <v-card-actions>
+                                                                    <v-progress-linear
+                                                                        v-if="progressL"
+                                                                        indeterminate
+                                                                        color="green"
+                                                                    ></v-progress-linear>
+                                                                    <v-spacer></v-spacer>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="close"
+                                                                    >
+                                                                        Cancel
+                                                                    </v-btn>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="variantAdd"
+                                                                    >
+                                                                        Save
+                                                                    </v-btn>
+                                                                </v-card-actions>
+                                                            </v-form>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <v-dialog
+                                                        v-model="editDialog"
+                                                        max-width="600px"
+                                                    >
+                                                        <v-card>
+                                                            <v-form ref="editForm">
+                                                                <v-card-title>
+                                                                    <span class="headline">{{ formTitle }}</span>
+                                                                </v-card-title>
+
+                                                                <v-card-text>
+                                                                    <v-container>
+                                                                        <v-row>
+                                                                            <v-col>
+                                                                                <v-select
+                                                                                    v-model="addVariant.attribute_group_ids"
+                                                                                    label="Attribute Groups"
+                                                                                    :items="itemAttributeGroups"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    disabled
+                                                                                    multiple
+                                                                                    required
+                                                                                    outlined
+                                                                                ></v-select>
+                                                                                <v-select
+                                                                                    v-model="addVariant.attribute_ids"
+                                                                                    label="Attributes"
+                                                                                    :items="itemAttributes"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    disabled
+                                                                                    multiple
+                                                                                    required
+                                                                                    outlined
+                                                                                ></v-select>
+                                                                                <v-text-field
+                                                                                    v-model="addVariant.quantity"
+                                                                                    label="Quantity"
+                                                                                    type="number"
+                                                                                    outlined
+                                                                                ></v-text-field>
+                                                                                <v-text-field
+                                                                                    v-model="addVariant.price"
+                                                                                    label="Price"
+                                                                                    type="number"
+                                                                                    outlined
+                                                                                ></v-text-field>
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                    </v-container>
+                                                                </v-card-text>
+
+                                                                <v-card-actions>
+                                                                    <v-progress-linear
+                                                                        v-if="progressL"
+                                                                        indeterminate
+                                                                        color="green"
+                                                                    ></v-progress-linear>
+                                                                    <v-spacer></v-spacer>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="editClose"
+                                                                    >
+                                                                        Cancel
+                                                                    </v-btn>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="variantAdd"
+                                                                    >
+                                                                        Save
+                                                                    </v-btn>
+                                                                </v-card-actions>
+                                                            </v-form>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <v-dialog v-model="dialogDelete" max-width="500px">
+                                                        <v-card>
+                                                            <v-card-title class="text-h6">Are you sure you want to
+                                                                delete this item?
+                                                            </v-card-title>
+                                                            <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn color="blue darken-1" text @click="closeDelete">
+                                                                    Cancel
+                                                                </v-btn>
+                                                                <v-btn color="blue darken-1" text
+                                                                       @click="deleteItemConfirm">OK
+                                                                </v-btn>
+                                                                <v-spacer></v-spacer>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                </v-toolbar>
+                                            </template>
+                                            <template v-slot:item.actions="{ item }">
+                                                <v-icon
+                                                    small
+                                                    class="mr-2"
+                                                    @click="editItem(item)"
+                                                >
+                                                    mdi-pencil
+                                                </v-icon>
+                                                <v-icon
+                                                    small
+                                                    @click="deleteItem(item)"
+                                                >
+                                                    mdi-delete
+                                                </v-icon>
+                                            </template>
+                                            <template v-slot:no-data>
+                                                <div>No Data</div>
+                                            </template>
+                                        </v-data-table>
+                                    </v-card>
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
@@ -235,6 +473,30 @@ export default {
         units: [],
         taxes: [],
         changeProgress: false,
+        search: '',
+        progressL: false,
+        dialog: false,
+        editDialog: false,
+        dialogDelete: false,
+        headers: [
+            {text: 'Attributes', value: 'name'},
+            {text: 'Quantity', value: 'quantity'},
+            {text: 'Price', value: 'price'},
+            {text: 'Actions', value: 'actions', sortable: false},
+        ],
+        tableLoad: false,
+        productCount: 0,
+        editedIndex: -1,
+        quoProducts: [],
+        itemAttributeGroups: [],
+        itemAttributes: [],
+        addVariant: {
+            attribute_group_ids: [],
+            attribute_ids: [],
+            quantity: '',
+            price: '',
+        },
+        variants: [],
         error: {
             name: '',
             product_id: '',
@@ -297,6 +559,7 @@ export default {
             let res = await ApiServices.itemShow(this.$route.params.id);
             if (res.success === true) {
                 this.editedItem = res.data;
+                this.variants = res.data.item_variants;
             }
         },
         clearError(name) {

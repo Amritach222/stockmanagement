@@ -19,7 +19,6 @@ class BudgetLimit extends JsonResource
             'id' => $this->id,
             'category_id' => $this->category_id,
             'amount' => $this->amount,
-            'category_name' => $category->name ?? '',
             'category' => $category,
         ];
     }

@@ -243,6 +243,7 @@ export default {
             if (this.editedItem.transaction_type === 'OnlineTransaction') {
                 this.bank_account = true;
             } else if (this.editedItem.transaction_type === 'Cheque') {
+                this.bank_account = true;
                 this.cheque = true;
             }
         },

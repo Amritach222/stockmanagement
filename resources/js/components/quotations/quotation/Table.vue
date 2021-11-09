@@ -133,7 +133,7 @@ export default {
             {text: 'Id', align: 'start', sortable: true, value: 'id'},
             {text: 'Reference No.', value: 'reference_no'},
             {text: 'Department', value: 'department_id'},
-            {text: 'File', value: 'link', sortable: false},
+            // {text: 'File', value: 'link', sortable: false},
             {text: 'Status', value: 'status', sortable: false},
             // {text: 'Brand', value: 'brand', sortable: false},
             // {text: 'Category', value: 'category', sortable: false},

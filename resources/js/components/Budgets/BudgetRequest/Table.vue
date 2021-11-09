@@ -122,6 +122,17 @@
             <template v-slot:item.department_id="{ item }">
                 <p v-if="item.department_id">{{ item.department_name }}</p>
             </template>
+            <template v-slot:item.status="{ item }">
+                <CButton size="sm" color="secondary" v-if="item.status == 'Pending'">
+                    {{ item.status }}
+                </CButton>
+                <CButton size="sm" color="success" v-else-if="item.status == 'Approved'">
+                    {{ item.status }}
+                </CButton>
+                <CButton size="sm" color="danger" v-else-if="item.status == 'Rejected'">
+                    {{ item.status }}
+                </CButton>
+            </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
                     small

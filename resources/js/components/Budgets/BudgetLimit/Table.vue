@@ -120,7 +120,7 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.category_id="{ item }">
-                <p v-if="item.category_id">{{ item.category_name }}</p>
+                <p v-if="item.category_id">{{ item.category.name }}</p>
             </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
@@ -278,7 +278,7 @@ export default {
                     data.append('amount', this.editedItem.amount);
                     let res = await ApiServices.budgetLimitCreate(data);
                     if (res.success === true) {
-                        this.budgetLimits.push(this.editedItem);
+                        this.budgetLimits.push(res.data);
                         this.$refs.form.reset();
                         this.close()
                     }

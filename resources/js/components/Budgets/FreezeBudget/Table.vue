@@ -71,7 +71,7 @@
                                                 <v-select
                                                     v-model="editedItem.fiscal_year_id"
                                                     :items="fiscalYears"
-                                                    :item-text="fiscalYear => fiscalYear.from +' || '+ fiscalYear.to"
+                                                    item-text="name"
                                                     item-value="id"
                                                     label="Fiscal Year"
                                                     required
