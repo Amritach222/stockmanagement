@@ -354,6 +354,39 @@
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
+                                                                                <v-row>
+                                                                                    <v-col v-if="typeof(addVariant.link) === 'string'">
+                                                                                        <v-card width="200"
+                                                                                                v-on:click="openImage(addVariant.link)">
+                                                                                            <v-img
+                                                                                                :src="cdnURL+addVariant.link"
+                                                                                                height="125"
+                                                                                                class="grey darken-4"
+                                                                                            ></v-img>
+                                                                                            <v-card-title class="title">
+                                                                                                Image
+                                                                                            </v-card-title>
+                                                                                        </v-card>
+                                                                                        <v-file-input
+                                                                                            v-model="addVariant.image"
+                                                                                            label="Image"
+                                                                                            filled
+                                                                                            outlined
+                                                                                            prepend-icon="mdi-camera"
+                                                                                            accept="image/png,image/jpeg,image/jpg"
+                                                                                        ></v-file-input>
+                                                                                    </v-col>
+                                                                                    <v-col v-else>
+                                                                                        <v-file-input
+                                                                                            v-model="addVariant.image"
+                                                                                            label="Image"
+                                                                                            filled
+                                                                                            outlined
+                                                                                            prepend-icon="mdi-camera"
+                                                                                            accept="image/png,image/jpeg,image/jpg"
+                                                                                        ></v-file-input>
+                                                                                    </v-col>
+                                                                                </v-row>
                                                                             </v-col>
                                                                         </v-row>
                                                                     </v-container>
@@ -402,6 +435,17 @@
                                                         </v-card>
                                                     </v-dialog>
                                                 </v-toolbar>
+                                            </template>
+                                            <template v-slot:item.link="{ item }">
+                                                <img :src=cdnURL+item.link
+                                                     v-if="item.link"
+                                                     style="width: 50px; height: 50px; object-fit: cover;"
+                                                     v-on:click="openImage(item.link)"/>
+
+                                                <img :src="baseURL+'images/placeholder.jpg'"
+                                                     v-else
+                                                     style="width: 50px; height: 50px; object-fit: cover"
+                                                />
                                             </template>
                                             <template v-slot:item.actions="{ item }">
                                                 <v-icon
@@ -457,6 +501,7 @@ export default {
     },
     data: () => ({
         cdnURL: config.cdnURL,
+        baseURL: config.baseURL,
         editedItem: {
             id: null,
             name: '',
@@ -482,6 +527,7 @@ export default {
         dialogDelete: false,
         headers: [
             {text: 'Attributes', value: 'name'},
+            {text: 'Image', value: 'link'},
             {text: 'Quantity', value: 'quantity'},
             {text: 'Price', value: 'price'},
             {text: 'Actions', value: 'actions', sortable: false},
@@ -497,6 +543,7 @@ export default {
             attribute_ids: [],
             quantity: '',
             price: '',
+            image: [],
         },
         variants: [],
         error: {
@@ -666,31 +713,39 @@ export default {
         },
 
         async variantAdd() {
-            if (this.editedIndex > -1) {
-                const data = new FormData();
-                data.append('quantity', parseInt(this.addVariant.quantity));
-                data.append('price', parseInt(this.addVariant.price));
-                let res = await ApiServices.itemVariantEdit(this.addVariant.id, data);
-                Object.assign(this.variants[this.editedIndex], res.data);
-                this.$refs.editForm.reset();
-                this.editClose()
-            } else {
-                const data = new FormData();
-                data.append('attribute_ids', JSON.stringify(this.addVariant.attribute_ids));
-                let res = await ApiServices.createVariant(data);
-                if (res.success === true) {
-                    for (var i = 0; i < res.data.length; i++) {
-                        data.append('attribute_ids', JSON.stringify(res.data[i].attribute_ids));
-                        data.append('item_id', this.editedItem.id);
-
-                        let rtn = await ApiServices.itemVariantCreate(data);
-                        if (rtn.success === true) {
-                            this.variants.push(rtn.data);
+            this.validate();
+            if (this.validated) {
+                if (this.editedIndex > -1) {
+                    const data = new FormData();
+                    data.append('quantity', parseInt(this.addVariant.quantity));
+                    data.append('price', parseInt(this.addVariant.price));
+                    if ('image' in this.addVariant) {
+                        if (typeof this.addVariant.image.name == 'string') {
+                            data.append('image', this.addVariant.image);
                         }
                     }
+                    let res = await ApiServices.itemVariantEdit(this.addVariant.id, data);
+                    Object.assign(this.variants[this.editedIndex], res.data);
+                    this.$refs.editForm.reset();
+                    this.editClose()
+                } else {
+                    const data = new FormData();
+                    data.append('attribute_ids', JSON.stringify(this.addVariant.attribute_ids));
+                    let res = await ApiServices.createVariant(data);
+                    if (res.success === true) {
+                        for (var i = 0; i < res.data.length; i++) {
+                            data.append('attribute_ids', JSON.stringify(res.data[i].attribute_ids));
+                            data.append('item_id', this.editedItem.id);
+
+                            let rtn = await ApiServices.itemVariantCreate(data);
+                            if (rtn.success === true) {
+                                this.variants.push(rtn.data);
+                            }
+                        }
+                    }
+                    this.$refs.form.reset();
+                    this.close()
                 }
-                this.$refs.form.reset();
-                this.close()
             }
         },
 
@@ -727,6 +782,17 @@ export default {
             this.changeProgress = false;
             if (res.success === true) {
                 route.replace('/items/');
+            }
+        },
+
+        validate() {
+            this.validated = true;
+            if (this.addVariant.attribute_group_ids.length === 0) {
+                this.validated = false;
+            } else if (this.addVariant.attribute_ids.length === 0) {
+                this.validated = false;
+            } else {
+                this.validated = true;
             }
         },
     }

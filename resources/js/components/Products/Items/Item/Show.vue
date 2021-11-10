@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>Item</strong> {{ show.name }}
+                                    <strong>Item </strong> {{ show.name }}
                             </CCardHeader>
                             <CCardBody>
                                 <CRow>
@@ -48,6 +48,59 @@
                                         <p>{{ show.tax_method }}</p>
                                     </CCol>
                                 </CRow>
+                                <hr>
+                                <v-card>
+                                    <v-card-title>
+                                        Variants
+                                        <v-spacer></v-spacer>
+                                    </v-card-title>
+                                    <v-data-table
+                                        :headers="headers"
+                                        :items="variants"
+                                        sort-by="id"
+                                        loading
+                                        loading-text="Loading... Please wait..."
+                                        :search="search"
+                                    >
+                                        <template v-slot:top>
+                                            <v-toolbar
+                                                flat
+                                            >
+                                                <v-row>
+                                                    <v-col
+                                                        cols="12"
+                                                        sm="4"
+                                                        md="6"
+                                                        lg="8"
+                                                    >
+                                                        <v-text-field
+                                                            v-model="search"
+                                                            append-icon="mdi-magnify"
+                                                            label="Search"
+                                                            solo
+                                                            hide-details
+                                                            max-width="100px"
+                                                        ></v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-toolbar>
+                                        </template>
+                                        <template v-slot:item.link="{ item }">
+                                            <img :src=cdnURL+item.link
+                                                 v-if="item.link"
+                                                 style="width: 50px; height: 50px; object-fit: cover;"
+                                                 v-on:click="openImage(item.link)"/>
+
+                                            <img :src="baseURL+'images/placeholder.jpg'"
+                                                 v-else
+                                                 style="width: 50px; height: 50px; object-fit: cover"
+                                            />
+                                        </template>
+                                        <template v-slot:no-data>
+                                            <div>No Data</div>
+                                        </template>
+                                    </v-data-table>
+                                </v-card>
                                 <CForm>
                                     <CCardFooter>
                                         <CButton size="sm" color="primary" :to="'/items/edit/'+show.id">
@@ -83,6 +136,7 @@ export default {
     },
     data: () => ({
         cdnURL: config.cdnURL,
+        baseURL: config.baseURL,
         show: {
             id: null,
             name: '',
@@ -96,6 +150,15 @@ export default {
             tax_method: '',
             image: [],
         },
+        variants: [],
+        search: '',
+        headers: [
+            {text: 'Attributes', value: 'name'},
+            {text: 'Image', value: 'link'},
+            {text: 'Quantity', value: 'quantity'},
+            {text: 'Price', value: 'price'},
+        ],
+        tableLoad: false,
     }),
     async created() {
         this.loadItems();
@@ -106,9 +169,9 @@ export default {
         },
         async loadItems() {
             let res = await ApiServices.itemShow(this.$route.params.id);
-            console.log(res)
             if (res.success === true) {
                 this.show = res.data;
+                this.variants = res.data.item_variants;
             }
         },
     }

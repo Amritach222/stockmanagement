@@ -7,6 +7,7 @@ use App\Helpers\CodeGenerator;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ItemVariantRequest;
 use App\Models\Attribute;
+use App\Models\File;
 use App\Models\Item;
 use App\Models\ItemAttributeGroup;
 use App\Http\Resources\ItemVariant as ItemVariantResource;
@@ -14,6 +15,7 @@ use App\Models\ItemAttribute;
 use App\Models\ItemVariant;
 use App\Models\ItemVariantAttribute;
 use Illuminate\Http\Request;
+use Samundra\File\SamundraFileHelper;
 
 class ItemVariantController extends Controller
 {
@@ -52,9 +54,21 @@ class ItemVariantController extends Controller
             $item = Item::findOrFail($request->item_id);
             foreach ($item->itemVariants as $variant) {
                 $variantAttributeIds = ItemVariantAttribute::where('item_variant_id', $variant->id)->pluck('attribute_id');
-                foreach ($variantAttributeIds as $id) {
-                    if (in_array($id, $requestAttributeIds)) {
-                        $common = $common + 1;
+                if (count($variantAttributeIds) > count($requestAttributeIds)) {
+                    foreach ($variantAttributeIds as $id) {
+                        if (in_array($id, $requestAttributeIds)) {
+                            $common = 1;
+                        } else {
+                            $common = 0;
+                        }
+                    }
+                } else {
+                    foreach ($requestAttributeIds as $id) {
+                        if ($variantAttributeIds->contains($id)) {
+                            $common = 1;
+                        } else {
+                            $common = 0;
+                        }
                     }
                 }
             }
@@ -62,6 +76,21 @@ class ItemVariantController extends Controller
 
             if ($common == 0) {
                 $values['code'] = CodeGenerator::code();
+                if ($request->hasFile('image')) {
+                    $fileHelper = new SamundraFileHelper();
+                    $file = $fileHelper->saveFile($request->image, 'itemVariant');
+                    if ($file['success'] !== true) {
+                        return response(['success' => false, 'message' => 'Data could not be saved at the moment', "data" => null], 400);
+                    }
+                    $newFile = new File();
+                    $newFile->extension = $file['data']['extension'];
+                    $newFile->original_name = $file['data']['original_filename'];
+                    $newFile->name = $file['data']['filename'];
+                    $newFile->type = $file['data']['mime_type'];
+                    $newFile->path = $file['data']['link'];
+                    $newFile->save();
+                    $values['image_id'] = $newFile->id;
+                }
                 $itemVariant = new ItemVariant($values);
                 $itemVariant->save();
                 $itemVariant->attributes()->sync($requestAttributeIds);
@@ -100,6 +129,7 @@ class ItemVariantController extends Controller
 
     public function update($id, ItemVariantRequest $request)
     {
+        $hasdata = 0;
         $data['success'] = true;
         $data['message'] = '';
         $data['data'] = [];
@@ -107,6 +137,36 @@ class ItemVariantController extends Controller
             $data['success'] = true;
             $itemVariant = ItemVariant::findOrFail($id);
             $values = $request->all();
+            if ($request->hasFile('image')) {
+                $fileHelper = new SamundraFileHelper();
+                $file = $fileHelper->saveFile($request->image, 'itemVariant');
+                if ($file['success'] !== true) {
+                    return response(['success' => false, 'message' => 'Data could not be saved at the moment', "data" => null], 400);
+                }
+                if ($itemVariant->image_id === null) {
+                    $newFile = new File();
+                } else {
+                    $newFile = File::where('id', $itemVariant->image_id)->first();
+                    if ($newFile === null) {
+                        $newFile = new File();
+                    } else {
+                        $hasdata = 1;
+                        $fileHelper->deleteFile($newFile->path);
+                    }
+                }
+
+                $newFile->extension = $file['data']['extension'];
+                $newFile->original_name = $file['data']['original_filename'];
+                $newFile->name = $file['data']['filename'];
+                $newFile->type = $file['data']['mime_type'];
+                $newFile->path = $file['data']['link'];
+                if ($hasdata === 1) {
+                    $newFile->update();
+                } else {
+                    $newFile->save();
+                }
+                $values['image_id'] = $newFile->id;
+            }
             $itemVariant->update($values);
             event(new ActivityLogEvent('Edit', 'Item Variant', $itemVariant->id));
             $data['message'] = "Updated successfully.";
