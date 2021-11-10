@@ -634,9 +634,18 @@ export default {
                 }
             }
         },
-        editItem(item) {
+        async editItem(item) {
             this.editedIndex = this.variants.indexOf(item)
             this.addVariant = Object.assign({}, item)
+            this.itemAttributes = [];
+            let res = await ApiServices.itemAttributeIndex();
+            for (var i = 0; i < res.data.length; i++) {
+                for (var j = 0; j < this.addVariant.attribute_group_ids.length; j++) {
+                    if (res.data[i].attribute_group_id === this.addVariant.attribute_group_ids[j]) {
+                        this.itemAttributes.push(res.data[i]);
+                    }
+                }
+            }
             this.editDialog = true
         },
 
