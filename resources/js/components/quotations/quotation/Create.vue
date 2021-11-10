@@ -118,12 +118,18 @@
                                                                                     required
                                                                                     outlined
                                                                                     :rules="rules"
+                                                                                    v-on:change="getVariants(addQuoProduct.item_id)"
                                                                                 ></v-select>
-                                                                                <!--                                                                                <v-select-->
-                                                                                <!--                                                                                    v-model="addQuoProduct.item_variant_id"-->
-                                                                                <!--                                                                                    label="Item Variant"-->
-                                                                                <!--                                                                                    outlined-->
-                                                                                <!--                                                                                ></v-select>-->
+                                                                                <div v-if="hasVariants">
+                                                                                    <v-select
+                                                                                        v-model="addQuoProduct.item_variant_id"
+                                                                                        label="Item Variant"
+                                                                                        :items="variants"
+                                                                                        item-value="id"
+                                                                                        item-text="name"
+                                                                                        outlined
+                                                                                    ></v-select>
+                                                                                </div>
                                                                                 <v-text-field
                                                                                     v-model="addQuoProduct.quantity"
                                                                                     label="Quantity"
@@ -241,12 +247,13 @@ export default {
         dialogDelete: false,
         headers: [
             {text: 'Item', value: 'item_name'},
-            // {text: 'Item Variant', value: 'item_variant_id'},
+            {text: 'Item Variant', value: 'item_variant'},
             {text: 'Quantity', value: 'quantity', sortable: false},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         quotations: [],
         tableLoad: false,
+        hasVariants: false,
         department_id: '',
         file: [],
         note: '',
@@ -255,6 +262,7 @@ export default {
         editedIndex: -1,
         quoProducts: [],
         items: [],
+        variants: [],
         addQuoProduct: {
             item_id: '',
             item_variant_id: '',
@@ -298,6 +306,18 @@ export default {
             }
         },
 
+        async getVariants(item) {
+            let res = await ApiServices.itemShow(item);
+            if (res.success === true) {
+                if (res.data.item_variants.length > 0) {
+                    this.hasVariants = true;
+                } else {
+                    this.hasVariants = false;
+                }
+                this.variants = res.data.item_variants;
+            }
+        },
+
         editItem(item) {
             this.editedIndex = this.quoProducts.indexOf(item)
             this.addQuoProduct = Object.assign({}, item)
@@ -334,20 +354,32 @@ export default {
         },
 
         async addProduct() {
+            var varName = '';
             if (this.editedIndex > -1) {
                 let res = await ApiServices.itemShow(this.addQuoProduct.item_id);
+                if (this.addQuoProduct.item_variant_id) {
+                    let rtn = await ApiServices.itemVariantShow(this.addQuoProduct.item_variant_id);
+                    varName = rtn.data.name;
+                }
+
                 Object.assign(this.quoProducts[this.editedIndex], {
                     'item_id': this.addQuoProduct.item_id,
                     'item_name': res.data.name,
+                    'item_variant': varName,
                     'item_variant_id': this.addQuoProduct.item_variant_id,
                     'quantity': this.addQuoProduct.quantity
                 })
             } else {
                 let res = await ApiServices.itemShow(this.addQuoProduct.item_id);
+                if (this.addQuoProduct.item_variant_id) {
+                    let rtn = await ApiServices.itemVariantShow(this.addQuoProduct.item_variant_id);
+                    varName = rtn.data.name;
+                }
                 this.quoProducts.push({
                     'item_id': this.addQuoProduct.item_id,
                     'item_name': res.data.name,
                     'item_variant_id': this.addQuoProduct.item_variant_id,
+                    'item_variant': varName,
                     'quantity': this.addQuoProduct.quantity
                 });
             }
@@ -391,6 +423,9 @@ export default {
                 productData.append('item_id', parseInt(this.quoProducts[i].item_id));
                 productData.append('quantity', parseInt(this.quoProducts[i].quantity));
                 productData.append('quotation_id', parseInt(id));
+                if (this.quoProducts[i].item_variant_id !== '') {
+                    productData.append('item_variant_id', parseInt(this.quoProducts[i].item_variant_id));
+                }
                 let res = await ApiServices.quotationProductCreate(productData);
             }
             route.replace('/quotations/');

@@ -132,12 +132,18 @@
                                                                                     required
                                                                                     outlined
                                                                                     :rules="rules"
+                                                                                    v-on:change="getVariants(addQuoProduct.item_id)"
                                                                                 ></v-select>
-                                                                                <!--                                                                                <v-select-->
-                                                                                <!--                                                                                    v-model="addQuoProduct.item_variant_id"-->
-                                                                                <!--                                                                                    label="Item Variant"-->
-                                                                                <!--                                                                                    outlined-->
-                                                                                <!--                                                                                ></v-select>-->
+                                                                                <div v-if="hasVariants">
+                                                                                    <v-select
+                                                                                        v-model="addQuoProduct.item_variant_id"
+                                                                                        label="Item Variant"
+                                                                                        :items="variants"
+                                                                                        item-text="name"
+                                                                                        item-value="id"
+                                                                                        outlined
+                                                                                    ></v-select>
+                                                                                </div>
                                                                                 <v-text-field
                                                                                     v-model="addQuoProduct.quantity"
                                                                                     label="Quantity"
@@ -197,7 +203,9 @@
                                                 <p v-if="item.item_id" class="mt-3">{{ item.item.name }}</p>
                                             </template>
                                             <template v-slot:item.item_variant_id="{ item }">
-                                                <p v-if="item.item_variant_id" class="mt-3">{{ item.item_variant.name }}</p>
+                                                <p v-if="item.item_variant_id" class="mt-3">{{
+                                                        item.item_variant.name
+                                                    }}</p>
                                                 <p v-else class="mt-3">---</p>
                                             </template>
                                             <template v-slot:item.tax_id="{ item }">
@@ -289,6 +297,8 @@ export default {
         changeProgress: false,
         validated: false,
         departments: [],
+        variants: [],
+        hasVariants: false,
         editedItem: {
             id: null,
             department_id: '',
@@ -338,6 +348,18 @@ export default {
             if (res.success === true) {
                 this.editedItem = res.data;
                 this.quoProducts = res.data.quotation_products;
+            }
+        },
+
+        async getVariants(item) {
+            let res = await ApiServices.itemShow(item);
+            if (res.success === true) {
+                if (res.data.item_variants.length > 0) {
+                    this.hasVariants = true;
+                } else {
+                    this.hasVariants = false;
+                }
+                this.variants = res.data.item_variants;
             }
         },
 
