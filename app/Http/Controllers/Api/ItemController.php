@@ -212,7 +212,7 @@ class ItemController extends Controller
 
             //Check if given attribute_ids are exiting id or not.
             try {
-                for ($i=0; $i<count($requestAttributeIds); $i++) {
+                for ($i = 0; $i < count($requestAttributeIds); $i++) {
                     $attribute = ItemAttribute::findOrFail($requestAttributeIds[$i]);
                 }
             } catch (\Exception $exception) {
@@ -262,10 +262,12 @@ class ItemController extends Controller
             } elseif (count($attributeGroups) == 1) {
                 $x = $attributeGroups[0]['attributes'];
 //                $attrIdsArray = $requestAttributeIds;
-                $l = count($collection);
-                $collection[$l]['attribute_group_ids'] = [$x[0]->attribute_group_id];
-                $collection[$l]['attribute_ids'] = [$x[0]->id];
-                $collection[$l]['name'] = $x[0]->name;
+                for ($i = 0; $i < count($x); $i++) {
+                    $l = count($collection);
+                    $collection[$l]['attribute_group_ids'] = [$x[$i]->attribute_group_id];
+                    $collection[$l]['attribute_ids'] = [$x[$i]->id];
+                    $collection[$l]['name'] = $x[$i]->name;
+                }
             }
             $data['data'] = $collection;
         } catch (\Exception $e) {

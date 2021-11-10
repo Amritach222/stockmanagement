@@ -227,6 +227,8 @@
                                                                                     multiple
                                                                                     required
                                                                                     outlined
+                                                                                    return-object
+                                                                                    v-on:change=getAttributes(addVariant.attribute_group_ids)
                                                                                 ></v-select>
                                                                                 <v-select
                                                                                     v-model="addVariant.attribute_ids"
@@ -421,6 +423,7 @@ import store from "../../../../store";
 import route from "../../../../router";
 import i18n from "../../../../i18n";
 import ApiServices from "../../../../services/ApiServices";
+import cityList from "../../../../services/lib/city.json";
 
 export default {
     name: "ItemCreate",
@@ -458,6 +461,7 @@ export default {
         tableLoad: false,
         productCount: 0,
         editedIndex: -1,
+        validated: false,
         quoProducts: [],
         itemAttributeGroups: [],
         itemAttributes: [],
@@ -489,6 +493,12 @@ export default {
             product_id: [
                 val => val > 0 || i18n.t('validation.required'),
             ],
+            attribute_group_ids: [
+                val => val > 0 || i18n.t('validation.required'),
+            ],
+            attribute_ids: [
+                val => val > 0 || i18n.t('validation.required'),
+            ],
         },
     }),
 
@@ -504,7 +514,7 @@ export default {
         this.loadUnits();
         this.loadTaxes();
         this.loadItemAttributeGroups();
-        this.loadItemAttributes();
+        // this.loadItemAttributes();
     },
     methods: {
         async loadProducts() {
@@ -537,10 +547,15 @@ export default {
                 this.itemAttributeGroups = res.data;
             }
         },
-        async loadItemAttributes() {
+        async getAttributes(attributeGroup) {
+            this.itemAttributes = [];
             let res = await ApiServices.itemAttributeIndex();
-            if (res.success === true) {
-                this.itemAttributes = res.data;
+            for (var i = 0; i < res.data.length; i++) {
+                for (var j = 0; j < attributeGroup.length; j++) {
+                    if (res.data[i].attribute_group_id === attributeGroup[j].id) {
+                        this.itemAttributes.push(res.data[i]);
+                    }
+                }
             }
         },
 
@@ -618,25 +633,27 @@ export default {
         },
 
         async variantAdd() {
-            if (this.editedIndex > -1) {
-                Object.assign(this.variants[this.editedIndex], {
-                    'quantity': this.addVariant.quantity,
-                    'price': this.addVariant.price
-                })
-                this.$refs.editForm.reset();
-                this.editClose()
-            } else {
-                const data = new FormData();
-                data.append('attribute_ids', JSON.stringify(this.addVariant.attribute_ids));
-                data.append('count', parseInt(this.addVariant.attribute_ids.length));
-                let res = await ApiServices.createVariant(data);
-                if (res.success === true) {
-                    for (var i = 0; i < res.data.length; i++) {
-                        this.variants.push(res.data[i]);
+            this.validate();
+            if (this.validated === true) {
+                if (this.editedIndex > -1) {
+                    Object.assign(this.variants[this.editedIndex], {
+                        'quantity': this.addVariant.quantity,
+                        'price': this.addVariant.price
+                    })
+                    this.$refs.editForm.reset();
+                    this.editClose()
+                } else {
+                    const data = new FormData();
+                    data.append('attribute_ids', JSON.stringify(this.addVariant.attribute_ids));
+                    let res = await ApiServices.createVariant(data);
+                    if (res.success === true) {
+                        for (var i = 0; i < res.data.length; i++) {
+                            this.variants.push(res.data[i]);
+                        }
                     }
+                    this.$refs.form.reset();
+                    this.close()
                 }
-                this.$refs.form.reset();
-                this.close()
             }
         },
 
@@ -658,12 +675,14 @@ export default {
                 data.append('image', this.image);
             }
 
+            console.log(this.variants.length)
+
             let res = await ApiServices.itemCreate(data);
             this.createProgress = false;
             if (res.success === true) {
-                if(this.variants.length >0){
+                if (this.variants.length > 0) {
                     let rtn = this.createVariant(res.data.id);
-                }else {
+                } else {
                     route.replace('/items/');
                 }
             }
@@ -672,7 +691,7 @@ export default {
         async createVariant(id) {
             this.createProgress = true;
             const data = new FormData();
-            for(var i=0; i<this.variants.length; i++) {
+            for (var i = 0; i < this.variants.length; i++) {
                 data.append('attribute_ids', JSON.stringify(this.variants[i].attribute_ids));
                 data.append('price', parseInt(this.variants[i].price));
                 data.append('quantity', parseInt(this.variants[i].quantity));
@@ -682,6 +701,17 @@ export default {
             }
             route.replace('/items/');
         },
+
+        validate() {
+            this.validated = true;
+            if (this.addVariant.attribute_group_ids.length === 0) {
+                this.validated = false;
+            } else if (this.addVariant.attribute_ids.length === 0) {
+                this.validated = false;
+            } else {
+                this.validated = true;
+            }
+        }
     }
 }
 </script>

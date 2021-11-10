@@ -252,6 +252,8 @@
                                                                                     multiple
                                                                                     required
                                                                                     outlined
+                                                                                    return-object
+                                                                                    v-on:change=getAttributes(addVariant.attribute_group_ids)
                                                                                 ></v-select>
                                                                                 <v-select
                                                                                     v-model="addVariant.attribute_ids"
@@ -520,12 +522,18 @@ export default {
             ],
         },
     }),
+    computed: {
+        formTitle() {
+            return this.editedIndex === -1 ? 'Add Item Variant' : 'Edit Item Variant'
+        },
+    },
     async created() {
         this.loadItems();
         this.loadProducts();
         this.loadBrands();
         this.loadUnits();
         this.loadTaxes();
+        this.loadItemAttributeGroups();
     },
     methods: {
         async loadProducts() {
@@ -562,6 +570,68 @@ export default {
                 this.variants = res.data.item_variants;
             }
         },
+        async loadItemAttributeGroups() {
+            let res = await ApiServices.itemAttributeGroupIndex();
+            if (res.success === true) {
+                this.itemAttributeGroups = res.data;
+            }
+        },
+        async getAttributes(attributeGroup) {
+            this.itemAttributes = [];
+            let res = await ApiServices.itemAttributeIndex();
+            for (var i = 0; i < res.data.length; i++) {
+                for (var j = 0; j < attributeGroup.length; j++) {
+                    if (res.data[i].attribute_group_id === attributeGroup[j].id) {
+                        this.itemAttributes.push(res.data[i]);
+                    }
+                }
+            }
+        },
+        editItem(item) {
+            this.editedIndex = this.variants.indexOf(item)
+            this.addVariant = Object.assign({}, item)
+            this.editDialog = true
+        },
+
+        deleteItem(item) {
+            this.editedIndex = this.variants.indexOf(item)
+            this.addVariant = Object.assign({}, item)
+            this.dialogDelete = true
+        },
+
+        async deleteItemConfirm() {
+            let res = await ApiServices.itemVariantDelete(this.addVariant.id);
+            if (res.success === true) {
+                this.variants.splice(this.editedIndex, 1)
+            }
+            this.closeDelete()
+        },
+
+        close() {
+            this.progressL = false;
+            this.dialog = false;
+            this.$nextTick(() => {
+                this.addVariant = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            });
+        },
+
+        editClose() {
+            this.progressL = false;
+            this.editDialog = false;
+            this.$nextTick(() => {
+                this.addVariant = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            });
+        },
+
+        closeDelete() {
+            this.dialogDelete = false
+            this.$nextTick(() => {
+                this.addVariant = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            })
+        },
         clearError(name) {
             if (name === 'name') {
                 this.error.name = '';
@@ -594,6 +664,36 @@ export default {
                 this.error.image = '';
             }
         },
+
+        async variantAdd() {
+            if (this.editedIndex > -1) {
+                const data = new FormData();
+                data.append('quantity', parseInt(this.addVariant.quantity));
+                data.append('price', parseInt(this.addVariant.price));
+                let res = await ApiServices.itemVariantEdit(this.addVariant.id, data);
+                Object.assign(this.variants[this.editedIndex], res.data);
+                this.$refs.editForm.reset();
+                this.editClose()
+            } else {
+                const data = new FormData();
+                data.append('attribute_ids', JSON.stringify(this.addVariant.attribute_ids));
+                let res = await ApiServices.createVariant(data);
+                if (res.success === true) {
+                    for (var i = 0; i < res.data.length; i++) {
+                        data.append('attribute_ids', JSON.stringify(res.data[i].attribute_ids));
+                        data.append('item_id', this.editedItem.id);
+
+                        let rtn = await ApiServices.itemVariantCreate(data);
+                        if (rtn.success === true) {
+                            this.variants.push(rtn.data);
+                        }
+                    }
+                }
+                this.$refs.form.reset();
+                this.close()
+            }
+        },
+
         async edit() {
             this.changeProgress = true;
             const data = new FormData();
