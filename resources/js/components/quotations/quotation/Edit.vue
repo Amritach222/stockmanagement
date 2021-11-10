@@ -366,6 +366,7 @@ export default {
         editItem(item) {
             this.editedIndex = this.quoProducts.indexOf(item)
             this.addQuoProduct = Object.assign({}, item)
+            this.getVariants(this.addQuoProduct.item_id)
             this.dialog = true
         },
 
@@ -431,6 +432,7 @@ export default {
                     this.progressL = true;
                     const data = new FormData();
                     data.append('item_id', this.addQuoProduct.item_id);
+                    data.append('item_variant_id', this.addQuoProduct.item_variant_id);
                     data.append('quantity', this.addQuoProduct.quantity);
                     let res = await ApiServices.quotationProductEdit(this.addQuoProduct.id, data);
                     if (res.success === true) {
@@ -443,6 +445,7 @@ export default {
                     this.progressL = true;
                     const data = new FormData();
                     data.append('item_id', this.addQuoProduct.item_id);
+                    data.append('item_variant_id', this.addQuoProduct.item_id);
                     data.append('quantity', this.addQuoProduct.quantity);
                     data.append('quotation_id', this.editedItem.id);
                     let res = await ApiServices.quotationProductCreate(data);
