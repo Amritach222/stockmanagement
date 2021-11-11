@@ -125,7 +125,7 @@ class QuotationController extends Controller
             $values = $request->all();
             if ($request->hasFile('file')) {
                 $fileHelper = new SamundraFileHelper();
-                $file = $fileHelper->saveFile($request->file, 'budget');
+                $file = $fileHelper->saveFile($request->file, 'quotation');
                 if ($file['success'] !== true) {
                     return response(['success' => false, 'message' => 'Data could not be saved at the moment', "data" => null], 400);
                 }

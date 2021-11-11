@@ -64,7 +64,7 @@ class ItemController extends Controller
             $values['code'] = CodeGenerator::code();
             if ($request->hasFile('image')) {
                 $fileHelper = new SamundraFileHelper();
-                $file = $fileHelper->saveFile($request->image, 'product');
+                $file = $fileHelper->saveFile($request->image, 'item');
                 if ($file['success'] !== true) {
                     return response(['success' => false, 'message' => 'Data could not be saved at the moment', "data" => null], 400);
                 }
