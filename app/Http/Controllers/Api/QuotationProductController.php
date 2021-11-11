@@ -97,8 +97,14 @@ class QuotationProductController extends Controller
             } elseif ($quotationProduct->item_variant_id !== null) {
                 $variant = ItemVariant::findOrFail($quotationProduct->item_variant_id);
             }
-            $price = $variant->price ?? $item->cost_price;
-            $values['price'] = $price;
+            if($request->item_id != $quotationProduct->item_id){
+                $price = $variant->price ?? $item->cost_price;
+                $values['price'] = $price;
+            }elseif ($request->item_variant_id != $quotationProduct->item_variant_id){
+                $price = $variant->price ?? $item->cost_price;
+                $values['price'] = $price;
+            }
+
             $values['tax_id'] = $item->tax_id;
             $quotationProduct->update($values);
             $quotationProduct->taxCalculate();
