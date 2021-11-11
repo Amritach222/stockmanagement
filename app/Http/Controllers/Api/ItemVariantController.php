@@ -185,6 +185,13 @@ class ItemVariantController extends Controller
         try {
             $data['success'] = true;
             $itemVariant = ItemVariant::findOrFail($id);
+            $fileHelper = new SamundraFileHelper();
+            if ($itemVariant->image_id !== null) {
+                $file = File::where('id', $itemVariant->image_id)->first();
+                if ($file !== null) {
+                    $fileHelper->deleteFile($file->path);
+                }
+            }
             $itemVariant->delete();
             event(new ActivityLogEvent('Delete', 'Item Variant', $id));
             $data['message'] = "Deleted successfully.";

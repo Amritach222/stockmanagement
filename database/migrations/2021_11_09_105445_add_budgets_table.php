@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddBudgetRequestsTable extends Migration
+class AddBudgetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,9 @@ class AddBudgetRequestsTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('budgets', function (Blueprint $table) {
+            $table->renameColumn('final_dispatched_amount', 'total_dispatched_amount');
+        });
     }
 
     /**

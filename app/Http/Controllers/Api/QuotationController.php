@@ -174,6 +174,13 @@ class QuotationController extends Controller
             foreach ($quotation->quotationProducts as $product) {
                 $product->delete();
             }
+            $fileHelper = new SamundraFileHelper();
+            if ($quotation->file_id !== null) {
+                $file = File::where('id', $quotation->file_id)->first();
+                if ($file !== null) {
+                    $fileHelper->deleteFile($file->path);
+                }
+            }
             $quotation->delete();
             event(new ActivityLogEvent('Delete', 'Quotation', $id));
             $data['message'] = "Deleted successfully.";

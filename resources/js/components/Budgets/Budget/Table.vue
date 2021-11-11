@@ -126,7 +126,7 @@ export default {
             {text: 'Fiscal Year', value: 'fiscal_year_id', sortable: false},
             {text: 'Allocated Amount', value: 'allocated_budget_amount'},
             {text: 'Initial Amount', value: 'initial_dispatched_amount'},
-            {text: 'Final Amount', value: 'final_dispatched_amount'},
+            {text: 'Total Amount', value: 'total_dispatched_amount'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         budgets: [],

@@ -147,9 +147,11 @@ class ProductController extends Controller
             $data['success'] = true;
             $product = Product::findOrFail($id);
             $fileHelper = new SamundraFileHelper();
-            $file = File::where('id', $product->image_id)->first();
-            if ($file !== null) {
-                $fileHelper->deleteFile($file->path);
+            if ($product->image_id !== null) {
+                $file = File::where('id', $product->image_id)->first();
+                if ($file !== null) {
+                    $fileHelper->deleteFile($file->path);
+                }
             }
             $product->delete();
             event(new ActivityLogEvent('Delete', 'Product', $id));

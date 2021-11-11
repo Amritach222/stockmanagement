@@ -190,6 +190,13 @@ class ItemController extends Controller
         try {
             $data['success'] = true;
             $item = Item::findOrFail($id);
+            $fileHelper = new SamundraFileHelper();
+            if ($item->image_id !== null) {
+                $file = File::where('id', $item->image_id)->first();
+                if ($file !== null) {
+                    $fileHelper->deleteFile($file->path);
+                }
+            }
             $item->delete();
             event(new ActivityLogEvent('Delete', 'Item', $id));
             $data['message'] = "Deleted Successfully.";

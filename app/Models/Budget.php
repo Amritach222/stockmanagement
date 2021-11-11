@@ -9,7 +9,7 @@ class Budget extends Model
 
     protected $table = 'budgets';
     public $timestamps = true;
-    protected $fillable = array('department_id', 'fiscal_year_id', 'allocated_budget_amount', 'initial_dispatched_amount', 'final_dispatched_amount', 'date_first_received', 'remarks', 'file_ids');
+    protected $guarded = ['id'];
 
     public function department()
     {
