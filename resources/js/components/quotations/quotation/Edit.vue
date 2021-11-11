@@ -150,6 +150,12 @@
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
+                                                                                <v-text-field
+                                                                                    v-model="addQuoProduct.shipping_cost"
+                                                                                    label="Shipping Cost"
+                                                                                    type="number"
+                                                                                    outlined
+                                                                                ></v-text-field>
                                                                             </v-col>
                                                                         </v-row>
                                                                     </v-container>
@@ -276,11 +282,11 @@ export default {
         headers: [
             {text: 'Item', value: 'item_id'},
             {text: 'Variant', value: 'item_variant_id'},
-            {text: 'Quantity', value: 'quantity', sortable: false},
-            {text: 'Price', value: 'price', sortable: false},
-            {text: 'Tax', value: 'tax_id', sortable: false},
-            {text: 'Shipping', value: 'shipping_cost', sortable: false},
-            {text: 'Total', value: 'grand_total', sortable: false},
+            {text: 'Quantity', value: 'quantity'},
+            {text: 'Price', value: 'price'},
+            {text: 'Tax', value: 'tax_id'},
+            {text: 'Shipping', value: 'shipping_cost'},
+            {text: 'Total', value: 'grand_total'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         quotations: [],
@@ -293,6 +299,7 @@ export default {
             item_id: '',
             item_variant_id: '',
             quantity: '',
+            shipping_cost: '',
         },
         changeProgress: false,
         validated: false,
@@ -432,8 +439,11 @@ export default {
                     this.progressL = true;
                     const data = new FormData();
                     data.append('item_id', this.addQuoProduct.item_id);
-                    data.append('item_variant_id', this.addQuoProduct.item_variant_id);
+                    if (this.addQuoProduct.item_variant_id !== null) {
+                        data.append('item_variant_id', this.addQuoProduct.item_variant_id);
+                    }
                     data.append('quantity', this.addQuoProduct.quantity);
+                    data.append('shipping_cost', this.addQuoProduct.shipping_cost);
                     let res = await ApiServices.quotationProductEdit(this.addQuoProduct.id, data);
                     if (res.success === true) {
                         Object.assign(this.quoProducts[this.editedIndex], res.data)
@@ -445,8 +455,11 @@ export default {
                     this.progressL = true;
                     const data = new FormData();
                     data.append('item_id', this.addQuoProduct.item_id);
-                    data.append('item_variant_id', this.addQuoProduct.item_id);
+                    if (this.addQuoProduct.item_variant_id !== null) {
+                        data.append('item_variant_id', this.addQuoProduct.item_variant_id);
+                    }
                     data.append('quantity', this.addQuoProduct.quantity);
+                    data.append('shipping_cost', this.addQuoProduct.shipping_cost);
                     data.append('quotation_id', this.editedItem.id);
                     let res = await ApiServices.quotationProductCreate(data);
                     if (res.success === true) {

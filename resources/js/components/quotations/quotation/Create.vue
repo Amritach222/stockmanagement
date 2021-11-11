@@ -136,6 +136,12 @@
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
+                                                                                <v-text-field
+                                                                                    v-model="addQuoProduct.shipping_cost"
+                                                                                    label="Shipping Cost"
+                                                                                    type="number"
+                                                                                    outlined
+                                                                                ></v-text-field>
                                                                             </v-col>
                                                                         </v-row>
                                                                     </v-container>
@@ -248,7 +254,9 @@ export default {
         headers: [
             {text: 'Item', value: 'item_name'},
             {text: 'Item Variant', value: 'item_variant'},
-            {text: 'Quantity', value: 'quantity', sortable: false},
+            {text: 'Quantity', value: 'quantity'},
+            {text: 'Price', value: 'price'},
+            {text: 'Shipping Cost', value: 'shipping_cost'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         quotations: [],
@@ -354,43 +362,38 @@ export default {
         },
 
         async addProduct() {
-            var varName = '';
+            var varName = '---';
+            var price = '';
+            let res = await ApiServices.itemShow(this.addQuoProduct.item_id);
+            price = res.data.cost_price;
+            if (this.addQuoProduct.item_variant_id) {
+                let rtn = await ApiServices.itemVariantShow(this.addQuoProduct.item_variant_id);
+                varName = rtn.data.name;
+                price = rtn.data.price;
+            }
             if (this.editedIndex > -1) {
-                let res = await ApiServices.itemShow(this.addQuoProduct.item_id);
-                if (this.addQuoProduct.item_variant_id) {
-                    let rtn = await ApiServices.itemVariantShow(this.addQuoProduct.item_variant_id);
-                    varName = rtn.data.name;
-                }
-
                 Object.assign(this.quoProducts[this.editedIndex], {
                     'item_id': this.addQuoProduct.item_id,
                     'item_name': res.data.name,
                     'item_variant': varName,
                     'item_variant_id': this.addQuoProduct.item_variant_id,
-                    'quantity': this.addQuoProduct.quantity
+                    'price': price,
+                    'quantity': this.addQuoProduct.quantity,
+                    'shipping_cost': this.addQuoProduct.shipping_cost,
                 })
             } else {
-                let res = await ApiServices.itemShow(this.addQuoProduct.item_id);
-                if (this.addQuoProduct.item_variant_id) {
-                    let rtn = await ApiServices.itemVariantShow(this.addQuoProduct.item_variant_id);
-                    varName = rtn.data.name;
-                }
                 this.quoProducts.push({
                     'item_id': this.addQuoProduct.item_id,
                     'item_name': res.data.name,
                     'item_variant_id': this.addQuoProduct.item_variant_id,
                     'item_variant': varName,
-                    'quantity': this.addQuoProduct.quantity
+                    'price': price,
+                    'quantity': this.addQuoProduct.quantity,
+                    'shipping_cost': this.addQuoProduct.shipping_cost,
                 });
             }
-            let f = await this.clearValue();
+            this.$refs.form.reset();
             this.close()
-        },
-
-        async clearValue() {
-            this.addQuoProduct.item_id = '';
-            this.addQuoProduct.item_variant_id = '';
-            this.addQuoProduct.quantity = '';
         },
 
         async create() {
@@ -423,6 +426,7 @@ export default {
                 productData.append('item_id', parseInt(this.quoProducts[i].item_id));
                 productData.append('quantity', parseInt(this.quoProducts[i].quantity));
                 productData.append('quotation_id', parseInt(id));
+                productData.append('shipping_cost', parseInt(this.quoProducts[i].shipping_cost));
                 if (this.quoProducts[i].item_variant_id !== '') {
                     productData.append('item_variant_id', parseInt(this.quoProducts[i].item_variant_id));
                 }
