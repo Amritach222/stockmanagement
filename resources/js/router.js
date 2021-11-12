@@ -149,6 +149,9 @@ import ExpenseCategoryShow from './components/expenses/ExpenseCategory/Show'
 
 import ProfileSetting from './components/Settings/profile/Index'
 
+import NewPurchaseRequest from './components/purchaseRequest/NewPurchaseRequest'
+import PurchaseRequestHistory from './components/purchaseRequest/PurchaseRequestHistory'
+
 Vue.use(Router)
 
 export default new Router({
@@ -219,6 +222,24 @@ export default new Router({
             path: '/reset-password',
             name: 'reset-password',
             component: ResetPassword,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/new-purchase-request',
+            name: 'New Purchase Request',
+            component: NewPurchaseRequest,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchase-request-history',
+            name: 'Purchase Request History',
+            component: PurchaseRequestHistory,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

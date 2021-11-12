@@ -1,4 +1,5 @@
 import i18n from "../../i18n";
+
 export default [
     {
         _name: 'CSidebarNav',
@@ -52,6 +53,21 @@ export default [
                         name: 'Item',
                         to: '/items'
                     }
+                ]
+            },
+            {
+                _name: 'CSidebarNavDropdown',
+                name: 'Purchase',
+                icon: 'cil-calculator',
+                items: [
+                    {
+                        name: 'New Purchase Request',
+                        to: '/new-purchase-request'
+                    },
+                    {
+                        name: 'Purchase Request History',
+                        to: '/purchase-request-history'
+                    },
                 ]
             },
             {

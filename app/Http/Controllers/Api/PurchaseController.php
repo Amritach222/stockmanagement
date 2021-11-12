@@ -63,11 +63,6 @@ class PurchaseController extends Controller
         return $data;
     }
 
-    public function edit($id)
-    {
-
-    }
-
     public function update($id, PurchaseRequest $request)
     {
         $data['success'] = true;

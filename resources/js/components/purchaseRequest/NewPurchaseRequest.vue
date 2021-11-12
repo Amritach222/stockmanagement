@@ -117,12 +117,12 @@
 </template>
 
 <script>
-import i18n from "../../../i18n";
-import ApiServices from "../../../services/ApiServices";
-import config from "../../../config";
+import config from "../../config";
+import i18n from "../../i18n";
+import ApiServices from "../../services/ApiServices";
 
 export default {
-    name: "SettingIndex",
+    name: "NewPurchaseRequest",
 
     data: () => ({
         cdnURL: config.cdnURL,
@@ -252,3 +252,7 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+
+</style>
