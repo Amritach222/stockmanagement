@@ -26,6 +26,7 @@ class BudgetRequest extends FormRequest
     {
         if ($this->id) {
             return [
+                'title' => 'string',
                 'department_id' => 'int|exists:departments,id',
                 'fiscal_year_id' => 'int|exists:fiscal_years,id',
                 'allocated_budget_amount' => 'int|min:0',
@@ -33,6 +34,7 @@ class BudgetRequest extends FormRequest
             ];
         } else {
             return [
+                'title' => 'required|string',
                 'department_id' => 'required|int|exists:departments,id',
                 'fiscal_year_id' => 'required|int|exists:fiscal_years,id',
                 'allocated_budget_amount' => 'required|int|min:0',

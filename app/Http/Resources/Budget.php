@@ -24,6 +24,7 @@ class Budget extends JsonResource
         }
         return [
             'id' => $this->id,
+            'title' => $this->title,
             'department_id' => $this->department_id,
             'fiscal_year_id' => $this->fiscal_year_id,
             'allocated_budget_amount' => $this->allocated_budget_amount,

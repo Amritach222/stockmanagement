@@ -15,6 +15,8 @@ class AddBudgetsTable extends Migration
     {
         Schema::table('budgets', function (Blueprint $table) {
             $table->renameColumn('final_dispatched_amount', 'total_dispatched_amount');
+            $table->string('title')->nullable();
+            $table->string('type')->nullable();
         });
     }
 
@@ -25,6 +27,10 @@ class AddBudgetsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('budgets', function (Blueprint $table) {
+            $table->renameColumn('total_dispatched_amount', 'final_dispatched_amount');
+            $table->dropColumn('title');
+            $table->dropColumn('type');
+        });
     }
 }

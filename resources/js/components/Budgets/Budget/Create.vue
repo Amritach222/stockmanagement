@@ -17,6 +17,15 @@
                             <CCardBody>
                                 <CForm>
                                     <v-form>
+                                        <v-text-field
+                                            v-model="title"
+                                            label="Title"
+                                            placeholder="Enter title..."
+                                            prepend-icon="mdi-alpha-t-circle"
+                                            required
+                                            :rules="rules.title"
+                                            solo
+                                        />
                                         <v-select
                                             v-model="department_id"
                                             :items="departments"
@@ -39,6 +48,14 @@
                                             prepend-icon="mdi-calendar-clock"
                                             required
                                             :rules="rules.fiscal_year_id"
+                                            solo
+                                        />
+                                        <v-select
+                                            v-model="type"
+                                            :items="['Annual','Extra']"
+                                            label="Type"
+                                            placeholder="Select a budget type..."
+                                            prepend-icon="mdi-shape"
                                             solo
                                         />
                                         <v-text-field
@@ -127,10 +144,13 @@ export default {
         date_first_received: '',
         remarks: '',
         file: [],
+        title: '',
+        type: '',
         departments: [],
         fiscalYears: [],
         createProgress: false,
         error: {
+            title:'',
             department_id: '',
             fiscal_year_id: '',
             allocated_budget_amount: '',
@@ -140,8 +160,11 @@ export default {
             file: [],
         },
         rules: {
-            department_id: [
+            title: [
                 val => val > 0 || i18n.t('validation.required'),
+            ],
+            department_id: [
+                val => (val || '').length > 0 || i18n.t('validation.required'),
             ],
             fiscal_year_id: [
                 val => val > 0 || i18n.t('validation.required'),
@@ -176,6 +199,9 @@ export default {
             }
         },
         clearError(name) {
+            if (name === 'title') {
+                this.error.title = '';
+            }
             if (name === 'department_id') {
                 this.error.department_id = '';
             }
@@ -198,8 +224,10 @@ export default {
         async create() {
             this.createProgress = true;
             const data = new FormData();
+            data.append('title', this.title);
             data.append('department_id', this.department_id);
             data.append('fiscal_year_id', this.fiscal_year_id);
+            data.append('type', this.type);
             data.append('allocated_budget_amount', this.allocated_budget_amount);
             data.append('initial_dispatched_amount', this.initial_dispatched_amount);
             data.append('date_first_received', this.date_first_received);

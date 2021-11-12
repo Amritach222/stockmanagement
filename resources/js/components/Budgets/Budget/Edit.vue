@@ -18,6 +18,15 @@
                                 <CForm>
                                     <v-form>
                                         <v-select
+                                            v-model="editedItem.title"
+                                            label="Title"
+                                            placeholder="Enter title..."
+                                            prepend-icon="mdi-alpha-d-circle"
+                                            required
+                                            :rules="rules.title"
+                                            solo
+                                        />
+                                        <v-select
                                             v-model="editedItem.department_id"
                                             :items="departments"
                                             item-text="name"
@@ -33,11 +42,20 @@
                                             v-model="editedItem.fiscal_year_id"
                                             :items="fiscalYears"
                                             item-text="name"
+                                            item-value="id"
                                             label="Fiscal Year"
                                             placeholder="Select a fiscal year..."
                                             prepend-icon="mdi-calendar-clock"
                                             required
                                             :rules="rules.fiscal_year_id"
+                                            solo
+                                        />
+                                        <v-select
+                                            v-model="editedItem.type"
+                                            :items="['Annual','Extra']"
+                                            label="Type"
+                                            placeholder="Select a budget type..."
+                                            prepend-icon="mdi-calendar-clock"
                                             solo
                                         />
                                         <v-text-field
@@ -88,7 +106,7 @@
                                                     accept="*/application"
                                                 ></v-file-input>
                                                 <v-col width="200" class="ml-3 file-link"
-                                                        v-on:click="openImage(editedItem.link)">
+                                                       v-on:click="openImage(editedItem.link)">
                                                     <h5> Open File </h5>
                                                 </v-col>
                                             </v-col>
@@ -140,8 +158,10 @@ export default {
     data: () => ({
         editedItem: {
             id: null,
+            title: '',
             department_id: '',
             fiscal_year_id: '',
+            type: '',
             allocated_budget_amount: '',
             initial_dispatched_amount: '',
             date_first_received: '',
@@ -153,6 +173,7 @@ export default {
         fiscalYears: [],
         changeProgress: false,
         error: {
+            title: '',
             department_id: '',
             fiscal_year_id: '',
             allocated_budget_amount: '',
@@ -162,6 +183,9 @@ export default {
             file: [],
         },
         rules: {
+            title: [
+                val => (val || '').length > 0 || i18n.t('validation.required'),
+            ],
             department_id: [
                 val => val > 0 || i18n.t('validation.required'),
             ],
@@ -209,6 +233,9 @@ export default {
             }
         },
         clearError(name) {
+            if (name === 'title') {
+                this.error.title = '';
+            }
             if (name === 'department_id') {
                 this.error.department_id = '';
             }
@@ -231,8 +258,10 @@ export default {
         async edit() {
             this.changeProgress = true;
             const data = new FormData();
+            data.append('title', this.editedItem.title);
             data.append('department_id', this.editedItem.department_id);
             data.append('fiscal_year_id', this.editedItem.fiscal_year_id);
+            data.append('type', this.editedItem.type);
             data.append('allocated_budget_amount', this.editedItem.allocated_budget_amount);
             data.append('initial_dispatched_amount', this.editedItem.initial_dispatched_amount);
             data.append('date_first_received', this.editedItem.date_first_received);
@@ -252,7 +281,7 @@ export default {
 }
 </script>
 <style scoped>
-.file-link{
+.file-link {
     cursor: pointer;
     text-decoration: underline;
 }

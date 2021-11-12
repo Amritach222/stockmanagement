@@ -122,6 +122,7 @@ export default {
         dialogDelete: false,
         headers: [
             {text: 'Id', align: 'start', sortable: true, value: 'id'},
+            {text: 'Title', value: 'title'},
             {text: 'Department', value: 'department_id'},
             {text: 'Fiscal Year', value: 'fiscal_year_id', sortable: false},
             {text: 'Allocated Amount', value: 'allocated_budget_amount'},
