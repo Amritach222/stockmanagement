@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
     Route::post('create-variants', [\App\Http\Controllers\Api\ItemController::class, 'createVariants']);
+    Route::get('logs', [\App\Http\Controllers\Api\logController::class, 'index']);
 
     Route::group(['prefix' => '/setting'], function () {
         Route::apiResource('brands', \App\Http\Controllers\Api\BrandController::class);

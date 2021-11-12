@@ -26,11 +26,6 @@ class Department extends Model
         return $this->hasMany(Budget::class, 'department_id');
     }
 
-    public function budgetExtends()
-    {
-        return $this->hasMany(BudgetExtend::class, 'department_id');
-    }
-
     public function budgetRequests()
     {
         return $this->hasMany(BudgetRequest::class, 'department_id');

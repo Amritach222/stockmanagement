@@ -16,6 +16,11 @@ class FiscalYear extends Model
         return $this->hasMany(Budget::class, 'fiscal_year_id');
     }
 
+    public function budgetRequests()
+    {
+        return $this->hasMany(BudgetRequest::class, 'fiscal_year_id');
+    }
+
     public function freezeBudgets()
     {
         return $this->hasMany(FreezeBudget::class, 'fiscal_year_id');

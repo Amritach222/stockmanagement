@@ -27,12 +27,18 @@ class BudgetRequestRequest extends FormRequest
         if ($this->id) {
             return [
                 'department_id' => 'int|exists:departments,id',
+                'fiscal_year_id' => 'int|exists:fiscal_years,id',
                 'request_amount' => 'int|min:0',
+                'type' => 'string',
+                'remarks' => 'string',
             ];
         } else {
             return [
                 'department_id' => 'required|int|exists:departments,id',
+                'fiscal_year_id' => 'required|int|exists:fiscal_years,id',
                 'request_amount' => 'required|int|min:0',
+                'type' => 'required|string',
+                'remarks' => 'sometimes|string',
             ];
         }
     }
