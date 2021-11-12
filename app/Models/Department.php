@@ -70,4 +70,9 @@ class Department extends Model
     {
         return $this->belongsTo(User::class, 'head_of_department');
     }
+
+    public function budgetLimits()
+    {
+        return $this->hasMany(BudgetLimit::class, 'department_id');
+    }
 }

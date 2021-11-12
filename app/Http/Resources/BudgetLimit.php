@@ -15,11 +15,14 @@ class BudgetLimit extends JsonResource
     public function toArray($request)
     {
         $category = new Category($this->category);
+        $department = new Department($this->department);
         return [
             'id' => $this->id,
             'category_id' => $this->category_id,
+            'department_id' => $this->department_id,
             'amount' => $this->amount,
             'category' => $category,
+            'department' => $department,
         ];
     }
 }
