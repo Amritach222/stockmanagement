@@ -40,7 +40,6 @@ class BudgetRequestController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
-            $budgetRequest = new BudgetRequest($values);
             if ($request->hasFile('file')) {
                 $fileHelper = new SamundraFileHelper();
                 $file = $fileHelper->saveFile($request->file, 'budgetRequest');
@@ -56,6 +55,7 @@ class BudgetRequestController extends Controller
                 $newFile->save();
                 $values['file_id'] = $newFile->id;
             }
+            $budgetRequest = new BudgetRequest($values);
             $budgetRequest->save();
             event(new ActivityLogEvent('Add', 'Budget Request', $budgetRequest->id));
             $data['message'] = "Budget Request added successfully.";

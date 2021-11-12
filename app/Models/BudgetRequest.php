@@ -35,4 +35,9 @@ class BudgetRequest extends Model
     {
         return $this->belongsTo(File::class, 'file_id');
     }
+
+    public function budgetRequestCategories()
+    {
+        return $this->hasMany(BudgetRequestCategory::class, 'budget_request_id');
+    }
 }

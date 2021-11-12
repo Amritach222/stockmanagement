@@ -136,8 +136,15 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['prefix' => '/budget'], function () {
         Route::apiResource('budgets', \App\Http\Controllers\Api\BudgetController::class);
         Route::post('budgets/{id}', [\App\Http\Controllers\Api\BudgetController::class, 'update']);
+
+
         Route::apiResource('budgetRequests', \App\Http\Controllers\Api\BudgetRequestController::class);
         Route::post('budgetRequests/{id}', [\App\Http\Controllers\Api\BudgetRequestController::class, 'update']);
+        Route::group(['prefix' => '/budgetRequest'], function () {
+            Route::apiResource('budgetRequestCategories', \App\Http\Controllers\Api\BudgetRequestCategoryController::class);
+            Route::post('budgetRequestCategories/{id}', [\App\Http\Controllers\Api\BudgetRequestCategoryController::class, 'update']);
+        });
+
         Route::apiResource('budgetLimits', \App\Http\Controllers\Api\BudgetLimitController::class);
         Route::post('budgetLimits/{id}', [\App\Http\Controllers\Api\BudgetLimitController::class, 'update']);
         Route::apiResource('budgetExtends', \App\Http\Controllers\Api\BudgetExtendController::class);

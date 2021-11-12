@@ -417,6 +417,22 @@ export default {
         return await apiCall(DELETE, `api/budget/budgetRequests/${id}`)
     },
 
+    async budgetRequestCategoryIndex() {
+        return await apiCall(GET, `api/budget/budgetRequest/budgetRequestCategories`)
+    },
+    async budgetRequestCategoryCreate(data) {
+        return await apiCall(POST, `api/budget/budgetRequest/budgetRequestCategories`, data)
+    },
+    async budgetRequestCategoryShow(id) {
+        return await apiCall(GET, `api/budget/budgetRequest/budgetRequestCategories/${id}`)
+    },
+    async budgetRequestCategoryEdit(id, data) {
+        return await apiCall(POST, `api/budget/budgetRequest/budgetRequestCategories/${id}`, data)
+    },
+    async budgetRequestCategoryDelete(id) {
+        return await apiCall(DELETE, `api/budget/budgetRequest/budgetRequestCategories/${id}`)
+    },
+
     async budgetLimitIndex() {
         return await apiCall(GET, `api/budget/budgetLimits`)
     },
