@@ -79,7 +79,7 @@
                 {{ item.department.name }}
             </template>
             <template v-slot:item.fiscal_year_id="{ item }">
-                {{ item.fiscal_year.from + ' || ' + item.fiscal_year.to }}
+                {{ item.fiscal_year.name}}
             </template>
             <template v-slot:item.actions="{ item }">
                 <router-link
@@ -126,8 +126,8 @@ export default {
             {text: 'Department', value: 'department_id'},
             {text: 'Fiscal Year', value: 'fiscal_year_id', sortable: false},
             {text: 'Allocated Amount', value: 'allocated_budget_amount'},
-            {text: 'Initial Amount', value: 'initial_dispatched_amount'},
-            {text: 'Total Amount', value: 'total_dispatched_amount'},
+            {text: 'Initial Dispatched Amount', value: 'initial_dispatched_amount'},
+            {text: 'Total Dispatched Amount', value: 'total_dispatched_amount'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         budgets: [],

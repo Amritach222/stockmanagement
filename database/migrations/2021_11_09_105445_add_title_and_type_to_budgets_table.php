@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddBudgetsTable extends Migration
+class AddTitleAndTypeToBudgetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class AddBudgetsTable extends Migration
         Schema::table('budgets', function (Blueprint $table) {
             $table->renameColumn('final_dispatched_amount', 'total_dispatched_amount');
             $table->string('title')->nullable();
-            $table->string('type')->nullable();
+            $table->enum('type', ['Annual', 'Extra'])->nullable();
         });
     }
 
