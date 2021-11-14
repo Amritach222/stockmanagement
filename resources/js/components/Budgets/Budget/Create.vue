@@ -161,10 +161,10 @@ export default {
         },
         rules: {
             title: [
-                val => val > 0 || i18n.t('validation.required'),
+                val => (val || '').length > 0 || i18n.t('validation.required'),
             ],
             department_id: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
+                val => val > 0 || i18n.t('validation.required'),
             ],
             fiscal_year_id: [
                 val => val > 0 || i18n.t('validation.required'),

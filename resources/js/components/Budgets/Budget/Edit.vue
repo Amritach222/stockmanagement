@@ -17,11 +17,11 @@
                             <CCardBody>
                                 <CForm>
                                     <v-form>
-                                        <v-select
+                                        <v-text-field
                                             v-model="editedItem.title"
                                             label="Title"
                                             placeholder="Enter title..."
-                                            prepend-icon="mdi-alpha-d-circle"
+                                            prepend-icon="mdi-alpha-t-circle"
                                             required
                                             :rules="rules.title"
                                             solo
@@ -55,7 +55,7 @@
                                             :items="['Annual','Extra']"
                                             label="Type"
                                             placeholder="Select a budget type..."
-                                            prepend-icon="mdi-calendar-clock"
+                                            prepend-icon="mdi-shape"
                                             solo
                                         />
                                         <v-text-field
