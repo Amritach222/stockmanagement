@@ -94,9 +94,9 @@
                                             <CIcon name="cil-check-circle"/>
                                             Submit
                                         </CButton>
-                                        <CButton type="reset" size="sm" color="danger">
+                                        <CButton size="sm" color="danger" :to="'/bankAccounts'">
                                             <CIcon name="cil-ban"/>
-                                            Reset
+                                            Cancel
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

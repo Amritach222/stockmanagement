@@ -29,14 +29,14 @@ class BudgetRequestCategoryRequest extends FormRequest
                 'budget_request_id' => 'int|exists:budget_requests,id',
                 'category_id' => 'int|exists:categories,id',
                 'amount' => 'int|min:0',
-                'note' => 'string',
+                'note' => 'sometimes',
             ];
         } else {
             return [
                 'budget_request_id' => 'required|int|exists:budget_requests,id',
                 'category_id' => 'required|int|exists:categories,id',
                 'amount' => 'required|int|min:0',
-                'note' => 'string',
+                'note' => 'sometimes',
             ];
         }
     }

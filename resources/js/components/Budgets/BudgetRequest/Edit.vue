@@ -58,6 +58,7 @@
                                             placeholder="Enter the amount..."
                                             prepend-icon="mdi-cash-check"
                                             required
+                                            disabled
                                             :rules="rules.request_amount"
                                             solo
                                         />
@@ -96,6 +97,165 @@
                                             </v-col>
                                         </v-row>
                                     </v-form>
+
+                                    <hr>
+                                    <v-card>
+                                        <v-card-title>
+                                            Categories
+                                            <v-spacer></v-spacer>
+                                        </v-card-title>
+                                        <v-data-table
+                                            :headers="headers"
+                                            :items="requestCategories"
+                                            sort-by="id"
+                                            loading
+                                            loading-text="Loading... Please wait..."
+                                            :search="search"
+                                        >
+                                            <template v-slot:top>
+                                                <v-toolbar
+                                                    flat
+                                                >
+                                                    <v-row>
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="4"
+                                                            md="6"
+                                                            lg="8"
+                                                        >
+                                                            <v-text-field
+                                                                v-model="search"
+                                                                append-icon="mdi-magnify"
+                                                                label="Search"
+                                                                solo
+                                                                hide-details
+                                                                max-width="100px"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-dialog
+                                                        v-model="dialog"
+                                                        max-width="600px"
+                                                    >
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-btn
+                                                                color="green"
+                                                                dark
+                                                                class="mb-2"
+                                                                v-bind="attrs"
+                                                                v-on="on"
+                                                            >
+                                                                Add New Request Category
+                                                            </v-btn>
+                                                        </template>
+                                                        <v-card>
+                                                            <v-form ref="form">
+                                                                <v-card-title>
+                                                                    <span class="headline">{{ formTitle }}</span>
+                                                                </v-card-title>
+
+                                                                <v-card-text>
+                                                                    <v-container>
+                                                                        <v-row>
+                                                                            <v-col>
+                                                                                <v-select
+                                                                                    v-model="reqCategory.category_id"
+                                                                                    label="Category"
+                                                                                    :items="categories"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    required
+                                                                                    outlined
+                                                                                ></v-select>
+
+                                                                                <v-text-field
+                                                                                    v-model="reqCategory.amount"
+                                                                                    label="Amount"
+                                                                                    type="number"
+                                                                                    required
+                                                                                    outlined
+                                                                                    :rules="rules.amount"
+                                                                                ></v-text-field>
+                                                                                <v-text-field
+                                                                                    v-model="reqCategory.note"
+                                                                                    label="Note"
+                                                                                    outlined
+                                                                                ></v-text-field>
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                    </v-container>
+                                                                </v-card-text>
+
+                                                                <v-card-actions>
+                                                                    <v-progress-linear
+                                                                        v-if="progressL"
+                                                                        indeterminate
+                                                                        color="green"
+                                                                    ></v-progress-linear>
+                                                                    <v-spacer></v-spacer>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="close"
+                                                                    >
+                                                                        Cancel
+                                                                    </v-btn>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="addCategory"
+                                                                    >
+                                                                        Save
+                                                                    </v-btn>
+                                                                </v-card-actions>
+                                                            </v-form>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <v-dialog v-model="dialogDelete" max-width="500px">
+                                                        <v-card>
+                                                            <v-card-title class="text-h6">Are you sure you want to
+                                                                delete this item?
+                                                            </v-card-title>
+                                                            <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn color="blue darken-1" text @click="closeDelete">
+                                                                    Cancel
+                                                                </v-btn>
+                                                                <v-btn color="blue darken-1" text
+                                                                       @click="deleteItemConfirm">OK
+                                                                </v-btn>
+                                                                <v-spacer></v-spacer>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                </v-toolbar>
+                                            </template>
+                                            <template v-slot:item.category_id="{ item }">
+                                                <p v-if="item.category_id" class="mt-3">{{ item.category.name }}</p>
+                                                <p v-else class="mt-3">---</p>
+                                            </template>
+                                            <template v-slot:item.actions="{ item }">
+                                                <v-icon
+                                                    small
+                                                    class="mr-2"
+                                                    @click="editItem(item)"
+                                                >
+                                                    mdi-pencil
+                                                </v-icon>
+                                                <v-icon
+                                                    small
+                                                    @click="deleteItem(item)"
+                                                >
+                                                    mdi-delete
+                                                </v-icon>
+                                            </template>
+                                            <template v-slot:no-data>
+                                                <div>No Data</div>
+                                            </template>
+                                        </v-data-table>
+                                    </v-card>
+
+
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
@@ -103,7 +263,7 @@
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/budgetRequests/'">
                                             <CIcon name="cil-ban"/>
-                                            Reset
+                                            Cancel
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -142,6 +302,26 @@ export default {
         departments: [],
         fiscalYears: [],
         changeProgress: false,
+        search: '',
+        progressL: false,
+        dialog: false,
+        dialogDelete: false,
+        headers: [
+            {text: 'Category', value: 'category_id'},
+            {text: 'Amount', value: 'amount'},
+            {text: 'Note', value: 'note'},
+            {text: 'Actions', value: 'actions', sortable: false},
+        ],
+        requestCategories: [],
+        reqCategory: {
+            category_id: '',
+            amount: '',
+            note: '',
+        },
+        categories: [],
+        validated: false,
+        tableLoad: false,
+        editedIndex: -1,
         error: {
             department_id: '',
             fiscal_year_id: '',
@@ -165,10 +345,18 @@ export default {
             ],
         },
     }),
+
+    computed: {
+        formTitle() {
+            return this.editedIndex === -1 ? 'Add Request Category' : 'Edit Request Category'
+        },
+    },
+
     async created() {
         this.loadDepartments();
         this.loadFiscalYears();
         this.loadItem();
+        this.loadCategories();
     },
     methods: {
         openImage(data) {
@@ -191,7 +379,98 @@ export default {
             let res = await ApiServices.budgetRequestShow(this.$route.params.id);
             if (res.success === true) {
                 this.editedItem = res.data;
+                this.requestCategories = res.data.budget_request_categories;
             }
+        },
+        async loadCategories() {
+            let res = await ApiServices.categoryIndex();
+            if (res.success === true) {
+                this.categories = res.data;
+            }
+        },
+
+        editItem(item) {
+            this.editedIndex = this.requestCategories.indexOf(item)
+            this.reqCategory = Object.assign({}, item)
+            this.dialog = true
+        },
+
+        deleteItem(item) {
+            this.editedIndex = this.requestCategories.indexOf(item)
+            this.reqCategory = Object.assign({}, item)
+            this.dialogDelete = true
+        },
+
+        async deleteItemConfirm() {
+            let res = await ApiServices.budgetRequestCategoryDelete(this.reqCategory.id)
+            if (res.success === true) {
+                this.requestCategories.splice(this.editedIndex, 1)
+                this.calculateTotalAmount();
+            }
+            this.closeDelete()
+        },
+
+        close() {
+            this.progressL = false;
+            this.dialog = false;
+            this.$nextTick(() => {
+                this.reqCategory = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            });
+        },
+
+        closeDelete() {
+            this.dialogDelete = false
+            this.$nextTick(() => {
+                this.reqCategory = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            })
+        },
+
+        async addCategory() {
+            this.validate();
+            if (this.validated) {
+                if (this.editedIndex > -1) {
+                    const data = new FormData();
+                    if (this.reqCategory.category_id != null) {
+                        data.append('category_id', this.reqCategory.category_id);
+                    }
+                    data.append('amount', parseInt(this.reqCategory.amount));
+                    if (this.reqCategory.note !== null) {
+                        data.append('note', this.reqCategory.note);
+                    }
+                    let res = await ApiServices.budgetRequestCategoryEdit(this.reqCategory.id, data)
+                    if (res.success === true) {
+                        Object.assign(this.requestCategories[this.editedIndex], res.data)
+                    }
+                } else {
+                    console.log(this.reqCategory.note)
+                    const data = new FormData();
+                    if (this.reqCategory.category_id != null) {
+                        data.append('category_id', this.reqCategory.category_id);
+                    }
+                    data.append('amount', parseInt(this.reqCategory.amount));
+                    data.append('budget_request_id', parseInt(this.editedItem.id));
+                    if (this.reqCategory.note !== null && this.reqCategory.note !== undefined) {
+                        data.append('note', this.reqCategory.note);
+                    }
+                    let res = await ApiServices.budgetRequestCategoryCreate(data)
+                    if (res.success === true) {
+                        this.requestCategories.push(res.data);
+                    }
+                }
+                this.calculateTotalAmount();
+                this.$refs.form.reset();
+                this.close()
+            }
+        },
+
+        async calculateTotalAmount() {
+            var total = 0;
+            for (var i = 0; i < this.requestCategories.length; i++) {
+                total = parseInt(total) + parseInt(this.requestCategories[i].amount);
+            }
+            this.editedItem.request_amount = total;
         },
 
         clearError(name) {
@@ -230,6 +509,16 @@ export default {
                 route.replace('/budgetRequests');
             }
         },
+
+        validate() {
+            if (this.reqCategory.amount === '') {
+                this.validated = false;
+            } else if (this.reqCategory.category_id === '') {
+                this.validated = false;
+            } else {
+                this.validated = true;
+            }
+        }
     }
 }
 </script>

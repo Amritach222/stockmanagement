@@ -24,6 +24,7 @@ class BudgetRequest extends JsonResource
             $file = File::find($this->file_id);
             $link = $file->path;
         }
+        $budgetRequestCategories = BudgetRequestCategory::collection($this->budgetRequestCategories);
         return [
             'id' => $this->id,
             'department_id' => $this->department_id,
@@ -40,6 +41,7 @@ class BudgetRequest extends JsonResource
             'approver' => $approver,
             'fiscal_year' => $fiscalYear,
             'link' => $link,
+            'budget_request_categories' => $budgetRequestCategories,
         ];
     }
 }
