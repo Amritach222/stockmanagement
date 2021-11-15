@@ -237,7 +237,9 @@ export default {
             data.append('name', this.editedItem.name);
             data.append('brand_id', this.editedItem.brand_id);
             data.append('category_id', this.editedItem.category_id);
-            data.append('details', this.editedItem.details);
+            if (this.editedItem.details !== null) {
+                data.append('details', this.editedItem.details);
+            }
 
             if ('image' in this.editedItem) {
                 if (typeof this.editedItem.image.name == 'string') {

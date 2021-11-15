@@ -10,7 +10,7 @@
                             </CCardHeader>
                             <CCardBody>
                                 <CRow>
-                                    <CCol md="4">
+                                    <CCol md="4" v-if="show.image_id">
                                         <v-col v-if="typeof(show.link) === 'string'">
                                             <v-card width="200"
                                                     v-on:click="openImage(show.link)">

@@ -83,6 +83,15 @@
             </template>
             <template v-slot:item.actions="{ item }">
                 <router-link
+                    :to="'/products/'+item.id"
+                >
+                    <v-icon
+                        small
+                    >
+                        mdi-eye
+                    </v-icon>
+                </router-link>
+                <router-link
                     :to="'/products/edit/'+item.id"
                 >
                     <v-icon
