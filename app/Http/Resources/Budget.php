@@ -28,6 +28,7 @@ class Budget extends JsonResource
             'title' => $this->title,
             'department_id' => $this->department_id,
             'fiscal_year_id' => $this->fiscal_year_id,
+            'type' => $this->type,
             'allocated_budget_amount' => $this->allocated_budget_amount,
             'initial_dispatched_amount' => $this->initial_dispatched_amount,
             'total_dispatched_amount' => $this->total_dispatched_amount,

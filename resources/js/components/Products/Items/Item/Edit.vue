@@ -526,6 +526,7 @@ export default {
         editDialog: false,
         dialogDelete: false,
         headers: [
+            {text: 'Id', value: 'id'},
             {text: 'Attributes', value: 'name'},
             {text: 'Image', value: 'link'},
             {text: 'Quantity', value: 'quantity'},

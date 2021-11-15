@@ -332,6 +332,7 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
+            {text: 'Id', value: 'id'},
             {text: 'Amount', value: 'amount'},
             {text: 'Date', value: 'dispatched_date'},
             {text: 'Actions', value: 'actions', sortable: false},
@@ -534,7 +535,9 @@ export default {
             data.append('initial_dispatched_amount', this.editedItem.initial_dispatched_amount);
             data.append('total_dispatched_amount', this.editedItem.total_dispatched_amount);
             data.append('date_first_received', this.editedItem.date_first_received);
-            data.append('remarks', this.editedItem.remarks);
+            if(this.editedItem.remarks !== null) {
+                data.append('remarks', this.editedItem.remarks);
+            }
             if ('file' in this.editedItem) {
                 if (typeof this.editedItem.file.name == 'string') {
                     data.append('file', this.editedItem.file);

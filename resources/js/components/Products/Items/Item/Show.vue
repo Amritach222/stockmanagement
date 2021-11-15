@@ -153,6 +153,7 @@ export default {
         variants: [],
         search: '',
         headers: [
+            {text: 'Id', value: 'id'},
             {text: 'Attributes', value: 'name'},
             {text: 'Image', value: 'link'},
             {text: 'Quantity', value: 'quantity'},
