@@ -136,6 +136,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['prefix' => '/budget'], function () {
         Route::apiResource('budgets', \App\Http\Controllers\Api\BudgetController::class);
         Route::post('budgets/{id}', [\App\Http\Controllers\Api\BudgetController::class, 'update']);
+        Route::apiResource('budgetDispatches', \App\Http\Controllers\Api\BudgetDispatchController::class);
+        Route::post('budgetDispatches/{id}', [\App\Http\Controllers\Api\BudgetDispatchController::class, 'update']);
 
 
         Route::apiResource('budgetRequests', \App\Http\Controllers\Api\BudgetRequestController::class);

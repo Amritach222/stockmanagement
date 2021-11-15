@@ -75,7 +75,17 @@
                                             placeholder="Enter the initial dispatched amount..."
                                             prepend-icon="mdi-cash-marker"
                                             required
+                                            disabled
                                             :rules="rules.initial_dispatched_amount"
+                                            solo
+                                        />
+                                        <v-text-field
+                                            v-model="editedItem.total_dispatched_amount"
+                                            type="number"
+                                            label="Total Dispatched Amount"
+                                            placeholder="Total dispatched amount..."
+                                            prepend-icon="mdi-currency-usd"
+                                            disabled
                                             solo
                                         />
                                         <v-text-field
@@ -122,6 +132,151 @@
                                             </v-col>
                                         </v-row>
                                     </v-form>
+
+                                    <hr>
+                                    <v-card>
+                                        <v-card-title>
+                                            Dispatched Amounts
+                                            <v-spacer></v-spacer>
+                                        </v-card-title>
+                                        <v-data-table
+                                            :headers="headers"
+                                            :items="dispatchedAmounts"
+                                            sort-by="id"
+                                            loading
+                                            loading-text="Loading... Please wait..."
+                                            :search="search"
+                                        >
+                                            <template v-slot:top>
+                                                <v-toolbar
+                                                    flat
+                                                >
+                                                    <v-row>
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="4"
+                                                            md="6"
+                                                            lg="8"
+                                                        >
+                                                            <v-text-field
+                                                                v-model="search"
+                                                                append-icon="mdi-magnify"
+                                                                label="Search"
+                                                                solo
+                                                                hide-details
+                                                                max-width="100px"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-dialog
+                                                        v-model="dialog"
+                                                        max-width="600px"
+                                                    >
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-btn
+                                                                color="green"
+                                                                dark
+                                                                class="mb-2"
+                                                                v-bind="attrs"
+                                                                v-on="on"
+                                                            >
+                                                                Add New Dispatched Amount
+                                                            </v-btn>
+                                                        </template>
+                                                        <v-card>
+                                                            <v-form ref="form">
+                                                                <v-card-title>
+                                                                    <span class="headline">{{ formTitle }}</span>
+                                                                </v-card-title>
+
+                                                                <v-card-text>
+                                                                    <v-container>
+                                                                        <v-row>
+                                                                            <v-col>
+                                                                                <v-text-field
+                                                                                    v-model="dispatch.amount"
+                                                                                    label="Amount"
+                                                                                    type="number"
+                                                                                    required
+                                                                                    outlined
+                                                                                ></v-text-field>
+                                                                                <v-text-field
+                                                                                    v-model="dispatch.dispatched_date"
+                                                                                    label="Date"
+                                                                                    type="date"
+                                                                                    required
+                                                                                    outlined
+                                                                                ></v-text-field>
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                    </v-container>
+                                                                </v-card-text>
+
+                                                                <v-card-actions>
+                                                                    <v-progress-linear
+                                                                        v-if="progressL"
+                                                                        indeterminate
+                                                                        color="green"
+                                                                    ></v-progress-linear>
+                                                                    <v-spacer></v-spacer>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="close"
+                                                                    >
+                                                                        Cancel
+                                                                    </v-btn>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="addCategory"
+                                                                    >
+                                                                        Save
+                                                                    </v-btn>
+                                                                </v-card-actions>
+                                                            </v-form>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <v-dialog v-model="dialogDelete" max-width="500px">
+                                                        <v-card>
+                                                            <v-card-title class="text-h6">Are you sure you want to
+                                                                delete this item?
+                                                            </v-card-title>
+                                                            <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn color="blue darken-1" text @click="closeDelete">
+                                                                    Cancel
+                                                                </v-btn>
+                                                                <v-btn color="blue darken-1" text
+                                                                       @click="deleteItemConfirm">OK
+                                                                </v-btn>
+                                                                <v-spacer></v-spacer>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                </v-toolbar>
+                                            </template>
+                                            <template v-slot:item.actions="{ item }">
+                                                <v-icon
+                                                    small
+                                                    class="mr-2"
+                                                    @click="editItem(item)"
+                                                >
+                                                    mdi-pencil
+                                                </v-icon>
+                                                <v-icon
+                                                    small
+                                                    @click="deleteItem(item)"
+                                                >
+                                                    mdi-delete
+                                                </v-icon>
+                                            </template>
+                                            <template v-slot:no-data>
+                                                <div>No Data</div>
+                                            </template>
+                                        </v-data-table>
+                                    </v-card>
+
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
@@ -172,12 +327,30 @@ export default {
         departments: [],
         fiscalYears: [],
         changeProgress: false,
+        search: '',
+        progressL: false,
+        dialog: false,
+        dialogDelete: false,
+        headers: [
+            {text: 'Amount', value: 'amount'},
+            {text: 'Date', value: 'dispatched_date'},
+            {text: 'Actions', value: 'actions', sortable: false},
+        ],
+        dispatchedAmounts: [],
+        dispatch: {
+            amount: '',
+            dispatched_date: '',
+        },
+        validated: false,
+        tableLoad: false,
+        editedIndex: -1,
         error: {
             title: '',
             department_id: '',
             fiscal_year_id: '',
             allocated_budget_amount: '',
             initial_dispatched_amount: '',
+            total_dispatched_amount: '',
             date_first_received: '',
             remarks: '',
             file: [],
@@ -203,6 +376,13 @@ export default {
             ],
         },
     }),
+
+    computed: {
+        formTitle() {
+            return this.editedIndex === -1 ? 'Add Dispatched Amount' : 'Edit Dispatched Amount'
+        },
+    },
+
     async created() {
         this.loadData();
         this.loadDepartments();
@@ -216,6 +396,8 @@ export default {
             let res = await ApiServices.budgetShow(this.$route.params.id);
             if (res.success === true) {
                 this.editedItem = res.data;
+                this.dispatchedAmounts = res.data.dispatched_amounts;
+                this.calculateTotalAmount();
             }
         },
 
@@ -232,6 +414,92 @@ export default {
                 this.fiscalYears = res.data;
             }
         },
+
+        editItem(item) {
+            this.editedIndex = this.dispatchedAmounts.indexOf(item)
+            this.dispatch = Object.assign({}, item)
+            this.dialog = true
+        },
+
+        deleteItem(item) {
+            this.editedIndex = this.dispatchedAmounts.indexOf(item)
+            this.dispatch = Object.assign({}, item)
+            this.dialogDelete = true
+        },
+
+        async deleteItemConfirm() {
+            let res = await ApiServices.budgetDispatchDelete(this.dispatch.id)
+            if (res.success === true) {
+                this.dispatchedAmounts.splice(this.editedIndex, 1)
+                this.calculateTotalAmount();
+                const data = new FormData();
+                data.append('total_dispatched_amount', this.editedItem.total_dispatched_amount);
+                let rtn = await ApiServices.budgetEdit(this.editedItem.id, data);
+            }
+            this.closeDelete()
+        },
+
+        close() {
+            this.progressL = false;
+            this.dialog = false;
+            this.$nextTick(() => {
+                this.dispatch = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            });
+        },
+
+        closeDelete() {
+            this.dialogDelete = false
+            this.$nextTick(() => {
+                this.dispatch = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            })
+        },
+
+        async addCategory() {
+            this.validate();
+            var success = false;
+            if (this.validated) {
+                if (this.editedIndex > -1) {
+                    const data = new FormData();
+                    data.append('budget_id', this.editedItem.id);
+                    data.append('amount', parseInt(this.dispatch.amount));
+                    data.append('dispatched_date', this.dispatch.dispatched_date);
+                    let res = await ApiServices.budgetDispatchEdit(this.dispatch.id, data)
+                    if (res.success === true) {
+                        Object.assign(this.dispatchedAmounts[this.editedIndex], res.data)
+                        success = true;
+                    }
+                } else {
+                    const data = new FormData();
+                    data.append('budget_id', this.editedItem.id);
+                    data.append('amount', parseInt(this.dispatch.amount));
+                    data.append('dispatched_date', this.dispatch.dispatched_date);
+                    let res = await ApiServices.budgetDispatchCreate(data)
+                    if (res.success === true) {
+                        this.dispatchedAmounts.push(res.data);
+                        success = true;
+                    }
+                }
+                if (success === true) {
+                    this.calculateTotalAmount();
+                    const data = new FormData();
+                    data.append('total_dispatched_amount', this.editedItem.total_dispatched_amount);
+                    let rtn = await ApiServices.budgetEdit(this.editedItem.id, data);
+                }
+                this.$refs.form.reset();
+                this.close()
+            }
+        },
+
+        async calculateTotalAmount() {
+            var total = 0;
+            for (var i = 0; i < this.dispatchedAmounts.length; i++) {
+                total = parseInt(total) + parseInt(this.dispatchedAmounts[i].amount);
+            }
+            this.editedItem.total_dispatched_amount = total;
+        },
+
         clearError(name) {
             if (name === 'title') {
                 this.error.title = '';
@@ -264,6 +532,7 @@ export default {
             data.append('type', this.editedItem.type);
             data.append('allocated_budget_amount', this.editedItem.allocated_budget_amount);
             data.append('initial_dispatched_amount', this.editedItem.initial_dispatched_amount);
+            data.append('total_dispatched_amount', this.editedItem.total_dispatched_amount);
             data.append('date_first_received', this.editedItem.date_first_received);
             data.append('remarks', this.editedItem.remarks);
             if ('file' in this.editedItem) {
@@ -277,6 +546,16 @@ export default {
                 route.replace('/budgets');
             }
         },
+
+        validate() {
+            if (this.dispatch.amount === '') {
+                this.validated = false;
+            } else if (this.dispatch.date === '') {
+                this.validated = false;
+            } else {
+                this.validated = true;
+            }
+        }
     }
 }
 </script>

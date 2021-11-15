@@ -401,6 +401,22 @@ export default {
         return await apiCall(DELETE, `api/budget/budgets/${id}`)
     },
 
+    async budgetDispatchIndex() {
+        return await apiCall(GET, `api/budget/budgetDispatches`)
+    },
+    async budgetDispatchCreate(data) {
+        return await apiCall(POST, `api/budget/budgetDispatches`, data)
+    },
+    async budgetDispatchShow(id) {
+        return await apiCall(GET, `api/budget/budgetDispatches/${id}`)
+    },
+    async budgetDispatchEdit(id, data) {
+        return await apiCall(POST, `api/budget/budgetDispatches/${id}`, data)
+    },
+    async budgetDispatchDelete(id) {
+        return await apiCall(DELETE, `api/budget/budgetDispatches/${id}`)
+    },
+
     async budgetRequestIndex() {
         return await apiCall(GET, `api/budget/budgetRequests`)
     },

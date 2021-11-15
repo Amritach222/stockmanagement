@@ -17,6 +17,7 @@ class Budget extends JsonResource
     {
         $department = new Department($this->department);
         $fiscal_year = new FiscalYear($this->fiscalYear);
+        $dispatchedAmounts = BudgetDispatch::collection($this->dispatchedAmounts);
         $link = null;
         if ($this->file_id !== null) {
             $image = File::where('id', $this->file_id)->first();
@@ -36,6 +37,7 @@ class Budget extends JsonResource
             'department' => $department,
             'fiscal_year' => $fiscal_year,
             'link' => $link,
+            'dispatched_amounts'=>$dispatchedAmounts,
         ];
     }
 }
