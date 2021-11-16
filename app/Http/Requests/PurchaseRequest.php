@@ -24,19 +24,11 @@ class PurchaseRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->id) {
             return [
                 'department_id' => 'int|exists:departments,id',
                 'note' => 'sometimes',
                 'user_id' => 'int|exists:users,id'
             ];
-        } else {
-            return [
-                'department_id' => 'required|int|exists:departments,id',
-                'note' => 'sometimes',
-                'user_id' => 'required|int|exists:users,id'
-            ];
-        }
     }
 
     public function messages()

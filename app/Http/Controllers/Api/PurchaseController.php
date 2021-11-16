@@ -38,6 +38,12 @@ class PurchaseController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
+            if(!$request->has('user_id')){
+                $values['user_id'] = auth()->user()->id;
+            }
+            if(!$request->has('department_id')){
+                $values['department_id'] = auth()->user()->department_id;
+            }
             $purchase = new Purchase($values);
             $purchase->save();
             event(new ActivityLogEvent('Add', 'Purchase', $purchase->id));
