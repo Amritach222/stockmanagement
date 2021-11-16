@@ -158,6 +158,15 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
+                <router-link
+                    :to="'/bankAccounts/'+item.id"
+                >
+                    <v-icon
+                        small
+                    >
+                        mdi-eye
+                    </v-icon>
+                </router-link>
                 <v-icon
                     small
                     class="mr-2"

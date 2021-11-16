@@ -154,10 +154,8 @@ export default {
         },
         async loadItems() {
             let res = await ApiServices.budgetShow(this.$route.params.id);
-            console.log(res)
             if (res.success === true) {
                 this.show = res.data;
-                console.log(this.show)
                 this.dispatchedAmounts = res.data.dispatched_amounts;
             }
         },
