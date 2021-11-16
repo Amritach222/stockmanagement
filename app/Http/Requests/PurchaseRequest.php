@@ -27,7 +27,8 @@ class PurchaseRequest extends FormRequest
             return [
                 'department_id' => 'int|exists:departments,id',
                 'note' => 'sometimes',
-                'user_id' => 'int|exists:users,id'
+                'user_id' => 'int|exists:users,id',
+                'file' => 'image|mimes:jpg,jpeg,png,pdf|max:4096',
             ];
     }
 

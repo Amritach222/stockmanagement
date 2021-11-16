@@ -137,8 +137,6 @@ export default {
             status: '',
             note: '',
             delivery_status: '',
-            image: [],
-            link: '',
         },
         error: {
             name: '',

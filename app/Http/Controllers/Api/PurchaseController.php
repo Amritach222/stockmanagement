@@ -6,8 +6,10 @@ use App\Events\ActivityLogEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PurchaseRequest;
 use App\Http\Resources\Purchase as PurchaseResource;
+use App\Models\File;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
+use Samundra\File\SamundraFileHelper;
 
 class PurchaseController extends Controller
 {
@@ -38,11 +40,26 @@ class PurchaseController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
-            if(!$request->has('user_id')){
+            if (!$request->has('user_id')) {
                 $values['user_id'] = auth()->user()->id;
             }
-            if(!$request->has('department_id')){
+            if (!$request->has('department_id')) {
                 $values['department_id'] = auth()->user()->department_id;
+            }
+            if ($request->hasFile('file')) {
+                $fileHelper = new SamundraFileHelper();
+                $file = $fileHelper->saveFile($request->file, 'purchase');
+                if ($file['success'] !== true) {
+                    return response(['success' => false, 'message' => 'Data could not be saved at the moment', "data" => null], 400);
+                }
+                $newFile = new File();
+                $newFile->extension = $file['data']['extension'];
+                $newFile->original_name = $file['data']['original_filename'];
+                $newFile->name = $file['data']['filename'];
+                $newFile->type = $file['data']['mime_type'];
+                $newFile->path = $file['data']['link'];
+                $newFile->save();
+                $values['file_id'] = $newFile->id;
             }
             $purchase = new Purchase($values);
             $purchase->save();
