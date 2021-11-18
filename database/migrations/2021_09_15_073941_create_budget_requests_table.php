@@ -11,8 +11,8 @@ class CreateBudgetRequestsTable extends Migration
         Schema::create('budget_requests', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->integer('department_id')->unsigned();
             $table->integer('user_id')->nullable()->unsigned();
+            $table->integer('department_id')->unsigned()->nullable();
             $table->integer('fiscal_year_id')->nullable()->unsigned();
             $table->enum('type', ['Annual Request', 'Extend Request'])->nullable();
             $table->integer('request_amount')->default('0');

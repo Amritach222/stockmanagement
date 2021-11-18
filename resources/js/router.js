@@ -1005,7 +1005,7 @@ export default new Router({
         },
         {
             path: '/budgetRequests/create',
-            name: 'budgetRequests-create',
+            name: 'Budget Requests Create',
             component: BudgetRequestCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1014,7 +1014,7 @@ export default new Router({
         },
         {
             path: '/budgetRequests/edit/:id',
-            name: 'budgetRequests-edit',
+            name: 'Budget Request Edit',
             component: BudgetRequestEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1023,7 +1023,7 @@ export default new Router({
         },
         {
             path: '/budgetRequests/:id',
-            name: 'budgetRequests-show',
+            name: 'Budget Request Show',
             component: BudgetRequestShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
