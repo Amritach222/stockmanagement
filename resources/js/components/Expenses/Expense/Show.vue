@@ -25,9 +25,9 @@
                                         <p>{{ show.amount }}</p>
                                         <h6>Transaction Type: </h6>
                                         <p>{{ show.transaction_type }}</p>
-                                        <div v-if="show.transaction_type === 'OnlineTransaction' && show.transaction_type=== 'Cheque'">
+                                        <div v-if="show.transaction_type === 'OnlineTransaction' || show.transaction_type=== 'Cheque'">
                                         <h6>Bank Account: </h6>
-                                        <p>{{ show.bank_account.name }}</p>
+                                        <p>{{ show.bank_account.bank_name }}</p>
                                         </div>
                                         <div v-if="show.transaction_type === 'Cheque'">
                                             <h6>Cheque No:</h6>

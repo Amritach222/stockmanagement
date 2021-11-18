@@ -251,24 +251,24 @@ export default {
         async edit() {
             this.changeProgress = true;
             const data = new FormData();
-            data.append('department_id', this.department_id);
-            data.append('user_id', this.user_id);
-            data.append('expense_category_id', this.expense_category_id);
-            data.append('amount', this.amount);
-            data.append('transaction_type', this.transaction_type);
-            if (this.cheque_no !== '') {
-                data.append('cheque_no', this.cheque_no);
+            data.append('department_id', this.editedItem.department_id);
+            data.append('user_id', this.editedItem.user_id);
+            data.append('expense_category_id', this.editedItem.expense_category_id);
+            data.append('amount', parseInt(this.editedItem.amount));
+            data.append('transaction_type', this.editedItem.transaction_type);
+            if (this.editedItem.cheque_no !== '') {
+                data.append('cheque_no', this.editedItem.cheque_no);
             }
             if (this.bank_account_id !== '') {
-                data.append('bank_account_id', this.bank_account_id);
+                data.append('bank_account_id', this.editedItem.bank_account_id);
             }
-            data.append('note', this.note);
+            data.append('note', this.editedItem.note);
             if ('file' in this.editedItem) {
                 if (typeof this.file.name == 'string') {
                     data.append('file', this.file);
                 }
             }
-            let res = await ApiServices.expenseEdit(data);
+            let res = await ApiServices.expenseEdit(this.editedItem.id, data);
             this.changeProgress = false;
             if (res.success === true) {
                 route.replace('/expenses/');
