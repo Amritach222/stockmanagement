@@ -183,7 +183,7 @@ export default {
             {text: 'Account', value: 'account_id'},
             {text: 'Amount', value: 'transaction_amount'},
             {text: 'Type', value: 'transaction_type'},
-            {text: 'Actions', value: 'actions', sortable: false},
+            // {text: 'Actions', value: 'actions', sortable: false},
         ],
         bankAccountTransactions: [],
         bankAccounts: [],
