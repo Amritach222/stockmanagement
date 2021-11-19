@@ -28,6 +28,11 @@ class BankAccount extends Model
             $this->total_balance = $this->total_balance - $amount;
         }
         $this->save();
+        $transactionValue['account_id'] = $this->id;
+        $transactionValue['transaction_amount'] = $amount;
+        $transactionValue['transaction_type'] = 'DR';
+        $transaction = new BankAccountTransaction($transactionValue);
+        $transaction->save();
     }
 
     public function addBalance($amount, $changeTotal = false)
@@ -37,6 +42,11 @@ class BankAccount extends Model
             $this->total_balance = $this->total_balance + $amount;
         }
         $this->save();
+        $transactionValue['account_id'] = $this->id;
+        $transactionValue['transaction_amount'] = $amount;
+        $transactionValue['transaction_type'] = 'CR';
+        $transaction = new BankAccountTransaction($transactionValue);
+        $transaction->save();
     }
 
     public function changeBalance($addAmount, $subAmount, $changeTotal = false)
@@ -46,5 +56,15 @@ class BankAccount extends Model
             $this->total_balance = $this->total_balance + $addAmount - $subAmount;
         }
         $this->save();
+        $transactionValue['account_id'] = $this->id;
+        if($addAmount > $subAmount) {
+            $transactionValue['transaction_amount'] = $addAmount - $subAmount;
+            $transactionValue['transaction_type'] = 'CR';
+        }else{
+            $transactionValue['transaction_amount'] = $subAmount - $addAmount;
+            $transactionValue['transaction_type'] = 'DR';
+        }
+        $transaction = new BankAccountTransaction($transactionValue);
+        $transaction->save();
     }
 }

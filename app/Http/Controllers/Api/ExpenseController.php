@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ExpenseRequest;
 use App\Http\Resources\Expense as ExpenseResource;
 use App\Models\BankAccount;
+use App\Models\BankAccountTransaction;
 use App\Models\Expense;
 use App\Models\File;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class ExpenseController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
-            $values['created_by'] = auth()->user()->id;
+            $values['created_by'] = auth('api')->user()->id;
             if ($request->hasFile('file')) {
                 $fileHelper = new SamundraFileHelper();
                 $file = $fileHelper->saveFile($request->file, 'budget');

@@ -85,11 +85,12 @@
                                         </v-row>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field
+                                                <v-select
                                                     v-model="editedItem.transaction_type"
                                                     label="Transaction Type"
+                                                    :items="['CR','DR']"
                                                     outlined
-                                                ></v-text-field>
+                                                ></v-select>
                                             </v-col>
                                         </v-row>
 
@@ -148,6 +149,10 @@
                 >
                     mdi-delete
                 </v-icon>
+            </template>
+            <template v-slot:item.account_id="{ item }">
+                <p v-if="item.account_id" class="mt-3">{{ item.bank_name }}</p>
+                <p v-else>----</p>
             </template>
             <template v-slot:no-data>
                 <div>No Data</div>
