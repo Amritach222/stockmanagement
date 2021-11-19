@@ -72,10 +72,6 @@ export default [
                         to: '/budgetLimits'
                     },
                     {
-                        name: 'Budget Extend',
-                        to: '/budgetExtends'
-                    },
-                    {
                         name: 'Freeze Budget',
                         to: '/freezeBudgets'
                     },

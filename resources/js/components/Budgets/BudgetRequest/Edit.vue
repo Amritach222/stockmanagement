@@ -307,6 +307,7 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
+            {text: 'Id', value: 'id'},
             {text: 'Category', value: 'category_id'},
             {text: 'Amount', value: 'amount'},
             {text: 'Note', value: 'note'},
@@ -348,7 +349,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Add Request Category' : 'Edit Request Category'
+            return this.editedIndex === -1 ? 'Add Request Category Amount' : 'Edit Request Category Amount'
         },
     },
 

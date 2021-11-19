@@ -89,7 +89,7 @@
                                         <v-data-table
                                             :headers="headers"
                                             :items="requestCategories"
-                                            sort-by="id"
+                                            sort-by="category"
                                             loading
                                             loading-text="Loading... Please wait..."
                                             :search="search"

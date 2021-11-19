@@ -167,7 +167,7 @@
                                         <v-data-table
                                             :headers="headers"
                                             :items="variants"
-                                            sort-by="id"
+                                            sort-by="name"
                                             loading
                                             loading-text="Loading... Please wait..."
                                             :search="search"

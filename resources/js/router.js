@@ -958,43 +958,6 @@ export default new Router({
         },
 
         {
-            path: '/budgetExtends',
-            name: 'Budget Extend',
-            component: BudgetExtendIndex,
-            beforeEnter: async (to, from, next) => {
-                await logMe(to, from);
-                next();
-            }
-        },
-        {
-            path: '/budgetExtends/create',
-            name: 'budgetExtends-create',
-            component: BudgetExtendCreate,
-            beforeEnter: async (to, from, next) => {
-                await logMe(to, from);
-                next();
-            }
-        },
-        {
-            path: '/budgetExtends/edit/:id',
-            name: 'budgetExtends-edit',
-            component: BudgetExtendEdit,
-            beforeEnter: async (to, from, next) => {
-                await logMe(to, from);
-                next();
-            }
-        },
-        {
-            path: '/budgetExtends/:id',
-            name: 'budgetExtends-show',
-            component: BudgetExtendShow,
-            beforeEnter: async (to, from, next) => {
-                await logMe(to, from);
-                next();
-            }
-        },
-
-        {
             path: '/budgetRequests',
             name: 'Budget Requests',
             component: BudgetRequestIndex,

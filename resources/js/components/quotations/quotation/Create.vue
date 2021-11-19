@@ -58,7 +58,7 @@
                                         <v-data-table
                                             :headers="headers"
                                             :items="quoProducts"
-                                            sort-by="id"
+                                            sort-by="item_name"
                                             loading
                                             loading-text="Loading... Please wait..."
                                             :search="search"
