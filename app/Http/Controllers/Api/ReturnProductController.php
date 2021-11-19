@@ -70,7 +70,7 @@ class ReturnProductController extends Controller
             } else {
                 $month = '-' . $nepDate['month'];
             }
-            $returnProduct->reference_no = 'CON-0'.$year . $month . '-' . $returnProduct->id;
+            $returnProduct->reference_no = 'RET-0'.$year . $month . '-' . $returnProduct->id;
             $returnProduct->save();
             event(new ActivityLogEvent('Add', 'Return Product', $returnProduct->id));
             $data['message'] = "Return Product added successfully.";
