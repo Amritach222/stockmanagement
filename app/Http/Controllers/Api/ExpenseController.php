@@ -103,31 +103,52 @@ class ExpenseController extends Controller
             $expense = Expense::findOrFail($id);
             $values = $request->all();
 
-            if (($expense->transaction_type != $request->transaction_type) && ($request->transaction_type !== null)) {
-                if ((($expense->transaction_type == 'Cheque') or ($expense->transaction_type == 'OnlineTransaction')) && (($request->transaction_type == 'Cheque') or ($request->transaction_type == 'OnlineTransaction'))) {
-                    if (($expense->bank_account_id != $request->bank_account_id) && ($request->bank_account_id !== null)) {
+            if (($request->amount != null) or ($request->amount != $expense->amount)) {
+                if (($expense->transaction_type != $request->transaction_type) && ($request->transaction_type !== null)) {
+                    if (($expense->transaction_type != 'Cash') && ($request->transaction_type != 'Cash')) {
+                        if (($expense->bank_account_id != $request->bank_account_id) && ($request->bank_account_id !== null)) {
+                            $bankAccount = BankAccount::findOrFail($expense->bank_account_id);
+                            $bankAccount->addBalance($expense->amount);
+                            $bankAccount1 = BankAccount::findOrFail($request->bank_account_id);
+                            $bankAccount1->subBalance($request->amount);
+                        }
+                    } elseif ($request->transaction_type == 'Cash') {
                         $bankAccount = BankAccount::findOrFail($expense->bank_account_id);
                         $bankAccount->addBalance($expense->amount);
-                        $bankAccount1 = BankAccount::findOrFail($request->bank_account_id);
-                        if ($request->amount !== null) {
+                    }
+                } else {
+                    if (($expense->transaction_type != 'Cash')) {
+                        if (($expense->bank_account_id != $request->bank_account_id) && ($request->bank_account_id !== null)) {
+                            $bankAccount = BankAccount::findOrFail($expense->bank_account_id);
+                            $bankAccount->addBalance($expense->amount);
+                            $bankAccount1 = BankAccount::findOrFail($request->bank_account_id);
                             $bankAccount1->subBalance($request->amount);
-                        } else {
-                            $bankAccount1->subBalance($expense->amount);
+                        }else{
+                            $bankAccount = BankAccount::findOrFail($expense->bank_account_id);
+                            $bankAccount->addBalance($expense->amount);
+                            $bankAccount->subBalance($request->amount);
                         }
                     }
-                } elseif ($request->transaction_type == 'Cash') {
-                    $bankAccount = BankAccount::findOrFail($expense->bank_account_id);
-                    $bankAccount->addBalance($expense->amount);
                 }
             } else {
-                if (($expense->transaction_type == 'Cheque') or ($expense->transaction_type == 'OnlineTransaction')) {
-                    if (($expense->bank_account_id != $request->bank_account_id) && ($request->bank_account_id !== null)) {
+                if (($expense->transaction_type != $request->transaction_type) && ($request->transaction_type !== null)) {
+                    if (($expense->transaction_type != 'Cash') && ($request->transaction_type != 'Cash')) {
+                        if (($expense->bank_account_id != $request->bank_account_id) && ($request->bank_account_id !== null)) {
+                            $bankAccount = BankAccount::findOrFail($expense->bank_account_id);
+                            $bankAccount->addBalance($expense->amount);
+                            $bankAccount1 = BankAccount::findOrFail($request->bank_account_id);
+                            $bankAccount1->subBalance($expense->amount);
+                        }
+                    } elseif ($request->transaction_type == 'Cash') {
                         $bankAccount = BankAccount::findOrFail($expense->bank_account_id);
                         $bankAccount->addBalance($expense->amount);
-                        $bankAccount1 = BankAccount::findOrFail($request->bank_account_id);
-                        if ($request->amount !== null) {
-                            $bankAccount1->subBalance($request->amount);
-                        } else {
+                    }
+                } else {
+                    if (($expense->transaction_type != 'Cash')) {
+                        if (($expense->bank_account_id != $request->bank_account_id) && ($request->bank_account_id !== null)) {
+                            $bankAccount = BankAccount::findOrFail($expense->bank_account_id);
+                            $bankAccount->addBalance($expense->amount);
+                            $bankAccount1 = BankAccount::findOrFail($request->bank_account_id);
                             $bankAccount1->subBalance($expense->amount);
                         }
                     }
