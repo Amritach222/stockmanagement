@@ -18,7 +18,6 @@ class MailConfigServiceProvider extends ServiceProvider
     {
         $mail = DB::table('mail_settings')->first();
         if ($mail) //checking if table is not empty
-//         dd($mail);
         {
             $config = array(
 //                 'driver' => $mail->mail_mailer,

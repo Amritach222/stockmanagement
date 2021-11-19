@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
+use App\Helpers\DateConverter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TransferRequest;
 use App\Http\Resources\Transfer as TransferResource;
 use App\Models\Item;
 use App\Models\ItemVariant;
+use App\Models\Setting;
 use App\Models\Transfer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TransferController extends Controller
@@ -52,6 +55,27 @@ class TransferController extends Controller
             $values['total_cost'] = $values['total_quantity'] * $price;
             $values['grand_total'] = $values['total_cost'] + $request->shipping_cost;
             $transfer = new Transfer($values);
+            $transfer->save();
+            $currentDate = Carbon::now();
+            $convertDate = new DateConverter();
+            $nepDate = $convertDate->eng_to_nep($currentDate->format('Y'), $currentDate->format('m'), $currentDate->format('d'));
+            $setting = Setting::findOrFail(1);
+            if ($setting->fiscal_year_id) {
+                $fiscalYear = $setting->fiscalYear;
+                $fromDate = $fiscalYear->from;
+                $toDate = $fiscalYear->to;
+                $fromNepDate = $convertDate->eng_to_nep(Carbon::parse($fromDate)->format('Y'), Carbon::parse($fromDate)->format('m'), Carbon::parse($fromDate)->format('d'));
+                $toNepDate = $convertDate->eng_to_nep(Carbon::parse($toDate)->format('Y'), Carbon::parse($toDate)->format('m'), Carbon::parse($toDate)->format('d'));
+                $year = $fromNepDate['year'] % 1000 . '/' . $toNepDate['year'] % 100;
+            } else {
+                $year = $nepDate['year'] % 1000;
+            }
+            if ($nepDate['month'] < 10) {
+                $month = '-0' . $nepDate['month'];
+            } else {
+                $month = '-' . $nepDate['month'];
+            }
+            $transfer->reference_no = 'TRA-0'.$year . $month . '-' . $transfer->id;
             $transfer->save();
             if($request->tax_id !== null){
                 $transfer->totalTax($request->tax_id);
