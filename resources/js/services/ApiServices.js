@@ -560,4 +560,16 @@ export default {
     async quotationProductDelete(id) {
         return await apiCall(DELETE, `api/quotation/quotationProducts/${id}`)
     },
+
+    async addPurchaseRequest(data) {
+        const config = {
+            headers: {
+                'enctype': 'multipart/form-data'
+            }
+        };
+        return await apiCall(POST, `api/purchase/purchases`, data, config)
+    },
+    async addPurchaseProductRequest(data) {
+        return await apiCall(POST, `api/purchase/purchaseProducts`, data)
+    },
 }

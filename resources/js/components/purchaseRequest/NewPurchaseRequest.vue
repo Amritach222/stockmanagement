@@ -5,105 +5,211 @@
                 <CCol sm="12">
                     <CCardGroup>
                         <CCard class="p-4">
+                            <CCardHeader>
+                                <v-progress-circular
+                                    v-if="createProgress"
+                                    indeterminate
+                                    color="white"
+                                    size="30"
+                                ></v-progress-circular>
+                            </CCardHeader>
                             <CCardBody>
                                 <CForm>
-                                    <v-form ref="form">
-                                        <v-text-field
-                                            v-model="editedItem.name"
+                                    <v-card>
+                                        <v-card-title>
+                                            Products
+                                            <v-spacer></v-spacer>
+                                        </v-card-title>
+                                        <v-data-table
+                                            :headers="headers"
+                                            :items="quoProducts"
+                                            sort-by="item_name"
+                                            :loading=tableLoad
+                                            loading-text="Loading... Please wait..."
+                                            :search="search"
+                                        >
+                                            <template v-slot:top>
+                                                <v-toolbar
+                                                    flat
+                                                >
+                                                    <v-row>
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="4"
+                                                            md="6"
+                                                            lg="8"
+                                                        >
+                                                            <v-text-field
+                                                                v-model="search"
+                                                                append-icon="mdi-magnify"
+                                                                label="Search"
+                                                                solo
+                                                                hide-details
+                                                                max-width="100px"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-dialog
+                                                        v-model="dialog"
+                                                        max-width="600px"
+                                                    >
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-btn
+                                                                color="green"
+                                                                dark
+                                                                class="mb-2"
+                                                                v-bind="attrs"
+                                                                v-on="on"
+                                                            >
+                                                                Add New Product
+                                                            </v-btn>
+                                                        </template>
+                                                        <v-card>
+                                                            <v-form ref="form">
+                                                                <v-card-title>
+                                                                    <span class="headline">{{ formTitle }}</span>
+                                                                </v-card-title>
+
+                                                                <v-card-text>
+                                                                    <v-container>
+                                                                        <v-row>
+                                                                            <v-col>
+                                                                                <v-select
+                                                                                    v-model="addQuoProduct.item_id"
+                                                                                    label="Item"
+                                                                                    :items="items"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    required
+                                                                                    outlined
+                                                                                    :rules="rules"
+                                                                                    v-on:change="getVariants(addQuoProduct.item_id)"
+                                                                                ></v-select>
+                                                                                <div v-if="hasVariants">
+                                                                                    <v-select
+                                                                                        v-model="addQuoProduct.item_variant_id"
+                                                                                        label="Item Variant"
+                                                                                        :items="variants"
+                                                                                        item-value="id"
+                                                                                        item-text="name"
+                                                                                        outlined
+                                                                                    ></v-select>
+                                                                                </div>
+                                                                                <v-text-field
+                                                                                    v-model="addQuoProduct.quantity"
+                                                                                    label="Quantity"
+                                                                                    type="number"
+                                                                                    outlined
+                                                                                ></v-text-field>
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                    </v-container>
+                                                                </v-card-text>
+
+                                                                <v-card-actions>
+                                                                    <v-progress-linear
+                                                                        v-if="progressL"
+                                                                        indeterminate
+                                                                        color="green"
+                                                                    ></v-progress-linear>
+                                                                    <v-spacer></v-spacer>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="close"
+                                                                    >
+                                                                        Cancel
+                                                                    </v-btn>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="addProduct"
+                                                                    >
+                                                                        Save
+                                                                    </v-btn>
+                                                                </v-card-actions>
+                                                            </v-form>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <v-dialog v-model="dialogDelete" max-width="500px">
+                                                        <v-card>
+                                                            <v-card-title class="text-h6">Are you sure you want to
+                                                                delete this item?
+                                                            </v-card-title>
+                                                            <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn color="blue darken-1" text @click="closeDelete">
+                                                                    Cancel
+                                                                </v-btn>
+                                                                <v-btn color="blue darken-1" text
+                                                                       @click="deleteItemConfirm">OK
+                                                                </v-btn>
+                                                                <v-spacer></v-spacer>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                </v-toolbar>
+                                            </template>
+                                            <template v-slot:item.actions="{ item }">
+                                                <v-icon
+                                                    small
+                                                    class="mr-2"
+                                                    @click="editItem(item)"
+                                                >
+                                                    mdi-pencil
+                                                </v-icon>
+                                                <v-icon
+                                                    small
+                                                    @click="deleteItem(item)"
+                                                >
+                                                    mdi-delete
+                                                </v-icon>
+                                            </template>
+                                            <template v-slot:no-data>
+                                                <div>No Data</div>
+                                            </template>
+                                        </v-data-table>
+                                    </v-card>
+                                    <v-form class="mt-5">
+                                        <v-select
+                                            v-if="admin"
+                                            v-model="department_id"
+                                            :items="departments"
+                                            item-value="id"
+                                            item-text="name"
+                                            prepend-icon="mdi-alpha-d-circle"
+                                            label="Department"
+                                            placeholder="Select department ..."
+                                            required
+                                            :rules="rules"
+                                            solo
+                                        />
+
+                                        <v-textarea
+                                            v-model="note"
                                             type="text"
-                                            name="Name"
-                                            description="Enter Name"
-                                            label="Name of User"
-                                            placeholder="Enter Name"
-                                            :error-messages="error.name"
-                                            @change="changeDetected('name')"
-                                            @keyup="clearError('name')"
-                                            @keyup.enter="edit"
-                                            :rules="rules.name"
+                                            label="Note"
+                                            placeholder="Enter quotation note..."
                                             solo
                                         />
-                                        <v-col
-                                            v-if="typeof(editedItem.link) !== '' && typeof(editedItem.link) !== null && typeof(editedItem.link) !== undefined">
-                                            <v-card width="200"
-                                                    v-on:click="openImage(editedItem.link)">
-                                                <v-img
-                                                    :src="cdnURL+editedItem.link"
-                                                    height="125"
-                                                    class="grey darken-4"
-                                                ></v-img>
-                                                <v-card-title class="title">
-                                                    Profile Picture
-                                                </v-card-title>
-                                            </v-card>
-                                            <v-file-input
-                                                v-model="editedItem.image"
-                                                label="Profile Picture"
-                                                filled
-                                                outlined
-                                                :error-messages="error.image"
-                                                prepend-icon="mdi-camera"
-                                                accept="image/png,image/jpeg,image/jpg"
-                                            ></v-file-input>
-                                        </v-col>
-                                        <v-col v-else>
-                                            <v-file-input
-                                                v-model="editedItem.image"
-                                                label="Profile Picture"
-                                                filled
-                                                outlined
-                                                :error-messages="error.image"
-                                                prepend-icon="mdi-camera"
-                                                accept="image/png,image/jpeg,image/jpg"
-                                            ></v-file-input>
-                                        </v-col>
-                                        <v-text-field
-                                            v-model="editedItem.address"
-                                            type="text"
-                                            name="address"
-                                            description="Please enter address."
-                                            autocomplete=""
-                                            label="Address"
-                                            placeholder="Enter address"
-                                            :error-messages="error.address"
-                                            @change="changeDetected('address')"
-                                            @keyup="clearError('address')"
-                                            @keyup.enter="edit"
-                                            solo
-                                        />
-                                        <v-text-field
-                                            v-model="editedItem.mobile_no"
-                                            type="number"
-                                            name="Mobile Number"
-                                            description="Please enter mobile number"
-                                            autocomplete=""
-                                            label="Mobile Number"
-                                            placeholder="Enter Mobile Number"
-                                            :error-messages="error.mobile_no"
-                                            @change="changeDetected('mobile_no')"
-                                            @keyup="clearError('mobile_no')"
-                                            @keyup.enter="edit"
-                                            solo
-                                        />
-                                        <v-text-field
-                                            v-model="editedItem.password"
-                                            :label="$t('password')"
-                                            name="password"
-                                            :rules="rules.password"
-                                            prepend-inner-icon="mdi-lock"
-                                            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                                            :type="show1 ? 'text' : 'password'"
-                                            @click:append="show1 = !show1"
-                                            :error-messages="error.password"
-                                            @change="changeDetected('password')"
-                                            @keyup="clearError('password')"
-                                            @keyup.enter="edit"
-                                            solo
-                                        ></v-text-field>
+
+                                        <v-file-input
+                                            v-model="file"
+                                            label="File"
+                                            filled
+                                            outlined
+                                            prepend-icon="mdi-camera"
+                                            accept="*/application"
+                                        ></v-file-input>
                                     </v-form>
                                     <CCardFooter>
-                                        <CButton type="submit" size="sm" color="primary" @click="edit">
+                                        <CButton type="submit" size="sm" color="primary" @click="create">
                                             <CIcon name="cil-check-circle"/>
                                             Submit
+                                        </CButton>
+                                        <CButton size="sm" color="danger" :to="'/quotations/'">
+                                            <CIcon name="cil-ban"/>
+                                            Cancel
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -117,144 +223,208 @@
 </template>
 
 <script>
-import config from "../../config";
-import i18n from "../../i18n";
+import route from "../../router";
 import ApiServices from "../../services/ApiServices";
+import config from "../../config";
 
 export default {
     name: "NewPurchaseRequest",
 
+    props: {
+        source: String,
+    },
     data: () => ({
         cdnURL: config.cdnURL,
-        options: [],
-        show1: false,
-        editedItem: {
-            reference_no: '',
-            user_id: '',
-            department_id: '',
-            shipping_cost: '',
-            paid_amount: '',
-            status: '',
-            note: '',
-            delivery_status: '',
+        admin: false,
+        createProgress: false,
+        search: '',
+        progressL: false,
+        dialog: false,
+        dialogDelete: false,
+        headers: [
+            {text: 'Item', value: 'item_name'},
+            {text: 'Item Variant', value: 'item_variant'},
+            {text: 'Quantity', value: 'quantity'},
+            {text: 'Price', value: 'price'},
+            {text: 'Shipping Cost', value: 'shipping_cost'},
+            {text: 'Actions', value: 'actions', sortable: false},
+        ],
+        quotations: [],
+        tableLoad: true,
+        hasVariants: false,
+        department_id: '',
+        file: [],
+        note: '',
+        departments: [],
+        productCount: 0,
+        editedIndex: -1,
+        quoProducts: [],
+        items: [],
+        variants: [],
+        addQuoProduct: {
+            item_id: '',
+            item_variant_id: '',
+            quantity: '',
+        },
+        productQuo: {
+            item_id: '',
+            item_variant_id: '',
+            quantity: '',
         },
         error: {
-            name: '',
-            address: '',
-            mobile_no: '',
-            password: '',
-            image: '',
+            department_id: '',
+            file: [],
+            note: '',
         },
-        rules: {
-            password: [
-                v => (v && v.length >= 8) || i18n.t('validation.morethan'),
-                v => /(?=.*[A-Z])/.test(v) || i18n.t('validation.uppercase'),
-                v => /(?=.*\d)/.test(v) || i18n.t('validation.numeric'),
-                v => /([!@$%:])/.test(v) || i18n.t('validation.special')
-            ],
-            name: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],
-        },
-        hasChanged: {
-            name: false,
-            address: false,
-            mobile_no: false,
-            password: false,
-            image: false,
-        },
+        rules: [
+            value => !!value || 'Required.',
+        ]
     }),
-
-    async created() {
-        this.loadData();
+    computed: {
+        formTitle() {
+            return this.editedIndex === -1 ? 'Add Quotation Product' : 'Edit Quotation Product'
+        },
     },
-
+    async created() {
+        this.loadDepartments();
+        this.loadItems();
+    },
     methods: {
-        openImage(data) {
-            window.open(config.cdnURL + data, `_blank`);
-        },
-        async loadData() {
-            let res = await ApiServices.getUserInformation();
-            let profilePic = await ApiServices.getUserProfilePic();
+        async loadDepartments() {
+            let res = await ApiServices.departmentIndex();
             if (res.success === true) {
-                this.editedItem = res.data;
-                this.editedItem.link = profilePic.data;
+                this.departments = res.data;
             }
         },
 
-        changeDetected(name) {
-            if (name === 'name') {
-                this.hasChanged.name = true;
+        async loadItems() {
+            let res = await ApiServices.itemIndex();
+            if (res.success === true) {
+                this.items = res.data;
             }
-            if (name === 'address') {
-                this.hasChanged.address = true;
-            }
-            if (name === 'mobile_no') {
-                this.hasChanged.mobile_no = true;
-            }
-            if (name === 'password') {
-                this.hasChanged.password = true;
+            this.tableLoad = false;
+        },
+
+        async getVariants(item) {
+            let res = await ApiServices.itemShow(item);
+            if (res.success === true) {
+                if (res.data.item_variants.length > 0) {
+                    this.hasVariants = true;
+                } else {
+                    this.hasVariants = false;
+                }
+                this.variants = res.data.item_variants;
             }
         },
 
-        clearError(name) {
-            if (name === 'name') {
-                this.error.name = '';
-            }
-            if (name === 'address') {
-                this.error.address = '';
-            }
-            if (name === 'mobile_no') {
-                this.error.mobile_no = '';
-            }
-            if (name === 'password') {
-                this.error.password = '';
-            }
-            if (name === 'image') {
-                this.error.image = '';
-            }
+        editItem(item) {
+            this.editedIndex = this.quoProducts.indexOf(item)
+            this.addQuoProduct = Object.assign({}, item)
+            this.dialog = true
         },
-        async edit() {
-            this.changeProgress = true;
+
+        deleteItem(item) {
+            this.editedIndex = this.quoProducts.indexOf(item)
+            this.addQuoProduct = Object.assign({}, item)
+            this.dialogDelete = true
+        },
+
+        async deleteItemConfirm() {
+            this.quoProducts.splice(this.editedIndex, 1)
+            this.closeDelete()
+        },
+
+        close() {
+            this.progressL = false;
+            this.dialog = false;
+            this.$nextTick(() => {
+                this.addQuoProduct = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            });
+            this.loadItems();
+        },
+
+        closeDelete() {
+            this.dialogDelete = false
+            this.$nextTick(() => {
+                this.addQuoProduct = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            })
+        },
+
+        async addProduct() {
+            var varName = '---';
+            var price = '';
+            let res = await ApiServices.itemShow(this.addQuoProduct.item_id);
+            price = res.data.cost_price;
+            if (this.addQuoProduct.item_variant_id) {
+                let rtn = await ApiServices.itemVariantShow(this.addQuoProduct.item_variant_id);
+                varName = rtn.data.name;
+                price = rtn.data.price;
+            }
+            if (this.editedIndex > -1) {
+                Object.assign(this.quoProducts[this.editedIndex], {
+                    'item_id': this.addQuoProduct.item_id,
+                    'item_name': res.data.name,
+                    'product_id': res.data.product_id,
+                    'item_variant': varName,
+                    'item_variant_id': this.addQuoProduct.item_variant_id,
+                    'price': price,
+                    'quantity': this.addQuoProduct.quantity,
+                    'shipping_cost': this.addQuoProduct.shipping_cost,
+                })
+            } else {
+                this.quoProducts.push({
+                    'item_id': this.addQuoProduct.item_id,
+                    'item_name': res.data.name,
+                    'product_id': res.data.product_id,
+                    'item_variant_id': this.addQuoProduct.item_variant_id,
+                    'item_variant': varName,
+                    'price': price,
+                    'quantity': this.addQuoProduct.quantity,
+                    'shipping_cost': this.addQuoProduct.shipping_cost,
+                });
+            }
+            this.$refs.form.reset();
+            this.close()
+        },
+
+        async create() {
+            this.createProgress = true;
             const data = new FormData();
-            if (this.hasChanged.name) {
-                data.append('name', this.editedItem.name);
+            data.append('note', this.note);
+            if (this.admin) {
+                data.append('department_id', this.department_id);
+
             }
-            if (this.hasChanged.address) {
-                data.append('address', this.editedItem.address);
-            }
-            if (this.hasChanged.mobile_no) {
-                data.append('mobile_no', this.editedItem.mobile_no);
-            }
-            if (this.hasChanged.password) {
-                data.append('password', this.editedItem.password);
+            if (typeof this.file.name == 'string') {
+                data.append('file', this.file);
             }
 
-            if ('image' in this.editedItem) {
-                if (typeof this.editedItem.image.name == 'string') {
-                    data.append('image', this.editedItem.image);
-                }
-            }
-            let res = await ApiServices.editProfile(data);
+            let res = await ApiServices.addPurchaseRequest(data);
+            this.createProgress = false;
             if (res.success === true) {
-                this.loadData();
+                if (this.quoProducts.length > 0) {
+                    await this.createProduct(res.data.id);
+                } else {
+                    route.replace('/quotations/');
+                }
             }
-            if (res.success === false) {
-                if (res.data.password !== undefined) {
-                    this.error.password = res.data.password[0]
+        },
+
+        async createProduct(id) {
+            for (var i = 0; i < this.quoProducts.length; i++) {
+                let productData = new FormData();
+                productData.append('item_id', parseInt(this.quoProducts[i].item_id));
+                productData.append('quantity', parseInt(this.quoProducts[i].quantity));
+                productData.append('product_id', parseInt(this.quoProducts[i].product_id));
+                productData.append('purchase_id', parseInt(id));
+                if (this.quoProducts[i].item_variant_id !== '') {
+                    productData.append('item_variant_id', parseInt(this.quoProducts[i].item_variant_id));
                 }
-                if (res.data.name !== undefined) {
-                    this.error.name = res.data.name[0]
-                }
-                if (res.data.image !== undefined) {
-                    this.error.image = res.data.image[0]
-                }
+                let res = await ApiServices.addPurchaseProductRequest(productData);
             }
         },
     }
 }
 </script>
-
-<style scoped>
-
-</style>
