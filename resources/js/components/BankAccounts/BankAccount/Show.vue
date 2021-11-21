@@ -11,22 +11,22 @@
                             <CCardBody>
                                 <CRow>
                                     <CCol md="4">
-                                        <h6>Bank Name: </h6>
+                                        <h6>{{ $t('bank') +' '+ $t('name') }}: </h6>
                                         <p>{{ show.bank_name }}</p>
-                                        <h6>Branch: </h6>
+                                        <h6>{{ $t('branch') }}: </h6>
                                         <p v-if="show.branch">{{ show.branch }}</p>
                                         <p v-else>----</p>
                                     </CCol>
                                     <CCol md="4">
-                                        <h6>Account No.: </h6>
+                                        <h6>{{ $t('account') +' '+ $t('number') }}: </h6>
                                         <p>{{ show.account_no }}</p>
-                                        <h6>Account Name: </h6>
+                                        <h6>{{ $t('account') +' '+ $t('name') }}: </h6>
                                         <p>{{ show.account_name }}</p>
                                     </CCol>
                                     <CCol md="4">
-                                        <h6>Total Balance: </h6>
+                                        <h6>{{ $t('total_balance') }}: </h6>
                                         <p>{{ show.total_balance }}</p>
-                                        <h6>Current Balance: </h6>
+                                        <h6>{{ $t('current_balance') }}: </h6>
                                         <p>{{ show.current_balance }}</p>
                                     </CCol>
                                 </CRow>
@@ -76,11 +76,11 @@
                                     <CCardFooter>
                                         <CButton size="sm" color="primary" :to="'/bankAccounts/edit/'+show.id">
                                             <CIcon name="cil-check-circle"/>
-                                            Edit
+                                            {{ $t('button.edit') }}
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/bankAccounts'">
                                             <CIcon name="cil-ban"/>
-                                            Back
+                                            {{ $t('button.back') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

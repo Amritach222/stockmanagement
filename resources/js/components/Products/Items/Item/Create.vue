@@ -23,7 +23,7 @@
                                             name="name"
                                             description="Please enter item name."
                                             autocomplete=""
-                                            label="Name"
+                                            :label="$t('name')"
                                             placeholder="Enter item name..."
                                             required
                                             @keyup="clearError('name')"
@@ -40,7 +40,7 @@
                                             item-value="id"
                                             description="Please select a product."
                                             autocomplete=""
-                                            label="Product"
+                                            :label="$t('product')"
                                             placeholder="Select product..."
                                             required
                                             @keyup="clearError('product_id')"
@@ -51,7 +51,7 @@
                                         />
                                         <v-file-input
                                             v-model="image"
-                                            label="Image"
+                                            :label="$t('image')"
                                             filled
                                             outlined
                                             prepend-icon="mdi-camera"
@@ -65,7 +65,7 @@
                                             item-value="id"
                                             description="Please select brand."
                                             autocomplete=""
-                                            label="Brand"
+                                            :label="$t('brand')"
                                             placeholder="Select brand ..."
                                             required
                                             @keyup="clearError('brand_id')"
@@ -80,7 +80,7 @@
                                             name="cost_price"
                                             description="Please enter cost price."
                                             autocomplete=""
-                                            label="Cost Price"
+                                            :label="$t('cost_price')"
                                             placeholder="Enter cost price..."
                                             prepend-icon="mdi-currency-usd"
                                             @keyup="clearError('cost_price')"
@@ -93,7 +93,7 @@
                                             name="stock"
                                             description="Please enter stock."
                                             autocomplete=""
-                                            label="Stock"
+                                            :label="$t('stock')"
                                             placeholder="Enter stock..."
                                             prepend-icon="mdi-chart-areaspline"
                                             @keyup="clearError('stock')"
@@ -106,7 +106,7 @@
                                             name="alert_stock"
                                             description="Please enter alert stock."
                                             autocomplete=""
-                                            label="Alert Stock"
+                                            :label="$t('alert_stock')"
                                             placeholder="Enter alert stock..."
                                             prepend-icon="mdi-chart-bell-curve"
                                             @keyup="clearError('alert_stock')"
@@ -121,7 +121,7 @@
                                             item-value="id"
                                             description="Please select a unit."
                                             autocomplete=""
-                                            label="Unit"
+                                            :label="$t('unit')"
                                             placeholder="Select a unit..."
                                             prepend-icon="mdi-google-circles-communities"
                                             required
@@ -137,7 +137,7 @@
                                             item-value="id"
                                             description="Please select a tax."
                                             autocomplete=""
-                                            label="Tax"
+                                            :label="$t('tax')"
                                             placeholder="Select a tax..."
                                             prepend-icon="mdi-alpha-t-circle"
                                             @keyup="clearError('tax_id')"
@@ -150,7 +150,7 @@
                                             :items="['Included','Excluded']"
                                             description="Please select a tax method."
                                             autocomplete=""
-                                            label="Tax Method"
+                                            :label="$t('tax_method')"
                                             placeholder="Select a method..."
                                             prepend-icon="mdi-chart-bubble"
                                             @keyup="clearError('tax_method')"
@@ -161,7 +161,7 @@
                                     <hr>
                                     <v-card>
                                         <v-card-title>
-                                            Variants
+                                            {{ $t('variants') }}
                                             <v-spacer></v-spacer>
                                         </v-card-title>
                                         <v-data-table
@@ -220,7 +220,7 @@
                                                                             <v-col>
                                                                                 <v-select
                                                                                     v-model="addVariant.attribute_group_ids"
-                                                                                    label="Attribute Groups"
+                                                                                    :label="$t('attribute_groups')"
                                                                                     :items="itemAttributeGroups"
                                                                                     item-text="name"
                                                                                     item-value="id"
@@ -232,7 +232,7 @@
                                                                                 ></v-select>
                                                                                 <v-select
                                                                                     v-model="addVariant.attribute_ids"
-                                                                                    label="Attributes"
+                                                                                    :label="$t('attributes')"
                                                                                     :items="itemAttributes"
                                                                                     item-text="name"
                                                                                     item-value="id"
@@ -240,17 +240,6 @@
                                                                                     required
                                                                                     outlined
                                                                                 ></v-select>
-                                                                                <!--                                                                                <v-select-->
-                                                                                <!--                                                                                    v-model="addQuoProduct.item_variant_id"-->
-                                                                                <!--                                                                                    label="Item Variant"-->
-                                                                                <!--                                                                                    outlined-->
-                                                                                <!--                                                                                ></v-select>-->
-                                                                                <!--                                                                                <v-text-field-->
-                                                                                <!--                                                                                    v-model="addQuoProduct.quantity"-->
-                                                                                <!--                                                                                    label="Quantity"-->
-                                                                                <!--                                                                                    type="number"-->
-                                                                                <!--                                                                                    outlined-->
-                                                                                <!--                                                                                ></v-text-field>-->
                                                                             </v-col>
                                                                         </v-row>
                                                                     </v-container>
@@ -268,14 +257,14 @@
                                                                         text
                                                                         @click="close"
                                                                     >
-                                                                        Cancel
+                                                                        {{ $t('button.cancel') }}
                                                                     </v-btn>
                                                                     <v-btn
                                                                         color="blue darken-1"
                                                                         text
                                                                         @click="variantAdd"
                                                                     >
-                                                                        Save
+                                                                        {{ $t('button.submit') }}
                                                                     </v-btn>
                                                                 </v-card-actions>
                                                             </v-form>
@@ -297,7 +286,7 @@
                                                                             <v-col>
                                                                                 <v-select
                                                                                     v-model="addVariant.attribute_group_ids"
-                                                                                    label="Attribute Groups"
+                                                                                    :label="$t('attribute_groups')"
                                                                                     :items="itemAttributeGroups"
                                                                                     item-text="name"
                                                                                     item-value="id"
@@ -308,7 +297,7 @@
                                                                                 ></v-select>
                                                                                 <v-select
                                                                                     v-model="addVariant.attribute_ids"
-                                                                                    label="Attributes"
+                                                                                    :label="$t('attributes')"
                                                                                     :items="itemAttributes"
                                                                                     item-text="name"
                                                                                     item-value="id"
@@ -319,13 +308,13 @@
                                                                                 ></v-select>
                                                                                 <v-text-field
                                                                                     v-model="addVariant.quantity"
-                                                                                    label="Quantity"
+                                                                                    :label="$t('quantity')"
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
                                                                                 <v-text-field
                                                                                     v-model="addVariant.price"
-                                                                                    label="Price"
+                                                                                    :label="$t('price')"
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
@@ -346,14 +335,14 @@
                                                                         text
                                                                         @click="editClose"
                                                                     >
-                                                                        Cancel
+                                                                        {{ $t('button.cancel') }}
                                                                     </v-btn>
                                                                     <v-btn
                                                                         color="blue darken-1"
                                                                         text
                                                                         @click="variantAdd"
                                                                     >
-                                                                        Save
+                                                                        {{ $t('button.submit') }}
                                                                     </v-btn>
                                                                 </v-card-actions>
                                                             </v-form>
@@ -361,16 +350,17 @@
                                                     </v-dialog>
                                                     <v-dialog v-model="dialogDelete" max-width="500px">
                                                         <v-card>
-                                                            <v-card-title class="text-h6">Are you sure you want to
-                                                                delete this item?
+                                                            <v-card-title class="text-h6">
+                                                                {{ $t('message.delete') }}
                                                             </v-card-title>
                                                             <v-card-actions>
                                                                 <v-spacer></v-spacer>
                                                                 <v-btn color="blue darken-1" text @click="closeDelete">
-                                                                    Cancel
+                                                                    {{ $t('button.cancel') }}
                                                                 </v-btn>
                                                                 <v-btn color="blue darken-1" text
-                                                                       @click="deleteItemConfirm">OK
+                                                                       @click="deleteItemConfirm">
+                                                                    {{ $t('button.confirm') }}
                                                                 </v-btn>
                                                                 <v-spacer></v-spacer>
                                                             </v-card-actions>
@@ -401,11 +391,11 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="create">
                                             <CIcon name="cil-check-circle"/>
-                                            Submit
+                                            {{ $t('button.submit') }}
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/items'">
                                             <CIcon name="cil-ban"/>
-                                            Cancel
+                                            {{ $t('button.cancel') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

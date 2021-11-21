@@ -61,14 +61,14 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.title"
-                                                    label="Name"
+                                                    :label="$t('name')"
                                                     required
                                                     outlined
                                                     :rules="rules"
                                                 ></v-text-field>
                                                 <v-select
                                                     v-model="editedItem.view_page"
-                                                    label="View Page"
+                                                    :label="$t('view_page')"
                                                     :items="['mail.notice','mail.password_change','mail.reset_password','mail.welcome']"
                                                     required
                                                     outlined
@@ -76,7 +76,7 @@
                                                 ></v-select>
                                                 <v-textarea
                                                     v-model="editedItem.content"
-                                                    label="Content"
+                                                    :label="$t('content')"
                                                     required
                                                     outlined
                                                     :rules="rules"
@@ -98,14 +98,14 @@
                                         text
                                         @click="close"
                                     >
-                                        Cancel
+                                        {{ $t('button.cancel') }}
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        Save
+                                        {{ $t('button.submit') }}
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>

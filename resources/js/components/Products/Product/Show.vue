@@ -20,36 +20,34 @@
                                                     class="grey darken-4"
                                                 ></v-img>
                                                 <v-card-title class="title">
-                                                    Image
+                                                    {{ $t('image') }}
                                                 </v-card-title>
                                             </v-card>
                                         </v-col>
                                     </CCol>
                                     <CCol md="8">
-                                        <h6>Name: </h6>
+                                        <h6>{{ $t('name') }}: </h6>
                                         <p>{{ show.name }}</p>
-                                        <h6>Code: </h6>
+                                        <h6>{{ $t('code') }}: </h6>
                                         <p>{{ show.code }}</p>
-                                        <h6>Brand: </h6>
+                                        <h6>{{ $t('brand') }}: </h6>
                                         <p v-if="show.brand_id">{{ show.brand.name }}</p>
                                         <p v-else>---</p>
-                                        <h6>Category: </h6>
+                                        <h6>{{ $t('category') }}: </h6>
                                         <p v-if="show.category_id">{{ show.category.name }}</p>
                                         <p v-else>---</p>
-                                        <h6 v-if="show.product">Product: </h6>
-                                        <p v-if="show.product">{{ show.product.name }}</p>
-                                        <h6>Status: </h6>
+                                        <h6>{{ $t('status') }}: </h6>
                                         <div v-if="show.is_active === 1" class="mb-2">
                                             <CButton size="sm" color="success">
-                                                Active
+                                                {{ $t('active') }}
                                             </CButton>
                                         </div>
                                         <div v-else class="mb-2">
                                             <CButton size="sm" color="danger">
-                                                Inactive
+                                                {{ $t('inactive') }}
                                             </CButton>
                                         </div>
-                                        <h6>Details: </h6>
+                                        <h6>{{ $t('details') }}: </h6>
                                         <p>{{ show.details }}</p>
                                     </CCol>
                                 </CRow>
@@ -57,11 +55,11 @@
                                     <CCardFooter>
                                         <CButton size="sm" color="primary" :to="'/products/edit/'+show.id">
                                             <CIcon name="cil-check-circle"/>
-                                            Edit
+                                            {{ $t('button.edit') }}
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/products'">
                                             <CIcon name="cil-ban"/>
-                                            Back
+                                            {{ $t('button.back') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

@@ -19,7 +19,7 @@
                                     <v-form>
                                         <v-select
                                             v-model="department_id"
-                                            label="Department"
+                                            :label="$t('department')"
                                             :items="departments"
                                             item-value="id"
                                             item-text="name"
@@ -30,7 +30,7 @@
                                         ></v-select>
                                         <v-select
                                             v-model="user_id"
-                                            label="User"
+                                            :label="$t('user')"
                                             :items="users"
                                             item-value="id"
                                             item-text="name"
@@ -41,7 +41,7 @@
                                         ></v-select>
                                         <v-select
                                             v-model="expense_category_id"
-                                            label="Expense Category"
+                                            :label="$t('expense') +' '+ $t('category')"
                                             :items="expenseCategories"
                                             item-value="id"
                                             item-text="name"
@@ -52,7 +52,7 @@
                                         ></v-select>
                                         <v-text-field
                                             v-model="amount"
-                                            label="Amount"
+                                            :label="$t('amount')"
                                             type="number"
                                             prepend-icon="mdi-currency-usd"
                                             required
@@ -61,7 +61,7 @@
                                         ></v-text-field>
                                         <v-select
                                             v-model="transaction_type"
-                                            label="Transaction Type"
+                                            :label="$t('transaction') +' '+ $t('type')"
                                             id="transaction_type"
                                             :items="['Cash', 'Cheque', 'OnlineTransaction']"
                                             prepend-icon="mdi-swap-horizontal"
@@ -71,7 +71,7 @@
                                         <div v-if="bank_account">
                                             <v-select
                                                 v-model="bank_account_id"
-                                                label="Bank Account"
+                                                :label="$t('bank') +' '+ $t('account')"
                                                 :items="bankAccounts"
                                                 :item-text="bankAccount => bankAccount.bank_name + ' - ' + bankAccount.account_name"
                                                 item-value="id"
@@ -82,7 +82,7 @@
                                         <div v-if="cheque">
                                             <v-text-field
                                                 v-model="cheque_no"
-                                                label="Cheque No."
+                                                :label="$t('cheque') +' '+ $t('number')"
                                                 type="number"
                                                 prepend-icon="mdi-checkbook"
                                                 solo
@@ -90,13 +90,13 @@
                                         </div>
                                         <v-text-field
                                             v-model="note"
-                                            label="Note"
+                                            :label="$t('note')"
                                             prepend-icon="mdi-pen"
                                             solo
                                         ></v-text-field>
                                         <v-file-input
                                             v-model="file"
-                                            label="File"
+                                            :label="$t('file')"
                                             filled
                                             outlined
                                             prepend-icon="mdi-camera"
@@ -106,11 +106,11 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="create">
                                             <CIcon name="cil-check-circle"/>
-                                            Submit
+                                            {{ $t('button.submit') }}
                                         </CButton>
                                         <CButton type="reset" size="sm" color="danger" :to="'/expenses/'">
                                             <CIcon name="cil-ban"/>
-                                            Cancel
+                                            {{ $t('button.cancel') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

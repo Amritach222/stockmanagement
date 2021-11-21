@@ -24,7 +24,7 @@
                                             description="Please enter site title."
                                             prepend-inner-icon="mdi-alpha-c-circle"
                                             autocomplete=""
-                                            label="Title"
+                                            :label="$t('title')"
                                             placeholder="Enter title..."
                                             required
                                             @keyup="clearError('title')"
@@ -41,12 +41,12 @@
                                                     class="grey darken-4"
                                                 ></v-img>
                                                 <v-card-title class="title">
-                                                    Logo
+                                                    {{ $t('logo') }}
                                                 </v-card-title>
                                             </v-card>
                                             <v-file-input
                                                 v-model="editedItem.image"
-                                                label="Logo"
+                                                :label="$t('logo')"
                                                 filled
                                                 outlined
                                                 prepend-icon="mdi-camera"
@@ -56,7 +56,7 @@
                                         <v-col v-else>
                                             <v-file-input
                                                 v-model="editedItem.image"
-                                                label="Logo"
+                                                :label="$t('logo')"
                                                 filled
                                                 outlined
                                                 prepend-icon="mdi-camera"
@@ -73,7 +73,7 @@
                                             description="Please select system current fiscal year."
                                             prepend-inner-icon="mdi-calendar-month"
                                             autocomplete=""
-                                            label="Fiscal Year"
+                                            :label="$t('fiscal_year')"
                                             placeholder="Select current fiscal year..."
                                             @keyup="clearError('fiscal_year_id')"
                                             @keyup.enter="edit"
@@ -87,7 +87,7 @@
                                             description="Please enter site currency."
                                             prepend-inner-icon="mdi-currency-usd"
                                             autocomplete=""
-                                            label="Currency"
+                                            :label="$t('currency')"
                                             placeholder="Enter currency..."
                                             @keyup="clearError('currency')"
                                             @keyup.enter="edit"
@@ -102,7 +102,7 @@
                                             description="Please enter site time zone."
                                             prepend-inner-icon="mdi-clock"
                                             autocomplete=""
-                                            label="Time Zone"
+                                            :label="$t('time_zone')"
                                             placeholder="Enter time zone..."
                                             @keyup="clearError('time_zone')"
                                             @keyup.enter="edit"
@@ -115,7 +115,7 @@
                                             prepend-inner-icon="mdi-calendar-month"
                                             :items="['y-m-d','y/m/d','d-m-y','d/m/y','m-d-y']"
                                             autocomplete=""
-                                            label="Date Format"
+                                            :label="$t('date_format')"
                                             placeholder="Select date format..."
                                             :rules="rules.date_format"
                                             solo
@@ -124,7 +124,7 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            Submit
+                                            {{ $t('button.submit') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

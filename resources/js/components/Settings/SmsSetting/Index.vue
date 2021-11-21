@@ -24,7 +24,7 @@
                                             description="Please enter sms gateway."
                                             prepend-inner-icon="mdi-door-open"
                                             autocomplete=""
-                                            label="Gateway"
+                                            :label="$t('gateway')"
                                             placeholder="Enter gateway..."
                                             required
                                             @keyup="clearError('gateway')"
@@ -39,7 +39,7 @@
                                             description="Please enter sms api key."
                                             prepend-inner-icon="mdi-key-variant"
                                             autocomplete=""
-                                            label="Api Key"
+                                            :label="$t('api_key')"
                                             placeholder="Enter api key..."
                                             required
                                             @keyup="clearError('api_key')"
@@ -51,7 +51,7 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            Submit
+                                            {{ $t('button.submit') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

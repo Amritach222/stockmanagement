@@ -11,33 +11,33 @@
                             <CCardBody>
                                 <CRow>
                                     <CCol md="4">
-                                        <h6>User: </h6>
+                                        <h6>{{ $t('user') }}: </h6>
                                         <p v-if="show.user_id">{{ show.user.name }}</p>
                                         <p v-else>---</p>
-                                        <h6>Department: </h6>
+                                        <h6>{{ $t('department') }}: </h6>
                                         <p v-if="show.department_id">{{ show.department.name }}</p>
                                         <p v-else>----</p>
-                                        <h6>Expense Category: </h6>
+                                        <h6>{{ $t('expense') +' '+ $t('category') }}: </h6>
                                         <p>{{ show.expense_category.name }}</p>
                                     </CCol>
                                     <CCol md="4">
-                                        <h6>Amount: </h6>
+                                        <h6>{{ $t('amount') }}: </h6>
                                         <p>{{ show.amount }}</p>
-                                        <h6>Transaction Type: </h6>
+                                        <h6>{{ $t('transaction') +' '+ $t('type') }}: </h6>
                                         <p>{{ show.transaction_type }}</p>
                                         <div v-if="show.transaction_type === 'OnlineTransaction' || show.transaction_type=== 'Cheque'">
-                                        <h6>Bank Account: </h6>
+                                        <h6>{{ $t('bank') +' '+ $t('account') }}: </h6>
                                         <p>{{ show.bank_account.bank_name }}</p>
                                         </div>
                                         <div v-if="show.transaction_type === 'Cheque'">
-                                            <h6>Cheque No:</h6>
+                                            <h6>{{ $t('cheque') +' '+ $t('number') }}:</h6>
                                             <p>{{ show.cheque_no }}</p>
                                         </div>
                                     </CCol>
                                     <CCol md="4">
-                                        <h6>Note: </h6>
+                                        <h6>{{ $t('note') }}: </h6>
                                         <p>{{ show.note }}</p>
-                                        <h6>Status: </h6>
+                                        <h6>{{ $t('status') }}: </h6>
                                         <div v-if="show.status === 'Pending'" class="mb-2">
                                             <CButton size="sm" color="secondary">
                                                 {{ show.status }}
@@ -53,12 +53,12 @@
                                                 {{ show.status }}
                                             </CButton>
                                         </div>
-                                        <h6>File: </h6>
+                                        <h6>{{ $t('file') }}: </h6>
                                         <div v-if="show.link"
                                              v-on:click="openLink(show.link)"
                                              class="file-link"
                                         >
-                                            Open File
+                                            {{ $t('open_file') }}
                                             <v-icon
                                                 small
                                             >
@@ -72,11 +72,11 @@
                                     <CCardFooter>
                                         <CButton size="sm" color="primary" :to="'/expenses/edit/'+show.id">
                                             <CIcon name="cil-check-circle"/>
-                                            Edit
+                                            {{ $t('button.edit') }}
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/expenses'">
                                             <CIcon name="cil-ban"/>
-                                            Back
+                                            {{ $t('button.back') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

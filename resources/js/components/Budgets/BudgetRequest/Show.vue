@@ -11,28 +11,28 @@
                             <CCardBody>
                                 <CRow>
                                     <CCol md="4">
-                                        <h6>User: </h6>
+                                        <h6>{{ $t('user') }}: </h6>
                                         <p v-if="show.user_id">{{ show.user.name }}</p>
                                         <p v-else>----</p>
-                                        <h6>Department: </h6>
+                                        <h6>{{ $t('department') }}: </h6>
                                         <p v-if="show.department_id">{{ show.department.name }}</p>
                                         <p v-else>----</p>
-                                        <h6>Fiscal Year: </h6>
+                                        <h6>{{ $t('fiscal_year') }}: </h6>
                                         <p v-if="show.fiscal_year_id">{{ show.fiscal_year.name }}</p>
                                         <p v-else>----</p>
                                     </CCol>
                                     <CCol md="4">
-                                        <h6>Type: </h6>
+                                        <h6>{{ $t('type') }}: </h6>
                                         <p>{{ show.type }}</p>
-                                        <h6>Request Amount: </h6>
+                                        <h6>{{ $t('requested') +' '+ $t('amount') }}: </h6>
                                         <p v-if="show.request_amount">{{ show.request_amount }}</p>
                                         <p v-else>----</p>
-                                        <h6>File: </h6>
+                                        <h6>{{ $t('file') }}: </h6>
                                         <div v-if="show.link"
                                              v-on:click="openLink(show.link)"
                                              class="file-link"
                                         >
-                                            Open File
+                                            {{ $t('open_file') }}
                                             <v-icon
                                                 small
                                             >
@@ -44,7 +44,7 @@
                                         </div>
                                     </CCol>
                                     <CCol md="4">
-                                        <h6>Status: </h6>
+                                        <h6>{{ $t('status') }}: </h6>
                                         <div v-if="show.status === 'Pending'" class="mb-2">
                                             <CButton size="sm" color="secondary">
                                                 {{ show.status }}
@@ -60,10 +60,10 @@
                                                 {{ show.status }}
                                             </CButton>
                                         </div>
-                                        <h6>Approver: </h6>
+                                        <h6>{{ $t('approver') }}: </h6>
                                         <p v-if="show.approved_by">{{ show.approver.name }}</p>
                                         <p v-else>----</p>
-                                        <h6>Remarks: </h6>
+                                        <h6>{{ $t('remarks') }}: </h6>
                                         <p v-if="show.remarks">{{ show.remarks }}</p>
                                         <p v-else>----</p>
                                     </CCol>
@@ -126,11 +126,11 @@
                                     <CCardFooter>
                                         <CButton size="sm" color="primary" :to="'/budgetRequests/edit/'+show.id">
                                             <CIcon name="cil-check-circle"/>
-                                            Edit
+                                            {{ $t('button.edit') }}
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/budgetRequests'">
                                             <CIcon name="cil-ban"/>
-                                            Back
+                                            {{ $t('button.back') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

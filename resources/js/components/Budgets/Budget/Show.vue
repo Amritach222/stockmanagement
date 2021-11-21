@@ -11,33 +11,33 @@
                             <CCardBody>
                                 <CRow>
                                     <CCol md="4">
-                                        <h6>Title: </h6>
+                                        <h6>{{ $t('title') }}: </h6>
                                         <p>{{ show.title }}</p>
-                                        <h6>Fiscal Year: </h6>
+                                        <h6>{{ $t('fiscal_year') }}: </h6>
                                         <p v-if="show.fiscal_year_id">{{ show.fiscal_year.name }}</p>
                                         <p v-else>----</p>
-                                        <h6>Type: </h6>
+                                        <h6>{{ $t('type') }}: </h6>
                                         <p>{{ show.type }}</p>
                                     </CCol>
                                     <CCol md="4">
-                                        <h6>Allocated Budget Amount: </h6>
+                                        <h6>{{ $t('allocated_budget') + ' ' + $t('amount') }}: </h6>
                                         <p>{{ show.allocated_budget_amount }}</p>
-                                        <h6>Initial Dispatched Amount: </h6>
+                                        <h6>{{ $t('initial_dispatched') + ' ' + $t('amount') }}: </h6>
                                         <p>{{ show.initial_dispatched_amount }}</p>
-                                        <h6>Total Dispatched Amount: </h6>
+                                        <h6>{{ $t('total_dispatched') + ' ' + $t('amount') }}: </h6>
                                         <p>{{ show.total_dispatched_amount }}</p>
                                     </CCol>
                                     <CCol md="4">
-                                        <h6>Date First Received: </h6>
+                                        <h6>{{ $t('date_first_received') }}: </h6>
                                         <p>{{ show.date_first_received }}</p>
-                                        <h6>Remarks: </h6>
+                                        <h6>{{ $t('remarks') }}: </h6>
                                         <p>{{ show.remarks }}</p>
-                                        <h6>File: </h6>
+                                        <h6>{{ $t('file') }}: </h6>
                                         <div v-if="show.link"
-                                            v-on:click="openLink(show.link)"
+                                             v-on:click="openLink(show.link)"
                                              class="file-link"
                                         >
-                                            Open File
+                                            {{ $t('open_file') }}
                                             <v-icon
                                                 small
                                             >
@@ -47,56 +47,56 @@
                                     </CCol>
                                 </CRow>
                                 <hr>
-<!--                                <v-card>-->
-                                    <v-card-title>
-                                        Dispatched Amounts
-                                        <v-spacer></v-spacer>
-                                    </v-card-title>
-                                    <v-data-table
-                                        :headers="headers"
-                                        :items="dispatchedAmounts"
-                                        sort-by="id"
-                                        loading
-                                        loading-text="Loading... Please wait..."
-                                        :search="search"
-                                    >
-                                        <template v-slot:top>
-                                            <v-toolbar
-                                                flat
-                                            >
-                                                <v-row>
-                                                    <v-col
-                                                        cols="12"
-                                                        sm="4"
-                                                        md="6"
-                                                        lg="8"
-                                                    >
-                                                        <v-text-field
-                                                            v-model="search"
-                                                            append-icon="mdi-magnify"
-                                                            label="Search"
-                                                            solo
-                                                            hide-details
-                                                            max-width="100px"
-                                                        ></v-text-field>
-                                                    </v-col>
-                                                </v-row>
-                                            </v-toolbar>
-                                        </template>
-                                        <template v-slot:no-data>
-                                            <div>No Data</div>
-                                        </template>
-                                    </v-data-table>
-<!--                                </v-card>-->
+                                <!--                                <v-card>-->
+                                <v-card-title>
+                                    {{ $t('dispatched_amounts') }}
+                                    <v-spacer></v-spacer>
+                                </v-card-title>
+                                <v-data-table
+                                    :headers="headers"
+                                    :items="dispatchedAmounts"
+                                    sort-by="id"
+                                    loading
+                                    loading-text="Loading... Please wait..."
+                                    :search="search"
+                                >
+                                    <template v-slot:top>
+                                        <v-toolbar
+                                            flat
+                                        >
+                                            <v-row>
+                                                <v-col
+                                                    cols="12"
+                                                    sm="4"
+                                                    md="6"
+                                                    lg="8"
+                                                >
+                                                    <v-text-field
+                                                        v-model="search"
+                                                        append-icon="mdi-magnify"
+                                                        label="Search"
+                                                        solo
+                                                        hide-details
+                                                        max-width="100px"
+                                                    ></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                        </v-toolbar>
+                                    </template>
+                                    <template v-slot:no-data>
+                                        <div>No Data</div>
+                                    </template>
+                                </v-data-table>
+                                <!--                                </v-card>-->
                                 <CForm>
                                     <CCardFooter>
                                         <CButton size="sm" color="primary" :to="'/budgets/edit/'+show.id">
                                             <CIcon name="cil-check-circle"/>
-                                            Edit
+                                            {{ $t('button.edit') }}
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/budgets'">
                                             <CIcon name="cil-ban"/>
-                                            Back
+                                            {{ $t('button.back') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -163,7 +163,7 @@ export default {
 }
 </script>
 <style scoped>
-.file-link{
+.file-link {
     cursor: pointer;
     font-weight: 600;
     background-color: rgba(222, 204, 3, 0.99);

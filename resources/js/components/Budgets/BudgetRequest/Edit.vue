@@ -22,7 +22,7 @@
                                             :items="departments"
                                             item-value="id"
                                             item-text="name"
-                                            label="Department"
+                                            :label="$t('department')"
                                             placeholder="Select a department..."
                                             prepend-icon="mdi-alpha-d-circle"
                                             required
@@ -32,7 +32,7 @@
                                         <v-select
                                             v-model="editedItem.type"
                                             :items="['Annual Request','Extend Request']"
-                                            label="Type"
+                                            :label="$t('type')"
                                             placeholder="Select a request type..."
                                             prepend-icon="mdi-shape"
                                             required
@@ -44,7 +44,7 @@
                                             :items="fiscalYears"
                                             item-value="id"
                                             item-text="name"
-                                            label="Fiscal Year"
+                                            :label="$t('fiscal_year')"
                                             placeholder="Select a fiscal year..."
                                             prepend-icon="mdi-calendar-month"
                                             required
@@ -54,7 +54,7 @@
                                         <v-text-field
                                             v-model="editedItem.request_amount"
                                             type="number"
-                                            label="Amount"
+                                            :label="$t('amount')"
                                             placeholder="Enter the amount..."
                                             prepend-icon="mdi-cash-check"
                                             required
@@ -65,7 +65,7 @@
                                         <v-text-field
                                             v-model="editedItem.remarks"
                                             type="text"
-                                            label="Remarks"
+                                            :label="$t('remarks')"
                                             placeholder="Enter remarks..."
                                             prepend-icon="mdi-pen"
                                             solo
@@ -74,7 +74,7 @@
                                             <v-col v-if="typeof(editedItem.link) === 'string'">
                                                 <v-file-input
                                                     v-model="editedItem.file"
-                                                    label="File"
+                                                    :label="$t('file')"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -82,13 +82,13 @@
                                                 ></v-file-input>
                                                 <v-col width="200" class="ml-3 file-link"
                                                        v-on:click="openImage(editedItem.link)">
-                                                    <h5> Open File </h5>
+                                                    <h5> {{ $t('open_file') }} </h5>
                                                 </v-col>
                                             </v-col>
                                             <v-col v-else>
                                                 <v-file-input
                                                     v-model="editedItem.file"
-                                                    label="File"
+                                                    :label="$t('file')"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -101,7 +101,7 @@
                                     <hr>
                                     <v-card>
                                         <v-card-title>
-                                            Categories
+                                            {{ $t('categories') }}
                                             <v-spacer></v-spacer>
                                         </v-card-title>
                                         <v-data-table
@@ -160,7 +160,7 @@
                                                                             <v-col>
                                                                                 <v-select
                                                                                     v-model="reqCategory.category_id"
-                                                                                    label="Category"
+                                                                                    :label="$t('category')"
                                                                                     :items="categories"
                                                                                     item-text="name"
                                                                                     item-value="id"
@@ -170,7 +170,7 @@
 
                                                                                 <v-text-field
                                                                                     v-model="reqCategory.amount"
-                                                                                    label="Amount"
+                                                                                    :label="$t('amount')"
                                                                                     type="number"
                                                                                     required
                                                                                     outlined
@@ -178,7 +178,7 @@
                                                                                 ></v-text-field>
                                                                                 <v-text-field
                                                                                     v-model="reqCategory.note"
-                                                                                    label="Note"
+                                                                                    :label="$t('note')"
                                                                                     outlined
                                                                                 ></v-text-field>
                                                                             </v-col>
@@ -198,14 +198,14 @@
                                                                         text
                                                                         @click="close"
                                                                     >
-                                                                        Cancel
+                                                                        {{ $t('button.cancel') }}
                                                                     </v-btn>
                                                                     <v-btn
                                                                         color="blue darken-1"
                                                                         text
                                                                         @click="addCategory"
                                                                     >
-                                                                        Save
+                                                                        {{ $t('button.submit') }}
                                                                     </v-btn>
                                                                 </v-card-actions>
                                                             </v-form>
@@ -213,16 +213,17 @@
                                                     </v-dialog>
                                                     <v-dialog v-model="dialogDelete" max-width="500px">
                                                         <v-card>
-                                                            <v-card-title class="text-h6">Are you sure you want to
-                                                                delete this item?
+                                                            <v-card-title class="text-h6">
+                                                                {{ $t('message.delete') }}
                                                             </v-card-title>
                                                             <v-card-actions>
                                                                 <v-spacer></v-spacer>
                                                                 <v-btn color="blue darken-1" text @click="closeDelete">
-                                                                    Cancel
+                                                                    {{ $t('button.cancel') }}
                                                                 </v-btn>
                                                                 <v-btn color="blue darken-1" text
-                                                                       @click="deleteItemConfirm">OK
+                                                                       @click="deleteItemConfirm">
+                                                                    {{ $t('button.confirm') }}
                                                                 </v-btn>
                                                                 <v-spacer></v-spacer>
                                                             </v-card-actions>
@@ -259,11 +260,11 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            Submit
+                                            {{ $t('button.submit') }}
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/budgetRequests/'">
                                             <CIcon name="cil-ban"/>
-                                            Cancel
+                                            {{ $t('button.cancel') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

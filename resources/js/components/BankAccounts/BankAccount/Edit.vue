@@ -24,7 +24,7 @@
                                             description="Please enter bank name."
                                             prepend-inner-icon="mdi-bank"
                                             autocomplete=""
-                                            label="Bank Name"
+                                            :label="$t('bank') +' '+ $t('name')"
                                             placeholder="Enter bank name..."
                                             required
                                             @keyup="clearError('bank_name')"
@@ -38,7 +38,7 @@
                                             description="Please enter account number."
                                             prepend-inner-icon="mdi-account"
                                             autocomplete=""
-                                            label="Account Number"
+                                            :label="$t('account') +' '+ $t('number')"
                                             placeholder="Enter account number..."
                                             required
                                             @keyup="clearError('account_no')"
@@ -52,7 +52,7 @@
                                             description="Please enter account name."
                                             prepend-inner-icon="mdi-account-details"
                                             autocomplete=""
-                                            label="Account Name"
+                                            :label="$t('account') +' '+ $t('name')"
                                             placeholder="Enter account name..."
                                             required
                                             @keyup="clearError('account_name')"
@@ -66,7 +66,7 @@
                                             description="Please enter the total balance."
                                             prepend-inner-icon="mdi-wallet"
                                             autocomplete=""
-                                            label="Total Balance"
+                                            :label="$t('total_balance')"
                                             placeholder="Enter the total balance..."
                                             @keyup="clearError('total_balance')"
                                             solo
@@ -78,7 +78,7 @@
                                             description="Please enter bank branch."
                                             prepend-inner-icon="mdi-source-branch"
                                             autocomplete=""
-                                            label="Branch"
+                                            :label="$t('branch')"
                                             placeholder="Enter bank branch..."
                                             @keyup="clearError('branch')"
                                             solo
@@ -87,11 +87,11 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            Submit
+                                            {{ $t('button.submit') }}
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/bankAccounts'">
                                             <CIcon name="cil-ban"/>
-                                            Cancel
+                                            {{ $t('button.cancel') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

@@ -23,7 +23,7 @@
                                             item-text="name"
                                             item-value="id"
                                             prepend-icon="mdi-alpha-b-circle"
-                                            label="Department"
+                                            :label="$t('department')"
                                             placeholder="Select department ..."
                                             required
                                             :rules="rules"
@@ -33,7 +33,7 @@
                                             <v-col v-if="typeof(editedItem.link) === 'string'">
                                                 <v-file-input
                                                     v-model="editedItem.file"
-                                                    label="File"
+                                                    :label="$t('file')"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -41,13 +41,13 @@
                                                 ></v-file-input>
                                                 <v-col width="200" class="ml-3 file-link"
                                                        v-on:click="openImage(editedItem.link)">
-                                                    <h5> Open File </h5>
+                                                    <h5> {{ $t('open_file') }} </h5>
                                                 </v-col>
                                             </v-col>
                                             <v-col v-else>
                                                 <v-file-input
                                                     v-model="editedItem.file"
-                                                    label="File"
+                                                    :label="$t('file')"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -57,7 +57,7 @@
                                         </v-row>
                                         <v-textarea
                                             v-model="editedItem.note"
-                                            label="Note"
+                                            :label="$t('note')"
                                             placeholder="Enter quotation notes..."
                                             solo
                                         />
@@ -66,7 +66,7 @@
                                     <hr>
                                     <v-card>
                                         <v-card-title>
-                                            Products
+                                            {{ $t('products') }}
                                             <v-spacer></v-spacer>
                                         </v-card-title>
                                         <v-data-table
@@ -125,7 +125,7 @@
                                                                             <v-col>
                                                                                 <v-select
                                                                                     v-model="addQuoProduct.item_id"
-                                                                                    label="Item"
+                                                                                    :label="$t('item')"
                                                                                     :items="items"
                                                                                     item-text="name"
                                                                                     item-value="id"
@@ -137,7 +137,7 @@
                                                                                 <div v-if="hasVariants">
                                                                                     <v-select
                                                                                         v-model="addQuoProduct.item_variant_id"
-                                                                                        label="Item Variant"
+                                                                                        :label="$t('item') +' '+ $t('variant')"
                                                                                         :items="variants"
                                                                                         item-text="name"
                                                                                         item-value="id"
@@ -146,13 +146,13 @@
                                                                                 </div>
                                                                                 <v-text-field
                                                                                     v-model="addQuoProduct.quantity"
-                                                                                    label="Quantity"
+                                                                                    :label="$t('quantity')"
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
                                                                                 <v-text-field
                                                                                     v-model="addQuoProduct.shipping_cost"
-                                                                                    label="Shipping Cost"
+                                                                                    :label="$t('shipping_cost')"
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
@@ -173,14 +173,14 @@
                                                                         text
                                                                         @click="close"
                                                                     >
-                                                                        Cancel
+                                                                        {{ $t('button.cancel') }}
                                                                     </v-btn>
                                                                     <v-btn
                                                                         color="blue darken-1"
                                                                         text
                                                                         @click="editQuoProduct"
                                                                     >
-                                                                        Save
+                                                                        {{ $t('button.submit') }}
                                                                     </v-btn>
                                                                 </v-card-actions>
                                                             </v-form>
@@ -188,16 +188,17 @@
                                                     </v-dialog>
                                                     <v-dialog v-model="dialogDelete" max-width="500px">
                                                         <v-card>
-                                                            <v-card-title class="text-h6">Are you sure you want to
-                                                                delete this item?
+                                                            <v-card-title class="text-h6">
+                                                                {{ $t('message.delete') }}
                                                             </v-card-title>
                                                             <v-card-actions>
                                                                 <v-spacer></v-spacer>
                                                                 <v-btn color="blue darken-1" text @click="closeDelete">
-                                                                    Cancel
+                                                                    {{ $t('button.cancel') }}
                                                                 </v-btn>
                                                                 <v-btn color="blue darken-1" text
-                                                                       @click="deleteItemConfirm">OK
+                                                                       @click="deleteItemConfirm">
+                                                                    {{ $t('button.submit') }}
                                                                 </v-btn>
                                                                 <v-spacer></v-spacer>
                                                             </v-card-actions>
@@ -242,11 +243,11 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            Submit
+                                            {{ $t('button.submit') }}
                                         </CButton>
                                         <CButton :to="'/quotations'" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
-                                            Cancel
+                                            {{ $t('button.cancel') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

@@ -24,7 +24,7 @@
                                             description="Please enter product name."
                                             prepend-icon="mdi-apps-box"
                                             autocomplete=""
-                                            label="Name"
+                                            :label="$t('name')"
                                             placeholder="Enter product name..."
                                             required
                                             @keyup="clearError('name')"
@@ -35,7 +35,7 @@
 
                                         <v-file-input
                                             v-model="image"
-                                            label="Image"
+                                            :label="$t('image')"
                                             filled
                                             outlined
                                             prepend-icon="mdi-camera"
@@ -51,7 +51,7 @@
                                             description="Please select brand."
                                             prepend-icon="mdi-alpha-b-circle"
                                             autocomplete=""
-                                            label="Brand"
+                                            :label="$t('brand')"
                                             placeholder="Select brand ..."
                                             required
                                             @keyup="clearError('brand_id')"
@@ -68,7 +68,7 @@
                                             prepend-icon="mdi-shape"
                                             description="Please select category."
                                             autocomplete=""
-                                            label="Category"
+                                            :label="$t('category')"
                                             placeholder="Select category..."
                                             required
                                             @keyup="clearError('category_id')"
@@ -83,7 +83,7 @@
                                             id="is_active"
                                             description="Please check the box if it is active."
                                             autocomplete=""
-                                            label="Active"
+                                            :label="$t('active')"
                                             @keyup="clearError('details')"
                                             @keyup.enter="create"
                                             ref="activeCheck"
@@ -95,7 +95,7 @@
                                             name="details"
                                             description="Please enter product details."
                                             autocomplete=""
-                                            label="Details"
+                                            :label="$t('details')"
                                             placeholder="Enter product details..."
                                             @keyup="clearError('details')"
                                             solo
@@ -104,11 +104,11 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="create">
                                             <CIcon name="cil-check-circle"/>
-                                            Submit
+                                            {{ $t('button.submit') }}
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/products'">
                                             <CIcon name="cil-ban"/>
-                                            Cancel
+                                            {{ $t('button.cancel') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

@@ -60,7 +60,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.bank_name"
-                                                    label="Bank Name"
+                                                    :label="$t('bank') +' '+ $t('name')"
                                                     required
                                                     outlined
                                                     :rules="rules.bank_name"
@@ -70,7 +70,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.branch"
-                                                    label="Bank Branch"
+                                                    :label="$t('bank') +' '+ $t('branch')"
                                                     outlined
                                                 ></v-text-field>
                                             </v-col>
@@ -79,7 +79,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.account_no"
-                                                    label="Account No."
+                                                    :label="$t('account') +' '+ $t('number')"
                                                     required
                                                     outlined
                                                     :rules="rules.account_no"
@@ -88,7 +88,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.account_name"
-                                                    label="Account Name."
+                                                    :label="$t('account') +' '+ $t('name')"
                                                     required
                                                     outlined
                                                     :rules="rules.account_name"
@@ -99,7 +99,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.total_balance"
-                                                    label="Total Balance"
+                                                    :label="$t('total_balance')"
                                                     required
                                                     outlined
                                                     type="number"
@@ -108,7 +108,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.current_balance"
-                                                    label="Current Balance"
+                                                    :label="$t('current_balance')"
                                                     outlined
                                                     required
                                                     :rules="rules.current_balance"
@@ -131,14 +131,14 @@
                                         text
                                         @click="close"
                                     >
-                                        Cancel
+                                        {{ $t('button.cancel') }}
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        Save
+                                        {{ $t('button.submit') }}
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>
@@ -146,11 +146,11 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
+                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>

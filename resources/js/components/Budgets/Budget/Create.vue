@@ -19,7 +19,7 @@
                                     <v-form>
                                         <v-text-field
                                             v-model="title"
-                                            label="Title"
+                                            :label="$t('title')"
                                             placeholder="Enter title..."
                                             prepend-icon="mdi-alpha-t-circle"
                                             required
@@ -31,7 +31,7 @@
                                             :items="departments"
                                             item-text="name"
                                             item-value="id"
-                                            label="Department"
+                                            :label="$t('department')"
                                             placeholder="Select a department..."
                                             prepend-icon="mdi-alpha-d-circle"
                                             required
@@ -43,7 +43,7 @@
                                             :items="fiscalYears"
                                             item-text="name"
                                             item-value="id"
-                                            label="Fiscal Year"
+                                            :label="$t('fiscal_year')"
                                             placeholder="Select a fiscal year..."
                                             prepend-icon="mdi-calendar-clock"
                                             required
@@ -53,7 +53,7 @@
                                         <v-select
                                             v-model="type"
                                             :items="['Annual','Extra']"
-                                            label="Type"
+                                            :label="$t('type')"
                                             placeholder="Select a budget type..."
                                             prepend-icon="mdi-shape"
                                             solo
@@ -61,7 +61,7 @@
                                         <v-text-field
                                             v-model="allocated_budget_amount"
                                             type="number"
-                                            label="Allocated Budget Amount"
+                                            :label="$t('allocated_budget') +' '+ $t('amount')"
                                             placeholder="Enter the allocate budget amount..."
                                             prepend-icon="mdi-cash-check"
                                             required
@@ -71,7 +71,7 @@
                                         <v-text-field
                                             v-model="initial_dispatched_amount"
                                             type="number"
-                                            label="Initial Dispatched Amount"
+                                            :label="$t('initial_dispatched') +' '+ $t('amount')"
                                             placeholder="Enter the initial dispatched amount..."
                                             prepend-icon="mdi-cash-marker"
                                             required
@@ -81,7 +81,7 @@
                                         <v-text-field
                                             v-model="date_first_received"
                                             type="date"
-                                            label="Initial Dispatched Amount"
+                                            :label="$t('date_first_received')"
                                             placeholder="Enter the first amount received date..."
                                             prepend-icon="mdi-calendar-month"
                                             :rules="rules.date_first_received"
@@ -90,14 +90,14 @@
                                         <v-text-field
                                             v-model="remarks"
                                             type="text"
-                                            label="Remarks"
+                                            :label="$t('remarks')"
                                             placeholder="Enter remarks..."
                                             prepend-icon="mdi-pen"
                                             solo
                                         />
                                         <v-file-input
                                             v-model="file"
-                                            label="File"
+                                            :label="$t('file')"
                                             filled
                                             outlined
                                             prepend-icon="mdi-camera"
@@ -107,11 +107,11 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="create">
                                             <CIcon name="cil-check-circle"/>
-                                            Submit
+                                            {{ $t('button.submit') }}
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/budgets/'">
                                             <CIcon name="cil-ban"/>
-                                            Cancel
+                                            {{ $t('button.cancel') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -150,7 +150,7 @@ export default {
         fiscalYears: [],
         createProgress: false,
         error: {
-            title:'',
+            title: '',
             department_id: '',
             fiscal_year_id: '',
             allocated_budget_amount: '',
