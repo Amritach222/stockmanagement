@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                    <strong>Item </strong> {{ show.name }}
+                                    <strong>{{ $t('item') }} </strong> {{ show.name }}
                             </CCardHeader>
                             <CCardBody>
                                 <CRow>

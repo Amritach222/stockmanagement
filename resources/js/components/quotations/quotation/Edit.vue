@@ -110,7 +110,7 @@
                                                                 v-bind="attrs"
                                                                 v-on="on"
                                                             >
-                                                                Add New Product
+                                                                {{ $t('button.add_new_product') }}
                                                             </v-btn>
                                                         </template>
                                                         <v-card>

@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            Signatures
+            {{ $t('signatures') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -27,7 +27,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('search')"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -46,7 +46,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                Add New Signature
+                                {{ $t('button.add_new_signature') }}
                             </v-btn>
                         </template>
                         <v-card>
@@ -147,7 +147,7 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">{{ $t(message.delete) }}</v-card-title>
+                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>

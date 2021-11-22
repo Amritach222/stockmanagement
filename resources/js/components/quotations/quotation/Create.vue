@@ -52,7 +52,7 @@
                                     <hr>
                                     <v-card>
                                         <v-card-title>
-                                            Products
+                                            {{ $t('products') }}
                                             <v-spacer></v-spacer>
                                         </v-card-title>
                                         <v-data-table
@@ -96,7 +96,7 @@
                                                                 v-bind="attrs"
                                                                 v-on="on"
                                                             >
-                                                                Add New Product
+                                                                {{ $t('button.add_new_product') }}
                                                             </v-btn>
                                                         </template>
                                                         <v-card>

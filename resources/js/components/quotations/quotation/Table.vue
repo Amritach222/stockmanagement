@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            Quotations
+            {{ $t('quotations') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -27,7 +27,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('search')"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -47,7 +47,7 @@
                                 v-on="on"
                                 :to="'/quotations/create'"
                             >
-                                Add New Quotation
+                                {{ $t('button.add_new_quotation') }}
                             </v-btn>
                         </template>
                     </v-dialog>

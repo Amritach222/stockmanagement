@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            Products
+            {{ $t('products') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -27,7 +27,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('search')"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -47,7 +47,7 @@
                                 v-on="on"
                                 :to="'/products/create'"
                             >
-                                Add New Product
+                                {{ $t('button.add_new_product') }}
                             </v-btn>
                         </template>
                     </v-dialog>

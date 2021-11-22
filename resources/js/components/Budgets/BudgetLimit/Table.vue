@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            Budget Limit
+            {{ $t('budget_limits') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -26,7 +26,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('search')"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -45,7 +45,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                Add New Budget Limit
+                                {{ $t('button.add_new_budget_limit') }}
                             </v-btn>
                         </template>
                         <v-card>

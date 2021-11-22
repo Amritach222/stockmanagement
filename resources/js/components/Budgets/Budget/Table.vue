@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            Budgets
+            {{ $t('budgets') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -27,7 +27,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('search')"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -47,7 +47,7 @@
                                 v-on="on"
                                 :to="'/budgets/create'"
                             >
-                                Add New Budget
+                                {{ $t('button.add_new_budget') }}
                             </v-btn>
                         </template>
                     </v-dialog>

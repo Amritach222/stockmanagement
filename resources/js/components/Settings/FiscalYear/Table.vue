@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            Fiscal Years
+            {{ $t('fiscal_years') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -27,7 +27,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('search')"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -46,7 +46,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                Add New Fiscal Year
+                                {{ $t('button.add_new_fiscal_year') }}
                             </v-btn>
                         </template>
                         <v-card>

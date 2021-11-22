@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>Budget Request </strong> {{ show.fiscal_year.name }}
+                                <strong>{{ $t('budget_request') }} </strong> {{ show.fiscal_year.name }}
                             </CCardHeader>
                             <CCardBody>
                                 <CRow>
