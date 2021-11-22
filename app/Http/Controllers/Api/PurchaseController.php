@@ -27,9 +27,15 @@ class PurchaseController extends Controller
         return $data;
     }
 
-    public function create()
+    public function userPurchaseHistory()
     {
-
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        $user = auth()->user();
+        $purchases = Purchase::where('user_id',$user->id)->get();
+        $data['data'] = PurchaseResource::collection($purchases);
+        return $data;
     }
 
     public function store(PurchaseRequest $request)

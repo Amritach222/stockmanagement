@@ -192,6 +192,17 @@
                                             placeholder="Enter quotation note..."
                                             solo
                                         />
+                                        <v-text-field
+                                            v-model="due_date"
+                                            type="date"
+                                            name="due_date"
+                                            description="Please enter due date"
+                                            prepend-inner-icon="mdi-calender"
+                                            label="Due Date"
+                                            placeholder="Enter due date"
+                                            :rules="rules.due_date"
+                                            solo
+                                        />
 
                                         <v-file-input
                                             v-model="file"
@@ -255,6 +266,7 @@ export default {
         department_id: '',
         file: [],
         note: '',
+        due_date: '',
         departments: [],
         productCount: 0,
         editedIndex: -1,
@@ -393,6 +405,9 @@ export default {
             this.createProgress = true;
             const data = new FormData();
             data.append('note', this.note);
+            if(this.due_date){
+                data.append('due_date', this.due_date);
+            }
             if (this.admin) {
                 data.append('department_id', this.department_id);
 
@@ -407,8 +422,9 @@ export default {
                 if (this.quoProducts.length > 0) {
                     await this.createProduct(res.data.id);
                 } else {
-                    route.replace('/quotations/');
+                    route.replace('/purchase-request-history/');
                 }
+                route.replace('/purchase-request-history');
             }
         },
 

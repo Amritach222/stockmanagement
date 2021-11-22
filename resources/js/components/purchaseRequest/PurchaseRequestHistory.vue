@@ -1,9 +1,5 @@
 <template>
     <v-card>
-        <v-card-title>
-            Brands
-            <v-spacer></v-spacer>
-        </v-card-title>
         <v-data-table
             :headers="headers"
             :items="brands"
@@ -46,7 +42,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                Add New Brand
+                                Add New Purchase Request
                             </v-btn>
                         </template>
                         <v-card>

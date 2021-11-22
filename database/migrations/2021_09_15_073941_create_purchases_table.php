@@ -19,6 +19,7 @@ class CreatePurchasesTable extends Migration {
 			$table->integer('total_cost')->nullable();
 			$table->integer('shipping_cost')->nullable();
 			$table->integer('grand_total')->nullable();
+			$table->date('due_date')->nullable();
 			$table->integer('paid_amount')->nullable()->default('0');
 			$table->enum('status', array('Pending', 'Requested', 'Approved', 'Rejected'))->default('Pending');
 			$table->enum('payment_status', array('Unpaid', 'Partial', 'Paid'))->default('Unpaid');

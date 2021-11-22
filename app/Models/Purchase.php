@@ -9,7 +9,7 @@ class Purchase extends Model
 
     protected $table = 'purchases';
     public $timestamps = true;
-    protected $fillable = array('reference_no', 'user_id', 'department_id', 'total_item', 'total_quantity', 'total_tax', 'total_cost', 'shipping_cost', 'grand_total', 'paid_amount', 'status', 'payment_status', 'note', 'file_id', 'approved_by', 'delivery_status');
+    protected $fillable = array('reference_no', 'user_id', 'department_id', 'total_item', 'total_quantity', 'total_tax', 'total_cost','due_date', 'shipping_cost', 'grand_total', 'paid_amount', 'status', 'payment_status', 'note', 'file_id', 'approved_by', 'delivery_status');
 
     public function department()
     {
