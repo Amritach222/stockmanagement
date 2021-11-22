@@ -77,6 +77,7 @@
     "bank": "बैंक",
     "branch": "साखा",
     "account": "खाता",
+    "accounts": "खाताहरु",
     "number": "नम्बर",
     "total_balance": "कुल सन्तुलन",
     "current_balance": "हालको सन्तुलन",
@@ -147,6 +148,7 @@
     "use": "प्रयोग",
     "profile": "प्रोफाइल",
     "request_category_amount_division": "वर्ग रकम विभाजन",
+    "general_setting": "सामान्य सेटिङ",
 
     "validation": {
         "required": "यो क्षेत्र आवश्यक छ!",

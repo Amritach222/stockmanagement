@@ -75,6 +75,7 @@
     "bank": "Bank",
     "branch": "Branch",
     "account": "Account",
+    "accounts": "Accounts",
     "number": "Number",
     "total_balance": "Total Balance",
     "current_balance": "Current Balance",
@@ -144,6 +145,7 @@
     "use": "Use",
     "profile": "Profile",
     "request_category_amount_division": "Request Category Amount Division",
+    "general_setting": "General Setting",
 
     "validation": {
         "required": "This field is required!",

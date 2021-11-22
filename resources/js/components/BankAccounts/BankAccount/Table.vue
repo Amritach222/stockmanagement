@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('bank') +' '+ $t('account') }}
+            {{ $t('bank') +' '+ $t('accounts') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
