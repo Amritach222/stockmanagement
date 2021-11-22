@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>Edit</strong> Budget
+                                <strong>{{ $t('card_title.edit_budget') }}</strong>
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate
@@ -161,7 +161,7 @@
                                                             <v-text-field
                                                                 v-model="search"
                                                                 append-icon="mdi-magnify"
-                                                                label="Search"
+                                                                :label="$t('search')"
                                                                 solo
                                                                 hide-details
                                                                 max-width="100px"
@@ -180,7 +180,7 @@
                                                                 v-bind="attrs"
                                                                 v-on="on"
                                                             >
-                                                                Add New Dispatched Amount
+                                                                {{ $t('button.add_new_dispatched_amount') }}
                                                             </v-btn>
                                                         </template>
                                                         <v-card>
@@ -381,7 +381,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Add Dispatched Amount' : 'Edit Dispatched Amount'
+            return this.editedIndex === -1 ? i18n.t('card_title.add_dispatched_amount') : i18n.t('card_title.edit_dispatched_amount')
         },
     },
 

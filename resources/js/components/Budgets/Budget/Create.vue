@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>Add</strong> Budget
+                                <strong>{{ $t('card_title.add_budget') }}</strong>
                                 <v-progress-circular
                                     v-if="createProgress"
                                     indeterminate

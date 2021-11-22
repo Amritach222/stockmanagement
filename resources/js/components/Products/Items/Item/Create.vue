@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>Add</strong> Item
+                                <strong>{{ $t('card_title.add_item') }}</strong>
                                 <v-progress-circular
                                     v-if="createProgress"
                                     indeterminate
@@ -186,7 +186,7 @@
                                                             <v-text-field
                                                                 v-model="search"
                                                                 append-icon="mdi-magnify"
-                                                                label="Search"
+                                                                :label="$t('search')"
                                                                 solo
                                                                 hide-details
                                                                 max-width="100px"
@@ -205,7 +205,7 @@
                                                                 v-bind="attrs"
                                                                 v-on="on"
                                                             >
-                                                                Add New Variants
+                                                                {{ $t('card_title.add_item_variant') }}
                                                             </v-btn>
                                                         </template>
                                                         <v-card>
@@ -494,7 +494,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Add Item Variant' : 'Edit Item Variant'
+            return this.editedIndex === -1 ? i18n.t('card_title.add_item_variant') : i18n.t('card_title.edit_item_variant')
         },
     },
 

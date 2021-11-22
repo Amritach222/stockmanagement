@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('vendor') }}
+            {{ $t('vendors') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -356,7 +356,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Add Vendor' : 'Edit Vendor'
+            return this.editedIndex === -1 ? i18n.t('card_title.add_vendor') : i18n.t('card_title.edit_vendor')
         },
     },
 

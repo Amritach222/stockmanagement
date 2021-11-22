@@ -19,7 +19,7 @@ export default [
             },
             {
                 _name: 'CSidebarNavItem',
-                name: 'Vendor',
+                name: i18n.t('vendor'),
                 to: '/vendors',
                 icon: 'cil-cursor',
                 // badge: {
@@ -29,11 +29,11 @@ export default [
             },
             {
                 _name: 'CSidebarNavDropdown',
-                name: 'Products',
+                name: i18n.t('products'),
                 icon: 'cil-star',
                 items: [
                     {
-                        name: 'Category',
+                        name: i18n.t('category'),
                         to: '/categories'
                     },
                     {

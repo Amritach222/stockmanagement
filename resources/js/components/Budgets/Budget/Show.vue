@@ -74,7 +74,7 @@
                                                     <v-text-field
                                                         v-model="search"
                                                         append-icon="mdi-magnify"
-                                                        label="Search"
+                                                        :label="$t('search')"
                                                         solo
                                                         hide-details
                                                         max-width="100px"

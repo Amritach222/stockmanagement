@@ -132,6 +132,7 @@
 <script>
     import store from "../../../store";
     import ApiServices from "../../../services/ApiServices";
+    import i18n from "../../../i18n";
 
     export default {
         name: "TableWrapper",
@@ -170,7 +171,7 @@
 
         computed: {
             formTitle() {
-                return this.editedIndex === -1 ? 'Add Mail Template' : 'Edit Mail Template'
+                return this.editedIndex === -1 ? i18n.t('card_title.add_mail_template') : i18n.t('card_title.edit_mail_template')
             },
         },
 

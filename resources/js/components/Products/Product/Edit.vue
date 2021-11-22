@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>Edit</strong> {{ $t('product') }}
+                                <strong>{{ $t('card_title.edit_product') }}</strong>
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate

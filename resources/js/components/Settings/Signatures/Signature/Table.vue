@@ -201,6 +201,7 @@
 import config from "../../../../config";
 import store from "../../../../store";
 import ApiServices from "../../../../services/ApiServices";
+import i18n from "../../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -244,7 +245,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Add Signature' : 'Edit Signature'
+            return this.editedIndex === -1 ? i18n.t('card_title.add_signature') : i18n.t('card_title.edit_signature')
         },
     },
 

@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>Add</strong> Budget Request
+                                <strong>{{ $t('card_title.add_budget_request') }}</strong>
                                 <v-progress-circular
                                     v-if="createProgress"
                                     indeterminate
@@ -108,7 +108,7 @@
                                                             <v-text-field
                                                                 v-model="search"
                                                                 append-icon="mdi-magnify"
-                                                                label="Search"
+                                                                :label="$t('search')"
                                                                 solo
                                                                 hide-details
                                                                 max-width="100px"
@@ -127,7 +127,7 @@
                                                                 v-bind="attrs"
                                                                 v-on="on"
                                                             >
-                                                                Add New Request Category
+                                                                {{ $t('button.add_new_request_category') }}
                                                             </v-btn>
                                                         </template>
                                                         <v-card>
@@ -325,7 +325,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Add Request Category' : 'Edit Request Category'
+            return this.editedIndex === -1 ? i18n.t('card_title.add_request_category') : i18n.t('card_title.edit_request_category')
         },
     },
 

@@ -71,7 +71,7 @@
                                 <hr>
                                 <!--                                <v-card>-->
                                 <v-card-title>
-                                    Request Categories Amount Division
+                                    {{ $t('request_category_amount_division') }}
                                     <v-spacer></v-spacer>
                                 </v-card-title>
                                 <v-data-table
@@ -96,7 +96,7 @@
                                                     <v-text-field
                                                         v-model="search"
                                                         append-icon="mdi-magnify"
-                                                        label="Search"
+                                                        :label="$t('search')"
                                                         solo
                                                         hide-details
                                                         max-width="100px"

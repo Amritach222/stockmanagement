@@ -213,7 +213,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Add Bank Account Transaction' : 'Edit Bank Account Transaction'
+            return this.editedIndex === -1 ? i18n.t('card_title.add_bank_account_transaction') : i18n.t('card_title.edit_bank_account_transaction')
         },
     },
 

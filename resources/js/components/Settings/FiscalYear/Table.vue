@@ -159,6 +159,7 @@
 import config from "../../../config";
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
+import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -197,7 +198,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Add Fiscal Year' : 'Edit Fiscal Year'
+            return this.editedIndex === -1 ? i18n.t('card_title.add_fiscal_year') : i18n.t('card_title.edit_fiscal_year')
         },
     },
 

@@ -144,6 +144,7 @@
 <script>
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
+import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -179,7 +180,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Add Unit' : 'Edit Unit'
+            return this.editedIndex === -1 ? i18n.t('card_title.add_unit') : i18n.t('card_title.edit_unit')
         },
     },
 

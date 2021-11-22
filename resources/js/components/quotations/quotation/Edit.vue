@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>Edit</strong> Quotation
+                                <strong>{{ $t('card_title.add_quotation') }}</strong>
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate
@@ -91,7 +91,7 @@
                                                             <v-text-field
                                                                 v-model="search"
                                                                 append-icon="mdi-magnify"
-                                                                label="Search"
+                                                                :label="$t('search')"
                                                                 solo
                                                                 hide-details
                                                                 max-width="100px"
@@ -324,7 +324,7 @@ export default {
     }),
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Add Quotation Product' : 'Edit Quotation Product'
+            return this.editedIndex === -1 ? i18n.t('card_title.add_quotation_product') : i18n.t('card_title.edit_quotation_product')
         },
     },
     async created() {
