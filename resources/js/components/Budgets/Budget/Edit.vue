@@ -333,10 +333,10 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Id', value: 'id'},
-            {text: 'Amount', value: 'amount'},
-            {text: 'Date', value: 'dispatched_date'},
-            {text: 'Actions', value: 'actions', sortable: false},
+            {text: i18n.t('id'), value: 'id'},
+            {text: i18n.t('amount'), value: 'amount'},
+            {text: i18n.t('date'), value: 'dispatched_date'},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         dispatchedAmounts: [],
         dispatch: {

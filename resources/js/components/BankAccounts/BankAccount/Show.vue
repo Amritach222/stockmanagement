@@ -120,9 +120,9 @@
             transactions: [],
             search: '',
             headers: [
-                {text: 'Id', value: 'id'},
-                {text: 'Amount', value: 'transaction_amount'},
-                {text: 'Type', value: 'transaction_type'},
+                {text: i18n.t('id'), value: 'id'},
+                {text: i18n.t('amount'), value: 'transaction_amount'},
+                {text: i18n.t('type'), value: 'transaction_type'},
             ],
             tableLoad: false,
         }),

@@ -24,6 +24,11 @@
     "languageChangedTo": "नेपाली भाषामा परिवर्तन भयेको छ ।",
     "signInToYourAccount": "आफ्नो खातामा साइन इन गर्नुहोस्",
 
+    "component": "अवयव",
+    "components": "अवयवहरू",
+    "new": "नयाँ",
+    "home": "होम पेज",
+    "id": "आईडी",
     "company_name": "कम्पनीको नाम",
     "vat_pan": "भ्याट / प्यान नम्बर",
     "landline": "ल्यान्डलाइन नं.",
@@ -79,8 +84,10 @@
     "account": "खाता",
     "accounts": "खाताहरु",
     "number": "नम्बर",
+    "total": "कुल",
     "total_balance": "कुल सन्तुलन",
     "current_balance": "हालको सन्तुलन",
+    "current": "हालको",
     "date_first_received": "पहिलो प्राप्त मिति",
     "open_file": "फाइल खोल्नुहोस्",
     "dispatched_amounts": "पठाईएका रकमहरु",
@@ -149,6 +156,11 @@
     "profile": "प्रोफाइल",
     "request_category_amount_division": "वर्ग रकम विभाजन",
     "general_setting": "सामान्य सेटिङ",
+    "actions": "कार्यहरू",
+    "reference": "रिफ्रेन्स",
+    "profile_picture": "प्रोफाइल तस्वीर",
+    "name_of_user": "प्रयोगकर्ताको नाम",
+    "action": "कार्य",
 
     "validation": {
         "required": "यो क्षेत्र आवश्यक छ!",
@@ -259,6 +271,17 @@
         "edit_mail_setting": "मेल सेटिङहरू परिवर्तन गर्नुहोस्",
         "add_mail_template": "मेल टेम्प्लेट थप्नुहोस्",
         "edit_mail_template": "मेल टेम्प्लेट परिवर्तन गर्नुहोस्"
+    },
+    "profileDropdown": {
+        "updates": "अपडेटहरू",
+        "logout": "बाहिर निस्कनु",
+        "messages": "सन्देशहरू"
+    },
+    "dashboardText": {
+        "total_number_of_products": "प्रडक्टको कुल संख्या",
+        "total_number_of_brands": "ब्राण्डको कुल संख्या",
+        "total_number_of_items": "वस्तुको कुल संख्या",
+        "total_number_of_categories": "वर्गको कुल संख्य"
     },
     "toAccessAcc": "आफ्नो खाता पहुँच गर्न, जानकारी प्रदान गरेर आफ्नो पहिचान गर्नुहोस् तलको क्षेत्रहरूमा अनुरोध गरियो, त्यसपछि लगइन क्लिक गर्नुहोस्। यदि तपाइँ अझै दर्ता हुनुहुन्न भने, नयाँ प्रयोगकर्ता मा क्लिक गर्नुहोस् र खाता सिर्जना गर्न निर्देशनहरू पालना गर्नुहोस्।"
 

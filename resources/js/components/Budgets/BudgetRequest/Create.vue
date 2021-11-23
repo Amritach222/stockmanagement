@@ -281,10 +281,10 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Category', value: 'category'},
-            {text: 'Amount', value: 'amount'},
-            {text: 'Note', value: 'note'},
-            {text: 'Actions', value: 'actions', sortable: false},
+            {text: i18n.t('category'), value: 'category'},
+            {text: i18n.t('amount'), value: 'amount'},
+            {text: i18n.t('note'), value: 'note'},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         requestCategories: [],
         reqCategory: {

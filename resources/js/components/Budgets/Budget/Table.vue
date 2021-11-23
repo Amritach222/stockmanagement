@@ -118,6 +118,7 @@
 import config from "../../../config";
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
+import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -130,14 +131,14 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Id', align: 'start', sortable: true, value: 'id'},
-            {text: 'Title', value: 'title'},
-            {text: 'Department', value: 'department_id'},
-            {text: 'Fiscal Year', value: 'fiscal_year_id', sortable: false},
-            {text: 'Allocated Amount', value: 'allocated_budget_amount'},
-            {text: 'Initial Dispatched Amount', value: 'initial_dispatched_amount'},
-            {text: 'Total Dispatched Amount', value: 'total_dispatched_amount'},
-            {text: 'Actions', value: 'actions', sortable: false},
+            {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
+            {text: i18n.t('title'), value: 'title'},
+            {text: i18n.t('department'), value: 'department_id'},
+            {text: i18n.t('fiscal_year'), value: 'fiscal_year_id', sortable: false},
+            {text: i18n.t('allocated_budget') +' '+ i18n.t('amount'), value: 'allocated_budget_amount'},
+            {text: i18n.t('initial_dispatch') +' '+ i18n.t('amount'), value: 'initial_dispatched_amount'},
+            {text: i18n.t('total_dispatch') +' '+ i18n.t('amount'), value: 'total_dispatched_amount'},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         budgets: [],
         editedItem: {

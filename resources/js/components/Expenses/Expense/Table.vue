@@ -111,6 +111,7 @@
 <script>
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
+import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -121,13 +122,13 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Id', align: 'start', sortable: false, value: 'id'},
-            {text: 'Department', value: 'department_id'},
-            {text: 'User', value: 'user_id'},
-            {text: 'Expense Category', value: 'expense_category_id'},
-            {text: 'Amount', value: 'amount'},
-            {text: 'Type', value: 'transaction_type'},
-            {text: 'Actions', value: 'actions', sortable: false},
+            {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
+            {text: i18n.t('department'), value: 'department_id'},
+            {text: i18n.t('user'), value: 'user_id'},
+            {text: i18n.t('expense') +' '+ i18n.t('category'), value: 'expense_category_id'},
+            {text: i18n.t('amount'), value: 'amount'},
+            {text: i18n.t('type'), value: 'transaction_type'},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         expenses: [],
         editedIndex: -1,

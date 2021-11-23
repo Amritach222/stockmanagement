@@ -1,6 +1,11 @@
 import i18n from "../../i18n";
-export default [
-    {
+export default {
+    mounted() {
+        this.$root.$on('navData', () => {
+            this.$forceUpdate();
+        })
+    },
+    data:[{
         _name: 'CSidebarNav',
         _children: [
             {
@@ -10,12 +15,12 @@ export default [
                 icon: 'cil-speedometer',
                 badge: {
                     color: 'primary',
-                    text: 'NEW'
+                    text: i18n.t('new')
                 }
             },
             {
                 _name: 'CSidebarNavTitle',
-                _children: ['Components']
+                _children: [i18n.t('components')]
             },
             {
                 _name: 'CSidebarNavItem',
@@ -79,15 +84,15 @@ export default [
             },
             {
                 _name: 'CSidebarNavDropdown',
-                name: i18n.t('bank') +' '+ i18n.t('accounts'),
+                name: i18n.t('bank') + ' ' + i18n.t('accounts'),
                 icon: 'cil-calculator',
                 items: [
                     {
-                        name: i18n.t('bank') +' '+ i18n.t('account'),
+                        name: i18n.t('bank') + ' ' + i18n.t('account'),
                         to: '/bankAccounts'
                     },
                     {
-                        name: i18n.t('bank') +' '+ i18n.t('account') +' '+ i18n.t('transaction'),
+                        name: i18n.t('bank') + ' ' + i18n.t('account') + ' ' + i18n.t('transaction'),
                         to: '/bankAccountTransactions'
                     },
                 ]
@@ -98,7 +103,7 @@ export default [
                 icon: 'cil-calculator',
                 items: [
                     {
-                        name: i18n.t('expense') +' '+ i18n.t('category'),
+                        name: i18n.t('expense') + ' ' + i18n.t('category'),
                         to: '/expenseCategories'
                     },
                     {
@@ -144,15 +149,15 @@ export default [
                         to: '/settings/'
                     },
                     {
-                        name: i18n.t('mail') +' '+ i18n.t('setting'),
+                        name: i18n.t('mail') + ' ' + i18n.t('settings'),
                         to: '/mailSettings/'
                     },
                     {
-                        name: i18n.t('sms') +' '+ i18n.t('setting'),
+                        name: i18n.t('sms') + ' ' + i18n.t('settings'),
                         to: '/smsSettings/'
                     },
                     {
-                        name: i18n.t('mail') +' '+ i18n.t('template'),
+                        name: i18n.t('mail') + ' ' + i18n.t('template'),
                         to: '/mailTemplates/'
                     },
                     {
@@ -172,15 +177,15 @@ export default [
                         to: '/signatures/'
                     },
                     {
-                        name: i18n.t('signature') +' '+ i18n.t('use') +' '+ i18n.t('department'),
+                        name: i18n.t('signature') + ' ' + i18n.t('use') + ' ' + i18n.t('department'),
                         to: '/signatureUseDepartments/'
                     },
                     {
-                        name: i18n.t('profile') +' '+ i18n.t('setting'),
+                        name: i18n.t('profile') + ' ' + i18n.t('settings'),
                         to: '/profile-setting/'
                     },
                 ]
             },
         ]
-    }
-]
+    }],
+}

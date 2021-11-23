@@ -115,6 +115,7 @@
 
 <script>
 import store from "../../../store";
+import i18n from "../../../i18n";
 import ApiServices from "../../../services/ApiServices";
 
 export default {
@@ -126,13 +127,13 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Id', align: 'start', sortable: true, value: 'id'},
-            {text: 'Department', value: 'department_id'},
-            {text: 'Fiscal Year', value: 'fiscal_year_id'},
-            {text: 'Type', value: 'type'},
-            {text: 'Amount', value: 'request_amount'},
-            {text: 'Status', value: 'status'},
-            {text: 'Actions', value: 'actions', sortable: false},
+            {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
+            {text: i18n.t('department'), value: 'department_id'},
+            {text: i18n.t('fiscal_year'), value: 'fiscal_year_id'},
+            {text: i18n.t('type'), value: 'type'},
+            {text: i18n.t('amount'), value: 'request_amount'},
+            {text: i18n.t('status'), value: 'status'},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         budgetRequests: [],
         tableLoad: false

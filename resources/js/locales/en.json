@@ -23,6 +23,12 @@
     "confirmPassword": "Confirm Password",
     "languageChangedTo": "Language changed to English",
     "signInToYourAccount": "Sign in to your Account",
+
+    "component": "Component",
+    "components": "Components",
+    "new": "New",
+    "home": "Home",
+    "id": "Id",
     "company_name": "Company Name",
     "vat_pan": "Vat/Pan No.",
     "landline": "Landline No.",
@@ -146,6 +152,11 @@
     "profile": "Profile",
     "request_category_amount_division": "Request Category Amount Division",
     "general_setting": "General Setting",
+    "actions": "Actions",
+    "reference": "Reference",
+    "profile_picture": "Profile Picture",
+    "name_of_user": "Name of User",
+    "action": "Action",
 
     "validation": {
         "required": "This field is required!",
@@ -256,6 +267,17 @@
         "edit_mail_setting": "Edit Mail Settings",
         "add_mail_template": "Add Mail Template",
         "edit_mail_template": "Edit Mail Template"
+    },
+    "profileDropdown": {
+        "updates": "Updates",
+        "logout": "Logout",
+        "messages": "Messages"
+    },
+    "dashboardText": {
+        "total_number_of_products": "Total Number of Products",
+        "total_number_of_brands": "Total Number of Brands",
+        "total_number_of_items": "Total Number of Items",
+        "total_number_of_categories": "Total Number of Categories"
     },
     "toAccessAcc": "To access your account, please identify yourself by providing the information requested in the fields below, then click Login. If you are not registered yet, click New user and follow the instructions to create an account."
 }

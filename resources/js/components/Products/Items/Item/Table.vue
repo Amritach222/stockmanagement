@@ -117,6 +117,7 @@
 <script>
 import config from "../../../../config";
 import store from "../../../../store";
+import i18n from "../../../../i18n";
 import ApiServices from "../../../../services/ApiServices";
 
 export default {
@@ -130,12 +131,12 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Id', align: 'start', sortable: true, value: 'id'},
-            {text: 'Name', value: 'name'},
-            {text: 'Image', value: 'link', sortable: false},
-            {text: 'Product', value: 'product', sortable: false},
-            {text: 'Brand', value: 'brand', sortable: false},
-            {text: 'Actions', value: 'actions', sortable: false},
+            {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
+            {text: i18n.t('name'), value: 'name'},
+            {text: i18n.t('image'), value: 'link', sortable: false},
+            {text: i18n.t('product'), value: 'product', sortable: false},
+            {text: i18n.t('brand'), value: 'brand', sortable: false},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         items: [],
         editedIndex: -1,

@@ -144,9 +144,9 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Id', align: 'start', sortable: false, value: 'id'},
-            {text: 'Name', value: 'name'},
-            {text: 'Actions', value: 'actions', sortable: false},
+            {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
+            {text: i18n.t('name'), value: 'name'},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         categories: [],
         editedIndex: -1,

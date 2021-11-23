@@ -308,11 +308,11 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Id', value: 'id'},
-            {text: 'Category', value: 'category_id'},
-            {text: 'Amount', value: 'amount'},
-            {text: 'Note', value: 'note'},
-            {text: 'Actions', value: 'actions', sortable: false},
+            {text: i18n.t('id'), value: 'id'},
+            {text: i18n.t('category'), value: 'category_id'},
+            {text: i18n.t('amount'), value: 'amount'},
+            {text: i18n.t('note'), value: 'note'},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         requestCategories: [],
         reqCategory: {

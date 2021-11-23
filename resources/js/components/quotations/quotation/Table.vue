@@ -118,6 +118,7 @@
 import config from "../../../config";
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
+import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -130,14 +131,14 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Id', align: 'start', sortable: true, value: 'id'},
-            {text: 'Reference No.', value: 'reference_no'},
-            {text: 'Department', value: 'department_id'},
+            {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
+            {text: i18n.t('reference') +' '+ i18n.t('number'), value: 'reference_no'},
+            {text: i18n.t('department'), value: 'department_id'},
             // {text: 'File', value: 'link', sortable: false},
-            {text: 'Status', value: 'status', sortable: false},
+            {text: i18n.t('status'), value: 'status', sortable: false},
             // {text: 'Brand', value: 'brand', sortable: false},
             // {text: 'Category', value: 'category', sortable: false},
-            {text: 'Actions', value: 'actions', sortable: false},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         quotations: [],
         tableLoad: false
