@@ -117,8 +117,6 @@
 </template>
 
 <script>
-import store from "../../../store";
-import route from "../../../router";
 import i18n from "../../../i18n";
 import ApiServices from "../../../services/ApiServices";
 import config from "../../../config";

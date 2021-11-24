@@ -8,7 +8,7 @@
             :headers="headers"
             :items="bankAccountTransactions"
             sort-by="id"
-            loading
+            :loading=tableLoad
             loading-text="Loading... Please wait..."
             :search="search"
         >
@@ -208,7 +208,7 @@ export default {
                 val => val >= 0 || i18n.t('validation.required'),
             ],
         },
-        tableLoad: false,
+        tableLoad: true,
     }),
 
     computed: {

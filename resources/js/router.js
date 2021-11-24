@@ -151,6 +151,9 @@ import ProfileSetting from './components/Settings/profile/Index'
 
 import i18n from './i18n'
 
+import NewPurchaseRequest from './components/purchaseRequest/NewPurchaseRequest'
+import PurchaseRequestHistory from './components/purchaseRequest/PurchaseRequestHistory'
+
 Vue.use(Router)
 
 export default new Router({
@@ -221,6 +224,24 @@ export default new Router({
             path: '/reset-password',
             name: 'reset-password',
             component: ResetPassword,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/new-purchase-request',
+            name: 'New Purchase Request',
+            component: NewPurchaseRequest,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchase-request-history',
+            name: 'Purchase Request History',
+            component: PurchaseRequestHistory,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
@@ -953,6 +974,43 @@ export default new Router({
             path: '/budgetLimits/:id',
             name: i18n.t('budget_limit'),
             component: BudgetLimitShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/budgetExtends',
+            name: 'Budget Extend',
+            component: BudgetExtendIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/budgetExtends/create',
+            name: 'budgetExtends-create',
+            component: BudgetExtendCreate,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/budgetExtends/edit/:id',
+            name: 'budgetExtends-edit',
+            component: BudgetExtendEdit,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/budgetExtends/:id',
+            name: 'budgetExtends-show',
+            component: BudgetExtendShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

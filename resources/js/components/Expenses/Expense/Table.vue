@@ -8,7 +8,7 @@
             :headers="headers"
             :items="expenses"
             sort-by="id"
-            loading
+            :loading=tableLoad
             loading-text="Loading... Please wait..."
             :search="search"
         >
@@ -145,7 +145,7 @@ export default {
         rules: [
             value => !!value || 'Required.',
         ],
-        tableLoad: false
+        tableLoad: true
     }),
 
     computed: {

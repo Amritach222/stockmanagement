@@ -8,7 +8,7 @@
             :headers="headers"
             :items="vendors"
             sort-by="id"
-            loading
+            :loading="tableLoad"
             loading-text="Loading... Please wait..."
             :search="search"
         >
@@ -348,7 +348,7 @@ export default {
                 val => /(\d{0,3})(\d{0,3})(\d{0,4})/.test(val) || i18n.t('validation.phone'),
             ],
         },
-        tableLoad: false,
+        tableLoad: true,
         country:[],
         state:[],
         city:[],
