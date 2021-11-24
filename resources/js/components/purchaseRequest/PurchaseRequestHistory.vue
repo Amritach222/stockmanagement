@@ -2,8 +2,9 @@
     <v-card>
         <v-data-table
             :headers="headers"
-            :items="brands"
+            :items="purchaseHistory"
             sort-by="id"
+            show-expand
             :loading=tableLoad
             loading-text="Loading... Please wait..."
             :search="search"
@@ -41,6 +42,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                :to="'/new-purchase-request'"
                             >
                                 Add New Purchase Request
                             </v-btn>
@@ -138,12 +140,6 @@
                     </v-dialog>
                 </v-toolbar>
             </template>
-            <template v-slot:item.link="{ item }">
-                <img :src=cdnURL+item.link
-                     v-if="item.link"
-                     style="width: 50px; height: 50px"
-                     v-on:click="openImage(item.link)"/>
-            </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
                     small
@@ -158,6 +154,37 @@
                 >
                     mdi-delete
                 </v-icon>
+            </template>
+            <template #expanded-item="{headers,item}">
+                <v-row>
+                    <v-col cols="3" md="8">
+                        <v-btn
+                            depressed
+                            color="dark"
+                        >
+                            {{ item.user_id }}
+                        </v-btn>
+
+                    </v-col>
+                    <v-col cols="6" md="8">
+                        <v-btn
+                            depressed
+                            color="dark"
+                        >
+                            {{ item.user_id }}
+                        </v-btn>
+
+                    </v-col>
+                    <v-col cols="3" md="8">
+                        <v-btn
+                            depressed
+                            color="dark"
+                        >
+                            {{ item.user_id }}
+                        </v-btn>
+
+                    </v-col>
+                </v-row>
             </template>
             <template v-slot:no-data>
                 <div>No Data</div>
@@ -181,12 +208,13 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Id', align: 'start', sortable: false, value: 'id'},
-            {text: 'Name', value: 'name'},
-            {text: 'Logo', value: 'link'},
+            {text: 'Reference No', align: 'start', sortable: false, value: 'reference_no'},
+            {text: 'Total Items', value: 'total_item'},
+            {text: 'Status', value: 'status'},
+            {text: 'Due Date', value: 'due_date'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
-        brands: [],
+        purchaseHistory: [],
         editedIndex: -1,
         editedItem: {
             id: null,
@@ -228,20 +256,20 @@ export default {
             window.open(config.cdnURL + data, `_blank`);
         },
         async loadItems() {
-            let res = await ApiServices.brandIndex();
+            let res = await ApiServices.getUserPurchaseProductRequestHistory();
             if (res.success === true) {
                 this.tableLoad = false;
-                this.brands = res.data;
+                this.purchaseHistory = res.data;
             }
         },
         editItem(item) {
-            this.editedIndex = this.brands.indexOf(item)
+            this.editedIndex = this.purchaseHistory.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialog = true
         },
 
         deleteItem(item) {
-            this.editedIndex = this.brands.indexOf(item)
+            this.editedIndex = this.purchaseHistory.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
         },
@@ -249,7 +277,7 @@ export default {
         async deleteItemConfirm() {
             let res = await ApiServices.brandDelete(this.editedItem.id);
             if (res.success === true) {
-                this.brands.splice(this.editedIndex, 1)
+                this.purchaseHistory.splice(this.editedIndex, 1)
             }
             this.closeDelete()
         },
@@ -278,15 +306,15 @@ export default {
                 this.progressL = true;
                 const data = new FormData();
                 data.append('name', this.editedItem.name);
-                console.log('edit',this.editedItem.image,this.editedItem)
-                if('image' in this.editedItem){
-                    if(typeof this.editedItem.image.name == 'string'){
+                console.log('edit', this.editedItem.image, this.editedItem)
+                if ('image' in this.editedItem) {
+                    if (typeof this.editedItem.image.name == 'string') {
                         data.append('image', this.editedItem.image);
                     }
                 }
                 let res = await ApiServices.brandEdit(this.editedItem.id, data);
                 if (res.success === true) {
-                    Object.assign(this.brands[this.editedIndex], this.editedItem)
+                    Object.assign(this.purchaseHistory[this.editedIndex], this.editedItem)
                     this.$refs.form.reset();
                     this.close();
                 }
@@ -297,12 +325,12 @@ export default {
                     this.progressL = true;
                     const data = new FormData();
                     data.append('name', this.editedItem.name);
-                    if(typeof this.editedItem.image.name == 'string'){
+                    if (typeof this.editedItem.image.name == 'string') {
                         data.append('image', this.editedItem.image);
                     }
                     let res = await ApiServices.brandCreate(data);
                     if (res.success === true) {
-                        this.brands.push(this.editedItem);
+                        this.purchaseHistory.push(this.editedItem);
                         this.$refs.form.reset();
                         this.close()
                     }

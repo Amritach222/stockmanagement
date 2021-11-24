@@ -29,6 +29,7 @@ class Purchase extends JsonResource
             'status' => $this->status,
             'payment_status' => $this->payment_status,
             'file_id' => $this->file_id,
+            'due_date' => $this->due_date,
             'note' => $this->note,
             'approved_by' => $this->approved_by,
             'delivery_status' => $this->delivery_status,

@@ -192,18 +192,31 @@
                                             placeholder="Enter quotation note..."
                                             solo
                                         />
-                                        <v-text-field
-                                            v-model="due_date"
-                                            type="date"
-                                            name="due_date"
-                                            description="Please enter due date"
-                                            prepend-inner-icon="mdi-calender"
-                                            label="Due Date"
-                                            placeholder="Enter due date"
-                                            :rules="rules.due_date"
-                                            solo
-                                        />
-
+                                        <v-menu
+                                            ref="menu1"
+                                            v-model="menu1"
+                                            :close-on-content-click="false"
+                                            transition="scale-transition"
+                                            offset-y
+                                            max-width="290px"
+                                            min-width="auto"
+                                        >
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-text-field
+                                                    v-model="due_date"
+                                                    label="Due Date"
+                                                    persistent-hint
+                                                    prepend-icon="mdi-calendar"
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                ></v-text-field>
+                                            </template>
+                                            <v-date-picker
+                                                v-model="due_date"
+                                                no-title
+                                                @input="menu1 = false"
+                                            ></v-date-picker>
+                                        </v-menu>
                                         <v-file-input
                                             v-model="file"
                                             label="File"
@@ -273,6 +286,8 @@ export default {
         quoProducts: [],
         items: [],
         variants: [],
+        menu1: false,
+        dateFormatted: '',
         addQuoProduct: {
             item_id: '',
             item_variant_id: '',
