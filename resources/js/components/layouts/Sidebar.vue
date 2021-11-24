@@ -79,7 +79,7 @@ export default {
             // console.log(nav)
             // console.log(i18n.t('vendors'))
             this.$root.$emit('navData')
-                this.navData = nav.data;
+                this.navData = nav;
         },
         async getSettings() {
             let isLoggedIn = localStorage.getItem('isLoggedIn');
