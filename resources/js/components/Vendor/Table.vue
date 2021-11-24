@@ -235,7 +235,10 @@
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{
+                                        $t('button.confirm')
+                                    }}
+                                </v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -243,7 +246,7 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.city="{ item }">
-                {{getCityName(item)}}
+                {{ getCityName(item) }}
             </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
@@ -288,7 +291,7 @@ export default {
             {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
             {text: i18n.t('name'), value: 'name'},
             {text: i18n.t('company_name'), value: 'company_name'},
-            {text: i18n.t('vat_pan') +' '+ i18n.t('number'), value: 'vat_no'},
+            {text: i18n.t('vat_pan') + ' ' + i18n.t('number'), value: 'vat_no'},
             {text: i18n.t('email'), value: 'email'},
             {text: i18n.t('mobile'), value: 'landline'},
             {text: i18n.t('city'), value: 'city'},
@@ -297,7 +300,7 @@ export default {
         activePassive: [
             {text: 'Active', value: 1},
             {text: 'Inactive', value: 0},
-            ],
+        ],
         categories: [],
         vendors: [],
         editedIndex: -1,
@@ -334,24 +337,24 @@ export default {
         rules: {
             name: [
                 val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],company_name: [
+            ], company_name: [
                 val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],vat_no: [
+            ], vat_no: [
                 val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],email: [
+            ], email: [
                 val => (val || '').length > 0 || i18n.t('validation.required'),
                 val => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(val) || i18n.t('validation.email'),
-            ],landline: [
+            ], landline: [
                 val => /(\d{0,3})(\d{0,3})(\d{0,4})/.test(val) || i18n.t('validation.phone'),
-            ],mobile: [
+            ], mobile: [
                 val => (val || '').length > 0 || i18n.t('validation.required'),
                 val => /(\d{0,3})(\d{0,3})(\d{0,4})/.test(val) || i18n.t('validation.phone'),
             ],
         },
         tableLoad: true,
-        country:[],
-        state:[],
-        city:[],
+        country: [],
+        state: [],
+        city: [],
     }),
 
     computed: {
@@ -376,16 +379,16 @@ export default {
     },
 
     methods: {
-        getCityName(item){
-            if(item.city !== null) return JSON.parse(item.city).name;
+        getCityName(item) {
+            if (item.city !== null) return JSON.parse(item.city).name;
         },
-        async getStates(country){
-            this.state = stateList.filter(function(value, index) {
+        async getStates(country) {
+            this.state = stateList.filter(function (value, index) {
                 return value.country_id === country.id;
             })
         },
-        async getCities(state){
-            this.city = cityList.filter(function(value, index) {
+        async getCities(state) {
+            this.city = cityList.filter(function (value, index) {
                 return value.state_id === state.id
             })
         },
@@ -409,9 +412,13 @@ export default {
             this.editedItem.country = JSON.parse(this.editedItem.country);
             this.editedItem.state = JSON.parse(this.editedItem.state);
             this.editedItem.city = JSON.parse(this.editedItem.city);
-            console.log('edit but', this.editedItem);
-            this.getStates(this.editedItem.country);
-            this.getCities(this.editedItem.state);
+            // console.log('edit but', this.editedItem);
+            if (this.editedItem.country) {
+                this.getStates(this.editedItem.country);
+            }
+            if (this.editedItem.state) {
+                this.getCities(this.editedItem.state);
+            }
             this.dialog = true
         },
 
@@ -501,27 +508,38 @@ export default {
             this.$refs.form.validate();
             if (this.editedItem.name === null) {
                 this.validated = false
-            }if (this.editedItem.company_name === null) {
+            }
+            if (this.editedItem.company_name === null) {
                 this.validated = false
-            }if (this.editedItem.vat_no === null) {
+            }
+            if (this.editedItem.vat_no === null) {
                 this.validated = false
-            }if (this.editedItem.email === null) {
+            }
+            if (this.editedItem.email === null) {
                 this.validated = false
-            }if (this.editedItem.landline === null) {
+            }
+            if (this.editedItem.landline === null) {
                 this.validated = false
-            }if (this.editedItem.mobile === null) {
+            }
+            if (this.editedItem.mobile === null) {
                 this.validated = false
-            }if (this.editedItem.country === null) {
+            }
+            if (this.editedItem.country === null) {
                 this.validated = false
-            }if (this.editedItem.state === null) {
+            }
+            if (this.editedItem.state === null) {
                 this.validated = false
-            }if (this.editedItem.city === null) {
+            }
+            if (this.editedItem.city === null) {
                 this.validated = false
-            }if (this.editedItem.postal_code === null) {
+            }
+            if (this.editedItem.postal_code === null) {
                 this.validated = false
-            }if (this.editedItem.category_id === null) {
+            }
+            if (this.editedItem.category_id === null) {
                 this.validated = false
-            }if (this.editedItem.is_active === null) {
+            }
+            if (this.editedItem.is_active === null) {
                 this.validated = false
             } else {
                 this.validated = true

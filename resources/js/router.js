@@ -231,7 +231,7 @@ export default new Router({
         },
         {
             path: '/new-purchase-request',
-            name: 'New Purchase Request',
+            name: i18n.t('new') +' '+ i18n.t('purchase') +' '+ i18n.t('request'),
             component: NewPurchaseRequest,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -240,7 +240,7 @@ export default new Router({
         },
         {
             path: '/purchase-request-history',
-            name: 'Purchase Request History',
+            name: i18n.t('purchase') +' '+ i18n.t('request') +' '+ i18n.t('history'),
             component: PurchaseRequestHistory,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
