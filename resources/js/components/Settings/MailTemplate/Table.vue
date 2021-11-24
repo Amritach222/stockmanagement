@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            Mail Templates
+            {{ $t('mail') +' '+ $t('templates') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -27,7 +27,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('search')"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -61,14 +61,14 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.title"
-                                                    label="Name"
+                                                    :label="$t('name')"
                                                     required
                                                     outlined
                                                     :rules="rules"
                                                 ></v-text-field>
                                                 <v-select
                                                     v-model="editedItem.view_page"
-                                                    label="View Page"
+                                                    :label="$t('view_page')"
                                                     :items="['mail.notice','mail.password_change','mail.reset_password','mail.welcome']"
                                                     required
                                                     outlined
@@ -76,7 +76,7 @@
                                                 ></v-select>
                                                 <v-textarea
                                                     v-model="editedItem.content"
-                                                    label="Content"
+                                                    :label="$t('content')"
                                                     required
                                                     outlined
                                                     :rules="rules"
@@ -98,14 +98,14 @@
                                         text
                                         @click="close"
                                     >
-                                        Cancel
+                                        {{ $t('button.cancel') }}
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        Save
+                                        {{ $t('button.submit') }}
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>
@@ -132,6 +132,7 @@
 <script>
     import store from "../../../store";
     import ApiServices from "../../../services/ApiServices";
+    import i18n from "../../../i18n";
 
     export default {
         name: "TableWrapper",
@@ -143,10 +144,10 @@
             dialog: false,
             dialogDelete: false,
             headers: [
-                {text: 'Id', align: 'start', sortable: false, value: 'id'},
-                {text: 'Title', value: 'title'},
-                {text: 'View Page', value: 'view_page'},
-                {text: 'Actions', value: 'actions', sortable: false},
+                {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
+                {text: i18n.t('title'), value: 'title'},
+                {text: i18n.t('view_page'), value: 'view_page'},
+                {text: i18n.t('actions'), value: 'actions', sortable: false},
             ],
             mailTemplates: [],
             editedIndex: -1,
@@ -170,7 +171,7 @@
 
         computed: {
             formTitle() {
-                return this.editedIndex === -1 ? 'Add Mail Template' : 'Edit Mail Template'
+                return this.editedIndex === -1 ? i18n.t('card_title.add_mail_template') : i18n.t('card_title.edit_mail_template')
             },
         },
 

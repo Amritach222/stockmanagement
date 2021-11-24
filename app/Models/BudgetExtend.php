@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class BudgetExtend extends Model
 {
 
-    protected $table = 'budget_extends';
+//    protected $table = 'budget_extends';
     public $timestamps = true;
     protected $fillable = array('department_id', 'amount', 'remarks', 'file_id', 'status', 'approved_by');
 

@@ -33,6 +33,10 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
 Route::group(['middleware' => 'auth:api'], function () {
 
     Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
+    Route::post('create-variants', [\App\Http\Controllers\Api\ItemController::class, 'createVariants']);
+    Route::get('logs', [\App\Http\Controllers\Api\logController::class, 'index']);
+    Route::get('get-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'getPermissions']);
+    Route::post('assign-role/{id}', [\App\Http\Controllers\Api\PermissionController::class, 'assignRole']);
 
     Route::group(['prefix' => '/setting'], function () {
         Route::apiResource('brands', \App\Http\Controllers\Api\BrandController::class);
@@ -134,8 +138,17 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['prefix' => '/budget'], function () {
         Route::apiResource('budgets', \App\Http\Controllers\Api\BudgetController::class);
         Route::post('budgets/{id}', [\App\Http\Controllers\Api\BudgetController::class, 'update']);
+        Route::apiResource('budgetDispatches', \App\Http\Controllers\Api\BudgetDispatchController::class);
+        Route::post('budgetDispatches/{id}', [\App\Http\Controllers\Api\BudgetDispatchController::class, 'update']);
+
+
         Route::apiResource('budgetRequests', \App\Http\Controllers\Api\BudgetRequestController::class);
         Route::post('budgetRequests/{id}', [\App\Http\Controllers\Api\BudgetRequestController::class, 'update']);
+        Route::group(['prefix' => '/budgetRequest'], function () {
+            Route::apiResource('budgetRequestCategories', \App\Http\Controllers\Api\BudgetRequestCategoryController::class);
+            Route::post('budgetRequestCategories/{id}', [\App\Http\Controllers\Api\BudgetRequestCategoryController::class, 'update']);
+        });
+
         Route::apiResource('budgetLimits', \App\Http\Controllers\Api\BudgetLimitController::class);
         Route::post('budgetLimits/{id}', [\App\Http\Controllers\Api\BudgetLimitController::class, 'update']);
         Route::apiResource('budgetExtends', \App\Http\Controllers\Api\BudgetExtendController::class);

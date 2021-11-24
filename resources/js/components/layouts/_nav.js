@@ -1,6 +1,11 @@
 import i18n from "../../i18n";
-export default [
-    {
+export default {
+    mounted() {
+        this.$root.$on('navData', () => {
+            this.$forceUpdate();
+        })
+    },
+    data:[{
         _name: 'CSidebarNav',
         _children: [
             {
@@ -10,16 +15,16 @@ export default [
                 icon: 'cil-speedometer',
                 badge: {
                     color: 'primary',
-                    text: 'NEW'
+                    text: i18n.t('new')
                 }
             },
             {
                 _name: 'CSidebarNavTitle',
-                _children: ['Components']
+                _children: [i18n.t('components')]
             },
             {
                 _name: 'CSidebarNavItem',
-                name: 'Vendor',
+                name: i18n.t('vendor'),
                 to: '/vendors',
                 icon: 'cil-cursor',
                 // badge: {
@@ -29,95 +34,91 @@ export default [
             },
             {
                 _name: 'CSidebarNavDropdown',
-                name: 'Products',
+                name: i18n.t('products'),
                 icon: 'cil-star',
                 items: [
                     {
-                        name: 'Category',
+                        name: i18n.t('category'),
                         to: '/categories'
                     },
                     {
-                        name: 'Product',
+                        name: i18n.t('product'),
                         to: '/products'
                     },
                     {
-                        name: 'Item Attribute Group',
+                        name: i18n.t('item_attribute_group'),
                         to: '/itemAttributeGroups'
                     },
                     {
-                        name: 'Item Attribute',
+                        name: i18n.t('item_attribute'),
                         to: '/itemAttributes'
                     },
                     {
-                        name: 'Item',
+                        name: i18n.t('item'),
                         to: '/items'
                     }
                 ]
             },
             {
                 _name: 'CSidebarNavDropdown',
-                name: 'Budgets',
+                name: i18n.t('budgets'),
                 icon: 'cil-calculator',
                 items: [
                     {
-                        name: 'Budget',
+                        name: i18n.t('budget'),
                         to: '/budgets'
                     },
                     {
-                        name: 'Budget Request',
+                        name: i18n.t('budget_request'),
                         to: '/budgetRequests'
                     },
                     {
-                        name: 'Budget Limit',
+                        name: i18n.t('budget_limit'),
                         to: '/budgetLimits'
                     },
                     {
-                        name: 'Budget Extend',
-                        to: '/budgetExtends'
-                    },
-                    {
-                        name: 'Freeze Budget',
+                        name: i18n.t('freeze_budget'),
                         to: '/freezeBudgets'
                     },
                 ]
             },
             {
                 _name: 'CSidebarNavDropdown',
-                name: 'Bank Accounts',
+                name: i18n.t('bank') + ' ' + i18n.t('accounts'),
                 icon: 'cil-calculator',
                 items: [
                     {
-                        name: 'Bank Account',
+                        name: i18n.t('bank') + ' ' + i18n.t('account'),
                         to: '/bankAccounts'
                     },
                     {
-                        name: 'Bank Account Transaction',
+                        name: i18n.t('bank') + ' ' + i18n.t('account') + ' ' + i18n.t('transaction'),
                         to: '/bankAccountTransactions'
                     },
                 ]
             },
             {
                 _name: 'CSidebarNavDropdown',
-                name: 'Expenses',
+                name: i18n.t('expenses'),
                 icon: 'cil-calculator',
                 items: [
                     {
-                        name: 'Expense Category',
+                        name: i18n.t('expense') + ' ' + i18n.t('category'),
                         to: '/expenseCategories'
                     },
                     {
-                        name: 'Expense',
+                        name: i18n.t('expense'),
                         to: '/expenses'
                     },
                 ]
             },
             {
                 _name: 'CSidebarNavDropdown',
-                name: 'Quotations',
+                name: i18n.t('quotations'),
                 icon: 'cil-star',
                 items: [
                     {
-                        name: 'Quotation',
+                        name: i18n.t('quotation'),
                         to: '/quotations'
                     },
                     // {
@@ -128,63 +129,63 @@ export default [
             },
             {
                 _name: 'CSidebarNavDropdown',
-                name: 'Settings',
+                name: i18n.t('settings'),
                 icon: 'cil-bell',
                 items: [
                     {
-                        name: 'Brand',
+                        name: i18n.t('brand'),
                         to: '/brands'
                     },
                     {
-                        name: 'Unit',
+                        name: i18n.t('unit'),
                         to: '/units'
                     },
                     {
-                        name: 'Tax',
+                        name: i18n.t('tax'),
                         to: '/taxes'
                     },
                     {
-                        name: 'General Setting',
+                        name: i18n.t('general_setting'),
                         to: '/settings/'
                     },
                     {
-                        name: 'Mail Setting',
+                        name: i18n.t('mail') + ' ' + i18n.t('settings'),
                         to: '/mailSettings/'
                     },
                     {
-                        name: 'Sms Setting',
+                        name: i18n.t('sms') + ' ' + i18n.t('settings'),
                         to: '/smsSettings/'
                     },
                     {
-                        name: 'Mail Template',
+                        name: i18n.t('mail') + ' ' + i18n.t('template'),
                         to: '/mailTemplates/'
                     },
                     {
-                        name: 'Department',
+                        name: i18n.t('department'),
                         to: '/departments/'
                     },
                     {
-                        name: 'Designation',
+                        name: i18n.t('designation'),
                         to: '/designations/'
                     },
                     {
-                        name: 'Fiscal Year',
+                        name: i18n.t('fiscal_year'),
                         to: '/fiscalYears/'
                     },
                     {
-                        name: 'Signature',
+                        name: i18n.t('signature'),
                         to: '/signatures/'
                     },
                     {
-                        name: 'Signature Use Department',
+                        name: i18n.t('signature') + ' ' + i18n.t('use') + ' ' + i18n.t('department'),
                         to: '/signatureUseDepartments/'
                     },
                     {
-                        name: 'Profile Setting',
+                        name: i18n.t('profile') + ' ' + i18n.t('settings'),
                         to: '/profile-setting/'
                     },
                 ]
             },
         ]
-    }
-]
+    }],
+}

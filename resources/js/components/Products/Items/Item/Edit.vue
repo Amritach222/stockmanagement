@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>Edit</strong> Item
+                                <strong>{{ $t('card_title.edit_item') }}</strong>
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate
@@ -23,7 +23,7 @@
                                             name="name"
                                             description="Please enter item name."
                                             autocomplete=""
-                                            label="Name"
+                                            :label="$t('name')"
                                             placeholder="Enter item name..."
                                             prepend-icon="mdi-apps-box"
                                             required
@@ -40,7 +40,7 @@
                                             item-text="name"
                                             description="Please select a product."
                                             autocomplete=""
-                                            label="Product"
+                                            :label="$t('product')"
                                             placeholder="Select product..."
                                             prepend-icon="mdi-alpha-p-circle"
                                             required
@@ -59,12 +59,12 @@
                                                         class="grey darken-4"
                                                     ></v-img>
                                                     <v-card-title class="title">
-                                                        Image
+                                                        {{ $t('image') }}
                                                     </v-card-title>
                                                 </v-card>
                                                 <v-file-input
                                                     v-model="editedItem.image"
-                                                    label="Image"
+                                                    :label="$t('image')"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -74,7 +74,7 @@
                                             <v-col v-else>
                                                 <v-file-input
                                                     v-model="editedItem.image"
-                                                    label="Image"
+                                                    :label="$t('image')"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -90,7 +90,7 @@
                                             item-text="name"
                                             description="Please select brand."
                                             autocomplete=""
-                                            label="Brand"
+                                            :label="$t('brand')"
                                             placeholder="Select brand ..."
                                             prepend-icon="mdi-alpha-b-circle"
                                             required
@@ -106,7 +106,7 @@
                                             description="Please enter cost price."
                                             prepend-icon="mdi-currency-usd"
                                             autocomplete=""
-                                            label="Cost Price"
+                                            :label="$t('cost_price')"
                                             placeholder="Enter cost price..."
                                             @keyup="clearError('cost_price')"
                                             @keyup.enter="edit"
@@ -118,7 +118,7 @@
                                             name="stock"
                                             description="Please enter stock."
                                             autocomplete=""
-                                            label="Stock"
+                                            :label="$t('stock')"
                                             placeholder="Enter stock..."
                                             prepend-icon="mdi-chart-areaspline"
                                             @keyup="clearError('stock')"
@@ -131,7 +131,7 @@
                                             name="alert_stock"
                                             description="Please enter alert stock."
                                             autocomplete=""
-                                            label="Alert Stock"
+                                            :label="$t('alert_stock')"
                                             placeholder="Enter alert stock..."
                                             prepend-icon="mdi-chart-bell-curve"
                                             @keyup="clearError('alert_stock')"
@@ -146,7 +146,7 @@
                                             item-text="name"
                                             description="Please select a unit."
                                             autocomplete=""
-                                            label="Unit"
+                                            :label="$t('unit')"
                                             placeholder="Select a unit..."
                                             prepend-icon="mdi-google-circles-communities"
                                             required
@@ -162,7 +162,7 @@
                                             item-text="name"
                                             description="Please select a tax."
                                             autocomplete=""
-                                            label="Tax"
+                                            :label="$t('tax')"
                                             placeholder="Select a tax..."
                                             prepend-icon="mdi-alpha-t-circle"
                                             @keyup="clearError('tax_id')"
@@ -175,7 +175,7 @@
                                             :items="['Included','Excluded']"
                                             description="Please select a tax method."
                                             autocomplete=""
-                                            label="Tax Method"
+                                            :label="$t('tax_method')"
                                             placeholder="Select a method..."
                                             prepend-icon="mdi-chart-bubble"
                                             @keyup="clearError('tax_method')"
@@ -183,14 +183,288 @@
                                             solo
                                         />
                                     </v-form>
+                                    <hr>
+                                    <v-card>
+                                        <v-card-title>
+                                            {{ $t('variants') }}
+                                            <v-spacer></v-spacer>
+                                        </v-card-title>
+                                        <v-data-table
+                                            :headers="headers"
+                                            :items="variants"
+                                            sort-by="id"
+                                            loading
+                                            loading-text="Loading... Please wait..."
+                                            :search="search"
+                                        >
+                                            <template v-slot:top>
+                                                <v-toolbar
+                                                    flat
+                                                >
+                                                    <v-row>
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="4"
+                                                            md="6"
+                                                            lg="8"
+                                                        >
+                                                            <v-text-field
+                                                                v-model="search"
+                                                                append-icon="mdi-magnify"
+                                                                :label="$t('search')"
+                                                                solo
+                                                                hide-details
+                                                                max-width="100px"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-dialog
+                                                        v-model="dialog"
+                                                        max-width="600px"
+                                                    >
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <v-btn
+                                                                color="green"
+                                                                dark
+                                                                class="mb-2"
+                                                                v-bind="attrs"
+                                                                v-on="on"
+                                                            >
+                                                                {{ $t('card_title.add_item_variant') }}
+                                                            </v-btn>
+                                                        </template>
+                                                        <v-card>
+                                                            <v-form ref="form">
+                                                                <v-card-title>
+                                                                    <span class="headline">{{ formTitle }}</span>
+                                                                </v-card-title>
+
+                                                                <v-card-text>
+                                                                    <v-container>
+                                                                        <v-row>
+                                                                            <v-col>
+                                                                                <v-select
+                                                                                    v-model="addVariant.attribute_group_ids"
+                                                                                    :label="$t('attribute_groups')"
+                                                                                    :items="itemAttributeGroups"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    multiple
+                                                                                    required
+                                                                                    outlined
+                                                                                    return-object
+                                                                                    v-on:change=getAttributes(addVariant.attribute_group_ids)
+                                                                                ></v-select>
+                                                                                <v-select
+                                                                                    v-model="addVariant.attribute_ids"
+                                                                                    :label="$t('attributes')"
+                                                                                    :items="itemAttributes"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    multiple
+                                                                                    required
+                                                                                    outlined
+                                                                                ></v-select>
+                                                                                </v-col>
+                                                                        </v-row>
+                                                                    </v-container>
+                                                                </v-card-text>
+
+                                                                <v-card-actions>
+                                                                    <v-progress-linear
+                                                                        v-if="progressL"
+                                                                        indeterminate
+                                                                        color="green"
+                                                                    ></v-progress-linear>
+                                                                    <v-spacer></v-spacer>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="close"
+                                                                    >
+                                                                        {{ $t('button.cancel') }}
+                                                                    </v-btn>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="variantAdd"
+                                                                    >
+                                                                        {{ $t('button.submit') }}
+                                                                    </v-btn>
+                                                                </v-card-actions>
+                                                            </v-form>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <v-dialog
+                                                        v-model="editDialog"
+                                                        max-width="600px"
+                                                    >
+                                                        <v-card>
+                                                            <v-form ref="editForm">
+                                                                <v-card-title>
+                                                                    <span class="headline">{{ formTitle }}</span>
+                                                                </v-card-title>
+
+                                                                <v-card-text>
+                                                                    <v-container>
+                                                                        <v-row>
+                                                                            <v-col>
+                                                                                <v-select
+                                                                                    v-model="addVariant.attribute_group_ids"
+                                                                                    :label="$t('attribute_groups')"
+                                                                                    :items="itemAttributeGroups"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    disabled
+                                                                                    multiple
+                                                                                    required
+                                                                                    outlined
+                                                                                ></v-select>
+                                                                                <v-select
+                                                                                    v-model="addVariant.attribute_ids"
+                                                                                    :label="$t('attributes')"
+                                                                                    :items="itemAttributes"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    disabled
+                                                                                    multiple
+                                                                                    required
+                                                                                    outlined
+                                                                                ></v-select>
+                                                                                <v-text-field
+                                                                                    v-model="addVariant.quantity"
+                                                                                    :label="$t('quantity')"
+                                                                                    type="number"
+                                                                                    outlined
+                                                                                ></v-text-field>
+                                                                                <v-text-field
+                                                                                    v-model="addVariant.price"
+                                                                                    :label="$t('price')"
+                                                                                    type="number"
+                                                                                    outlined
+                                                                                ></v-text-field>
+                                                                                <v-row>
+                                                                                    <v-col v-if="typeof(addVariant.link) === 'string'">
+                                                                                        <v-card width="200"
+                                                                                                v-on:click="openImage(addVariant.link)">
+                                                                                            <v-img
+                                                                                                :src="cdnURL+addVariant.link"
+                                                                                                height="125"
+                                                                                                class="grey darken-4"
+                                                                                            ></v-img>
+                                                                                            <v-card-title class="title">
+                                                                                                {{ $t('image') }}
+                                                                                            </v-card-title>
+                                                                                        </v-card>
+                                                                                        <v-file-input
+                                                                                            v-model="addVariant.image"
+                                                                                            :label="$t('image')"
+                                                                                            filled
+                                                                                            outlined
+                                                                                            prepend-icon="mdi-camera"
+                                                                                            accept="image/png,image/jpeg,image/jpg"
+                                                                                        ></v-file-input>
+                                                                                    </v-col>
+                                                                                    <v-col v-else>
+                                                                                        <v-file-input
+                                                                                            v-model="addVariant.image"
+                                                                                            :label="$t('image')"
+                                                                                            filled
+                                                                                            outlined
+                                                                                            prepend-icon="mdi-camera"
+                                                                                            accept="image/png,image/jpeg,image/jpg"
+                                                                                        ></v-file-input>
+                                                                                    </v-col>
+                                                                                </v-row>
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                    </v-container>
+                                                                </v-card-text>
+
+                                                                <v-card-actions>
+                                                                    <v-progress-linear
+                                                                        v-if="progressL"
+                                                                        indeterminate
+                                                                        color="green"
+                                                                    ></v-progress-linear>
+                                                                    <v-spacer></v-spacer>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="editClose"
+                                                                    >
+                                                                        {{ $t('button.cancel') }}
+                                                                    </v-btn>
+                                                                    <v-btn
+                                                                        color="blue darken-1"
+                                                                        text
+                                                                        @click="variantAdd"
+                                                                    >
+                                                                        {{ $t('button.submit') }}
+                                                                    </v-btn>
+                                                                </v-card-actions>
+                                                            </v-form>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <v-dialog v-model="dialogDelete" max-width="500px">
+                                                        <v-card>
+                                                            <v-card-title class="text-h6">
+                                                                {{ $t('message.delete') }}
+                                                            </v-card-title>
+                                                            <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn color="blue darken-1" text @click="closeDelete">
+                                                                    {{ $t('button.cancel') }}
+                                                                </v-btn>
+                                                                <v-btn color="blue darken-1" text
+                                                                       @click="deleteItemConfirm">
+                                                                    {{ $t('button.confirm') }}
+                                                                </v-btn>
+                                                                <v-spacer></v-spacer>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                </v-toolbar>
+                                            </template>
+                                            <template v-slot:item.link="{ item }">
+                                                <img :src=cdnURL+item.link
+                                                     v-if="item.link"
+                                                     style="width: 50px; height: 50px; object-fit: cover;"
+                                                     v-on:click="openImage(item.link)"/>
+
+                                                <img :src="baseURL+'images/placeholder.jpg'"
+                                                     v-else
+                                                     style="width: 50px; height: 50px; object-fit: cover"
+                                                />
+                                            </template>
+                                            <template v-slot:item.actions="{ item }">
+                                                <v-icon
+                                                    small
+                                                    class="mr-2"
+                                                    @click="editItem(item)"
+                                                >
+                                                    mdi-pencil
+                                                </v-icon>
+                                                <v-icon
+                                                    small
+                                                    @click="deleteItem(item)"
+                                                >
+                                                    mdi-delete
+                                                </v-icon>
+                                            </template>
+                                            <template v-slot:no-data>
+                                                <div>No Data</div>
+                                            </template>
+                                        </v-data-table>
+                                    </v-card>
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            Submit
+                                            {{ $t('button.submit') }}
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/items'">
                                             <CIcon name="cil-ban"/>
-                                            Cancel
+                                            {{ $t('button.cancel') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -217,6 +491,7 @@ export default {
     },
     data: () => ({
         cdnURL: config.cdnURL,
+        baseURL: config.baseURL,
         editedItem: {
             id: null,
             name: '',
@@ -235,6 +510,33 @@ export default {
         units: [],
         taxes: [],
         changeProgress: false,
+        search: '',
+        progressL: false,
+        dialog: false,
+        editDialog: false,
+        dialogDelete: false,
+        headers: [
+            {text: i18n.t('id'), value: 'id'},
+            {text: i18n.t('attributes'), value: 'name'},
+            {text: i18n.t('image'), value: 'link'},
+            {text: i18n.t('quantity'), value: 'quantity'},
+            {text: i18n.t('price'), value: 'price'},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
+        ],
+        tableLoad: false,
+        productCount: 0,
+        editedIndex: -1,
+        quoProducts: [],
+        itemAttributeGroups: [],
+        itemAttributes: [],
+        addVariant: {
+            attribute_group_ids: [],
+            attribute_ids: [],
+            quantity: '',
+            price: '',
+            image: [],
+        },
+        variants: [],
         error: {
             name: '',
             product_id: '',
@@ -258,12 +560,18 @@ export default {
             ],
         },
     }),
+    computed: {
+        formTitle() {
+            return this.editedIndex === -1 ? i18n.t('card_title.add_item_variant') : i18n.t('card_title.edit_item_variant')
+        },
+    },
     async created() {
         this.loadItems();
         this.loadProducts();
         this.loadBrands();
         this.loadUnits();
         this.loadTaxes();
+        this.loadItemAttributeGroups();
     },
     methods: {
         async loadProducts() {
@@ -297,7 +605,79 @@ export default {
             let res = await ApiServices.itemShow(this.$route.params.id);
             if (res.success === true) {
                 this.editedItem = res.data;
+                this.variants = res.data.item_variants;
             }
+        },
+        async loadItemAttributeGroups() {
+            let res = await ApiServices.itemAttributeGroupIndex();
+            if (res.success === true) {
+                this.itemAttributeGroups = res.data;
+            }
+        },
+        async getAttributes(attributeGroup) {
+            this.itemAttributes = [];
+            let res = await ApiServices.itemAttributeIndex();
+            for (var i = 0; i < res.data.length; i++) {
+                for (var j = 0; j < attributeGroup.length; j++) {
+                    if (res.data[i].attribute_group_id === attributeGroup[j].id) {
+                        this.itemAttributes.push(res.data[i]);
+                    }
+                }
+            }
+        },
+        async editItem(item) {
+            this.editedIndex = this.variants.indexOf(item)
+            this.addVariant = Object.assign({}, item)
+            this.itemAttributes = [];
+            let res = await ApiServices.itemAttributeIndex();
+            for (var i = 0; i < res.data.length; i++) {
+                for (var j = 0; j < this.addVariant.attribute_group_ids.length; j++) {
+                    if (res.data[i].attribute_group_id === this.addVariant.attribute_group_ids[j]) {
+                        this.itemAttributes.push(res.data[i]);
+                    }
+                }
+            }
+            this.editDialog = true
+        },
+
+        deleteItem(item) {
+            this.editedIndex = this.variants.indexOf(item)
+            this.addVariant = Object.assign({}, item)
+            this.dialogDelete = true
+        },
+
+        async deleteItemConfirm() {
+            let res = await ApiServices.itemVariantDelete(this.addVariant.id);
+            if (res.success === true) {
+                this.variants.splice(this.editedIndex, 1)
+            }
+            this.closeDelete()
+        },
+
+        close() {
+            this.progressL = false;
+            this.dialog = false;
+            this.$nextTick(() => {
+                this.addVariant = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            });
+        },
+
+        editClose() {
+            this.progressL = false;
+            this.editDialog = false;
+            this.$nextTick(() => {
+                this.addVariant = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            });
+        },
+
+        closeDelete() {
+            this.dialogDelete = false
+            this.$nextTick(() => {
+                this.addVariant = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            })
         },
         clearError(name) {
             if (name === 'name') {
@@ -331,6 +711,44 @@ export default {
                 this.error.image = '';
             }
         },
+
+        async variantAdd() {
+            this.validate();
+            if (this.validated) {
+                if (this.editedIndex > -1) {
+                    const data = new FormData();
+                    data.append('quantity', parseInt(this.addVariant.quantity));
+                    data.append('price', parseInt(this.addVariant.price));
+                    if ('image' in this.addVariant) {
+                        if (typeof this.addVariant.image.name == 'string') {
+                            data.append('image', this.addVariant.image);
+                        }
+                    }
+                    let res = await ApiServices.itemVariantEdit(this.addVariant.id, data);
+                    Object.assign(this.variants[this.editedIndex], res.data);
+                    this.$refs.editForm.reset();
+                    this.editClose()
+                } else {
+                    const data = new FormData();
+                    data.append('attribute_ids', JSON.stringify(this.addVariant.attribute_ids));
+                    let res = await ApiServices.createVariant(data);
+                    if (res.success === true) {
+                        for (var i = 0; i < res.data.length; i++) {
+                            data.append('attribute_ids', JSON.stringify(res.data[i].attribute_ids));
+                            data.append('item_id', this.editedItem.id);
+
+                            let rtn = await ApiServices.itemVariantCreate(data);
+                            if (rtn.success === true) {
+                                this.variants.push(rtn.data);
+                            }
+                        }
+                    }
+                    this.$refs.form.reset();
+                    this.close()
+                }
+            }
+        },
+
         async edit() {
             this.changeProgress = true;
             const data = new FormData();
@@ -364,6 +782,17 @@ export default {
             this.changeProgress = false;
             if (res.success === true) {
                 route.replace('/items/');
+            }
+        },
+
+        validate() {
+            this.validated = true;
+            if (this.addVariant.attribute_group_ids.length === 0) {
+                this.validated = false;
+            } else if (this.addVariant.attribute_ids.length === 0) {
+                this.validated = false;
+            } else {
+                this.validated = true;
             }
         },
     }

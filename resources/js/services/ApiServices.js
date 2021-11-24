@@ -72,6 +72,9 @@ export default {
     async getUserProfilePic() {
         return await apiCall(GET, `api/user/profile-picture`)
     },
+    async getUserPermissions() {
+        return await apiCall(GET, `api/get-permissions`)
+    },
     async logout() {
         return await apiCall(GET, `api/user/logout`)
     },
@@ -401,6 +404,22 @@ export default {
         return await apiCall(DELETE, `api/budget/budgets/${id}`)
     },
 
+    async budgetDispatchIndex() {
+        return await apiCall(GET, `api/budget/budgetDispatches`)
+    },
+    async budgetDispatchCreate(data) {
+        return await apiCall(POST, `api/budget/budgetDispatches`, data)
+    },
+    async budgetDispatchShow(id) {
+        return await apiCall(GET, `api/budget/budgetDispatches/${id}`)
+    },
+    async budgetDispatchEdit(id, data) {
+        return await apiCall(POST, `api/budget/budgetDispatches/${id}`, data)
+    },
+    async budgetDispatchDelete(id) {
+        return await apiCall(DELETE, `api/budget/budgetDispatches/${id}`)
+    },
+
     async budgetRequestIndex() {
         return await apiCall(GET, `api/budget/budgetRequests`)
     },
@@ -415,6 +434,22 @@ export default {
     },
     async budgetRequestDelete(id) {
         return await apiCall(DELETE, `api/budget/budgetRequests/${id}`)
+    },
+
+    async budgetRequestCategoryIndex() {
+        return await apiCall(GET, `api/budget/budgetRequest/budgetRequestCategories`)
+    },
+    async budgetRequestCategoryCreate(data) {
+        return await apiCall(POST, `api/budget/budgetRequest/budgetRequestCategories`, data)
+    },
+    async budgetRequestCategoryShow(id) {
+        return await apiCall(GET, `api/budget/budgetRequest/budgetRequestCategories/${id}`)
+    },
+    async budgetRequestCategoryEdit(id, data) {
+        return await apiCall(POST, `api/budget/budgetRequest/budgetRequestCategories/${id}`, data)
+    },
+    async budgetRequestCategoryDelete(id) {
+        return await apiCall(DELETE, `api/budget/budgetRequest/budgetRequestCategories/${id}`)
     },
 
     async budgetLimitIndex() {
@@ -559,5 +594,9 @@ export default {
     },
     async quotationProductDelete(id) {
         return await apiCall(DELETE, `api/quotation/quotationProducts/${id}`)
+    },
+
+    async createVariant(data) {
+        return await apiCall(POST, `api/create-variants`, data)
     },
 }

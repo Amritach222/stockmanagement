@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            Items
+            {{ $t('items') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -27,7 +27,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('search')"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -47,17 +47,17 @@
                                 v-on="on"
                                 :to="'/items/create'"
                             >
-                                Add New Item
+                                {{ $t('button.add_new_item') }}
                             </v-btn>
                         </template>
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
+                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -117,6 +117,7 @@
 <script>
 import config from "../../../../config";
 import store from "../../../../store";
+import i18n from "../../../../i18n";
 import ApiServices from "../../../../services/ApiServices";
 
 export default {
@@ -130,12 +131,12 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Id', align: 'start', sortable: true, value: 'id'},
-            {text: 'Name', value: 'name'},
-            {text: 'Image', value: 'link', sortable: false},
-            {text: 'Product', value: 'product', sortable: false},
-            {text: 'Brand', value: 'brand', sortable: false},
-            {text: 'Actions', value: 'actions', sortable: false},
+            {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
+            {text: i18n.t('name'), value: 'name'},
+            {text: i18n.t('image'), value: 'link', sortable: false},
+            {text: i18n.t('product'), value: 'product', sortable: false},
+            {text: i18n.t('brand'), value: 'brand', sortable: false},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         items: [],
         editedIndex: -1,

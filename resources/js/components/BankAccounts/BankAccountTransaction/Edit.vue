@@ -3,7 +3,7 @@
         <CCol sm="12">
             <CCard>
                 <CCardHeader>
-                    <strong>Edit</strong> Bank Account Transaction
+                    <strong>{{ $t('card_title.edit_bank_account') }}</strong>
                     <v-progress-circular
                         v-if="changeProgress"
                         indeterminate

@@ -19,7 +19,7 @@
                             name="name"
                             description="Please enter attribute name."
                             autocomplete=""
-                            label="Name"
+                            :label="$t('name')"
                             placeholder="Enter attribute name..."
                             required
                             @keyup="clearError('name')"
@@ -31,7 +31,7 @@
                             name="attribute_group_id"
                             description="Please select attribute group."
                             autocomplete=""
-                            label="Attribute Group"
+                            :label="$t('attribute_group')"
                             placeholder="Select attribute group..."
                             required
                             @keyup="clearError('attribute_group_id')"
@@ -42,7 +42,7 @@
                     <CCardFooter>
                         <CButton type="submit" size="sm" color="primary" @click="create">
                             <CIcon name="cil-check-circle"/>
-                            Submit
+                            {{ $t('button.submit') }}
                         </CButton>
                         <CButton type="reset" size="sm" color="danger">
                             <CIcon name="cil-ban"/>

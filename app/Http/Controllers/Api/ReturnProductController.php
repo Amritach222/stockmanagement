@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
+use App\Helpers\DateConverter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReturnProductRequest;
 use App\Http\Resources\ReturnProduct as ReturnProductResource;
 use App\Models\Purchase;
 use App\Models\PurchaseProduct;
 use App\Models\ReturnProduct;
+use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReturnProductController extends Controller
@@ -47,6 +50,27 @@ class ReturnProductController extends Controller
             $price = $purchaseProduct->price;
             $values['total_cost'] = $request->quantity * $price + $request->shipping_cost;
             $returnProduct = new ReturnProduct($values);
+            $returnProduct->save();
+            $currentDate = Carbon::now();
+            $convertDate = new DateConverter();
+            $nepDate = $convertDate->eng_to_nep($currentDate->format('Y'), $currentDate->format('m'), $currentDate->format('d'));
+            $setting = Setting::findOrFail(1);
+            if ($setting->fiscal_year_id) {
+                $fiscalYear = $setting->fiscalYear;
+                $fromDate = $fiscalYear->from;
+                $toDate = $fiscalYear->to;
+                $fromNepDate = $convertDate->eng_to_nep(Carbon::parse($fromDate)->format('Y'), Carbon::parse($fromDate)->format('m'), Carbon::parse($fromDate)->format('d'));
+                $toNepDate = $convertDate->eng_to_nep(Carbon::parse($toDate)->format('Y'), Carbon::parse($toDate)->format('m'), Carbon::parse($toDate)->format('d'));
+                $year = $fromNepDate['year'] % 1000 . '/' . $toNepDate['year'] % 100;
+            } else {
+                $year = $nepDate['year'] % 1000;
+            }
+            if ($nepDate['month'] < 10) {
+                $month = '-0' . $nepDate['month'];
+            } else {
+                $month = '-' . $nepDate['month'];
+            }
+            $returnProduct->reference_no = 'RET-0'.$year . $month . '-' . $returnProduct->id;
             $returnProduct->save();
             event(new ActivityLogEvent('Add', 'Return Product', $returnProduct->id));
             $data['message'] = "Return Product added successfully.";

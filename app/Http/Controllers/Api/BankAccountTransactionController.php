@@ -42,8 +42,13 @@ class BankAccountTransactionController extends Controller
             $bankAccountTransaction = new BankAccountTransaction($values);
             $bankAccountTransaction->save();
             $bankAccount = BankAccount::findOrFail($bankAccountTransaction->account_id);
-            $bankAccount->total_balance = $bankAccount->total_balance + $bankAccountTransaction->transaction_amount;
-            $bankAccount->current_balance = $bankAccount->current_balance + $bankAccountTransaction->transaction_amount;
+            if($bankAccountTransaction->transaction_type == 'CR') {
+                $bankAccount->total_balance = $bankAccount->total_balance + $bankAccountTransaction->transaction_amount;
+                $bankAccount->current_balance = $bankAccount->current_balance + $bankAccountTransaction->transaction_amount;
+            }else{
+                $bankAccount->total_balance = $bankAccount->total_balance - $bankAccountTransaction->transaction_amount;
+                $bankAccount->current_balance = $bankAccount->current_balance - $bankAccountTransaction->transaction_amount;
+            }
             $bankAccount->save();
             event(new ActivityLogEvent('Add', 'Bank Account Transaction', $bankAccountTransaction->id));
             $data['message'] = "Bank Account Transaction added successfully.";

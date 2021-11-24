@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>Edit</strong> Product
+                                <strong>{{ $t('card_title.edit_product') }}</strong>
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate
@@ -24,7 +24,7 @@
                                             description="Please enter product name."
                                             autocomplete=""
                                             prepend-icon="mdi-apps-box"
-                                            label="Name"
+                                            :label="$t('name')"
                                             placeholder="Enter product name..."
                                             required
                                             @keyup="clearError('name')"
@@ -42,12 +42,12 @@
                                                         class="grey darken-4"
                                                     ></v-img>
                                                     <v-card-title class="title">
-                                                        Image
+                                                        {{ $t('image') }}
                                                     </v-card-title>
                                                 </v-card>
                                                 <v-file-input
                                                     v-model="editedItem.image"
-                                                    label="Image"
+                                                    :label="$t('image')"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -57,7 +57,7 @@
                                             <v-col v-else>
                                                 <v-file-input
                                                     v-model="editedItem.image"
-                                                    label="Image"
+                                                    :label="$t('image')"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -74,7 +74,7 @@
                                             description="Please select brand."
                                             prepend-icon="mdi-alpha-b-circle"
                                             autocomplete=""
-                                            label="Brand"
+                                            :label="$t('brand')"
                                             placeholder="Select brand ..."
                                             required
                                             @keyup="clearError('brand_id')"
@@ -91,7 +91,7 @@
                                             description="Please select category."
                                             prepend-icon="mdi-shape"
                                             autocomplete=""
-                                            label="Category"
+                                            :label="$t('category')"
                                             placeholder="Select category..."
                                             required
                                             @keyup="clearError('category_id')"
@@ -106,7 +106,7 @@
                                             id="is_active"
                                             description="Please check the box if it is active."
                                             autocomplete=""
-                                            label="Active"
+                                            :label="$t('active')"
                                             @keyup="clearError('is_active')"
                                             @keyup.enter="edit"
                                             ref="activeCheck"
@@ -118,7 +118,7 @@
                                             name="details"
                                             description="Please enter product details."
                                             autocomplete=""
-                                            label="Details"
+                                            :label="$t('details')"
                                             placeholder="Enter product details..."
                                             @keyup="clearError('details')"
                                             solo
@@ -127,11 +127,11 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            Submit
+                                            {{ $t('button.submit') }}
                                         </CButton>
                                         <CButton :to="'/products'" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
-                                            Cancel
+                                            {{ $t('button.cancel') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -237,7 +237,9 @@ export default {
             data.append('name', this.editedItem.name);
             data.append('brand_id', this.editedItem.brand_id);
             data.append('category_id', this.editedItem.category_id);
-            data.append('details', this.editedItem.details);
+            if (this.editedItem.details !== null) {
+                data.append('details', this.editedItem.details);
+            }
 
             if ('image' in this.editedItem) {
                 if (typeof this.editedItem.image.name == 'string') {

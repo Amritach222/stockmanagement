@@ -400,13 +400,23 @@ class CreateForeignKeys extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
-        Schema::table('budget_extends', function (Blueprint $table) {
-            $table->foreign('department_id')->references('id')->on('departments')
+        Schema::table('budget_requests', function (Blueprint $table) {
+            $table->foreign('approved_by')->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
-        Schema::table('budget_extends', function (Blueprint $table) {
-            $table->foreign('approved_by')->references('id')->on('users')
+        Schema::table('budget_requests', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('restrict');
+        });
+        Schema::table('budget_requests', function (Blueprint $table) {
+            $table->foreign('fiscal_year_id')->references('id')->on('fiscal_years')
+                ->onDelete('cascade')
+                ->onUpdate('restrict');
+        });
+        Schema::table('budget_requests', function (Blueprint $table) {
+            $table->foreign('file_id')->references('id')->on('files')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
@@ -668,11 +678,17 @@ class CreateForeignKeys extends Migration
         Schema::table('budget_requests', function (Blueprint $table) {
             $table->dropForeign('budget_requests_department_id_foreign');
         });
-        Schema::table('budget_extends', function (Blueprint $table) {
-            $table->dropForeign('budget_extends_department_id_foreign');
+        Schema::table('budget_requests', function (Blueprint $table) {
+            $table->dropForeign('budget_requests_approved_by_foreign');
         });
-        Schema::table('budget_extends', function (Blueprint $table) {
-            $table->dropForeign('budget_extends_approved_by_foreign');
+        Schema::table('budget_requests', function (Blueprint $table) {
+            $table->dropForeign('budget_requests_user_id_foreign');
+        });
+        Schema::table('budget_requests', function (Blueprint $table) {
+            $table->dropForeign('budget_requests_fiscal_year_id_foreign');
+        });
+        Schema::table('budget_requests', function (Blueprint $table) {
+            $table->dropForeign('budget_requests_file_id_foreign');
         });
         Schema::table('budget_limits', function (Blueprint $table) {
             $table->dropForeign('budget_limits_category_id_foreign');

@@ -42,7 +42,7 @@ class SignatureController extends Controller
             $values = $request->all();
             if ($request->hasFile('image')) {
                 $fileHelper = new SamundraFileHelper();
-                $file = $fileHelper->saveFile($request->image, 'brand');
+                $file = $fileHelper->saveFile($request->image, 'signature');
                 if ($file['success'] !== true) {
                     return response(['success' => false, 'message' => 'Data couldnot be saved at the moment', "data" => null], 400);
                 }
@@ -98,7 +98,7 @@ class SignatureController extends Controller
             $values = $request->all();
             if ($request->hasFile('image')) {
                 $fileHelper = new SamundraFileHelper();
-                $file = $fileHelper->saveFile($request->image, 'brand');
+                $file = $fileHelper->saveFile($request->image, 'signature');
                 if ($file['success'] !== true) {
                     return response(['success' => false, 'message' => 'Data couldnot be saved at the moment', "data" => null], 400);
                 }
@@ -144,6 +144,13 @@ class SignatureController extends Controller
         try {
             $data['success'] = true;
             $signature = Signature::findOrFail($id);
+            $fileHelper = new SamundraFileHelper();
+            if ($signature->file_id !== null) {
+                $file = File::where('id', $signature->file_id)->first();
+                if ($file !== null) {
+                    $fileHelper->deleteFile($file->path);
+                }
+            }
             $signature->delete();
             event(new ActivityLogEvent('Delete', 'Signature', $id));
             $data['message'] = "Deleted successfully.";

@@ -19,7 +19,12 @@ class ItemAttribute extends Model
 
     public function variants()
     {
-        return $this->belongsToMany(ItemVariant::class,'item_variant_attributes','attribute_id');
+        return $this->belongsToMany(ItemVariant::class, 'item_variant_attributes', 'attribute_id');
+    }
+
+    public function itemAttributeGroup()
+    {
+        return $this->belongsTo(ItemAttributeGroup::class, 'attribute_group_id');
     }
 
 }

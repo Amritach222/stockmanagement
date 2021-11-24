@@ -143,6 +143,13 @@ class BudgetExtendController extends Controller
         try {
             $data['success'] = true;
             $budgetExtend = BudgetExtend::findOrFail($id);
+            $fileHelper = new SamundraFileHelper();
+            if ($budgetExtend->file_id !== null) {
+                $file = File::where('id', $budgetExtend->file_id)->first();
+                if ($file !== null) {
+                    $fileHelper->deleteFile($file->path);
+                }
+            }
             $budgetExtend->delete();
             event(new ActivityLogEvent('Delete', 'Budget Extend', $id));
             $data['message'] = "Deleted successfully.";

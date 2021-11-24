@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            Freeze Budget
+            {{ $t('freeze_budgets') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -26,7 +26,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                label="Search"
+                                :label="$t('search')"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -45,7 +45,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                Add New Freeze Budget
+                                {{ $t('button.add_new_freeze_budget') }}
                             </v-btn>
                         </template>
                         <v-card>
@@ -63,7 +63,7 @@
                                                     :items="departments"
                                                     item-value="id"
                                                     item-text="name"
-                                                    label="Department"
+                                                    :label="$t('department')"
                                                     required
                                                     outlined
                                                     :rules="rules"
@@ -71,9 +71,9 @@
                                                 <v-select
                                                     v-model="editedItem.fiscal_year_id"
                                                     :items="fiscalYears"
-                                                    :item-text="fiscalYear => fiscalYear.from +' || '+ fiscalYear.to"
+                                                    item-text="name"
                                                     item-value="id"
-                                                    label="Fiscal Year"
+                                                    :label="$t('fiscal_year')"
                                                     required
                                                     outlined
                                                     :rules="rules"
@@ -81,14 +81,14 @@
                                                 <v-text-field
                                                     v-model="editedItem.amount"
                                                     type="number"
-                                                    label="Amount"
+                                                    :label="$t('amount')"
                                                     required
                                                     outlined
                                                     :rules="rules"
                                                 ></v-text-field>
                                                 <v-text-field
                                                     v-model="editedItem.remark"
-                                                    label="Remark"
+                                                    :label="$t('remarks')"
                                                     outlined
                                                     :rules="rules"
                                                 ></v-text-field>
@@ -109,14 +109,14 @@
                                         text
                                         @click="close"
                                     >
-                                        Cancel
+                                        {{ $t('button.cancel') }}
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        Save
+                                        {{ $t('button.submit') }}
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>
@@ -124,11 +124,11 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
+                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -166,6 +166,7 @@
 <script>
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
+import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -176,12 +177,12 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Id', align: 'start', sortable: true, value: 'id'},
-            {text: 'Department', value: 'department_id'},
-            {text: 'Fiscal Year', value: 'fiscal_year_id'},
-            {text: 'Amount', value: 'amount'},
-            {text: 'Remark', value: 'remark'},
-            {text: 'Actions', value: 'actions', sortable: false},
+            {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
+            {text: i18n.t('department'), value: 'department_id'},
+            {text: i18n.t('fiscal_year'), value: 'fiscal_year_id'},
+            {text: i18n.t('amount'), value: 'amount'},
+            {text: i18n.t('remarks'), value: 'remark'},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         freezeBudgets: [],
         departments: [],
@@ -209,7 +210,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Add Freeze Budget' : 'Edit Freeze Budget'
+            return this.editedIndex === -1 ? i18n.t('card_title.add_freeze_budget') : i18n.t('card_title.edit_freeze_budget')
         },
     },
 

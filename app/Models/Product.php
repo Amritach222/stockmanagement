@@ -9,7 +9,7 @@ class Product extends Model
 
     protected $table = 'products';
     public $timestamps = true;
-    protected $fillable = array('name', 'code', 'brand_id', 'category_id', 'image_ids', 'is_active', 'details');
+    protected $fillable = array('name', 'code', 'brand_id', 'category_id', 'image_id', 'is_active', 'details');
 
     public function brand()
     {
@@ -29,5 +29,10 @@ class Product extends Model
     public function purchaseProducts()
     {
         return $this->hasMany(PurchaseProduct::class, 'product_id');
+    }
+
+    public function image()
+    {
+        return $this->belongsTo(File::class, 'image_id');
     }
 }

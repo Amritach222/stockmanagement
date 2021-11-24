@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
+use App\Helpers\DateConverter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ConsumeRequest;
 use App\Http\Resources\Consume as ConsumeResource;
 use App\Models\Consume;
+use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ConsumeController extends Controller

@@ -8,7 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\QuotationRequest;
 use App\Http\Resources\Quotation as QuotationResource;
 use App\Models\File;
+use App\Models\Item;
+use App\Models\ItemVariant;
 use App\Models\Quotation;
+use App\Models\QuotationProduct;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -122,7 +125,7 @@ class QuotationController extends Controller
             $values = $request->all();
             if ($request->hasFile('file')) {
                 $fileHelper = new SamundraFileHelper();
-                $file = $fileHelper->saveFile($request->file, 'budget');
+                $file = $fileHelper->saveFile($request->file, 'quotation');
                 if ($file['success'] !== true) {
                     return response(['success' => false, 'message' => 'Data could not be saved at the moment', "data" => null], 400);
                 }
@@ -170,6 +173,13 @@ class QuotationController extends Controller
             $quotation = Quotation::findOrFail($id);
             foreach ($quotation->quotationProducts as $product) {
                 $product->delete();
+            }
+            $fileHelper = new SamundraFileHelper();
+            if ($quotation->file_id !== null) {
+                $file = File::where('id', $quotation->file_id)->first();
+                if ($file !== null) {
+                    $fileHelper->deleteFile($file->path);
+                }
             }
             $quotation->delete();
             event(new ActivityLogEvent('Delete', 'Quotation', $id));

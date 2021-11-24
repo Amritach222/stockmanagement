@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BudgetRequest;
 use App\Http\Resources\Budget as BudgetResource;
 use App\Models\Budget;
+use App\Models\BudgetDispatch;
 use App\Models\File;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class BudgetController extends Controller
             $data['success'] = true;
             $values = $request->all();
 //            $values['date_first_received'] = Carbon::now();
-            $values['final_dispatched_amount'] = $request->initial_dispatched_amount;
+            $values['total_dispatched_amount'] = $request->initial_dispatched_amount;
             if ($request->hasFile('file')) {
                 $fileHelper = new SamundraFileHelper();
                 $file = $fileHelper->saveFile($request->file, 'budget');
@@ -60,6 +61,11 @@ class BudgetController extends Controller
             }
             $budget = new Budget($values);
             $budget->save();
+            $dispatch['budget_id'] = $budget->id;
+            $dispatch['amount'] = $budget->initial_dispatched_amount;
+            $dispatch['dispatched_date'] = $budget->date_first_received;
+            $budgetDispatch = new BudgetDispatch($dispatch);
+            $budgetDispatch->save();
             event(new ActivityLogEvent('Add', 'Budget', $budget->id));
             $data['message'] = "Budget added successfully.";
             $data['data'] = new BudgetResource($budget);
@@ -146,6 +152,13 @@ class BudgetController extends Controller
         try {
             $data['success'] = true;
             $budget = Budget::findOrFail($id);
+            $fileHelper = new SamundraFileHelper();
+            if ($budget->file_id !== null) {
+                $file = File::where('id', $budget->file_id)->first();
+                if ($file !== null) {
+                    $fileHelper->deleteFile($file->path);
+                }
+            }
             $budget->delete();
             event(new ActivityLogEvent('Delete', 'Budget', $id));
             $data['message'] = "Deleted successfully.";

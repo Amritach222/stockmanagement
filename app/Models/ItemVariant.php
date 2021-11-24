@@ -9,7 +9,7 @@ class ItemVariant extends Model
 
     protected $table = 'item_variants';
     public $timestamps = true;
-    protected $fillable = array('item_id', 'code', 'price', 'quantity', 'image_ids');
+    protected $fillable = array('item_id', 'code', 'price', 'quantity', 'image_id');
     protected $appends = ['name'];
 
     public function item()
@@ -63,5 +63,10 @@ class ItemVariant extends Model
     public function unusedProducts()
     {
         return $this->hasMany(UnusedProduct::class, 'item_variant_id');
+    }
+
+    public function image()
+    {
+        return $this->belongsTo(File::class, 'image_id');
     }
 }

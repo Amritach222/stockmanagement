@@ -50,9 +50,14 @@ class User extends Authenticatable
         return $this->hasMany(Expense::class, 'user_id');
     }
 
-    public function budgetExtends()
+    public function budgetRequestApproves()
     {
-        return $this->hasMany(BudgetExtend::class, 'approved_by');
+        return $this->hasMany(BudgetRequest::class, 'approved_by');
+    }
+
+    public function budgetRequests()
+    {
+        return $this->hasMany(BudgetRequest::class, 'user_id');
     }
 
     public function consumes()

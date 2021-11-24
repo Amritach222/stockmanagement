@@ -27,11 +27,13 @@ class BudgetLimitRequest extends FormRequest
         if ($this->id) {
             return [
                 'category_id' => 'int|exists:categories,id',
+                'department_id' => 'int|exists:departments,id',
                 'amount' => 'int|min:0',
             ];
         } else {
             return [
                 'category_id' => 'required|int|exists:categories,id',
+                'department_id' => 'required|int|exists:departments,id',
                 'amount' => 'required|int|min:0',
             ];
         }
