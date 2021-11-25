@@ -15,10 +15,8 @@ import budgets from './components/budgets'
 import bankAccounts from './components/bankAccounts'
 import expenses from './components/expenses'
 import {iconsSet as icons} from '../assets/icons/icons.js'
-import Permissions from '../mixins/Permissions';
 
 Vue.use(Vuex)
-Vue.mixin(Permissions)
 
 const store = new Vuex.Store({
 

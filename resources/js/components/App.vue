@@ -34,6 +34,7 @@ import Sidebar from "./layouts/Sidebar";
 import Snackbar from "./layouts/Snackbar";
 import Footers from "./layouts/TheFooter";
 import ApiServices from "../services/ApiServices";
+import Vue from "vue";
 
 export default {
     name: "Default",
@@ -52,6 +53,10 @@ export default {
             store.state.auth.isLoggedIn = true;
             store.state.auth.auth_token = accessToken;
         }
+        let lang = localStorage.getItem('lang');
+        if (lang === null) {
+            localStorage.setItem('lang', 'en');
+        }
     },
     watch: {
         loginState() {
@@ -60,14 +65,24 @@ export default {
             });
         },
     },
-    created() {
+    async created() {
         let accessToken = localStorage.getItem('access_token');
         let isLoggedIn = localStorage.getItem('isLoggedIn');
         if (isLoggedIn === 'true') {
             store.state.auth.isLoggedIn = true;
             store.state.auth.auth_token = accessToken;
         }
-        this.getPermissions();
+        // let isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (isLoggedIn === 'true') {
+            let res = await ApiServices.getUserPermissions();
+            if (res.success === true) {
+                Vue.prototype.$permissions = res.data;
+            } else {
+                Vue.prototype.$permissions = [];
+            }
+        } else {
+            Vue.prototype.$permissions = [];
+        }
     },
     methods: {
         async logoutUser() {
@@ -76,19 +91,6 @@ export default {
             let res = await store.dispatch('auth/logoutUser');
             if (res) {
                 route.replace('login');
-            }
-        },
-        async getPermissions() {
-            let isLoggedIn = localStorage.getItem('isLoggedIn');
-            if (isLoggedIn === 'true') {
-                let res = await ApiServices.getUserPermissions();
-                if (res.success === true) {
-                    window.Permissions = res.data;
-                } else {
-                    window.Permissions = [];
-                }
-            } else {
-                window.Permissions = [];
             }
         },
     }
