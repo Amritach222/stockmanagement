@@ -1,4 +1,5 @@
 import i18n from "../../i18n";
+import permissions from "../../permissions";
 export default {
     mounted() {
         this.$root.$on('navData', () => {
@@ -65,6 +66,7 @@ export default {
                 icon: 'cil-calculator',
                 items: [
                     {
+                        active: false,
                         name: i18n.t('budget'),
                         to: '/budgets'
                     },

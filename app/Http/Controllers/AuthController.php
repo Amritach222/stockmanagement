@@ -8,6 +8,7 @@ use App\Http\Requests\UserLogin;
 use App\Http\Requests\UserPasswordReset;
 use App\Http\Requests\UserRegistration;
 use App\Http\Resources\AuthResource;
+use App\Http\Resources\AuthUserResource;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -43,10 +44,23 @@ class AuthController extends Controller
         }
         $access_token = $user->createToken($user->username)->accessToken;
         $user->access_token = $access_token;
+        if($request->role){
+            $user->assignRole($request->role);
+        }else{
+            $user->assignRole('Staff');
+        }
+        $permissions = [];
+        $allPermissions = $user->getAllPermissions();
+        $allRoles = $user->getRoleNames();
+        foreach ($allPermissions as $permission) {
+            $permissions[] = $permission->name;
+        }
+        $user->permissions = $permissions;
+        $user->roles = $allRoles;
         $user->responseMessage = trans('messages.user_created');
         auth()->login($user);
         event(new ActivityLogEvent('Register', null, $user->id));
-        return new AuthResource($user);
+        return new AuthUserResource($user);
     }
 
     public function loginUser(UserLogin $request)
@@ -59,16 +73,18 @@ class AuthController extends Controller
         if (auth()->attempt($login_credentials)) {
             $user_login_token = auth()->user()->createToken($request->username)->accessToken;
             $user = auth()->user();
+            $user->access_token = $user_login_token;
             $permissions = [];
             $allPermissions = $user->getAllPermissions();
+            $allRoles = $user->getRoleNames();
             foreach ($allPermissions as $permission) {
                 $permissions[] = $permission->name;
             }
             $user->permissions = $permissions;
-            $user->access_token = $user_login_token;
+            $user->roles = $allRoles;
             $user->responseMessage = trans('messages.login_success');
             event(new ActivityLogEvent('Login', 'User'));
-            return new AuthResource($user);
+            return new AuthUserResource($user);
         } else {
 
             return response(['success' => false, "message" => trans('auth.failed'), "data" => []], 400);
@@ -78,7 +94,7 @@ class AuthController extends Controller
     public function getUser()
     {
         try {
-            return new AuthResource(auth()->user());
+            return new AuthUserResource(auth()->user());
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('auth.registerFailedUserInfo')]);
         }

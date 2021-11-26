@@ -7,8 +7,11 @@ export default {
         $can(permissionName) {
             let permissions = localStorage.getItem('permissions')
             let status = permissions.indexOf(permissionName) !== -1;
-            // let check = {"status":status,"return":'check'}
-            console.log("permission",status)
+            return status;
+        },
+        $is(roleName) {
+            let roles = localStorage.getItem('roles')
+            let status = roles.indexOf(roleName) !== -1;
             return status;
         },
     },
