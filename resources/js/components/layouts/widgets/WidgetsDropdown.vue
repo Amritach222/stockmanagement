@@ -87,9 +87,7 @@
                 </template>
             </CWidgetDropdown>
         </CCol>
-        <v-container v-if="can('items')">
-            hello
-            </v-container>
+<!--        <div >-->
             <CCol sm="6" lg="3">
                 <CWidgetDropdown
                     color="danger"
@@ -133,24 +131,24 @@ export default {
     props: ['settData'],
     components: {CChartLineSimple, CChartBarSimple},
     methods:{
-        async can(permission){
-            if(Vue.prototype.$permissions !== []) {
-                let isLoggedIn = localStorage.getItem('isLoggedIn');
-                if (isLoggedIn === 'true') {
-                    let res = await ApiServices.getUserPermissions();
-                    if (res.success === true) {
-                        Vue.prototype.$permissions = res.data;
-                    } else {
-                        Vue.prototype.$permissions = [];
-                    }
-                } else {
-                    Vue.prototype.$permissions = [];
-                }
-            }
-            let status = Vue.prototype.$permissions.indexOf(permission) !== -1;
-            console.log(status)
-            return status;
-        }
+        // async can(permission){
+        //     if(Vue.prototype.$permissions !== []) {
+        //         let isLoggedIn = localStorage.getItem('isLoggedIn');
+        //         if (isLoggedIn === 'true') {
+        //             let res = await ApiServices.getUserPermissions();
+        //             if (res.success === true) {
+        //                 Vue.prototype.$permissions = res.data;
+        //             } else {
+        //                 Vue.prototype.$permissions = [];
+        //             }
+        //         } else {
+        //             Vue.prototype.$permissions = [];
+        //         }
+        //     }
+        //     let status = Vue.prototype.$permissions.indexOf(permission) !== -1;
+        //     console.log(status)
+        //     return status;
+        // }
     }
 }
 </script>

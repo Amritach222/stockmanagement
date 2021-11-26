@@ -59,6 +59,12 @@ class AuthController extends Controller
         if (auth()->attempt($login_credentials)) {
             $user_login_token = auth()->user()->createToken($request->username)->accessToken;
             $user = auth()->user();
+            $permissions = [];
+            $allPermissions = $user->getAllPermissions();
+            foreach ($allPermissions as $permission) {
+                $permissions[] = $permission->name;
+            }
+            $user->permissions = $permissions;
             $user->access_token = $user_login_token;
             $user->responseMessage = trans('messages.login_success');
             event(new ActivityLogEvent('Login', 'User'));
