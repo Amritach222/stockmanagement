@@ -67,6 +67,7 @@ class PurchaseController extends Controller
                 $newFile->save();
                 $values['file_id'] = $newFile->id;
             }
+            $values['reference_no'] = 'REF-'.$this->random_id(8);
             $purchase = new Purchase($values);
             $purchase->save();
             event(new ActivityLogEvent('Add', 'Purchase', $purchase->id));
@@ -76,6 +77,11 @@ class PurchaseController extends Controller
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
         return $data;
+    }
+
+    function random_id($digit) {
+        $rand = rand(10,1000000);
+        return substr(bin2hex($rand), 0, $digit);
     }
 
     public function show($id)

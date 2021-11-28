@@ -14,11 +14,40 @@ class Purchase extends JsonResource
      */
     public function toArray($request)
     {
+        $department =  (object) ["name" => "Not Found"];
+        $file =  (object) ["path" => "Not Found"];
+        $due_date =  "Not Found";
+        $item_short = 'Not Found';
+        $note = 'There is no note for this request';
+        if($this->department_id){
+            $department = \App\Models\Department::where('id', $this->department_id)->first();
+        }
+        if($this->file_id){
+            $file = \App\Models\File::where('id', $this->file_id)->first();
+        }
+
+        if(!empty($this->purchaseProducts->toArray())){
+            $item_short = '';
+            forEach($this->purchaseProducts->toArray() as $data){
+                $item = \App\Models\Item::where('id',$data['item_id'])->first();
+                $item_short = $item_short.$item->name."(".$data['quantity'].") ";
+            }
+        }
+
+        if($this->due_date){
+            $due_date = date('F j, Y', strtotime($this->due_date));
+        }
+
+        if($this->note){
+            $note = $this->note;
+        }
+
         return [
             'id' => $this->id,
             'reference_no' => $this->reference_no,
             'user_id' => $this->user_id,
             'department_id' => $this->department_id,
+            'department_name' => $department->name,
             'total_item' => $this->total_item,
             'total_quantity' => $this->total_quantity,
             'total_tax' => $this->total_tax,
@@ -29,11 +58,14 @@ class Purchase extends JsonResource
             'status' => $this->status,
             'payment_status' => $this->payment_status,
             'file_id' => $this->file_id,
-            'due_date' => $this->due_date,
-            'note' => $this->note,
+            'file_link' => $file->path,
+            'due_date_formal' => $this->due_date,
+            'due_date' => $due_date,
+            'note' => $note,
             'approved_by' => $this->approved_by,
             'delivery_status' => $this->delivery_status,
             'purchase_products' => $this->purchaseProducts,
+            'purchase_products_shortcode' => $item_short,
         ];
     }
 }

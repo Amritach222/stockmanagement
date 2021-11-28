@@ -155,36 +155,10 @@
                     mdi-delete
                 </v-icon>
             </template>
-            <template #expanded-item="{headers,item}">
-                <v-row>
-                    <v-col cols="3" md="8">
-                        <v-btn
-                            depressed
-                            color="dark"
-                        >
-                            {{ item.user_id }}
-                        </v-btn>
-
-                    </v-col>
-                    <v-col cols="6" md="8">
-                        <v-btn
-                            depressed
-                            color="dark"
-                        >
-                            {{ item.user_id }}
-                        </v-btn>
-
-                    </v-col>
-                    <v-col cols="3" md="8">
-                        <v-btn
-                            depressed
-                            color="dark"
-                        >
-                            {{ item.user_id }}
-                        </v-btn>
-
-                    </v-col>
-                </v-row>
+            <template v-slot:expanded-item="{ headers, item }">
+                <td :colspan="headers.length">
+                    <PurchaseTableDetail :item="item"></PurchaseTableDetail>
+                </td>
             </template>
             <template v-slot:no-data>
                 <div>No Data</div>
@@ -196,10 +170,11 @@
 <script>
 import config from "../../config";
 import ApiServices from "../../services/ApiServices";
+import PurchaseTableDetail from "./PurchaseTableDetail";
 
 export default {
     name: "PurchaseRequestHistory",
-
+    components: {PurchaseTableDetail},
     data: () => ({
         cdnURL: config.cdnURL,
         search: '',
@@ -209,7 +184,9 @@ export default {
         dialogDelete: false,
         headers: [
             {text: 'Reference No', align: 'start', sortable: false, value: 'reference_no'},
-            {text: 'Total Items', value: 'total_item'},
+            {text: 'Items', value: 'purchase_products_shortcode'},
+            {text: 'Item Count', value: 'total_item'},
+            {text: 'Department', value: 'department_name'},
             {text: 'Status', value: 'status'},
             {text: 'Due Date', value: 'due_date'},
             {text: 'Actions', value: 'actions', sortable: false},
