@@ -250,9 +250,10 @@
 import route from "../../router";
 import ApiServices from "../../services/ApiServices";
 import config from "../../config";
+import store from "../../store";
 
 export default {
-    name: "NewPurchaseRequest",
+    name: "EditPurchaseRequest",
 
     props: {
         source: String,
@@ -330,6 +331,11 @@ export default {
                 this.items = res.data;
             }
             this.tableLoad = false;
+            let item = store.state.purchase.editItem;
+            this.quoProducts = item.purchase_products;
+            this.note = item.note;
+            this.due_date = item.due_date_formal;
+            console.log('data loaded on edit item', item)
         },
 
         async getVariants(item) {
@@ -437,9 +443,9 @@ export default {
                 if (this.quoProducts.length > 0) {
                     await this.createProduct(res.data.id);
                 } else {
-                    route.replace('/purchase/purchase-request-history/');
+                    route.replace('/purchase-request-history/');
                 }
-                route.replace('/purchase/purchase-request-history');
+                route.replace('/purchase-request-history');
             }
         },
 

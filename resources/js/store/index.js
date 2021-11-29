@@ -14,6 +14,7 @@ import vendors from './components/vendors'
 import budgets from './components/budgets'
 import bankAccounts from './components/bankAccounts'
 import expenses from './components/expenses'
+import purchase from './components/purchase'
 import {iconsSet as icons} from '../assets/icons/icons.js'
 
 Vue.use(Vuex)
@@ -32,6 +33,7 @@ const store = new Vuex.Store({
         budgets: budgets,
         bankAccounts: bankAccounts,
         expenses: expenses,
+        purchase: purchase,
         icons,
     },
 })

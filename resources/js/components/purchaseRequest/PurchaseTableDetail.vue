@@ -10,14 +10,18 @@
         </tr>
         <tr>
             <td>Line Items: {{ item.total_item }}</td>
-            <td>Delivery Status: {{ item.delivery_status }}</td>
             <td>Due Date: {{ item.due_date }}</td>
-
+            <td>Status: {{ item.status }}</td>
         </tr>
         <tr>
-            <td>File link: <button v-on="openImage(item.file_link)">Open File</button></td>
+            <td>File link:
+                <button v-if="item.file_link !== 'Not Found'" v-on:click="openImage(item.file_link)">
+                    Click to Open
+                </button>
+                <button v-else>No file</button>
+            </td>
             <td>Department: {{ item.department_name }}</td>
-            <td>Status: {{ item.status }}</td>
+            <td>Delivery Status: {{ item.delivery_status }}</td>
         </tr>
         </tbody>
     </table>

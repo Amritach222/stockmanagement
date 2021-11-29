@@ -62,11 +62,11 @@ export default [
                 items: [
                     {
                         name: 'New Purchase Request',
-                        to: '/new-purchase-request'
+                        to: '/purchase/new-purchase-request'
                     },
                     {
                         name: 'Purchase Request History',
-                        to: '/purchase-request-history'
+                        to: '/purchase/purchase-request-history'
                     },
                 ]
             },

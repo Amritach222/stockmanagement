@@ -171,6 +171,8 @@
 import config from "../../config";
 import ApiServices from "../../services/ApiServices";
 import PurchaseTableDetail from "./PurchaseTableDetail";
+import store from "../../store";
+import route from "../../router";
 
 export default {
     name: "PurchaseRequestHistory",
@@ -240,19 +242,32 @@ export default {
             }
         },
         editItem(item) {
-            this.editedIndex = this.purchaseHistory.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            this.dialog = true
+            if(item.status === "Pending"){
+                this.editedIndex = this.purchaseHistory.indexOf(item)
+                this.editedItem = Object.assign({}, item)
+                store.state.purchase.editItem = item;
+                route.replace('/purchase/edit-purchase-request');
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = 'Cannot perform this action, Status Changed !!';
+                store.state.home.snackbarColor = 'red';
+            }
         },
 
         deleteItem(item) {
-            this.editedIndex = this.purchaseHistory.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            this.dialogDelete = true
+            if(item.status === "Pending") {
+                this.editedIndex = this.purchaseHistory.indexOf(item)
+                this.editedItem = Object.assign({}, item)
+                this.dialogDelete = true
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = 'Cannot perform this action, Status Changed !!';
+                store.state.home.snackbarColor = 'red';
+            }
         },
 
         async deleteItemConfirm() {
-            let res = await ApiServices.brandDelete(this.editedItem.id);
+            let res = await ApiServices.deleteUserPurchaseRequest(this.editedItem.id);
             if (res.success === true) {
                 this.purchaseHistory.splice(this.editedIndex, 1)
             }
