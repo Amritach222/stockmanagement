@@ -66,7 +66,7 @@ export default {
                 icon: 'cil-calculator',
                 items: [
                     {
-                        active: false,
+                        show: false,
                         name: i18n.t('budget'),
                         to: '/budgets'
                     },
