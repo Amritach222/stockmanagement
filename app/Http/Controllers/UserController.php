@@ -16,6 +16,10 @@ class UserController extends Controller
         $user = auth()->user();
 
         if ($user->hasRole('admin')) {
+            if ($request->has('user_id')) {
+                $user = User::where('id',$request->user_id)->first();
+                if($user === null) return response(['success' => false, 'message' => 'User not found!', "data" => null], 400);
+            }
             if ($request->has('username')) {
                 $user->username = $request->username;
             }
@@ -25,9 +29,9 @@ class UserController extends Controller
             if ($request->has('is_active')) {
                 $user->is_active = $request->is_active;
             }
-            if ($request->has('department_id')) {
-                $user->department_id = $request->department_id;
-            }
+        }
+        if ($request->has('department_id')) {
+            $user->department_id = $request->department_id;
         }
         if ($request->has('name')) {
             $user->name = $request->name;

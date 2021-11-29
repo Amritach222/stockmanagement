@@ -122,6 +122,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('purchases/{id}', [\App\Http\Controllers\Api\PurchaseController::class, 'update']);
         Route::apiResource('purchaseProducts', \App\Http\Controllers\Api\PurchaseProductController::class);
         Route::post('purchaseProducts/{id}', [\App\Http\Controllers\Api\PurchaseProductController::class, 'update']);
+        Route::get('user-history', [\App\Http\Controllers\Api\PurchaseController::class, 'userPurchaseHistory']);
     });
 
     Route::apiResource('transfers', \App\Http\Controllers\Api\TransferController::class);

@@ -157,6 +157,9 @@
     "profile_picture": "Profile Picture",
     "name_of_user": "Name of User",
     "action": "Action",
+    "purchase": "Purchase",
+    "purchases": "Purchases",
+    "history": "History",
 
     "validation": {
         "required": "This field is required!",

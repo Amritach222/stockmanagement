@@ -404,22 +404,6 @@ export default {
         return await apiCall(DELETE, `api/budget/budgets/${id}`)
     },
 
-    async budgetDispatchIndex() {
-        return await apiCall(GET, `api/budget/budgetDispatches`)
-    },
-    async budgetDispatchCreate(data) {
-        return await apiCall(POST, `api/budget/budgetDispatches`, data)
-    },
-    async budgetDispatchShow(id) {
-        return await apiCall(GET, `api/budget/budgetDispatches/${id}`)
-    },
-    async budgetDispatchEdit(id, data) {
-        return await apiCall(POST, `api/budget/budgetDispatches/${id}`, data)
-    },
-    async budgetDispatchDelete(id) {
-        return await apiCall(DELETE, `api/budget/budgetDispatches/${id}`)
-    },
-
     async budgetRequestIndex() {
         return await apiCall(GET, `api/budget/budgetRequests`)
     },
@@ -434,22 +418,6 @@ export default {
     },
     async budgetRequestDelete(id) {
         return await apiCall(DELETE, `api/budget/budgetRequests/${id}`)
-    },
-
-    async budgetRequestCategoryIndex() {
-        return await apiCall(GET, `api/budget/budgetRequest/budgetRequestCategories`)
-    },
-    async budgetRequestCategoryCreate(data) {
-        return await apiCall(POST, `api/budget/budgetRequest/budgetRequestCategories`, data)
-    },
-    async budgetRequestCategoryShow(id) {
-        return await apiCall(GET, `api/budget/budgetRequest/budgetRequestCategories/${id}`)
-    },
-    async budgetRequestCategoryEdit(id, data) {
-        return await apiCall(POST, `api/budget/budgetRequest/budgetRequestCategories/${id}`, data)
-    },
-    async budgetRequestCategoryDelete(id) {
-        return await apiCall(DELETE, `api/budget/budgetRequest/budgetRequestCategories/${id}`)
     },
 
     async budgetLimitIndex() {
@@ -598,5 +566,20 @@ export default {
 
     async createVariant(data) {
         return await apiCall(POST, `api/create-variants`, data)
+    },
+
+    async addPurchaseRequest(data) {
+        const config = {
+            headers: {
+                'enctype': 'multipart/form-data'
+            }
+        };
+        return await apiCall(POST, `api/purchase/purchases`, data, config)
+    },
+    async addPurchaseProductRequest(data) {
+        return await apiCall(POST, `api/purchase/purchaseProducts`, data)
+    },
+    async getUserPurchaseProductRequestHistory() {
+        return await apiCall(GET, `api/purchase/user-history`)
     },
 }

@@ -161,6 +161,9 @@
     "profile_picture": "प्रोफाइल तस्वीर",
     "name_of_user": "प्रयोगकर्ताको नाम",
     "action": "कार्य",
+    "purchase": "खरिद",
+    "purchases": "खरिदहरू",
+    "history": "इतिहास",
 
     "validation": {
         "required": "यो क्षेत्र आवश्यक छ!",

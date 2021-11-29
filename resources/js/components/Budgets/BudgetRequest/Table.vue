@@ -8,7 +8,7 @@
             :headers="headers"
             :items="budgetRequests"
             sort-by="id"
-            loading
+            :loading=tableLoad
             loading-text="Loading... Please wait..."
             :search="search"
         >
@@ -136,7 +136,22 @@ export default {
             {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         budgetRequests: [],
-        tableLoad: false
+        departments: [],
+        editedIndex: -1,
+        editedItem: {
+            id: null,
+            department_id: '',
+            request_amount: '',
+        },
+        defaultItem: {
+            id: null,
+            department_id: '',
+            request_amount: '',
+        },
+        rules: [
+            value => !!value || 'Required.',
+        ],
+        tableLoad: true
     }),
 
     watch: {

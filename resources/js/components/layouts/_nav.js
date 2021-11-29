@@ -62,6 +62,21 @@ export default {
             },
             {
                 _name: 'CSidebarNavDropdown',
+                name: i18n.t('purchase'),
+                icon: 'cil-calculator',
+                items: [
+                    {
+                        name: i18n.t('new') +' '+ i18n.t('purchase') +' '+ i18n.t('request'),
+                        to: '/new-purchase-request'
+                    },
+                    {
+                        name: i18n.t('purchase') +' '+ i18n.t('request') +' '+ i18n.t('history'),
+                        to: '/purchase-request-history'
+                    },
+                ]
+            },
+            {
+                _name: 'CSidebarNavDropdown',
                 name: i18n.t('budgets'),
                 icon: 'cil-calculator',
                 items: [

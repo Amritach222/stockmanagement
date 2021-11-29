@@ -26,6 +26,7 @@ class UserEditRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => 'sometimes|integer',
             'username' => 'sometimes|string|unique:users',
             'name' => 'sometimes|string',
             'email' => 'sometimes|email|indisposable|unique:users',
