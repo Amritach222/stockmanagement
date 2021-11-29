@@ -20,74 +20,17 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-group>
-                <template v-slot:activator>
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-inbox-multiple</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title class="ml-2 item-color">{{ $t('products') }}</v-list-item-title>
-                </template>
-
-                <v-list-item class="ml-3">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-shape</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/categories/'">
-                            {{ $t('category') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item class="ml-3">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-alpha-p-box</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/products/'">
-                            {{ $t('product') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item class="ml-3">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-select-group</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/itemAttributeGroups/'">
-                            {{ $t('item_attribute_group') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item class="ml-3">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-rhombus-split</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/itemAttributes/'">
-                            {{ $t('item_attribute') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item class="ml-3">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-toolbox</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/items/'">
-                            {{ $t('item') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-            </v-list-group>
+            <v-list-item>
+                <v-list-item-icon class="mr-2">
+                    <v-icon>mdi-account-voice</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>
+                    <router-link
+                        :to="'/vendors/'">
+                        {{ $t('vendor') }}
+                    </router-link>
+                </v-list-item-title>
+            </v-list-item>
 
             <v-list-group>
                 <template v-slot:activator>
@@ -207,6 +150,108 @@
                         <router-link
                             :to="'/expenses/'">
                             {{ $t('expense') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
+
+            <v-list-group>
+                <template v-slot:activator>
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-inbox-multiple</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title class="ml-2 item-color">{{ $t('products') }}</v-list-item-title>
+                </template>
+
+                <v-list-item class="ml-3">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-shape</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/categories/'">
+                            {{ $t('category') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="ml-3">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-alpha-p-box</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/products/'">
+                            {{ $t('product') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="ml-3">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-select-group</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/itemAttributeGroups/'">
+                            {{ $t('item_attribute_group') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="ml-3">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-rhombus-split</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/itemAttributes/'">
+                            {{ $t('item_attribute') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="ml-3">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-toolbox</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/items/'">
+                            {{ $t('item') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
+
+            <v-list-group>
+                <template v-slot:activator>
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-account-cash</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title class="ml-2 item-color">{{ $t('purchases') }}</v-list-item-title>
+                </template>
+
+                <v-list-item class="ml-3">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-shield-plus</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/new-purchase-request/'">
+                            {{ $t('new') +' '+ $t('purchase') +' '+ $t('request') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="ml-3">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-shield-refresh</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/purchase-request-history/'">
+                            {{ $t('purchase') +' '+ $t('request') +' '+ $t('history') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
@@ -392,7 +437,7 @@
                     </v-list-item-icon>
                     <v-list-item-title>
                         <router-link
-                            :to="'/profile-settings/'">
+                            :to="'/profile-setting/'">
                             {{ $t('profile') + ' ' + $t('settings') }}
                         </router-link>
                     </v-list-item-title>

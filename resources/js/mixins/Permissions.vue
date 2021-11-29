@@ -1,7 +1,4 @@
 <script>
-import Vue from "vue";
-import ApiServices from "../services/ApiServices";
-
 export default {
     methods: {
         $can(permissionName) {
