@@ -16,6 +16,11 @@ use Illuminate\Http\Request;
 
 class TransferController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('transfers');
+    }
+
     public function index()
     {
         $data['success'] = true;

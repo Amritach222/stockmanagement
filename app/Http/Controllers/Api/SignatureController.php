@@ -13,6 +13,11 @@ use Samundra\File\SamundraFileHelper;
 
 class SignatureController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('signatures');
+    }
+
     public function index()
     {
         $data['success'] = true;

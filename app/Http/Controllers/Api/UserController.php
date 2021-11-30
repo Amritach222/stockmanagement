@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('users');
+    }
+
     public function index()
     {
         $data['success'] = true;

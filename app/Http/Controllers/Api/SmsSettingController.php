@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class SmsSettingController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('smsSettings');
+    }
+
     public function index()
     {
         $data['success'] = true;

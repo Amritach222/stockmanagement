@@ -12,6 +12,11 @@ use Samundra\File\SamundraFileHelper;
 
 class BrandController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('brands');
+    }
+
     public function index()
     {
         $data['success'] = true;

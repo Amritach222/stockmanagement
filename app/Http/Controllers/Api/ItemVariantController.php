@@ -19,6 +19,11 @@ use Samundra\File\SamundraFileHelper;
 
 class ItemVariantController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('itemVariants');
+    }
+
     public function index()
     {
         $data['success'] = true;

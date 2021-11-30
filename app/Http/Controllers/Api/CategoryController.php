@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('categories');
+    }
+
     public function index()
     {
         $data['success'] = true;

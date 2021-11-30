@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class SignatureUseDepartmentController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('signatureUseDepartments');
+    }
+
     public function index()
     {
         $data['success'] = true;

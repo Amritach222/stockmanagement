@@ -75,6 +75,7 @@
     "amount": "Amount",
     "allocated_budget": "Allocated Budget",
     "initial_dispatch": "Initial Dispatch",
+    "total_dispatch": "Total Dispatch",
     "remarks": "Remarks",
     "file": "File",
     "note": "Note",

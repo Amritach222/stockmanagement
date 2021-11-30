@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class ItemAttributeController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('attributes');
+    }
+
     public function index()
     {
         $data['success'] = true;

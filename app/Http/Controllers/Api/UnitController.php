@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class UnitController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('units');
+    }
+
     public function index()
     {
         $data['success'] = true;

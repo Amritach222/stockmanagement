@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class LogController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('logs');
+    }
+
     public function index()
     {
         $data['success'] = true;

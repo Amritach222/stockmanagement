@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class DesignationController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('designations');
+    }
+
     public function index()
     {
         $data['success'] = true;

@@ -15,6 +15,11 @@ use Illuminate\Http\Request;
 
 class PurchaseProductController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('purchaseProducts');
+    }
+
     public function index()
     {
         $data['success'] = true;

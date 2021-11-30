@@ -18,6 +18,13 @@ class RolesSeeder extends Seeder
         $guards = ['api', 'web'];
 
         foreach ($guards as $guard) {
+            $superAdmin = Role::create([
+                'name' => 'Super Admin',
+                'guard_name' => $guard
+            ]);
+            $permissions = Permission::where('guard_name', $guard)->get();
+            $superAdmin->givePermissionTo($permissions);
+
             $admin = Role::create([
                 'name' => 'Admin',
                 'guard_name' => $guard

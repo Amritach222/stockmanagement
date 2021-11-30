@@ -19,6 +19,11 @@ use Samundra\File\SamundraFileHelper;
 
 class QuotationController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('quotations');
+    }
+
     public function index()
     {
         $data['success'] = true;

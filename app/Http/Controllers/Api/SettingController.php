@@ -13,6 +13,11 @@ use Samundra\File\SamundraFileHelper;
 
 class SettingController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('settings');
+    }
+
     public function index()
     {
         $data['success'] = true;

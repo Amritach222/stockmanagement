@@ -13,6 +13,11 @@ use Samundra\File\SamundraFileHelper;
 
 class BudgetRequestController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('budgetRequests');
+    }
+
     public function index()
     {
         $data['success'] = true;

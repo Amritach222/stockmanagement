@@ -18,6 +18,11 @@ use Samundra\File\SamundraFileHelper;
 
 class ItemController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('items');
+    }
+
     /**
      * Display a listing of the resource.
      *

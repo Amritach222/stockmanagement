@@ -15,6 +15,11 @@ use Samundra\File\SamundraFileHelper;
 
 class ExpenseController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('expenses');
+    }
+
     public function index()
     {
         $data['success'] = true;

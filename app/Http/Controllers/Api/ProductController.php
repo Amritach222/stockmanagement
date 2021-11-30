@@ -14,6 +14,11 @@ use Samundra\File\SamundraFileHelper;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('products');
+    }
+
     public function index()
     {
         $data['success'] = true;

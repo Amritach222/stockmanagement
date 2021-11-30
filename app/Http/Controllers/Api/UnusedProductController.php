@@ -12,6 +12,11 @@ use Illuminate\Http\Request;
 
 class UnusedProductController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('unusedProducts');
+    }
+
     public function index()
     {
         $data['success'] = true;

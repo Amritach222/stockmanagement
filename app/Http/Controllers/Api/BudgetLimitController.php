@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class BudgetLimitController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('budgetLimits');
+    }
+
     public function index()
     {
         $data['success'] = true;

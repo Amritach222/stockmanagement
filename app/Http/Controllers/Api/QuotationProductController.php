@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 
 class QuotationProductController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('quotationProducts');
+    }
+
     public function index()
     {
         $data['success'] = true;
