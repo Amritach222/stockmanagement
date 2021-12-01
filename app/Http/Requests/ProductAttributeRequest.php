@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 
-class ItemVariantRequest extends FormRequest
+class ProductAttributeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,14 +26,13 @@ class ItemVariantRequest extends FormRequest
     {
         if ($this->id) {
             return [
-                'item_id' => 'int',
-                'quantity' => 'int',
-                'price' => 'int'
+                'name' => 'string',
+                'attribute_group_id' => 'int|exists:product_attribute_groups,id'
             ];
         } else {
             return [
-                'item_id' => 'required|int',
-                'attribute_ids' => 'required'
+                'name' => 'required|string',
+                'attribute_group_id' => 'required|int|exists:product_attribute_groups,id'
             ];
         }
     }
@@ -41,6 +40,7 @@ class ItemVariantRequest extends FormRequest
     public function messages()
     {
         return [
+            'exists' => 'Id doesn\'t exist.'
         ];
     }
 

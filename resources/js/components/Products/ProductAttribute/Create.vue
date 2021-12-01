@@ -3,9 +3,9 @@
         <CCol sm="12">
             <CCard>
                 <CCardHeader>
-                    <strong>Edit</strong> Item Attribute
+                    <strong>Add</strong> Item Attribute
                     <v-progress-circular
-                        v-if="changeProgress"
+                        v-if="createProgress"
                         indeterminate
                         color="white"
                         size="30"
@@ -19,11 +19,11 @@
                             name="name"
                             description="Please enter attribute name."
                             autocomplete=""
-                            label="Name"
+                            :label="$t('name')"
                             placeholder="Enter attribute name..."
                             required
                             @keyup="clearError('name')"
-                            @keyup.enter="edit"
+                            @keyup.enter="create"
                             :rules="rules.name"
                         />
                         <CSelect
@@ -31,18 +31,18 @@
                             name="attribute_group_id"
                             description="Please select attribute group."
                             autocomplete=""
-                            label="Attribute Group"
+                            :label="$t('attribute_group')"
                             placeholder="Select attribute group..."
                             required
                             @keyup="clearError('attribute_group_id')"
-                            @keyup.enter="edit"
+                            @keyup.enter="create"
                             :rules="rules.attribute_group_id"
                         />
                     </CCardBody>
                     <CCardFooter>
-                        <CButton type="submit" size="sm" color="primary" @click="edit">
+                        <CButton type="submit" size="sm" color="primary" @click="create">
                             <CIcon name="cil-check-circle"/>
-                            Submit
+                            {{ $t('button.submit') }}
                         </CButton>
                         <CButton type="reset" size="sm" color="danger">
                             <CIcon name="cil-ban"/>
@@ -56,12 +56,12 @@
 </template>
 
 <script>
-import store from "../../../../store";
-import route from "../../../../router";
-import i18n from "../../../../i18n";
+import store from "../../../store";
+import route from "../../../router";
+import i18n from "../../../i18n";
 
 export default {
-    name: "ItemAttributeEdit",
+    name: "ItemAttributeCreate",
 
     props: {
         source: String,
@@ -69,7 +69,7 @@ export default {
     data: () => ({
         name: '',
         attribute_group_id: '',
-        changeProgress: false,
+        createProgress: false,
         error: {
             name: '',
         },
@@ -78,7 +78,7 @@ export default {
                 val => (val || '').length > 0 || i18n.t('validation.required'),
             ],
             attribute_group_id: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
+                val => i18n.t('validation.required'),
             ],
         },
     }),
@@ -88,11 +88,11 @@ export default {
                 this.error.name = '';
             }
         },
-        async edit() {
-            this.changeProgress = true;
+        async create() {
+            this.createProgress = true;
             store.state.products.name = this.name;
             store.state.products.attribute_group_id = this.attribute_group_id;
-            let res = await store.dispatch('products/itemAttributeEdit');
+            let res = await store.dispatch('products/itemAttributeCreate');
             this.createProgress = false;
             if (res === true) {
                 route.replace('/index');

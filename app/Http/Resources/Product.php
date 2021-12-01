@@ -20,6 +20,7 @@ class Product extends JsonResource
             $image = File::where('id', $this->image_id)->first();
             $link = $image->path;
         }
+        $variants = ProductVariant::collection($this->productVariants);
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -33,6 +34,7 @@ class Product extends JsonResource
             'link' => $link,
             'brand' => $this->brand,
             'category' => $this->category,
+            'product_variants' => $variants,
         ];
     }
 }

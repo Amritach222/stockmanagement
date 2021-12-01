@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ItemAttributeRequest;
-use App\Http\Resources\ItemAttribute as ItemAttributeResource;
-use App\Models\ItemAttribute;
+use App\Http\Requests\ProductAttributeRequest;
+use App\Http\Resources\ProductAttribute as ProductAttributeResource;
+use App\Models\ProductAttribute;
 use Illuminate\Http\Request;
 
-class ItemAttributeController extends Controller
+class ProductAttributeController extends Controller
 {
     public function __construct()
     {
@@ -23,7 +23,7 @@ class ItemAttributeController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $data['data'] = ItemAttributeResource::collection(ItemAttribute::all());
+            $data['data'] = ProductAttributeResource::collection(ProductAttribute::all());
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
@@ -35,7 +35,7 @@ class ItemAttributeController extends Controller
 
     }
 
-    public function store(ItemAttributeRequest $request)
+    public function store(ProductAttributeRequest $request)
     {
         $data['success'] = true;
         $data['message'] = '';
@@ -43,11 +43,11 @@ class ItemAttributeController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
-            $itemAttribute = new ItemAttribute($values);
-            $itemAttribute->save();
-            event(new ActivityLogEvent('Add', 'Item Attribute', $itemAttribute->id));
-            $data['message'] = "Item Attribute added successfully.";
-            $data['data'] = new ItemAttributeResource($itemAttribute);
+            $productAttribute = new ProductAttribute($values);
+            $productAttribute->save();
+            event(new ActivityLogEvent('Add', 'Product Attribute', $productAttribute->id));
+            $data['message'] = "Product Attribute added successfully.";
+            $data['data'] = new ProductAttributeResource($productAttribute);
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
@@ -61,7 +61,7 @@ class ItemAttributeController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $data['data'] = new ItemAttributeResource(ItemAttribute::findOrFail($id));
+            $data['data'] = new ProductAttributeResource(ProductAttribute::findOrFail($id));
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
@@ -73,19 +73,19 @@ class ItemAttributeController extends Controller
 
     }
 
-    public function update($id, ItemAttributeRequest $request)
+    public function update($id, ProductAttributeRequest $request)
     {
         $data['success'] = true;
         $data['message'] = '';
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $itemAttribute = ItemAttribute::findOrFail($id);
+            $productAttribute = ProductAttribute::findOrFail($id);
             $values = $request->all();
-            $itemAttribute->update($values);
-            event(new ActivityLogEvent('Update', 'Item Attribute', $itemAttribute->id));
+            $productAttribute->update($values);
+            event(new ActivityLogEvent('Update', 'Product Attribute', $productAttribute->id));
             $data['message'] = "Updated successfully.";
-            $data['data'] = new ItemAttributeResource($itemAttribute);
+            $data['data'] = new ProductAttributeResource($productAttribute);
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
@@ -99,9 +99,9 @@ class ItemAttributeController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $itemAttribute = ItemAttribute::findOrFail($id);
-            $itemAttribute->delete();
-            event(new ActivityLogEvent('Delete', 'Item Attribute', $id));
+            $productAttribute = ProductAttribute::findOrFail($id);
+            $productAttribute->delete();
+            event(new ActivityLogEvent('Delete', 'Product Attribute', $id));
             $data['message'] = "Deleted successfully.";
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);

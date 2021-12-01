@@ -20,7 +20,7 @@ class Item extends JsonResource
             $image = File::where('id', $this->image_id)->first();
             $link = $image->path;
         }
-        $variants = ItemVariant::collection($this->itemVariants);
+        $variant = new ProductVariant($this->productVariant);
         $product = new Product($this->product);
         $brand = new Brand($this->brand);
         $unit = new Unit($this->unit);
@@ -38,9 +38,9 @@ class Item extends JsonResource
             'unit_id' => $this->unit_id,
             'tax_id' => $this->tax_id,
             'tax_method' => $this->tax_method,
-            'item_variants' => $variants,
             'link' => $link,
             'product' => $product,
+            'product_variant' => $variant,
             'brand' => $brand,
             'tax' => $tax,
             'unit' => $unit,

@@ -15,7 +15,6 @@ class CreateTransfersTable extends Migration {
 			$table->integer('from')->unsigned();
 			$table->integer('to')->unsigned();
 			$table->integer('item_id')->unsigned();
-			$table->integer('item_variant_id')->unsigned()->nullable();
 			$table->integer('total_quantity')->default('1');
 			$table->integer('total_cost')->default('0');
 			$table->integer('total_tax')->nullable()->default('0');

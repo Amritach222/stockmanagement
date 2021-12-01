@@ -48,59 +48,6 @@
                                         <p>{{ show.tax_method }}</p>
                                     </CCol>
                                 </CRow>
-                                <hr>
-                                <v-card>
-                                    <v-card-title>
-                                        {{ $t('variants') }}
-                                        <v-spacer></v-spacer>
-                                    </v-card-title>
-                                    <v-data-table
-                                        :headers="headers"
-                                        :items="variants"
-                                        sort-by="id"
-                                        loading
-                                        loading-text="Loading... Please wait..."
-                                        :search="search"
-                                    >
-                                        <template v-slot:top>
-                                            <v-toolbar
-                                                flat
-                                            >
-                                                <v-row>
-                                                    <v-col
-                                                        cols="12"
-                                                        sm="4"
-                                                        md="6"
-                                                        lg="8"
-                                                    >
-                                                        <v-text-field
-                                                            v-model="search"
-                                                            append-icon="mdi-magnify"
-                                                            :label="$t('search')"
-                                                            solo
-                                                            hide-details
-                                                            max-width="100px"
-                                                        ></v-text-field>
-                                                    </v-col>
-                                                </v-row>
-                                            </v-toolbar>
-                                        </template>
-                                        <template v-slot:item.link="{ item }">
-                                            <img :src=cdnURL+item.link
-                                                 v-if="item.link"
-                                                 style="width: 50px; height: 50px; object-fit: cover;"
-                                                 v-on:click="openImage(item.link)"/>
-
-                                            <img :src="baseURL+'images/placeholder.jpg'"
-                                                 v-else
-                                                 style="width: 50px; height: 50px; object-fit: cover"
-                                            />
-                                        </template>
-                                        <template v-slot:no-data>
-                                            <div>No Data</div>
-                                        </template>
-                                    </v-data-table>
-                                </v-card>
                                 <CForm>
                                     <CCardFooter>
                                         <CButton size="sm" color="primary" :to="'/items/edit/'+show.id">
@@ -150,16 +97,6 @@ export default {
             tax_method: '',
             image: [],
         },
-        variants: [],
-        search: '',
-        headers: [
-            {text: i18n.t('id'), value: 'id'},
-            {text: i18n.t('attributes'), value: 'name'},
-            {text: i18n.t('image'), value: 'link'},
-            {text: i18n.t('quantity'), value: 'quantity'},
-            {text: i18n.t('price'), value: 'price'},
-        ],
-        tableLoad: false,
     }),
     async created() {
         this.loadItems();
@@ -172,7 +109,6 @@ export default {
             let res = await ApiServices.itemShow(this.$route.params.id);
             if (res.success === true) {
                 this.show = res.data;
-                this.variants = res.data.item_variants;
             }
         },
     }

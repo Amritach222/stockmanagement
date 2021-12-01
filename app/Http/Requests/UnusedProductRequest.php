@@ -28,14 +28,12 @@ class UnusedProductRequest extends FormRequest
             return [
                 'department_id' => 'int|exists:departments,id',
                 'item_id' => 'int|exists:items,id',
-                'item_variant_id' => 'int|exists:item_variants,id',
                 'note'=>'nullable'
             ];
         } else {
             return [
                 'department_id' => 'required|int|exists:departments,id',
                 'item_id' => 'required|int|exists:items,id',
-                'item_variant_id' => 'int|exists:item_variants,id',
                 'note'=>'nullable'
             ];
         }

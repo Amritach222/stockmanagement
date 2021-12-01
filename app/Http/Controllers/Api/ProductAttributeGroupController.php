@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ItemAttributeGroupRequest;
-use App\Http\Resources\ItemAttributeGroup as ItemAttributeGroupResource;
-use App\Models\ItemAttributeGroup;
+use App\Http\Requests\ProductAttributeGroupRequest;
+use App\Http\Resources\ProductAttributeGroup as ProductAttributeGroupResource;
+use App\Models\ProductAttributeGroup;
 use Illuminate\Http\Request;
 
-class ItemAttributeGroupController extends Controller
+class ProductAttributeGroupController extends Controller
 {
     public function __construct()
     {
@@ -23,7 +23,7 @@ class ItemAttributeGroupController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $data['data'] = ItemAttributeGroupResource::collection(ItemAttributeGroup::all());
+            $data['data'] = ProductAttributeGroupResource::collection(ProductAttributeGroup::all());
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
@@ -35,7 +35,7 @@ class ItemAttributeGroupController extends Controller
 
     }
 
-    public function store(ItemAttributeGroupRequest $request)
+    public function store(ProductAttributeGroupRequest $request)
     {
         $data['success'] = true;
         $data['message'] = '';
@@ -43,11 +43,11 @@ class ItemAttributeGroupController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
-            $itemAttributeGroup = new ItemAttributeGroup($values);
-            $itemAttributeGroup->save();
-            event(new ActivityLogEvent('Add', 'Item Attribute Group', $itemAttributeGroup->id));
-            $data['message'] = "Item Attribute group added successfully.";
-            $data['data'] = new ItemAttributeGroupResource($itemAttributeGroup);
+            $productAttributeGroup = new ProductAttributeGroup($values);
+            $productAttributeGroup->save();
+            event(new ActivityLogEvent('Add', 'Product Attribute Group', $productAttributeGroup->id));
+            $data['message'] = "Product Attribute group added successfully.";
+            $data['data'] = new ProductAttributeGroupResource($productAttributeGroup);
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
@@ -61,7 +61,7 @@ class ItemAttributeGroupController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $data['data'] = new ItemAttributeGroupResource(ItemAttributeGroup::findOrFail($id));
+            $data['data'] = new ProductAttributeGroupResource(ProductAttributeGroup::findOrFail($id));
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
@@ -73,19 +73,19 @@ class ItemAttributeGroupController extends Controller
 
     }
 
-    public function update($id, ItemAttributeGroupRequest $request)
+    public function update($id, ProductAttributeGroupRequest $request)
     {
         $data['success'] = true;
         $data['message'] = '';
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $itemAttributeGroup = ItemAttributeGroup::findOrFail($id);
+            $productAttributeGroup = ProductAttributeGroup::findOrFail($id);
             $values = $request->all();
-            $itemAttributeGroup->update($values);
-            event(new ActivityLogEvent('Edit', 'Item Attribute Group', $itemAttributeGroup->id));
+            $productAttributeGroup->update($values);
+            event(new ActivityLogEvent('Edit', 'Product Attribute Group', $productAttributeGroup->id));
             $data['message'] = "Updated successfully.";
-            $data['data'] = new ItemAttributeGroupResource($itemAttributeGroup);
+            $data['data'] = new ProductAttributeGroupResource($productAttributeGroup);
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
@@ -99,9 +99,9 @@ class ItemAttributeGroupController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $itemAttributeGroup = ItemAttributeGroup::findOrFail($id);
-            $itemAttributeGroup->delete();
-            event(new ActivityLogEvent('Delete', 'Item Attribute Group', $id));
+            $productAttributeGroup = ProductAttributeGroup::findOrFail($id);
+            $productAttributeGroup->delete();
+            event(new ActivityLogEvent('Delete', 'Product Attribute Group', $id));
             $data['message'] = "Deleted successfully.";
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);

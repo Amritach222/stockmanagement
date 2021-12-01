@@ -61,6 +61,10 @@ class PermissionSeeder extends Seeder
             $this->createAutoAllPermissions('mailSettings', $guard);
             $this->createAutoAllPermissions('smsSettings', $guard);
             $this->createAutoAllPermissions('mailTemplates', $guard);
+            $this->createAutoAllPermissions('budgetDispatches', $guard);
+            $this->createAutoAllPermissions('budgetRequestCategories', $guard);
+            $this->createAutoAllPermissions('roles', $guard);
+            $this->createAutoAllPermissions('permissions', $guard);
         }
     }
 

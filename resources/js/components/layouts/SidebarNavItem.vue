@@ -193,8 +193,8 @@
                     </v-list-item-icon>
                     <v-list-item-title>
                         <router-link
-                            :to="'/itemAttributeGroups/'">
-                            {{ $t('item_attribute_group') }}
+                            :to="'/productAttributeGroups/'">
+                            {{ $t('product_attribute_group') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
@@ -205,8 +205,8 @@
                     </v-list-item-icon>
                     <v-list-item-title>
                         <router-link
-                            :to="'/itemAttributes/'">
-                            {{ $t('item_attribute') }}
+                            :to="'/productAttributes/'">
+                            {{ $t('product_attribute') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>

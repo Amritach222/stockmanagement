@@ -33,7 +33,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
 Route::group(['middleware' => 'auth:api'], function () {
 
     Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
-    Route::post('create-variants', [\App\Http\Controllers\Api\ItemController::class, 'createVariants']);
+    Route::post('create-variants', [\App\Http\Controllers\Api\ProductController::class, 'createVariants']);
     Route::get('logs', [\App\Http\Controllers\Api\logController::class, 'index']);
     Route::get('get-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'getPermissions']);
     Route::post('assign-role/{id}', [\App\Http\Controllers\Api\PermissionController::class, 'assignRole']);
@@ -82,16 +82,16 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('products/{id}', [\App\Http\Controllers\Api\ProductController::class, 'update']);
         Route::apiResource('categories', \App\Http\Controllers\Api\CategoryController::class);
         Route::post('categories/{id}', [\App\Http\Controllers\Api\CategoryController::class, 'update']);
+        Route::apiResource('productVariants', \App\Http\Controllers\Api\ProductVariantController::class);
+        Route::post('productVariants/{id}', [\App\Http\Controllers\Api\ProductVariantController::class, 'update']);
+        Route::apiResource('productAttributeGroups', \App\Http\Controllers\Api\ProductAttributeGroupController::class);
+        Route::post('productAttributeGroups/{id}', [\App\Http\Controllers\Api\ProductAttributeGroupController::class, 'update']);
+        Route::apiResource('productAttributes', \App\Http\Controllers\Api\ProductAttributeController::class);
+        Route::post('productAttributes/{id}', [\App\Http\Controllers\Api\ProductAttributeController::class, 'update']);
 
         Route::group(['prefix' => '/item'], function () {
             Route::apiResource('items', \App\Http\Controllers\Api\ItemController::class);
             Route::post('items/{id}', [\App\Http\Controllers\Api\ItemController::class, 'update']);
-            Route::apiResource('itemVariants', \App\Http\Controllers\Api\ItemVariantController::class);
-            Route::post('itemVariants/{id}', [\App\Http\Controllers\Api\ItemVariantController::class, 'update']);
-            Route::apiResource('itemAttributeGroups', \App\Http\Controllers\Api\ItemAttributeGroupController::class);
-            Route::post('itemAttributeGroups/{id}', [\App\Http\Controllers\Api\ItemAttributeGroupController::class, 'update']);
-            Route::apiResource('itemAttributes', \App\Http\Controllers\Api\ItemAttributeController::class);
-            Route::post('itemAttributes/{id}', [\App\Http\Controllers\Api\ItemAttributeController::class, 'update']);
         });
     });
 

@@ -9,11 +9,16 @@ class Item extends Model
 
     protected $table = 'items';
     public $timestamps = true;
-    protected $fillable = array('name', 'code', 'product_id', 'stock', 'alert_stock', 'brand_id', 'unit_id', 'tax_id', 'tax_method', 'cost_price', 'image_id');
+    protected $fillable = array('name', 'code', 'product_id', 'product_variant_id', 'stock', 'alert_stock', 'brand_id', 'unit_id', 'tax_id', 'tax_method', 'cost_price', 'image_id');
 
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function productVariant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
     }
 
     public function brand()
@@ -29,11 +34,6 @@ class Item extends Model
     public function tax()
     {
         return $this->belongsTo(Tax::class, 'tax_id');
-    }
-
-    public function itemVariants()
-    {
-        return $this->hasMany(ItemVariant::class, 'item_id');
     }
 
     public function consumes()

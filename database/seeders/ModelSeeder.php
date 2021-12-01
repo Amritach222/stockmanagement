@@ -12,8 +12,8 @@ use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\FiscalYear;
 use App\Models\Item;
-use App\Models\ItemAttribute;
-use App\Models\ItemAttributeGroup;
+use App\Models\ProductAttribute;
+use App\Models\ProductAttributeGroup;
 use App\Models\Product;
 use App\Models\Tax;
 use App\Models\Unit;
@@ -67,41 +67,41 @@ class ModelSeeder extends Seeder
         ]);
         $itemT->save();
 
-        $itemAG1 = new ItemAttributeGroup([
+        $itemAG1 = new ProductAttributeGroup([
             'name' => 'Size'
         ]);
         $itemAG1->save();
 
-        $itemAG2 = new ItemAttributeGroup([
+        $itemAG2 = new ProductAttributeGroup([
             'name' => 'Color'
         ]);
         $itemAG2->save();
 
-        $item = new ItemAttribute([
+        $item = new ProductAttribute([
             'name' => 'S',
             'attribute_group_id' => $itemAG1->id
         ]);
         $item->save();
 
-        $item = new ItemAttribute([
+        $item = new ProductAttribute([
             'name' => 'M',
             'attribute_group_id' => $itemAG1->id
         ]);
         $item->save();
 
-        $item = new ItemAttribute([
+        $item = new ProductAttribute([
             'name' => 'L',
             'attribute_group_id' => $itemAG1->id
         ]);
         $item->save();
 
-        $item = new ItemAttribute([
+        $item = new ProductAttribute([
             'name' => 'Red',
             'attribute_group_id' => $itemAG2->id
         ]);
         $item->save();
 
-        $item = new ItemAttribute([
+        $item = new ProductAttribute([
             'name' => 'Black',
             'attribute_group_id' => $itemAG2->id
         ]);

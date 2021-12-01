@@ -28,8 +28,7 @@ class PurchaseProductRequest extends FormRequest
             return [
                 'purchase_id' => 'int|exists:purchases,id',
                 'product_id' => 'int|exists:products,id',
-                'item_id' => 'int|exists:items,id',
-                'item_variant_id' => 'int|exists:item_variants,id',
+                'product_variant_id' => 'int|exists:product_variants,id',
                 'vendor_id' => 'int|exists:vendors,id',
                 'quantity' => 'int|min:1',
                 'tax_id' => 'int|exists:taxes,id',
@@ -38,8 +37,7 @@ class PurchaseProductRequest extends FormRequest
             return [
                 'purchase_id' => 'required|int|exists:purchases,id',
                 'product_id' => 'required|int|exists:products,id',
-                'item_id' => 'required|int|exists:items,id',
-                'item_variant_id' => 'int|exists:item_variants,id',
+                'product_variant_id' => 'int|exists:product_variants,id',
                 'vendor_id' => 'int|exists:vendors,id',
                 'quantity' => 'int|min:1',
                 'tax_id' => 'int|exists:taxes,id',

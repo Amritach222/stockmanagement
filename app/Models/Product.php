@@ -26,6 +26,11 @@ class Product extends Model
         return $this->hasMany(Item::class, 'product_id');
     }
 
+    public function productVariants()
+    {
+        return $this->hasMany(ProductVariant::class, 'product_id');
+    }
+
     public function purchaseProducts()
     {
         return $this->hasMany(PurchaseProduct::class, 'product_id');

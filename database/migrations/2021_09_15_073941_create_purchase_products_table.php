@@ -12,8 +12,7 @@ class CreatePurchaseProductsTable extends Migration {
 			$table->timestamps();
 			$table->integer('purchase_id')->unsigned();
 			$table->integer('product_id')->unsigned();
-			$table->integer('item_id')->unsigned()->nullable();
-			$table->integer('item_variant_id')->unsigned()->nullable();
+			$table->integer('product_variant_id')->unsigned()->nullable();
 			$table->integer('vendor_id')->unsigned()->nullable();
 			$table->integer('quantity')->nullable()->default('1');
 			$table->integer('price')->nullable()->default('0');

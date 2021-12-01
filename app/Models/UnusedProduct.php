@@ -9,16 +9,11 @@ class UnusedProduct extends Model
 
     protected $table = 'unused_products';
     public $timestamps = true;
-    protected $fillable = array('code', 'item_id', 'item_variant_id', 'department_id', 'user_id', 'approved_by', 'image_id', 'note');
+    protected $fillable = array('code', 'item_id', 'department_id', 'user_id', 'approved_by', 'image_id', 'note');
 
     public function item()
     {
         return $this->belongsTo(Item::class, 'item_id');
-    }
-
-    public function itemVariant()
-    {
-        return $this->belongsTo(ItemVariant::class, 'item_variant_id');
     }
 
     public function user()
@@ -38,6 +33,6 @@ class UnusedProduct extends Model
 
     public function image()
     {
-        return $this->belongsTo(Image::class, 'image_id');
+        return $this->belongsTo(File::class, 'image_id');
     }
 }

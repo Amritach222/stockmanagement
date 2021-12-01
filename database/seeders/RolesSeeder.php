@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -29,7 +30,7 @@ class RolesSeeder extends Seeder
                 'name' => 'Admin',
                 'guard_name' => $guard
             ]);
-            $permissions = Permission::where('guard_name', $guard)->get();
+            $permissions = Permission::where('guard_name', $guard)->whereIn('name', ['roles', 'roles.create', 'roles.edit', 'roles.delete', 'permissions', 'permissions.create', 'permissions.edit', 'permissions.delete'])->get();
             $admin->givePermissionTo($permissions);
 
             $director = Role::create([
@@ -131,6 +132,22 @@ class RolesSeeder extends Seeder
             ]);
             $this->giveAutoAllPermissions($financeStaff, 'expenses');
         }
+        $user = new User([
+            'name' => 'Super Admin',
+            'username' => 'SuperAdmin',
+            'email' => 'superadmin@rkdholdings.com',
+            'password' => bcrypt('Rkd@holdings123'),
+        ]);
+        $user->save();
+        $user->assignRole('Super Admin');
+        $user = new User([
+            'name' => 'Admin',
+            'username' => 'Admin',
+            'email' => 'admin@rkdholdings.com',
+            'password' => bcrypt('Rkd@holdings123'),
+        ]);
+        $user->save();
+        $user->assignRole('Admin');
     }
 
     public function giveAutoAllPermissions($role, $permissionName)

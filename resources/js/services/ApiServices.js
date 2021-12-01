@@ -196,52 +196,52 @@ export default {
         return await apiCall(DELETE, `api/product/item/items/${id}`)
     },
 
-    async itemAttributeGroupIndex() {
-        return await apiCall(GET, `api/product/item/itemAttributeGroups`)
+    async productAttributeGroupIndex() {
+        return await apiCall(GET, `api/product/productAttributeGroups`)
     },
-    async itemAttributeGroupCreate(data) {
-        return await apiCall(POST, `api/product/item/itemAttributeGroups`, data)
+    async productAttributeGroupCreate(data) {
+        return await apiCall(POST, `api/product/productAttributeGroups`, data)
     },
-    async itemAttributeGroupShow(id) {
-        return await apiCall(GET, `api/product/item/itemAttributeGroups/${id}`)
+    async productAttributeGroupShow(id) {
+        return await apiCall(GET, `api/product/productAttributeGroups/${id}`)
     },
-    async itemAttributeGroupEdit(id, data) {
-        return await apiCall(POST, `api/product/item/itemAttributeGroups/${id}`, data)
+    async productAttributeGroupEdit(id, data) {
+        return await apiCall(POST, `api/product/productAttributeGroups/${id}`, data)
     },
-    async itemAttributeGroupDelete(id) {
-        return await apiCall(DELETE, `api/product/item/itemAttributeGroups/${id}`)
-    },
-
-    async itemAttributeIndex() {
-        return await apiCall(GET, `api/product/item/itemAttributes`)
-    },
-    async itemAttributeCreate(data) {
-        return await apiCall(POST, `api/product/item/itemAttributes`, data)
-    },
-    async itemAttributeShow(id) {
-        return await apiCall(GET, `api/product/item/itemAttributes/${id}`)
-    },
-    async itemAttributeEdit(id, data) {
-        return await apiCall(POST, `api/product/item/itemAttributes/${id}`, data)
-    },
-    async itemAttributeDelete(id) {
-        return await apiCall(DELETE, `api/product/item/itemAttributes/${id}`)
+    async productAttributeGroupDelete(id) {
+        return await apiCall(DELETE, `api/product/productAttributeGroups/${id}`)
     },
 
-    async itemVariantIndex() {
-        return await apiCall(GET, `api/product/item/itemVariants`)
+    async productAttributeIndex() {
+        return await apiCall(GET, `api/product/productAttributes`)
     },
-    async itemVariantCreate(data) {
-        return await apiCall(POST, `api/product/item/itemVariants`, data)
+    async productAttributeCreate(data) {
+        return await apiCall(POST, `api/product/productAttributes`, data)
     },
-    async itemVariantShow(id) {
-        return await apiCall(GET, `api/product/item/itemVariants/${id}`)
+    async productAttributeShow(id) {
+        return await apiCall(GET, `api/product/productAttributes/${id}`)
     },
-    async itemVariantEdit(id, data) {
-        return await apiCall(POST, `api/product/item/itemVariants/${id}`, data)
+    async productAttributeEdit(id, data) {
+        return await apiCall(POST, `api/product/productAttributes/${id}`, data)
     },
-    async itemVariantDelete(id) {
-        return await apiCall(DELETE, `api/product/item/itemVariants/${id}`)
+    async productAttributeDelete(id) {
+        return await apiCall(DELETE, `api/product/productAttributes/${id}`)
+    },
+
+    async productVariantIndex() {
+        return await apiCall(GET, `api/product/productVariants`)
+    },
+    async productVariantCreate(data) {
+        return await apiCall(POST, `api/product/productVariants`, data)
+    },
+    async productVariantShow(id) {
+        return await apiCall(GET, `api/product/productVariants/${id}`)
+    },
+    async productVariantEdit(id, data) {
+        return await apiCall(POST, `api/product/productVariants/${id}`, data)
+    },
+    async productVariantDelete(id) {
+        return await apiCall(DELETE, `api/product/productVariants/${id}`)
     },
 
     async taxIndex() {

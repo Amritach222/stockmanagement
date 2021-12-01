@@ -1,12 +1,12 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('item_attributes') }}
+            {{ $t('product_attribute_groups') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
             :headers="headers"
-            :items="itemAttributes"
+            :items="productAttributeGroups"
             sort-by="id"
             :loading=tableLoad
             loading-text="Loading... Please wait..."
@@ -45,7 +45,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                {{ $t('button.add_new_item_attribute') }}
+                                {{ $t('button.add_new_product_attribute_group') }}
                             </v-btn>
                         </template>
                         <v-card>
@@ -60,21 +60,11 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.name"
-                                                    :label="$t('name')"
+                                                    :label="$t('product_attribute_group') + ' ' + $t('name')"
                                                     required
                                                     outlined
                                                     :rules="rules"
                                                 ></v-text-field>
-                                                <v-select
-                                                    v-model="editedItem.attribute_group_id"
-                                                    :items="attributeGroups"
-                                                    item-text="name"
-                                                    item-value="id"
-                                                    :label="$t('item_attribute_group')"
-                                                    required
-                                                    outlined
-                                                    :rules="rules"
-                                                ></v-select>
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -118,9 +108,6 @@
                     </v-dialog>
                 </v-toolbar>
             </template>
-            <template v-slot:item.attribute_group_id="{ item }">
-                <p v-if="item.attribute_group_id">{{ item.attribute_group.name }}</p>
-            </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
                     small
@@ -144,9 +131,9 @@
 </template>
 
 <script>
-import store from "../../../../store";
-import ApiServices from "../../../../services/ApiServices";
-import i18n from "../../../../i18n";
+import store from "../../../store";
+import ApiServices from "../../../services/ApiServices";
+import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -159,21 +146,17 @@ export default {
         headers: [
             {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
             {text: i18n.t('name'), value: 'name'},
-            {text: i18n.t('item_attribute_group'), value: 'attribute_group_id'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
-        itemAttributes: [],
-        attributeGroups: [],
+        productAttributeGroups: [],
         editedIndex: -1,
         editedItem: {
             id: null,
             name: '',
-            attribute_group_id: '',
         },
         defaultItem: {
             id: null,
             name: '',
-            attribute_group_id: '',
         },
         rules: [
             value => !!value || 'Required.',
@@ -183,7 +166,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? i18n.t('card_title.add_item_attribute') : i18n.t('card_title.edit_item_attribute')
+            return this.editedIndex === -1 ? i18n.t('card_title.add_product_attribute_group') : i18n.t('card_title.edit_product_attribute_group')
         },
     },
 
@@ -198,40 +181,32 @@ export default {
 
     async created() {
         this.loadItems();
-        this.loadAttributeGroups();
     },
 
     methods: {
         async loadItems() {
-            let res = await ApiServices.itemAttributeIndex();
+            let res = await ApiServices.productAttributeGroupIndex();
             if (res.success === true) {
                 this.tableLoad = false;
-                this.itemAttributes = res.data;
-            }
-        },
-        async loadAttributeGroups() {
-            let res = await ApiServices.itemAttributeGroupIndex();
-            if (res.success === true) {
-                this.tableLoad = false;
-                this.attributeGroups = res.data;
+                this.productAttributeGroups = res.data;
             }
         },
         editItem(item) {
-            this.editedIndex = this.itemAttributes.indexOf(item)
+            this.editedIndex = this.productAttributeGroups.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialog = true
         },
 
         deleteItem(item) {
-            this.editedIndex = this.itemAttributes.indexOf(item)
+            this.editedIndex = this.productAttributeGroups.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
         },
 
         async deleteItemConfirm() {
-            let res = await ApiServices.itemAttributeDelete(this.editedItem.id);
+            let res = await ApiServices.productAttributeGroupDelete(this.editedItem.id);
             if (res.success === true) {
-                this.itemAttributes.splice(this.editedIndex, 1)
+                this.productAttributeGroups.splice(this.editedIndex, 1)
             }
             this.closeDelete()
         },
@@ -261,10 +236,9 @@ export default {
                     this.progressL = true;
                     const data = new FormData();
                     data.append('name', this.editedItem.name);
-                    data.append('attribute_group_id', this.editedItem.attribute_group_id);
-                    let res = await ApiServices.itemAttributeEdit(this.editedItem.id, data);
+                    let res = await ApiServices.productAttributeGroupEdit(this.editedItem.id, data);
                     if (res.success === true) {
-                        Object.assign(this.itemAttributes[this.editedIndex], res.data)
+                        Object.assign(this.productAttributeGroups[this.editedIndex], this.editedItem)
                         this.$refs.form.reset();
                         this.close();
                     }
@@ -272,10 +246,9 @@ export default {
                     this.progressL = true;
                     const data = new FormData();
                     data.append('name', this.editedItem.name);
-                    data.append('attribute_group_id', this.editedItem.attribute_group_id);
-                    let res = await ApiServices.itemAttributeCreate(data);
+                    let res = await ApiServices.itemAttributeGroupCreate(data);
                     if (res.success === true) {
-                        this.itemAttributes.push(res.data);
+                        this.productAttributeGroups.push(this.editedItem);
                         this.$refs.form.reset();
                         this.close()
                     }

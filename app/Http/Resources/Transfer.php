@@ -21,7 +21,6 @@ class Transfer extends JsonResource
             'from_department' => $this->from,
             'to_department' => $this->to,
             'item_id' => $this->item_id,
-            'item_variant_id' => $this->item_variant_id,
             'total_quantity' => $this->total_quantity,
             'total_cost' => $this->total_cost,
             'total_tax' => $this->total_tax,

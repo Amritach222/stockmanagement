@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 
-class ItemAttributeRequest extends FormRequest
+class ProductAttributeGroupRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,13 +26,11 @@ class ItemAttributeRequest extends FormRequest
     {
         if ($this->id) {
             return [
-                'name' => 'string',
-                'attribute_group_id' => 'int|exists:item_attribute_groups,id'
+                'name' => 'string'
             ];
         } else {
             return [
-                'name' => 'required|string',
-                'attribute_group_id' => 'required|int|exists:item_attribute_groups,id'
+                'name' => 'required|string'
             ];
         }
     }
@@ -40,7 +38,6 @@ class ItemAttributeRequest extends FormRequest
     public function messages()
     {
         return [
-            'exists' => 'Id doesn\'t exist.'
         ];
     }
 
