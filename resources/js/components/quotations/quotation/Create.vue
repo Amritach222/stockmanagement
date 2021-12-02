@@ -309,14 +309,14 @@ export default {
         },
 
         async loadItems() {
-            let res = await ApiServices.itemIndex();
+            let res = await ApiServices.productIndex();
             if (res.success === true) {
-                this.items = res.data;
+                this.products = res.data;
             }
         },
 
-        async getVariants(item) {
-            let res = await ApiServices.itemShow(item);
+        async getVariants(product) {
+            let res = await ApiServices.productShow(product);
             if (res.success === true) {
                 if (res.data.product_variants.length > 0) {
                     this.hasVariants = true;
@@ -365,7 +365,7 @@ export default {
         async addProduct() {
             var varName = '---';
             var price = '';
-            let res = await ApiServices.itemShow(this.addQuoProduct.item_id);
+            let res = await ApiServices.productShow(this.addQuoProduct.product_id);
             price = res.data.cost_price;
             if (this.addQuoProduct.product_variant_id) {
                 let rtn = await ApiServices.productVariantShow(this.addQuoProduct.product_variant_id);
@@ -386,7 +386,7 @@ export default {
                 this.quoProducts.push({
                     'product_id': this.addQuoProduct.product_id,
                     'product_name': res.data.name,
-                    'product_variant_id': this.addQuoProduct.itemproduct_variant_id,
+                    'product_variant_id': this.addQuoProduct.product_variant_id,
                     'product_variant': varName,
                     'price': price,
                     'quantity': this.addQuoProduct.quantity,

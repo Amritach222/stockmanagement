@@ -345,9 +345,9 @@ export default {
         },
 
         async loadItems() {
-            let res = await ApiServices.itemIndex();
+            let res = await ApiServices.productIndex();
             if (res.success === true) {
-                this.items = res.data;
+                this.products = res.data;
             }
         },
 
@@ -359,15 +359,15 @@ export default {
             }
         },
 
-        async getVariants(item) {
-            let res = await ApiServices.itemShow(item);
+        async getVariants(product) {
+            let res = await ApiServices.productShow(product);
             if (res.success === true) {
-                if (res.data.item_variants.length > 0) {
+                if (res.data.product_variants.length > 0) {
                     this.hasVariants = true;
                 } else {
                     this.hasVariants = false;
                 }
-                this.variants = res.data.item_variants;
+                this.variants = res.data.product_variants;
             }
         },
 
