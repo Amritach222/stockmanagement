@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', [AuthController::class, 'registerUser']);
 Route::post('login', [AuthController::class, 'loginUser']);
 
+Route::post('vendor-login', [AuthController::class, 'loginVendor']);
+
 Route::post('reset-password', [AuthController::class, 'resetUserPassword']);
 
 Route::post('forgot-password', [AuthController::class, 'forgotUserPassword']);

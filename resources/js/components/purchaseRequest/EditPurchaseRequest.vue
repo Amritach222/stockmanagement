@@ -271,7 +271,6 @@ export default {
             {text: 'Item Variant', value: 'item_variant'},
             {text: 'Quantity', value: 'quantity'},
             {text: 'Price', value: 'price'},
-            {text: 'Shipping Cost', value: 'shipping_cost'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         quotations: [],

@@ -49,6 +49,30 @@ class AuthController extends Controller
         return new AuthResource($user);
     }
 
+    public function loginVendor(UserLogin $request)
+    {
+        $login_credentials = [
+            'username' => $request->username,
+            'password' => $request->password,
+        ];
+        if (auth()->attempt($login_credentials)) {
+            $user_login_token = auth()->user()->createToken($request->username)->accessToken;
+            $user = auth()->user();
+            $is_vendor = $user->is_vendor;
+            if($is_vendor){
+                $user->access_token = $user_login_token;
+                $user->responseMessage = trans('messages.login_success');
+                event(new ActivityLogEvent('Login', 'User'));
+                return new AuthResource($user);
+            } else {
+                return response(['success' => false, "message" => trans('auth.failedVendor'), "data" => []], 400);
+            }
+        } else {
+
+            return response(['success' => false, "message" => trans('auth.failed'), "data" => []], 400);
+        }
+    }
+
     public function loginUser(UserLogin $request)
     {
 
