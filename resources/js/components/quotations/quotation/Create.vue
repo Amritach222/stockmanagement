@@ -254,7 +254,7 @@ export default {
         dialogDelete: false,
         headers: [
             {text: i18n.t('product'), value: 'product_name'},
-            {text: i18n.t('product_variant'), value: 'product_variant'},
+            {text: i18n.t('product') +' '+ i18n.t('variant'), value: 'product_variant'},
             {text: i18n.t('quantity'), value: 'quantity'},
             {text: i18n.t('price'), value: 'price'},
             {text: i18n.t('shipping_cost'), value: 'shipping_cost'},

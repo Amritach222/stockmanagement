@@ -73,16 +73,6 @@ export default {
             store.state.auth.auth_token = accessToken;
         }
         // let isLoggedIn = localStorage.getItem('isLoggedIn');
-        if (isLoggedIn === 'true') {
-            let res = await ApiServices.getUserPermissions();
-            if (res.success === true) {
-                Vue.prototype.$permissions = res.data;
-            } else {
-                Vue.prototype.$permissions = [];
-            }
-        } else {
-            Vue.prototype.$permissions = [];
-        }
     },
     methods: {
         async logoutUser() {

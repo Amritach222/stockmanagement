@@ -21,7 +21,7 @@ class ProductVariantController extends Controller
 {
     public function __construct()
     {
-        parent::generateAllMiddlewareByPermission('itemVariants');
+        parent::generateAllMiddlewareByPermission('productVariants');
     }
 
     public function index()
@@ -57,22 +57,24 @@ class ProductVariantController extends Controller
             $requestAttributeIds = json_decode($request->attribute_ids);
 
             $product = Product::findOrFail($request->product_id);
-            foreach ($product->productVariants as $variant) {
-                $variantAttributeIds = ProductVariantAttribute::where('product_variant_id', $variant->id)->pluck('attribute_id');
-                if (count($variantAttributeIds) > count($requestAttributeIds)) {
-                    foreach ($variantAttributeIds as $id) {
-                        if (in_array($id, $requestAttributeIds)) {
-                            $common = 1;
-                        } else {
-                            $common = 0;
+            if (count($product->productVariants) > 0) {
+                foreach ($product->productVariants as $variant) {
+                    $variantAttributeIds = ProductVariantAttribute::where('product_variant_id', $variant->id)->pluck('attribute_id');
+                    if (count($variantAttributeIds) > count($requestAttributeIds)) {
+                        foreach ($variantAttributeIds as $id) {
+                            if (in_array($id, $requestAttributeIds)) {
+                                $common = 1;
+                            } else {
+                                $common = 0;
+                            }
                         }
-                    }
-                } else {
-                    foreach ($requestAttributeIds as $id) {
-                        if ($variantAttributeIds->contains($id)) {
-                            $common = 1;
-                        } else {
-                            $common = 0;
+                    } else {
+                        foreach ($requestAttributeIds as $id) {
+                            if ($variantAttributeIds->contains($id)) {
+                                $common = 1;
+                            } else {
+                                $common = 0;
+                            }
                         }
                     }
                 }

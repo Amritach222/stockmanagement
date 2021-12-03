@@ -30,7 +30,7 @@ class RolesSeeder extends Seeder
                 'name' => 'Admin',
                 'guard_name' => $guard
             ]);
-            $permissions = Permission::where('guard_name', $guard)->whereIn('name', ['roles', 'roles.create', 'roles.edit', 'roles.delete', 'permissions', 'permissions.create', 'permissions.edit', 'permissions.delete'])->get();
+            $permissions = Permission::where('guard_name', $guard)->where('name', '!=', 'roles')->where('name', '!=', 'permissions')->get();
             $admin->givePermissionTo($permissions);
 
             $director = Role::create([
@@ -95,8 +95,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($staff, 'categories');
             $this->giveAutoAllPermissions($staff, 'products');
             $this->giveAutoAllPermissions($staff, 'items');
-            $this->giveAutoAllPermissions($staff, 'itemVariants');
-            $this->giveAutoAllPermissions($staff, 'itemVariantAttributes');
+            $this->giveAutoAllPermissions($staff, 'productVariants');
+            $this->giveAutoAllPermissions($staff, 'productVariantAttributes');
             $this->giveAutoAllPermissions($staff, 'quotations', $guard);
             $this->giveAutoAllPermissions($staff, 'quotationProducts');
             $this->giveAutoAllPermissions($staff, 'unusedProducts');
@@ -111,8 +111,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeKeeper, 'attributes');
             $this->giveAutoAllPermissions($storeKeeper, 'products');
             $this->giveAutoAllPermissions($storeKeeper, 'items');
-            $this->giveAutoAllPermissions($storeKeeper, 'itemVariants');
-            $this->giveAutoAllPermissions($storeKeeper, 'itemVariantAttributes');
+            $this->giveAutoAllPermissions($storeKeeper, 'productVariants');
+            $this->giveAutoAllPermissions($storeKeeper, 'productVariantAttributes');
             $this->giveAutoAllPermissions($storeKeeper, 'unusedProducts');
             $this->giveAutoAllPermissions($storeKeeper, 'transfers');
             $this->giveAutoAllPermissions($storeKeeper, 'returnProducts');
@@ -134,7 +134,7 @@ class RolesSeeder extends Seeder
         }
         $user = new User([
             'name' => 'Super Admin',
-            'username' => 'SuperAdmin',
+            'username' => 'superAdmin',
             'email' => 'superadmin@rkdholdings.com',
             'password' => bcrypt('Rkd@holdings123'),
         ]);
@@ -142,7 +142,7 @@ class RolesSeeder extends Seeder
         $user->assignRole('Super Admin');
         $user = new User([
             'name' => 'Admin',
-            'username' => 'Admin',
+            'username' => 'admin',
             'email' => 'admin@rkdholdings.com',
             'password' => bcrypt('Rkd@holdings123'),
         ]);

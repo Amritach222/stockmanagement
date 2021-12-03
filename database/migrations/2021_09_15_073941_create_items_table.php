@@ -13,6 +13,8 @@ class CreateItemsTable extends Migration
             $table->timestamps();
             $table->string('name', 255);
             $table->string('code', 255);
+            $table->integer('user_id')->unsigned();
+            $table->integer('department_id')->unsigned();
             $table->integer('product_id')->unsigned();
             $table->integer('product_variant_id')->unsigned()->nullable();
             $table->integer('stock')->nullable()->default('0');
@@ -23,6 +25,9 @@ class CreateItemsTable extends Migration
             $table->enum('tax_method', array('Included', 'Excluded'))->nullable();
             $table->integer('cost_price')->nullable()->default('0');
             $table->integer('image_id')->unsigned()->nullable();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('department_id')->references('id')->on('departments');
         });
     }
 

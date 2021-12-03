@@ -307,9 +307,9 @@ export default {
             const data = new FormData();
             data.append('name', this.name);
             data.append('brand_id', this.brand_id);
+            data.append('product_id', this.product_id);
             data.append('stock', this.stock);
             data.append('alert_stock', this.alert_stock);
-            data.append('product_id', this.product_id);
             data.append('cost_price', this.cost_price);
             data.append('unit_id', this.unit_id);
             data.append('tax_id', this.tax_id);

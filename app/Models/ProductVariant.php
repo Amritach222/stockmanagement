@@ -25,11 +25,11 @@ class ProductVariant extends Model
     public function getNameAttribute()
     {
         $name = '';
-        foreach ($this->itemVariantAttributes as $i => $variantAttribute) {
+        foreach ($this->productVariantAttributes as $i => $variantAttribute) {
             if ($i > 0) {
-                $name = $name . ', ' . $variantAttribute->itemAttribute->name;
+                $name = $name . ', ' . $variantAttribute->productAttribute->name;
             } else {
-                $name = $name . $variantAttribute->itemAttribute->name;
+                $name = $name . $variantAttribute->productAttribute->name;
             }
         }
         return $name;

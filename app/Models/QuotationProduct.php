@@ -43,7 +43,7 @@ class QuotationProduct extends Model
 
     public function taxCalculate()
     {
-        if ($this->item->tax_method == 'Excluded') {
+        if ($this->product->tax_method == 'Excluded') {
             $taxValue = $this->taxAmount();
             $this->grand_total = $this->quantity * $this->price + $taxValue + $this->shipping_cost;
         } else {

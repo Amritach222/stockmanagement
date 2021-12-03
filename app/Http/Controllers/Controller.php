@@ -15,7 +15,7 @@ class Controller extends BaseController
     {
         if ($permissionName !== null) {
             $this->middleware('permission:' . $permissionName)->only('index', 'show');
-            $this->middleware('permission:' . $permissionName . '.add')->only('create', 'store');
+            $this->middleware('permission:' . $permissionName . '.create')->only('create', 'store');
             $this->middleware('permission:' . $permissionName . '.edit')->only('edit', 'update');
             $this->middleware('permission:' . $permissionName . '.delete')->only('destroy');
         }

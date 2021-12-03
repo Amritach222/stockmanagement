@@ -100,6 +100,89 @@
                                             @keyup="clearError('details')"
                                             solo
                                         />
+                                        <v-text-field
+                                            v-model="cost_price"
+                                            type="number"
+                                            name="cost_price"
+                                            description="Please enter cost price."
+                                            autocomplete=""
+                                            :label="$t('cost_price')"
+                                            placeholder="Enter cost price..."
+                                            prepend-icon="mdi-currency-usd"
+                                            @keyup="clearError('cost_price')"
+                                            @keyup.enter="create"
+                                            solo
+                                        />
+                                        <v-text-field
+                                            v-model="stock"
+                                            type="number"
+                                            name="stock"
+                                            description="Please enter stock."
+                                            autocomplete=""
+                                            :label="$t('stock')"
+                                            placeholder="Enter stock..."
+                                            prepend-icon="mdi-chart-areaspline"
+                                            @keyup="clearError('stock')"
+                                            @keyup.enter="create"
+                                            solo
+                                        />
+                                        <v-text-field
+                                            v-model="alert_stock"
+                                            type="number"
+                                            name="alert_stock"
+                                            description="Please enter alert stock."
+                                            autocomplete=""
+                                            :label="$t('alert_stock')"
+                                            placeholder="Enter alert stock..."
+                                            prepend-icon="mdi-chart-bell-curve"
+                                            @keyup="clearError('alert_stock')"
+                                            @keyup.enter="create"
+                                            solo
+                                        />
+                                        <v-select
+                                            v-model="unit_id"
+                                            name="unit_id"
+                                            :items="units"
+                                            item-text="name"
+                                            item-value="id"
+                                            description="Please select a unit."
+                                            autocomplete=""
+                                            :label="$t('unit')"
+                                            placeholder="Select a unit..."
+                                            prepend-icon="mdi-google-circles-communities"
+                                            required
+                                            @keyup="clearError('unit_id')"
+                                            @keyup.enter="create"
+                                            solo
+                                        />
+                                        <v-select
+                                            v-model="tax_id"
+                                            name="tax_id"
+                                            :items="taxes"
+                                            item-text="name"
+                                            item-value="id"
+                                            description="Please select a tax."
+                                            autocomplete=""
+                                            :label="$t('tax')"
+                                            placeholder="Select a tax..."
+                                            prepend-icon="mdi-alpha-t-circle"
+                                            @keyup="clearError('tax_id')"
+                                            @keyup.enter="create"
+                                            solo
+                                        />
+                                        <v-select
+                                            v-model="tax_method"
+                                            name="tax_method"
+                                            :items="['Included','Excluded']"
+                                            description="Please select a tax method."
+                                            autocomplete=""
+                                            :label="$t('tax_method')"
+                                            placeholder="Select a method..."
+                                            prepend-icon="mdi-chart-bubble"
+                                            @keyup="clearError('tax_method')"
+                                            @keyup.enter="create"
+                                            solo
+                                        />
                                     </v-form>
 
                                     <hr>
@@ -376,6 +459,12 @@ export default {
         category_id: '',
         details: '',
         is_active: '',
+        stock: '',
+        alert_stock: '',
+        cost_price: '',
+        unit_id: '',
+        tax_id: '',
+        tax_method: '',
         image: [],
         search: '',
         progressL: false,
@@ -402,12 +491,20 @@ export default {
             price: '',
         },
         variants: [],
+        units: [],
+        taxes: [],
         error: {
             name: '',
             brand_id: '',
             category_id: '',
             details: '',
             is_active: '',
+            stock: '',
+            alert_stock: '',
+            cost_price: '',
+            unit_id: '',
+            tax_id: '',
+            tax_method: '',
         },
         rules: {
             name: [
@@ -430,6 +527,8 @@ export default {
         this.loadBrands();
         this.loadCategories();
         this.loadProductAttributeGroups();
+        this.loadUnits();
+        this.loadTaxes();
     },
     methods: {
         openImage(data) {
@@ -445,6 +544,18 @@ export default {
             let res = await ApiServices.categoryIndex();
             if (res.success === true) {
                 this.categories = res.data;
+            }
+        },
+        async loadUnits() {
+            let res = await ApiServices.unitIndex();
+            if (res.success === true) {
+                this.units = res.data;
+            }
+        },
+        async loadTaxes() {
+            let res = await ApiServices.taxIndex();
+            if (res.success === true) {
+                this.taxes = res.data;
             }
         },
         async loadProductAttributeGroups() {
@@ -521,6 +632,24 @@ export default {
             if (name === 'details') {
                 this.error.details = '';
             }
+            if (name === 'stock') {
+                this.error.stock = '';
+            }
+            if (name === 'alert_stock') {
+                this.error.alert_stock = '';
+            }
+            if (name === 'cost_price') {
+                this.error.cost_price = '';
+            }
+            if (name === 'unit_id') {
+                this.error.unit_id = '';
+            }
+            if (name === 'tax_id') {
+                this.error.tax_id = '';
+            }
+            if (name === 'tax_method') {
+                this.error.tax_method = '';
+            }
         },
 
         async variantAdd() {
@@ -555,6 +684,13 @@ export default {
             data.append('brand_id', this.brand_id);
             data.append('category_id', this.category_id);
             data.append('details', this.details);
+            data.append('stock', this.stock);
+            data.append('alert_stock', this.alert_stock);
+            data.append('cost_price', this.cost_price);
+            data.append('unit_id', this.unit_id);
+            data.append('tax_id', this.tax_id);
+            data.append('tax_method', this.tax_method);
+
 
             if (typeof this.image.name == 'string') {
                 data.append('image', this.image);
@@ -573,7 +709,7 @@ export default {
                 if (this.variants.length > 0) {
                     let rtn = this.createVariant(res.data.id);
                 } else {
-                    route.replace('/products/');
+                    // route.replace('/products/');
                 }
             }
         },
@@ -584,13 +720,17 @@ export default {
             const data = new FormData();
             for (var i = 0; i < this.variants.length; i++) {
                 data.append('attribute_ids', JSON.stringify(this.variants[i].attribute_ids));
-                data.append('price', parseInt(this.variants[i].price));
-                data.append('quantity', parseInt(this.variants[i].quantity));
+                if (this.variants[i].price) {
+                    data.append('price', parseInt(this.variants[i].price));
+                }
+                if (this.variants[i].quantity) {
+                    data.append('quantity', parseInt(this.variants[i].quantity));
+                }
                 data.append('product_id', id);
 
                 let res = await ApiServices.productVariantCreate(data);
             }
-            route.replace('/products/');
+            // route.replace('/products/');
         },
 
         validate() {

@@ -123,6 +123,83 @@
                                             @keyup="clearError('details')"
                                             solo
                                         />
+                                        <v-text-field
+                                            v-model="editedItem.cost_price"
+                                            type="number"
+                                            name="cost_price"
+                                            description="Please enter cost price."
+                                            autocomplete=""
+                                            :label="$t('cost_price')"
+                                            placeholder="Enter cost price..."
+                                            prepend-icon="mdi-currency-usd"
+                                            @keyup="clearError('cost_price')"
+                                            solo
+                                        />
+                                        <v-text-field
+                                            v-model="editedItem.stock"
+                                            type="number"
+                                            name="stock"
+                                            description="Please enter stock."
+                                            autocomplete=""
+                                            :label="$t('stock')"
+                                            placeholder="Enter stock..."
+                                            prepend-icon="mdi-chart-areaspline"
+                                            @keyup="clearError('stock')"
+                                            solo
+                                        />
+                                        <v-text-field
+                                            v-model="editedItem.alert_stock"
+                                            type="number"
+                                            name="alert_stock"
+                                            description="Please enter alert stock."
+                                            autocomplete=""
+                                            :label="$t('alert_stock')"
+                                            placeholder="Enter alert stock..."
+                                            prepend-icon="mdi-chart-bell-curve"
+                                            @keyup="clearError('alert_stock')"
+                                            solo
+                                        />
+                                        <v-select
+                                            v-model="editedItem.unit_id"
+                                            name="unit_id"
+                                            :items="units"
+                                            item-text="name"
+                                            item-value="id"
+                                            description="Please select a unit."
+                                            autocomplete=""
+                                            :label="$t('unit')"
+                                            placeholder="Select a unit..."
+                                            prepend-icon="mdi-google-circles-communities"
+                                            required
+                                            @keyup="clearError('unit_id')"
+                                            solo
+                                        />
+                                        <v-select
+                                            v-model="editedItem.tax_id"
+                                            name="tax_id"
+                                            :items="taxes"
+                                            item-text="name"
+                                            item-value="id"
+                                            description="Please select a tax."
+                                            autocomplete=""
+                                            :label="$t('tax')"
+                                            placeholder="Select a tax..."
+                                            prepend-icon="mdi-alpha-t-circle"
+                                            @keyup="clearError('tax_id')"
+                                            solo
+                                        />
+                                        <v-select
+                                            v-model="editedItem.tax_method"
+                                            name="tax_method"
+                                            :items="['Included','Excluded']"
+                                            description="Please select a tax method."
+                                            autocomplete=""
+                                            :label="$t('tax_method')"
+                                            placeholder="Select a method..."
+                                            prepend-icon="mdi-chart-bubble"
+                                            @keyup="clearError('tax_method')"
+                                            solo
+                                        />
                                     </v-form>
                                     <hr>
                                     <v-card>
@@ -464,6 +541,8 @@ export default {
             image: [],
         },
         variants: [],
+        units: [],
+        taxes: [],
         editedItem: {
             id: null,
             name: '',
@@ -471,6 +550,12 @@ export default {
             category_id: '',
             details: '',
             is_active: '',
+            stock: '',
+            alert_stock: '',
+            cost_price: '',
+            unit_id: '',
+            tax_id: '',
+            tax_method: '',
             image: [],
         },
         error: {
@@ -479,6 +564,12 @@ export default {
             category_id: '',
             details: '',
             is_active: '',
+            stock: '',
+            alert_stock: '',
+            cost_price: '',
+            unit_id: '',
+            tax_id: '',
+            tax_method: '',
         },
         rules: {
             name: [
@@ -502,6 +593,8 @@ export default {
         this.loadCategories();
         this.loadData();
         this.loadProductAttributeGroups();
+        this.loadUnits();
+        this.loadTaxes();
     },
     methods: {
         openImage(data) {
@@ -517,6 +610,18 @@ export default {
             let res = await ApiServices.categoryIndex();
             if (res.success === true) {
                 this.categories = res.data;
+            }
+        },
+        async loadUnits() {
+            let res = await ApiServices.unitIndex();
+            if (res.success === true) {
+                this.units = res.data;
+            }
+        },
+        async loadTaxes() {
+            let res = await ApiServices.taxIndex();
+            if (res.success === true) {
+                this.taxes = res.data;
             }
         },
         async loadData() {
@@ -610,6 +715,24 @@ export default {
             if (name === 'details') {
                 this.error.details = '';
             }
+            if (name === 'stock') {
+                this.error.stock = '';
+            }
+            if (name === 'alert_stock') {
+                this.error.alert_stock = '';
+            }
+            if (name === 'cost_price') {
+                this.error.cost_price = '';
+            }
+            if (name === 'unit_id') {
+                this.error.unit_id = '';
+            }
+            if (name === 'tax_id') {
+                this.error.tax_id = '';
+            }
+            if (name === 'tax_method') {
+                this.error.tax_method = '';
+            }
         },
 
         async variantAdd() {
@@ -655,6 +778,13 @@ export default {
             data.append('name', this.editedItem.name);
             data.append('brand_id', this.editedItem.brand_id);
             data.append('category_id', this.editedItem.category_id);
+            data.append('stock', this.editedItem.stock);
+            data.append('alert_stock', this.editedItem.alert_stock);
+            data.append('cost_price', this.editedItem.cost_price);
+            data.append('unit_id', this.editedItem.unit_id);
+            data.append('tax_id', this.editedItem.tax_id);
+            data.append('tax_method', this.editedItem.tax_method);
+
             if (this.editedItem.details !== null) {
                 data.append('details', this.editedItem.details);
             }

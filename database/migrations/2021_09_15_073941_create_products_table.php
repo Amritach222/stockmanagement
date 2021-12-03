@@ -17,7 +17,16 @@ class CreateProductsTable extends Migration
             $table->integer('category_id')->unsigned();
             $table->integer('image_id')->unsigned()->nullable();
             $table->bigInteger('is_active')->default('1');
+            $table->integer('stock')->nullable()->default('0');
+            $table->integer('alert_stock')->nullable()->default('0');
+            $table->integer('unit_id')->unsigned()->nullable();
+            $table->integer('tax_id')->unsigned()->nullable();
+            $table->enum('tax_method', array('Included', 'Excluded'))->nullable();
+            $table->integer('cost_price')->nullable()->default('0');
             $table->text('details')->nullable();
+
+            $table->foreign('unit_id')->references('id')->on('units');
+            $table->foreign('tax_id')->references('id')->on('taxes');
         });
     }
 
