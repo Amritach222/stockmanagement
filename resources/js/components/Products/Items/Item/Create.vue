@@ -88,28 +88,14 @@
                                             solo
                                         />
                                         <v-text-field
-                                            v-model="stock"
+                                            v-model="quantity"
                                             type="number"
-                                            name="stock"
-                                            description="Please enter stock."
+                                            description="Please enter quantity."
                                             autocomplete=""
-                                            :label="$t('stock')"
-                                            placeholder="Enter stock..."
+                                            :label="$t('quantity')"
+                                            placeholder="Enter quantity..."
                                             prepend-icon="mdi-chart-areaspline"
-                                            @keyup="clearError('stock')"
-                                            @keyup.enter="create"
-                                            solo
-                                        />
-                                        <v-text-field
-                                            v-model="alert_stock"
-                                            type="number"
-                                            name="alert_stock"
-                                            description="Please enter alert stock."
-                                            autocomplete=""
-                                            :label="$t('alert_stock')"
-                                            placeholder="Enter alert stock..."
-                                            prepend-icon="mdi-chart-bell-curve"
-                                            @keyup="clearError('alert_stock')"
+                                            @keyup="clearError('quantity')"
                                             @keyup.enter="create"
                                             solo
                                         />
@@ -196,8 +182,7 @@ export default {
         name: '',
         brand_id: '',
         product_id: '',
-        stock: '',
-        alert_stock: '',
+        quantity: '',
         cost_price: '',
         unit_id: '',
         tax_id: '',
@@ -243,6 +228,8 @@ export default {
         this.loadBrands();
         this.loadUnits();
         this.loadTaxes();
+        this.loadUnits();
+        this.loadDepartments();
         // this.loadItemAttributes();
     },
     methods: {
@@ -250,6 +237,18 @@ export default {
             let res = await ApiServices.productIndex();
             if (res.success === true) {
                 this.products = res.data;
+            }
+        },
+        async loadUsers() {
+            let res = await ApiServices.userIndex();
+            if (res.success === true) {
+                this.users = res.data;
+            }
+        },
+        async loadDepartments() {
+            let res = await ApiServices.userIndex();
+            if (res.success === true) {
+                this.departments = res.data;
             }
         },
         async loadBrands() {
@@ -281,11 +280,8 @@ export default {
             if (name === 'product_id') {
                 this.error.product_id = '';
             }
-            if (name === 'stock') {
-                this.error.stock = '';
-            }
-            if (name === 'alert_stock') {
-                this.error.alert_stock = '';
+            if (name === 'quantity') {
+                this.error.quantity = '';
             }
             if (name === 'cost_price') {
                 this.error.cost_price = '';
@@ -308,8 +304,7 @@ export default {
             data.append('name', this.name);
             data.append('brand_id', this.brand_id);
             data.append('product_id', this.product_id);
-            data.append('stock', this.stock);
-            data.append('alert_stock', this.alert_stock);
+            data.append('quantity', this.quantity);
             data.append('cost_price', this.cost_price);
             data.append('unit_id', this.unit_id);
             data.append('tax_id', this.tax_id);

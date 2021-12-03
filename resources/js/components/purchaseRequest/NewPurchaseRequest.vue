@@ -88,7 +88,7 @@
                                                                                 <div v-if="hasVariants">
                                                                                     <v-select
                                                                                         v-model="addQuoProduct.product_variant_id"
-                                                                                        :label="$t('product_variant')"
+                                                                                        :label="$t('product') +' '+ ('variant')"
                                                                                         :items="variants"
                                                                                         item-value="id"
                                                                                         item-text="name"
@@ -315,7 +315,7 @@ export default {
     },
     async created() {
         this.loadDepartments();
-        this.loadItems();
+        this.loadProducts();
     },
     methods: {
         async loadDepartments() {
@@ -325,10 +325,10 @@ export default {
             }
         },
 
-        async loadItems() {
-            let res = await ApiServices.itemIndex();
+        async loadProducts() {
+            let res = await ApiServices.productIndex();
             if (res.success === true) {
-                this.items = res.data;
+                this.products = res.data;
             }
             this.tableLoad = false;
         },

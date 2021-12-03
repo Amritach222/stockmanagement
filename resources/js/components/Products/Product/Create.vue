@@ -89,17 +89,6 @@
                                             ref="activeCheck"
                                             solo
                                         />
-                                        <v-textarea
-                                            v-model="details"
-                                            type="text"
-                                            name="details"
-                                            description="Please enter product details."
-                                            autocomplete=""
-                                            :label="$t('details')"
-                                            placeholder="Enter product details..."
-                                            @keyup="clearError('details')"
-                                            solo
-                                        />
                                         <v-text-field
                                             v-model="cost_price"
                                             type="number"
@@ -110,7 +99,6 @@
                                             placeholder="Enter cost price..."
                                             prepend-icon="mdi-currency-usd"
                                             @keyup="clearError('cost_price')"
-                                            @keyup.enter="create"
                                             solo
                                         />
                                         <v-text-field
@@ -123,7 +111,6 @@
                                             placeholder="Enter stock..."
                                             prepend-icon="mdi-chart-areaspline"
                                             @keyup="clearError('stock')"
-                                            @keyup.enter="create"
                                             solo
                                         />
                                         <v-text-field
@@ -136,7 +123,6 @@
                                             placeholder="Enter alert stock..."
                                             prepend-icon="mdi-chart-bell-curve"
                                             @keyup="clearError('alert_stock')"
-                                            @keyup.enter="create"
                                             solo
                                         />
                                         <v-select
@@ -152,7 +138,6 @@
                                             prepend-icon="mdi-google-circles-communities"
                                             required
                                             @keyup="clearError('unit_id')"
-                                            @keyup.enter="create"
                                             solo
                                         />
                                         <v-select
@@ -167,7 +152,6 @@
                                             placeholder="Select a tax..."
                                             prepend-icon="mdi-alpha-t-circle"
                                             @keyup="clearError('tax_id')"
-                                            @keyup.enter="create"
                                             solo
                                         />
                                         <v-select
@@ -180,7 +164,18 @@
                                             placeholder="Select a method..."
                                             prepend-icon="mdi-chart-bubble"
                                             @keyup="clearError('tax_method')"
-                                            @keyup.enter="create"
+                                            solo
+                                        />
+
+                                        <v-textarea
+                                            v-model="details"
+                                            type="text"
+                                            name="details"
+                                            description="Please enter product details."
+                                            autocomplete=""
+                                            :label="$t('details')"
+                                            placeholder="Enter product details..."
+                                            @keyup="clearError('details')"
                                             solo
                                         />
                                     </v-form>

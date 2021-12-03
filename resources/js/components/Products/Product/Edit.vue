@@ -112,17 +112,6 @@
                                             ref="activeCheck"
                                             solo
                                         />
-                                        <v-textarea
-                                            v-model="editedItem.details"
-                                            type="text"
-                                            name="details"
-                                            description="Please enter product details."
-                                            autocomplete=""
-                                            :label="$t('details')"
-                                            placeholder="Enter product details..."
-                                            @keyup="clearError('details')"
-                                            solo
-                                        />
                                         <v-text-field
                                             v-model="editedItem.cost_price"
                                             type="number"
@@ -198,6 +187,17 @@
                                             placeholder="Select a method..."
                                             prepend-icon="mdi-chart-bubble"
                                             @keyup="clearError('tax_method')"
+                                            solo
+                                        />
+                                        <v-textarea
+                                            v-model="editedItem.details"
+                                            type="text"
+                                            name="details"
+                                            description="Please enter product details."
+                                            autocomplete=""
+                                            :label="$t('details')"
+                                            placeholder="Enter product details..."
+                                            @keyup="clearError('details')"
                                             solo
                                         />
                                     </v-form>

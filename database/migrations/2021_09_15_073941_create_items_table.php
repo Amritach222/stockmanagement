@@ -17,8 +17,7 @@ class CreateItemsTable extends Migration
             $table->integer('department_id')->unsigned();
             $table->integer('product_id')->unsigned();
             $table->integer('product_variant_id')->unsigned()->nullable();
-            $table->integer('stock')->nullable()->default('0');
-            $table->integer('alert_stock')->nullable()->default('0');
+            $table->integer('quantity')->nullable()->default('1');
             $table->integer('brand_id')->unsigned();
             $table->integer('unit_id')->unsigned()->nullable();
             $table->integer('tax_id')->unsigned()->nullable();

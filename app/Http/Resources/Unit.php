@@ -14,7 +14,7 @@ class Unit extends JsonResource
      */
     public function toArray($request)
     {
-        $children = new Unit($this->children);
+        $children = Unit::collection($this->children);
         return [
             'id' => $this->id,
             'name' => $this->name,

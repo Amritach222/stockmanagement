@@ -9,7 +9,7 @@ class Item extends Model
 
     protected $table = 'items';
     public $timestamps = true;
-    protected $fillable = array('name', 'code', 'product_id', 'product_variant_id', 'stock', 'alert_stock', 'brand_id', 'unit_id', 'tax_id', 'tax_method', 'cost_price', 'image_id');
+    protected $fillable = array('name', 'code', 'product_id', 'product_variant_id', 'quantity', 'user_id', 'department_id', 'brand_id', 'unit_id', 'tax_id', 'tax_method', 'cost_price', 'image_id');
 
     public function product()
     {
