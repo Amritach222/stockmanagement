@@ -50,7 +50,7 @@ class QuotationProductController extends Controller
             if ($request->product_variant_id != null) {
                 $variant = ProductVariant::findOrFail($request->product_variant_id);
             }
-            $price = $variant->price ?? $product->cost_price;
+            $price = $variant->price ? $product->cost_price + $variant->price : $product->cost_price;
             $values['price'] = $price;
             $values['tax_id'] = $product->tax_id;
             $quotationProduct = new QuotationProduct($values);
@@ -103,10 +103,10 @@ class QuotationProductController extends Controller
             } elseif ($quotationProduct->product_variant_id !== null) {
                 $variant = ProductVariant::findOrFail($quotationProduct->product_variant_id);
             }
-            if($request->product_id != $quotationProduct->product_id){
-                $price = $variant->price ?? $product->cost_price;
+            if ($request->product_id != $quotationProduct->product_id) {
+                $price = $variant->price ? $product->cost_price + $variant->price : $product->cost_price;
                 $values['price'] = $price;
-            }elseif ($request->product_variant_id != $quotationProduct->product_variant_id){
+            } elseif ($request->product_variant_id != $quotationProduct->product_variant_id) {
                 $price = $variant->price ?? $product->cost_price;
                 $values['price'] = $price;
             }
