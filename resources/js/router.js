@@ -152,6 +152,7 @@ import ProfileSetting from './components/Settings/profile/Index'
 import NewPurchaseRequest from './components/purchaseRequest/NewPurchaseRequest'
 import PurchaseRequestHistory from './components/purchaseRequest/PurchaseRequestHistory'
 import EditPurchaseRequest from './components/purchaseRequest/EditPurchaseRequest'
+import PurchaseRequestProducts from './components/purchaseRequest/PurchaseRequestProducts'
 
 Vue.use(Router)
 
@@ -250,6 +251,15 @@ export default new Router({
             path: '/purchase/edit-purchase-request',
             name: 'Purchase Request Edit',
             component: EditPurchaseRequest,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchase/view-purchase-request-product',
+            name: 'Purchase Request Products',
+            component: PurchaseRequestProducts,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
