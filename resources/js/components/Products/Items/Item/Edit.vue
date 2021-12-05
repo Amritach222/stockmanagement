@@ -61,6 +61,20 @@
                                             @keyup="clearError('product_variant_id')"
                                             solo
                                         />
+                                        <v-select
+                                            v-model="editedItem.user_id"
+                                            :items="users"
+                                            item-value="id"
+                                            item-text="name"
+                                            description="Please select a users."
+                                            autocomplete=""
+                                            :label="$t('user')"
+                                            placeholder="Select user..."
+                                            prepend-icon="mdi-alpha-v-circle"
+                                            :rules="rules.user_id"
+                                            @keyup="clearError('user_id')"
+                                            solo
+                                        />
                                         <v-row>
                                             <v-col v-if="typeof(editedItem.link) === 'string'">
                                                 <v-card width="200"
@@ -148,33 +162,50 @@
                                             @keyup="clearError('unit_id')"
                                             solo
                                         />
-                                        <v-select
-                                            v-model="editedItem.tax_id"
-                                            name="tax_id"
-                                            :items="taxes"
-                                            item-value="id"
-                                            item-text="name"
-                                            description="Please select a tax."
-                                            autocomplete=""
-                                            :label="$t('tax')"
-                                            placeholder="Select a tax..."
-                                            prepend-icon="mdi-alpha-t-circle"
-                                            @keyup="clearError('tax_id')"
-                                            solo
-                                        />
-                                        <v-select
-                                            v-model="editedItem.tax_method"
-                                            name="tax_method"
-                                            :items="['Included','Excluded']"
-                                            description="Please select a tax method."
-                                            autocomplete=""
-                                            :label="$t('tax_method')"
-                                            placeholder="Select a method..."
-                                            prepend-icon="mdi-chart-bubble"
-                                            @keyup="clearError('tax_method')"
-                                            solo
-                                        />
                                     </v-form>
+
+                                    <hr>
+                                    <v-card>
+                                        <v-card-title>
+                                            {{ $t('users') }}
+                                            <v-spacer></v-spacer>
+                                        </v-card-title>
+                                        <v-data-table
+                                            :headers="headers"
+                                            :items="itemUsers"
+                                            sort-by="id"
+                                            loading
+                                            loading-text="Loading... Please wait..."
+                                            :search="search"
+                                        >
+                                            <template v-slot:top>
+                                                <v-toolbar
+                                                    flat
+                                                >
+                                                    <v-row>
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="4"
+                                                            md="6"
+                                                            lg="8"
+                                                        >
+                                                            <v-text-field
+                                                                v-model="search"
+                                                                append-icon="mdi-magnify"
+                                                                :label="$t('search')"
+                                                                solo
+                                                                hide-details
+                                                                max-width="100px"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-toolbar>
+                                            </template>
+                                            <template v-slot:no-data>
+                                                <div>No Data</div>
+                                            </template>
+                                        </v-data-table>
+                                    </v-card>
 
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
@@ -220,15 +251,15 @@ export default {
             quantity: '',
             cost_price: '',
             unit_id: '',
-            tax_id: '',
-            tax_method: '',
+            user_id: '',
             image: [],
         },
         products: [],
         brands: [],
+        users: [],
         units: [],
-        taxes: [],
         variants: [],
+        itemUsers: [],
         changeProgress: false,
         error: {
             name: '',
@@ -237,8 +268,7 @@ export default {
             quantity: '',
             cost_price: '',
             unit_id: '',
-            tax_id: '',
-            tax_method: '',
+            user_id: '',
             image: [],
         },
         rules: {
@@ -251,6 +281,9 @@ export default {
             product_id: [
                 val => val > 0 || i18n.t('validation.required'),
             ],
+            user_id: [
+                val => val > 0 || i18n.t('validation.required'),
+            ],
         },
     }),
 
@@ -258,8 +291,8 @@ export default {
         this.loadItems();
         this.loadProducts();
         this.loadBrands();
+        this.loadUsers();
         this.loadUnits();
-        this.loadTaxes();
     },
     methods: {
         async loadProducts() {
@@ -274,16 +307,16 @@ export default {
                 this.brands = res.data;
             }
         },
+        async loadUsers() {
+            let res = await ApiServices.userIndex();
+            if (res.success === true) {
+                this.users = res.data;
+            }
+        },
         async loadUnits() {
             let res = await ApiServices.unitIndex();
             if (res.success === true) {
                 this.units = res.data;
-            }
-        },
-        async loadTaxes() {
-            let res = await ApiServices.taxIndex();
-            if (res.success === true) {
-                this.taxes = res.data;
             }
         },
         openImage(data) {
@@ -293,6 +326,7 @@ export default {
             let res = await ApiServices.itemShow(this.$route.params.id);
             if (res.success === true) {
                 this.editedItem = res.data;
+                this.itemUsers = res.data.item_users;
             }
         },
 
@@ -315,14 +349,11 @@ export default {
             if (name === 'cost_price') {
                 this.error.cost_price = '';
             }
+            if (name === 'user_id') {
+                this.error.user_id = '';
+            }
             if (name === 'unit_id') {
                 this.error.unit_id = '';
-            }
-            if (name === 'tax_id') {
-                this.error.tax_id = '';
-            }
-            if (name === 'tax_method') {
-                this.error.tax_method = '';
             }
             if (name === 'image') {
                 this.error.image = '';
@@ -344,14 +375,11 @@ export default {
                 data.append('product_variant_id', this.editedItem.product_id);
             }
             data.append('cost_price', this.editedItem.cost_price);
+            if (this.editedItem.user_id !== null) {
+                data.append('user_id', this.editedItem.user_id);
+            }
             if (this.editedItem.unit_id !== null) {
                 data.append('unit_id', this.editedItem.unit_id);
-            }
-            if (this.editedItem.tax_id !== null) {
-                data.append('tax_id', this.editedItem.tax_id);
-            }
-            if (this.editedItem.tax_method !== null) {
-                data.append('tax_method', this.editedItem.tax_method);
             }
 
             if ('image' in this.editedItem) {

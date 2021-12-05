@@ -92,6 +92,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::group(['prefix' => '/item'], function () {
             Route::apiResource('items', \App\Http\Controllers\Api\ItemController::class);
             Route::post('items/{id}', [\App\Http\Controllers\Api\ItemController::class, 'update']);
+            Route::apiResource('itemUsers', \App\Http\Controllers\Api\ItemUserController::class);
+            Route::post('itemUsers/{id}', [\App\Http\Controllers\Api\ItemUserController::class, 'update']);
         });
     });
 

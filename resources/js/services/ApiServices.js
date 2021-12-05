@@ -196,6 +196,22 @@ export default {
         return await apiCall(DELETE, `api/product/item/items/${id}`)
     },
 
+    async itemUnitIndex() {
+        return await apiCall(GET, `api/product/item/itemUnits`)
+    },
+    async itemUnitCreate(data) {
+        return await apiCall(POST, `api/product/item/itemUnits`, data)
+    },
+    async itemUnitShow(id) {
+        return await apiCall(GET, `api/product/item/itemUnits/${id}`)
+    },
+    async itemUnitEdit(id, data) {
+        return await apiCall(POST, `api/product/item/itemUnits/${id}`, data)
+    },
+    async itemUnitDelete(id) {
+        return await apiCall(DELETE, `api/product/item/itemUnits/${id}`)
+    },
+
     async productAttributeGroupIndex() {
         return await apiCall(GET, `api/product/productAttributeGroups`)
     },

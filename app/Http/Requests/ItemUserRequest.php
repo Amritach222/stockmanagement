@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 
-class ItemRequest extends FormRequest
+class ItemUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,18 +26,12 @@ class ItemRequest extends FormRequest
     {
         if ($this->id) {
             return [
-                'name' => 'string',
-                'product_id' => 'int|exists:products,id',
-                'product_variant_id' => 'int|exists:product_variants,id',
-                'brand_id' => 'int|exists:brands,id',
+                'item_id' => 'int|exists:items,id',
                 'user_id' => 'int|exists:users,id',
             ];
-        }else{
+        } else {
             return [
-                'name' => 'required|string',
-                'product_id' => 'required|int|exists:products,id',
-                'product_variant_id' => 'required|int|exists:product_variants,id',
-                'brand_id' => 'required|int|exists:brands,id',
+                'item_id' => 'required|int|exists:items,id',
                 'user_id' => 'required|int|exists:users,id',
             ];
         }

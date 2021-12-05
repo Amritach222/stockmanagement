@@ -28,7 +28,6 @@
                                             required
                                             @keyup="clearError('name')"
                                             prepend-icon="mdi-apps-box"
-                                            @keyup.enter="create"
                                             :rules="rules.name"
                                             solo
                                         />
@@ -45,7 +44,6 @@
                                             required
                                             @keyup="clearError('product_id')"
                                             prepend-icon="mdi-alpha-p-circle"
-                                            @keyup.enter="create"
                                             :rules="rules.product_id"
                                             solo
                                         />
@@ -59,6 +57,20 @@
                                             :label="$t('variants')"
                                             placeholder="Select variant..."
                                             prepend-icon="mdi-alpha-v-circle"
+                                            solo
+                                        />
+                                        <v-select
+                                            v-model="user_id"
+                                            :items="users"
+                                            item-text="name"
+                                            item-value="id"
+                                            description="Please select a user."
+                                            autocomplete=""
+                                            :label="$t('user')"
+                                            placeholder="Select user..."
+                                            :rules="rules.user_id"
+                                            required
+                                            prepend-icon="mdi-account"
                                             solo
                                         />
                                         <v-file-input
@@ -82,7 +94,6 @@
                                             required
                                             @keyup="clearError('brand_id')"
                                             prepend-icon="mdi-alpha-b-circle"
-                                            @keyup.enter="create"
                                             :rules="rules.brand_id"
                                             solo
                                         />
@@ -96,7 +107,6 @@
                                             placeholder="Enter cost price..."
                                             prepend-icon="mdi-currency-usd"
                                             @keyup="clearError('cost_price')"
-                                            @keyup.enter="create"
                                             solo
                                         />
                                         <v-text-field
@@ -108,7 +118,6 @@
                                             placeholder="Enter quantity..."
                                             prepend-icon="mdi-chart-areaspline"
                                             @keyup="clearError('quantity')"
-                                            @keyup.enter="create"
                                             solo
                                         />
                                         <v-select
@@ -124,35 +133,6 @@
                                             prepend-icon="mdi-google-circles-communities"
                                             required
                                             @keyup="clearError('unit_id')"
-                                            @keyup.enter="create"
-                                            solo
-                                        />
-                                        <v-select
-                                            v-model="tax_id"
-                                            name="tax_id"
-                                            :items="taxes"
-                                            item-text="name"
-                                            item-value="id"
-                                            description="Please select a tax."
-                                            autocomplete=""
-                                            :label="$t('tax')"
-                                            placeholder="Select a tax..."
-                                            prepend-icon="mdi-alpha-t-circle"
-                                            @keyup="clearError('tax_id')"
-                                            @keyup.enter="create"
-                                            solo
-                                        />
-                                        <v-select
-                                            v-model="tax_method"
-                                            name="tax_method"
-                                            :items="['Included','Excluded']"
-                                            description="Please select a tax method."
-                                            autocomplete=""
-                                            :label="$t('tax_method')"
-                                            placeholder="Select a method..."
-                                            prepend-icon="mdi-chart-bubble"
-                                            @keyup="clearError('tax_method')"
-                                            @keyup.enter="create"
                                             solo
                                         />
                                     </v-form>
@@ -195,25 +175,22 @@ export default {
         brand_id: '',
         product_id: '',
         product_variant_id: '',
+        user_id: '',
         quantity: '',
         cost_price: '',
         unit_id: '',
-        tax_id: '',
-        tax_method: '',
         image: [],
         brands: [],
         products: [],
         units: [],
-        taxes: [],
         variants: [],
+        users: [],
         createProgress: false,
         error: {
             name: '',
             product_id: '',
             cost_price: '',
             unit_id: '',
-            tax_id: '',
-            tax_method: '',
             image: [],
         },
         rules: {
@@ -224,6 +201,9 @@ export default {
                 val => val > 0 || i18n.t('validation.required'),
             ],
             product_id: [
+                val => val > 0 || i18n.t('validation.required'),
+            ],
+            user_id: [
                 val => val > 0 || i18n.t('validation.required'),
             ],
             attribute_group_ids: [
@@ -239,8 +219,7 @@ export default {
         this.loadProducts();
         this.loadBrands();
         this.loadUnits();
-        this.loadTaxes();
-        this.loadUnits();
+        this.loadUsers();
         this.loadDepartments();
         // this.loadItemAttributes();
     },
@@ -275,12 +254,6 @@ export default {
                 this.units = res.data;
             }
         },
-        async loadTaxes() {
-            let res = await ApiServices.taxIndex();
-            if (res.success === true) {
-                this.taxes = res.data;
-            }
-        },
 
         clearError(name) {
             if (name === 'name') {
@@ -301,12 +274,6 @@ export default {
             if (name === 'unit_id') {
                 this.error.unit_id = '';
             }
-            if (name === 'tax_id') {
-                this.error.tax_id = '';
-            }
-            if (name === 'tax_method') {
-                this.error.tax_method = '';
-            }
         },
 
 
@@ -320,14 +287,11 @@ export default {
             data.append('quantity', this.quantity);
             data.append('cost_price', this.cost_price);
             data.append('unit_id', this.unit_id);
-            data.append('tax_id', this.tax_id);
-            data.append('tax_method', this.tax_method);
+            data.append('user_id', this.user_id);
 
             if (typeof this.image.name == 'string') {
                 data.append('image', this.image);
             }
-
-            console.log(this.variants.length)
 
             let res = await ApiServices.itemCreate(data);
             this.createProgress = false;

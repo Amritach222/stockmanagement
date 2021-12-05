@@ -7,11 +7,12 @@ use App\Helpers\CodeGenerator;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ItemRequest;
 use App\Http\Resources\Item as ItemResource;
-use App\Models\Attribute;
 use App\Models\File;
 use App\Models\Item;
+use App\Models\ItemUser;
 use App\Models\ProductAttribute;
 use App\Models\ProductAttributeGroup;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Samundra\File\SamundraFileHelper;
@@ -84,6 +85,14 @@ class ItemController extends Controller
             }
             $item = new Item($values);
             $item->save();
+            if ($request->user_id) {
+                $userValues['item_id'] = $item->id;
+                $user = User::findOrFail($request->user_id);
+                $userValues['user_id'] = $user->id;
+                $userValues['department_id'] = $user->department_id;
+                $itemUser = new ItemUser($userValues);
+                $itemUser->save();
+            }
             event(new ActivityLogEvent('Add', 'Item', $item->id));
             $data['message'] = "Item added successfully";
             $data['data'] = new ItemResource($item);
@@ -172,6 +181,15 @@ class ItemController extends Controller
                 $values['image_id'] = $newFile->id;
             }
             $item->update($values);
+            $itemUser = ItemUser::where('item_id', $item->id)->orderBy('created_at', 'desc')->first();
+            if ($item->user_id != $request->user_id) {
+                $userValues['item_id'] = $item->id;
+                $user = User::findOrFail($request->user_id);
+                $userValues['user_id'] = $user->id;
+                $userValues['department_id'] = $user->department_id;
+                $itemUser = new ItemUser($userValues);
+                $itemUser->save();
+            }
             event(new ActivityLogEvent('Edit', 'Item', $item->id));
             $data['message'] = "Updated successfully";
             $data['data'] = new ItemResource($item);
