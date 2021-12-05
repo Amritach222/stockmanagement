@@ -3,11 +3,11 @@
 namespace App\Http\Resources;
 
 use App\Models\File;
-use App\Models\ItemVariantAttribute;
-use App\Models\ItemAttribute;
+use App\Models\ProductVariantAttribute;
+use App\Models\ProductAttribute;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ItemVariant extends JsonResource
+class ProductVariant extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -22,8 +22,8 @@ class ItemVariant extends JsonResource
             $image = File::where('id', $this->image_id)->first();
             $link = $image->path;
         }
-        $variantAttributeIds = ItemVariantAttribute::where('item_variant_id', $this->id)->pluck('attribute_id');
-        $attributeGroupIds = ItemAttribute::whereIn('id', $variantAttributeIds)->pluck('attribute_group_id');
+        $variantAttributeIds = ProductVariantAttribute::where('product_variant_id', $this->id)->pluck('attribute_id');
+        $attributeGroupIds = ProductAttribute::whereIn('id', $variantAttributeIds)->pluck('attribute_group_id');
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -35,7 +35,7 @@ class ItemVariant extends JsonResource
             'link' => $link,
             'attribute_ids' => $variantAttributeIds,
             'attribute_group_ids' => $attributeGroupIds,
-            'item_variant_attributes' => $this->itemVariantAttributes,
+            'product_variant_attributes' => $this->productVariantAttributes,
         ];
     }
 }

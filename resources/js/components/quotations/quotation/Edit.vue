@@ -124,20 +124,20 @@
                                                                         <v-row>
                                                                             <v-col>
                                                                                 <v-select
-                                                                                    v-model="addQuoProduct.item_id"
-                                                                                    :label="$t('item')"
-                                                                                    :items="items"
+                                                                                    v-model="addQuoProduct.product_id"
+                                                                                    :label="$t('product')"
+                                                                                    :items="products"
                                                                                     item-text="name"
                                                                                     item-value="id"
                                                                                     required
                                                                                     outlined
                                                                                     :rules="rules"
-                                                                                    v-on:change="getVariants(addQuoProduct.item_id)"
+                                                                                    v-on:change="getVariants(addQuoProduct.product_id)"
                                                                                 ></v-select>
                                                                                 <div v-if="hasVariants">
                                                                                     <v-select
-                                                                                        v-model="addQuoProduct.item_variant_id"
-                                                                                        :label="$t('item') +' '+ $t('variant')"
+                                                                                        v-model="addQuoProduct.product_variant_id"
+                                                                                        :label="$t('product') +' '+ $t('variant')"
                                                                                         :items="variants"
                                                                                         item-text="name"
                                                                                         item-value="id"
@@ -206,12 +206,12 @@
                                                     </v-dialog>
                                                 </v-toolbar>
                                             </template>
-                                            <template v-slot:item.item_id="{ item }">
-                                                <p v-if="item.item_id" class="mt-3">{{ item.item.name }}</p>
+                                            <template v-slot:item.product_id="{ item }">
+                                                <p v-if="item.product_id" class="mt-3">{{ item.product.name }}</p>
                                             </template>
-                                            <template v-slot:item.item_variant_id="{ item }">
-                                                <p v-if="item.item_variant_id" class="mt-3">{{
-                                                        item.item_variant.name
+                                            <template v-slot:item.product_variant_id="{ item }">
+                                                <p v-if="item.product_variant_id" class="mt-3">{{
+                                                        item.product_variant.name
                                                     }}</p>
                                                 <p v-else class="mt-3">---</p>
                                             </template>
@@ -281,8 +281,8 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('item'), value: 'item_id'},
-            {text: i18n.t('item_variant'), value: 'item_variant_id'},
+            {text: i18n.t('product'), value: 'product_id'},
+            {text: i18n.t('product') +' '+ i18n.t('variant'), value: 'product_variant_id'},
             {text: i18n.t('quantity'), value: 'quantity'},
             {text: i18n.t('price'), value: 'price'},
             {text: i18n.t('tax'), value: 'tax_id'},
@@ -295,10 +295,10 @@ export default {
         productCount: 0,
         editedIndex: -1,
         quoProducts: [],
-        items: [],
+        products: [],
         addQuoProduct: {
-            item_id: '',
-            item_variant_id: '',
+            product_id: '',
+            product_variant_id: '',
             quantity: '',
             shipping_cost: '',
         },
@@ -345,9 +345,9 @@ export default {
         },
 
         async loadItems() {
-            let res = await ApiServices.itemIndex();
+            let res = await ApiServices.productIndex();
             if (res.success === true) {
-                this.items = res.data;
+                this.products = res.data;
             }
         },
 
@@ -359,15 +359,15 @@ export default {
             }
         },
 
-        async getVariants(item) {
-            let res = await ApiServices.itemShow(item);
+        async getVariants(product) {
+            let res = await ApiServices.productShow(product);
             if (res.success === true) {
-                if (res.data.item_variants.length > 0) {
+                if (res.data.product_variants.length > 0) {
                     this.hasVariants = true;
                 } else {
                     this.hasVariants = false;
                 }
-                this.variants = res.data.item_variants;
+                this.variants = res.data.product_variants;
             }
         },
 
@@ -439,9 +439,9 @@ export default {
                     //edit goes here
                     this.progressL = true;
                     const data = new FormData();
-                    data.append('item_id', this.addQuoProduct.item_id);
-                    if (this.addQuoProduct.item_variant_id !== null) {
-                        data.append('item_variant_id', this.addQuoProduct.item_variant_id);
+                    data.append('product_id', this.addQuoProduct.product_id);
+                    if (this.addQuoProduct.product_variant_id !== null) {
+                        data.append('product_variant_id', this.addQuoProduct.product_variant_id);
                     }
                     data.append('quantity', this.addQuoProduct.quantity);
                     data.append('shipping_cost', this.addQuoProduct.shipping_cost);
@@ -455,9 +455,9 @@ export default {
                     //add new
                     this.progressL = true;
                     const data = new FormData();
-                    data.append('item_id', this.addQuoProduct.item_id);
-                    if (this.addQuoProduct.item_variant_id !== null) {
-                        data.append('item_variant_id', this.addQuoProduct.item_variant_id);
+                    data.append('product_id', this.addQuoProduct.product_id);
+                    if (this.addQuoProduct.product_variant_id !== null) {
+                        data.append('product_variant_id', this.addQuoProduct.product_variant_id);
                     }
                     data.append('quantity', this.addQuoProduct.quantity);
                     data.append('shipping_cost', this.addQuoProduct.shipping_cost);
@@ -481,7 +481,7 @@ export default {
         },
 
         productValidate() {
-            if (this.item_id === '') {
+            if (this.product_id === '') {
                 this.validated = false;
             } else {
                 this.validated = true;

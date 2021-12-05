@@ -14,6 +14,11 @@ use Illuminate\Http\Request;
 
 class ConsumeController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('consumes');
+    }
+
     public function index()
     {
         $data['success'] = true;

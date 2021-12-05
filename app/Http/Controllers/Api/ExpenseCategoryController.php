@@ -12,6 +12,11 @@ use Illuminate\Http\Request;
 
 class ExpenseCategoryController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('expenseCategories');
+    }
+
     public function index()
     {
         $data['success'] = true;

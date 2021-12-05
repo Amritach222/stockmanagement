@@ -29,6 +29,10 @@ class ProductRequest extends FormRequest
                 'name' => 'string',
                 'brand_id' => 'int|exists:brands,id',
                 'category_id' => 'int|exists:categories,id',
+                'stock' => 'int',
+                'alert_stock' => 'int',
+                'unit_id' => 'int|exists:units,id',
+                'tax_id' => 'int|exists:taxes,id',
                 'details' => 'sometimes',
                 'image' => 'sometimes|image|mimes:jpg,jpeg,png,pdf|max:4096'
             ];
@@ -37,6 +41,10 @@ class ProductRequest extends FormRequest
                 'name' => 'required|string',
                 'brand_id' => 'required|int|exists:brands,id',
                 'category_id' => 'required|int|exists:categories,id',
+                'stock' => 'int',
+                'alert_stock' => 'int',
+                'unit_id' => 'int|exists:units,id',
+                'tax_id' => 'int|exists:taxes,id',
                 'details' => 'sometimes',
                 'image' => 'sometimes|image|mimes:jpg,jpeg,png,pdf|max:4096'
             ];

@@ -65,6 +65,16 @@ class CreateForeignKeys extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
+        Schema::table('products', function (Blueprint $table) {
+            $table->foreign('unit_id')->references('id')->on('units')
+                ->onDelete('cascade')
+                ->onUpdate('restrict');
+        });
+        Schema::table('products', function (Blueprint $table) {
+            $table->foreign('tax_id')->references('id')->on('taxes')
+                ->onDelete('cascade')
+                ->onUpdate('restrict');
+        });
         Schema::table('departments', function (Blueprint $table) {
             $table->foreign('head_of_department')->references('id')->on('users')
                 ->onDelete('cascade')
@@ -85,13 +95,18 @@ class CreateForeignKeys extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
-        Schema::table('item_attributes', function (Blueprint $table) {
-            $table->foreign('attribute_group_id')->references('id')->on('item_attribute_groups')
+        Schema::table('product_attributes', function (Blueprint $table) {
+            $table->foreign('attribute_group_id')->references('id')->on('product_attribute_groups')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
         Schema::table('items', function (Blueprint $table) {
             $table->foreign('product_id')->references('id')->on('products')
+                ->onDelete('cascade')
+                ->onUpdate('restrict');
+        });
+        Schema::table('items', function (Blueprint $table) {
+            $table->foreign('product_variant_id')->references('id')->on('product_variants')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
@@ -115,23 +130,23 @@ class CreateForeignKeys extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
-        Schema::table('item_variants', function (Blueprint $table) {
-            $table->foreign('item_id')->references('id')->on('items')
+        Schema::table('product_variants', function (Blueprint $table) {
+            $table->foreign('product_id')->references('id')->on('products')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
-        Schema::table('item_variants', function (Blueprint $table) {
+        Schema::table('product_variants', function (Blueprint $table) {
             $table->foreign('image_id')->references('id')->on('files')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
-        Schema::table('item_variant_attributes', function (Blueprint $table) {
-            $table->foreign('item_variant_id')->references('id')->on('item_variants')
+        Schema::table('product_variant_attributes', function (Blueprint $table) {
+            $table->foreign('product_variant_id')->references('id')->on('product_variants')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
-        Schema::table('item_variant_attributes', function (Blueprint $table) {
-            $table->foreign('attribute_id')->references('id')->on('item_attributes')
+        Schema::table('product_variant_attributes', function (Blueprint $table) {
+            $table->foreign('attribute_id')->references('id')->on('product_attributes')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
@@ -176,12 +191,12 @@ class CreateForeignKeys extends Migration
                 ->onUpdate('restrict');
         });
         Schema::table('quotation_products', function (Blueprint $table) {
-            $table->foreign('item_id')->references('id')->on('items')
+            $table->foreign('product_id')->references('id')->on('products')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
         Schema::table('quotation_products', function (Blueprint $table) {
-            $table->foreign('item_variant_id')->references('id')->on('item_variants')
+            $table->foreign('product_variant_id')->references('id')->on('product_variants')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
@@ -221,12 +236,7 @@ class CreateForeignKeys extends Migration
                 ->onUpdate('restrict');
         });
         Schema::table('purchase_products', function (Blueprint $table) {
-            $table->foreign('item_id')->references('id')->on('items')
-                ->onDelete('cascade')
-                ->onUpdate('restrict');
-        });
-        Schema::table('purchase_products', function (Blueprint $table) {
-            $table->foreign('item_variant_id')->references('id')->on('item_variants')
+            $table->foreign('product_variant_id')->references('id')->on('product_variants')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
@@ -242,11 +252,6 @@ class CreateForeignKeys extends Migration
         });
         Schema::table('consumes', function (Blueprint $table) {
             $table->foreign('item_id')->references('id')->on('items')
-                ->onDelete('cascade')
-                ->onUpdate('restrict');
-        });
-        Schema::table('consumes', function (Blueprint $table) {
-            $table->foreign('item_variant_id')->references('id')->on('item_variants')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
@@ -296,11 +301,6 @@ class CreateForeignKeys extends Migration
                 ->onUpdate('restrict');
         });
         Schema::table('unused_products', function (Blueprint $table) {
-            $table->foreign('item_variant_id')->references('id')->on('item_variants')
-                ->onDelete('cascade')
-                ->onUpdate('restrict');
-        });
-        Schema::table('unused_products', function (Blueprint $table) {
             $table->foreign('department_id')->references('id')->on('departments')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
@@ -337,11 +337,6 @@ class CreateForeignKeys extends Migration
         });
         Schema::table('transfers', function (Blueprint $table) {
             $table->foreign('item_id')->references('id')->on('items')
-                ->onDelete('cascade')
-                ->onUpdate('restrict');
-        });
-        Schema::table('transfers', function (Blueprint $table) {
-            $table->foreign('item_variant_id')->references('id')->on('item_variants')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
@@ -477,6 +472,12 @@ class CreateForeignKeys extends Migration
         Schema::table('products', function (Blueprint $table) {
             $table->dropForeign('products_image_id_foreign');
         });
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign('products_unit_id_foreign');
+        });
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign('products_tax_id_foreign');
+        });
         Schema::table('departments', function (Blueprint $table) {
             $table->dropForeign('departments_head_of_department_foreign');
         });
@@ -489,11 +490,14 @@ class CreateForeignKeys extends Migration
         Schema::table('logs', function (Blueprint $table) {
             $table->dropForeign('logs_activity_id_foreign');
         });
-        Schema::table('item_attributes', function (Blueprint $table) {
-            $table->dropForeign('item_attributes_attribute_group_id_foreign');
+        Schema::table('product_attributes', function (Blueprint $table) {
+            $table->dropForeign('product_attributes_attribute_group_id_foreign');
         });
         Schema::table('items', function (Blueprint $table) {
             $table->dropForeign('items_product_id_foreign');
+        });
+        Schema::table('items', function (Blueprint $table) {
+            $table->dropForeign('items_product_variant_id_foreign');
         });
         Schema::table('items', function (Blueprint $table) {
             $table->dropForeign('items_brand_id_foreign');
@@ -507,17 +511,17 @@ class CreateForeignKeys extends Migration
         Schema::table('items', function (Blueprint $table) {
             $table->dropForeign('items_image_id_foreign');
         });
-        Schema::table('item_variants', function (Blueprint $table) {
-            $table->dropForeign('item_variants_item_id_foreign');
+        Schema::table('product_variants', function (Blueprint $table) {
+            $table->dropForeign('product_variants_item_id_foreign');
         });
-        Schema::table('item_variants', function (Blueprint $table) {
-            $table->dropForeign('item_variants_image_id_foreign');
+        Schema::table('product_variants', function (Blueprint $table) {
+            $table->dropForeign('product_variants_image_id_foreign');
         });
-        Schema::table('item_variant_attributes', function (Blueprint $table) {
-            $table->dropForeign('item_variant_attributes_item_variant_id_foreign');
+        Schema::table('product_variant_attributes', function (Blueprint $table) {
+            $table->dropForeign('product_variant_attributes_product_variant_id_foreign');
         });
-        Schema::table('item_variant_attributes', function (Blueprint $table) {
-            $table->dropForeign('item_variant_attributes_attribute_id_foreign');
+        Schema::table('product_variant_attributes', function (Blueprint $table) {
+            $table->dropForeign('product_variant_attributes_attribute_id_foreign');
         });
         Schema::table('vendors', function (Blueprint $table) {
             $table->dropForeign('vendors_image_id_foreign');
@@ -544,10 +548,10 @@ class CreateForeignKeys extends Migration
             $table->dropForeign('quotation_products_quotation_id_foreign');
         });
         Schema::table('quotation_products', function (Blueprint $table) {
-            $table->dropForeign('quotation_products_item_id_foreign');
+            $table->dropForeign('quotation_products_product_id_foreign');
         });
         Schema::table('quotation_products', function (Blueprint $table) {
-            $table->dropForeign('quotation_products_item_variant_id_foreign');
+            $table->dropForeign('quotation_products_product_variant_id_foreign');
         });
         Schema::table('quotation_products', function (Blueprint $table) {
             $table->dropForeign('quotation_products_tax_id_foreign');
@@ -571,10 +575,10 @@ class CreateForeignKeys extends Migration
             $table->dropForeign('purchase_products_product_id_foreign');
         });
         Schema::table('purchase_products', function (Blueprint $table) {
-            $table->dropForeign('purchase_products_item_id_foreign');
+            $table->dropForeign('purchase_products_product_id_foreign');
         });
         Schema::table('purchase_products', function (Blueprint $table) {
-            $table->dropForeign('purchase_products_item_variant_id_foreign');
+            $table->dropForeign('purchase_products_product_variant_id_foreign');
         });
         Schema::table('purchase_products', function (Blueprint $table) {
             $table->dropForeign('purchase_products_vendor_id_foreign');
@@ -584,9 +588,6 @@ class CreateForeignKeys extends Migration
         });
         Schema::table('consumes', function (Blueprint $table) {
             $table->dropForeign('consumes_item_id_foreign');
-        });
-        Schema::table('consumes', function (Blueprint $table) {
-            $table->dropForeign('consumes_item_variant_id_foreign');
         });
         Schema::table('consumes', function (Blueprint $table) {
             $table->dropForeign('consumes_department_id_foreign');
@@ -616,9 +617,6 @@ class CreateForeignKeys extends Migration
             $table->dropForeign('unused_products_item_id_foreign');
         });
         Schema::table('unused_products', function (Blueprint $table) {
-            $table->dropForeign('unused_products_item_variant_id_foreign');
-        });
-        Schema::table('unused_products', function (Blueprint $table) {
             $table->dropForeign('unused_products_department_id_foreign');
         });
         Schema::table('unused_products', function (Blueprint $table) {
@@ -641,9 +639,6 @@ class CreateForeignKeys extends Migration
         });
         Schema::table('transfers', function (Blueprint $table) {
             $table->dropForeign('transfers_item_id_foreign');
-        });
-        Schema::table('transfers', function (Blueprint $table) {
-            $table->dropForeign('transfers_item_variant_id_foreign');
         });
         Schema::table('transfers', function (Blueprint $table) {
             $table->dropForeign('transfers_file_id_foreign');

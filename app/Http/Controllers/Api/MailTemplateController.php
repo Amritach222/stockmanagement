@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class MailTemplateController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('mailTemplates');
+    }
+
     public function index()
     {
         $data['success'] = true;

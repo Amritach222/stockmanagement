@@ -11,7 +11,6 @@ class CreateConsumesTable extends Migration {
 			$table->increments('id');
 			$table->timestamps();
 			$table->integer('item_id')->unsigned();
-			$table->integer('item_variant_id')->unsigned()->nullable();
 			$table->integer('department_id')->unsigned();
 			$table->integer('user_id')->unsigned();
 			$table->integer('approved_by')->unsigned()->nullable();

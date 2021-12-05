@@ -63,28 +63,28 @@ import MailTemplateIndex from './components/settings/mailTemplate/Index'
 
 import MailTemplateShow from './components/settings/mailTemplate/Show'
 import MailTemplateEdit from './components/settings/mailTemplate/Edit'
-import ItemAttributeGroupIndex from './components/products/items/itemAttributeGroup/Index'
 
-import ItemAttributeGroupCreate from './components/products/items/itemAttributeGroup/Create'
-import ItemAttributeGroupShow from './components/products/items/itemAttributeGroup/Show'
-import ItemAttributeGroupEdit from './components/products/items/itemAttributeGroup/Edit'
-import ItemAttributeIndex from './components/products/items/itemAttribute/Index'
+import ProductAttributeGroupIndex from './components/Products/ProductAttributeGroup/Index'
+import ProductAttributeGroupCreate from './components/Products/ProductAttributeGroup/Create'
+import ProductAttributeGroupShow from './components/Products/ProductAttributeGroup/Show'
+import ProductAttributeGroupEdit from './components/Products/ProductAttributeGroup/Edit'
 
-import ItemAttributeCreate from './components/products/items/itemAttribute/Create'
-import ItemAttributeShow from './components/products/items/itemAttribute/Show'
-import ItemAttributeEdit from './components/products/items/itemAttribute/Edit'
+import ProductAttributeIndex from './components/Products/ProductAttribute/Index'
+import ProductAttributeCreate from './components/Products/ProductAttribute/Create'
+import ProductAttributeShow from './components/Products/ProductAttribute/Show'
+import ProductAttributeEdit from './components/Products/ProductAttribute/Edit'
+
 import ItemIndex from './components/products/items/item/Index'
-
 import ItemCreate from './components/products/items/item/Create'
 import ItemShow from './components/products/items/item/Show'
 import ItemEdit from './components/products/items/item/Edit'
-import ItemVariantIndex from './components/products/items/itemVariant/Index'
 
-import ItemVariantCreate from './components/products/items/itemVariant/Create'
-import ItemVariantShow from './components/products/items/itemVariant/Show'
-import ItemVariantEdit from './components/products/items/itemVariant/Edit'
+import ProductVariantIndex from './components/Products/ProductVariant/Index'
+import ProductVariantCreate from './components/Products/ProductVariant/Create'
+import ProductVariantShow from './components/Products/ProductVariant/Show'
+import ProductVariantEdit from './components/Products/ProductVariant/Edit'
+
 import SignatureIndex from './components/settings/signatures/signature/Index'
-
 import SignatureCreate from './components/settings/signatures/signature/Create'
 import SignatureShow from './components/settings/signatures/signature/Show'
 import SignatureEdit from './components/settings/signatures/signature/Edit'
@@ -421,72 +421,72 @@ export default new Router({
             }
         },
         {
-            path: '/itemAttributeGroups',
-            name: i18n.t('item_attribute_groups'),
-            component: ItemAttributeGroupIndex,
+            path: '/productAttributeGroups',
+            name: i18n.t('product_attribute_groups'),
+            component: ProductAttributeGroupIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
             }
         },
         {
-            path: '/itemAttributeGroups/create',
-            name: i18n.t('card_title.add_item_attribute_group'),
-            component: ItemAttributeGroupCreate,
+            path: '/productAttributeGroups/create',
+            name: i18n.t('card_title.add_product_attribute_group'),
+            component: ProductAttributeGroupCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
             }
         },
         {
-            path: '/itemAttributeGroups/edit/:id',
-            name: i18n.t('card_title.edit_item_attribute_group'),
-            component: ItemAttributeGroupEdit,
+            path: '/productAttributeGroups/edit/:id',
+            name: i18n.t('card_title.edit_product_attribute_group'),
+            component: ProductAttributeGroupEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
             }
         },
         {
-            path: '/itemAttributeGroups/:id',
-            name: i18n.t('item_attribute_group'),
-            component: ItemAttributeGroupShow,
+            path: '/productAttributeGroups/:id',
+            name: i18n.t('product_attribute_group'),
+            component: ProductAttributeGroupShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
             }
         },
         {
-            path: '/itemAttributes',
-            name: i18n.t('item_attributes'),
-            component: ItemAttributeIndex,
+            path: '/productAttributes',
+            name: i18n.t('product_attributes'),
+            component: ProductAttributeIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
             }
         },
         {
-            path: '/itemAttributes/create',
-            name: i18n.t('card_title.add_item_attribute'),
-            component: ItemAttributeCreate,
+            path: '/productAttributes/create',
+            name: i18n.t('card_title.add_product_attribute'),
+            component: ProductAttributeCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
             }
         },
         {
-            path: '/itemAttributes/edit/:id',
-            name: i18n.t('card_title.edit_item_attribute'),
-            component: ItemAttributeEdit,
+            path: '/productAttributes/edit/:id',
+            name: i18n.t('card_title.edit_product_attribute'),
+            component: ProductAttributeEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
             }
         },
         {
-            path: '/itemAttributes/:id',
-            name: i18n.t('item_attribute'),
-            component: ItemAttributeShow,
+            path: '/productAttributes/:id',
+            name: i18n.t('product_attribute'),
+            component: ProductAttributeShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
@@ -529,36 +529,36 @@ export default new Router({
             }
         },
         {
-            path: '/itemVariants',
-            name: i18n.t('item_variants'),
-            component: ItemVariantIndex,
+            path: '/productVariants',
+            name: i18n.t('product_variants'),
+            component: ProductVariantIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
             }
         },
         {
-            path: '/itemVariants/create',
-            name: i18n.t('card_title.add_item_variant'),
-            component: ItemVariantCreate,
+            path: '/productVariants/create',
+            name: i18n.t('card_title.add_product_variant'),
+            component: ProductVariantCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
             }
         },
         {
-            path: '/itemVariants/edit/:id',
-            name: i18n.t('card_title.edit_item_variant'),
-            component: ItemVariantEdit,
+            path: '/productVariants/edit/:id',
+            name: i18n.t('card_title.edit_product_variant'),
+            component: ProductVariantEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
             }
         },
         {
-            path: '/itemVariants/:id',
-            name: i18n.t('item_variant'),
-            component: ItemVariantShow,
+            path: '/productVariants/:id',
+            name: i18n.t('product_variant'),
+            component: ProductVariantShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

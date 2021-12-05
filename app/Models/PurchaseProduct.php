@@ -9,7 +9,7 @@ class PurchaseProduct extends Model
 
     protected $table = 'purchase_products';
     public $timestamps = true;
-    protected $fillable = array('purchase_id', 'product_id', 'item_id', 'item_variant_id', 'vendor_id', 'quantity', 'price', 'tax_id', 'total_price');
+    protected $fillable = array('purchase_id', 'product_id', 'product_variant_id', 'vendor_id', 'quantity', 'price', 'tax_id', 'total_price');
 
     public function purchase()
     {
@@ -21,14 +21,9 @@ class PurchaseProduct extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    public function item()
+    public function productVariant()
     {
-        return $this->belongsTo(Item::class, 'item_id');
-    }
-
-    public function itemVariant()
-    {
-        return $this->belongsTo(ItemVariant::class, 'item_variant_id');
+        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
     }
 
     public function vendor()

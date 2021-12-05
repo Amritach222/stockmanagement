@@ -17,7 +17,6 @@ class UnusedProduct extends JsonResource
         return [
             'id' => $this->id,
             'item_id' => $this->item_id,
-            'item_variant_id' => $this->item_variant_id,
             'department_id' => $this->department_id,
             'user_id' => $this->user_id,
             'approved_by' => $this->approved_by,

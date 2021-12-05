@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuthResource extends JsonResource
+class AuthUserResource extends JsonResource
 {
     public static $wrap = 'data';
 
@@ -24,6 +24,9 @@ class AuthResource extends JsonResource
             'is_active' => $this->is_active,
             'mobile_no' => $this->mobile_no,
             'address' => $this->address,
+            'access_token' => $this->access_token,
+            'permissions' => $this->permissions,
+            'roles' => $this->roles,
         ];
     }
 

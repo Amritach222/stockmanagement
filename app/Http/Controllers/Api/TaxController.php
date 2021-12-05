@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class TaxController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('taxes');
+    }
+
     public function index()
     {
         $data['success'] = true;

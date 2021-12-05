@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 
 class BankAccountController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('bankAccounts');
+    }
     public function index()
     {
         $data['success'] = true;

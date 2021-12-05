@@ -27,8 +27,8 @@ class QuotationProductRequest extends FormRequest
         if ($this->id) {
             return [
                 'quotation_id' => 'int|exists:quotations,id',
-                'item_id' => 'int|exists:items,id',
-                'item_variant_id' => 'int|exists:item_variants,id',
+                'product_id' => 'int|exists:products,id',
+                'product_variant_id' => 'int|exists:product_variants,id',
                 'quantity' => 'int',
                 'tax_id' => 'int|exists:taxes,id',
                 'shipping_cost' => 'int',
@@ -36,8 +36,8 @@ class QuotationProductRequest extends FormRequest
         } else {
             return [
                 'quotation_id' => 'required|int|exists:quotations,id',
-                'item_id' => 'required|int|exists:items,id',
-                'item_variant_id' => 'int|exists:item_variants,id',
+                'product_id' => 'required|int|exists:products,id',
+                'product_variant_id' => 'int|exists:product_variants,id',
                 'quantity' => 'int',
                 'tax_id' => 'int|exists:taxes,id',
                 'shipping_cost' => 'int',

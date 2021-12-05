@@ -29,7 +29,6 @@ class TransferRequest extends FormRequest
                 'from' => 'int|exists:departments,id',
                 'to' => 'int|exists:departments,id',
                 'item_id' => 'int|exists:items,id',
-                'item_variant_id' => 'int|exists:item_variants,id',
                 'total_quantity' => 'int|min:1',
                 'tax_id' => 'int|exists:taxes,id',
                 'shipping_cost' => 'int'
@@ -39,7 +38,6 @@ class TransferRequest extends FormRequest
                 'from' => 'required|int|exists:departments,id',
                 'to' => 'required|int|exists:departments,id',
                 'item_id' => 'required|int|exists:items,id',
-                'item_variant_id' => 'int|exists:item_variants,id',
                 'total_quantity' => 'int|min:1',
                 'tax_id' => 'int|exists:taxes,id',
                 'shipping_cost' => 'int'

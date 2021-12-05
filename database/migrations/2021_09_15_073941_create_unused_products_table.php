@@ -12,7 +12,6 @@ class CreateUnusedProductsTable extends Migration {
 			$table->timestamps();
 			$table->string('code', 255);
 			$table->integer('item_id')->unsigned();
-			$table->integer('item_variant_id')->unsigned()->nullable();
 			$table->integer('department_id')->unsigned();
 			$table->integer('user_id')->unsigned();
 			$table->integer('approved_by')->unsigned()->nullable();

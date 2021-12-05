@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 
 class BudgetDispatchController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('budgetDispatches');
+    }
     public function index()
     {
         $data['success'] = true;

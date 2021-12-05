@@ -3,19 +3,19 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateItemAttributeGroupsTable extends Migration {
+class CreateProductAttributeGroupsTable extends Migration {
 
 	public function up()
 	{
-		Schema::create('item_attribute_groups', function(Blueprint $table) {
+		Schema::create('product_attribute_groups', function(Blueprint $table) {
 			$table->increments('id');
-			$table->timestamps();
 			$table->string('name', 255);
+            $table->timestamps();
 		});
 	}
 
 	public function down()
 	{
-		Schema::drop('item_attribute_groups');
+		Schema::drop('product_attribute_groups');
 	}
 }

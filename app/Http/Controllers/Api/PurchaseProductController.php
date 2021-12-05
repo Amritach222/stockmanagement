@@ -7,7 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PurchaseProductRequest;
 use App\Http\Resources\PurchaseProduct as PurchaseProductResource;
 use App\Models\Item;
-use App\Models\ItemVariant;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\Purchase;
 use App\Models\PurchaseProduct;
 use App\Models\Tax;
@@ -15,6 +16,11 @@ use Illuminate\Http\Request;
 
 class PurchaseProductController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('purchaseProducts');
+    }
+
     public function index()
     {
         $data['success'] = true;
@@ -46,11 +52,11 @@ class PurchaseProductController extends Controller
                 $values['quantity'] = 1;
             }
             $purchase = Purchase::findOrFail($request->purchase_id);
-            $item = Item::findOrFail($request->item_id);
-            if ($request->item_variant_id != null) {
-                $variant = ItemVariant::findOrFail($request->item_variant_id);
+            $product = Product::findOrFail($request->product_id);
+            if ($request->product_variant_id != null) {
+                $variant = ProductVariant::findOrFail($request->product_variant_id);
             }
-            $price = $variant->price ?? $item->cost_price;
+            $price = $variant->price ?? $product->cost_price;
             $values['price'] = $price;
             $values['total_price'] = $values['quantity'] * $price;
             $purchaseProduct = new PurchaseProduct($values);
@@ -95,17 +101,17 @@ class PurchaseProductController extends Controller
             $purchaseProduct = PurchaseProduct::findOrFail($id);
             $purchase = Purchase::findOrFail($purchaseProduct->purchase_id);
             $values = $request->all();
-            if ($request->item_id !== null) {
-                $item = Item::findOrFail($request->item_id);
+            if ($request->product_id !== null) {
+                $product = Product::findOrFail($request->product_id);
             } else {
-                $item = $purchaseProduct->item;
+                $product = $purchaseProduct->product;
             }
-            if ($request->item_variant_id != null) {
-                $variant = ItemVariant::findOrFail($request->item_variant_id);
-            } elseif ($purchaseProduct->item_variant_id !== null) {
-                $variant = $purchaseProduct->itemVariant;
+            if ($request->product_variant_id != null) {
+                $variant = ProductVariant::findOrFail($request->product_variant_id);
+            } elseif ($purchaseProduct->product_variant_id !== null) {
+                $variant = $purchaseProduct->productVariant;
             }
-            $price = $variant->price ?? $item->cost_price;
+            $price = $variant->price ?? $product->cost_price;
             $values['price'] = $price;
             if (($request->quantity !== null)) {
                 $values['total_price'] = $request->quantity * $price;

@@ -11,8 +11,8 @@ class CreateQuotationProductsTable extends Migration {
 			$table->increments('id');
 			$table->timestamps();
 			$table->integer('quotation_id')->unsigned();
-			$table->integer('item_id')->unsigned();
-			$table->integer('item_variant_id')->unsigned()->nullable();
+			$table->integer('product_id')->unsigned();
+			$table->integer('product_variant_id')->unsigned()->nullable();
 			$table->integer('quantity')->nullable()->default('1');
 			$table->integer('price')->nullable()->default('0');
 			$table->integer('tax_id')->unsigned()->nullable();

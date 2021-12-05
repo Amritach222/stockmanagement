@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class FiscalYearController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('fiscalYears');
+    }
+
     public function index()
     {
         $data['success'] = true;

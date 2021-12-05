@@ -8,7 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TransferRequest;
 use App\Http\Resources\Transfer as TransferResource;
 use App\Models\Item;
-use App\Models\ItemVariant;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\Setting;
 use App\Models\Transfer;
 use Carbon\Carbon;
@@ -16,6 +17,11 @@ use Illuminate\Http\Request;
 
 class TransferController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('transfers');
+    }
+
     public function index()
     {
         $data['success'] = true;
@@ -47,11 +53,11 @@ class TransferController extends Controller
                 $values['total_quantity'] = 1;
             }
             $values['user_id'] = auth()->user()->id;
-            $item = Item::findOrFail($request->item_id);
-            if ($request->item_variant_id) {
-                $variant = ItemVariant::findOrFail($request->item_variant_id);
+            $product = Product::findOrFail($request->product_id);
+            if ($request->product_variant_id) {
+                $variant = ProductVariant::findOrFail($request->product_variant_id);
             }
-            $price = $variant->price ?? $item->cost_price;
+            $price = $variant->price ?? $product->cost_price;
             $values['total_cost'] = $values['total_quantity'] * $price;
             $values['grand_total'] = $values['total_cost'] + $request->shipping_cost;
             $transfer = new Transfer($values);
@@ -117,17 +123,17 @@ class TransferController extends Controller
             $data['success'] = true;
             $transfer = Transfer::findOrFail($id);
             $values = $request->all();
-            if ($request->item_id !== null) {
-                $item = Item::findOrFail($request->item_id);
+            if ($request->product_id !== null) {
+                $product = Product::findOrFail($request->product_id);
             } else {
-                $item = Item::findOrFail($transfer->item_id);
+                $product = Item::findOrFail($transfer->product_id);
             }
-            if ($request->item_variant_id != null) {
-                $variant = ItemVariant::findOrFail($request->item_variant_id);
-            } elseif ($transfer->item_variant_id !== null) {
-                $variant = ItemVariant::findOrFail($transfer->item_variant_id);
+            if ($request->product_variant_id != null) {
+                $variant = ProductVariant::findOrFail($request->product_variant_id);
+            } elseif ($transfer->product_variant_id !== null) {
+                $variant = ProductVariant::findOrFail($transfer->product_variant_id);
             }
-            $price = $variant->price ?? $item->cost_price;
+            $price = $variant->price ?? $product->cost_price;
             if (($request->total_quantity !== null)) {
                 $values['total_cost'] = $request->total_quantity * $price;
                 $values['grand_total'] = $values['total_cost'] + $request->shipping_cost + $transfer->total_tax;

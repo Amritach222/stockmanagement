@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class VendorController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('vendors');
+    }
+
     public function index()
     {
         $data['success'] = true;

@@ -20,7 +20,9 @@
                 v-on:click="openImage(settings.link)"/>
         </CSidebarBrand>
 
-        <CRenderFunction flat :content-to-render="navData"/>
+        <SidebarNavItem></SidebarNavItem>
+
+<!--        <CRenderFunction flat :content-to-render="navData"/>-->
         <CSidebarMinimizer
             class="d-md-down-none"
             @click.native="$store.commit('set', ['sidebarMinimize', !minimize])"
@@ -34,9 +36,11 @@ import store from "../../store";
 import ApiServices from "../../services/ApiServices";
 import config from "../../config";
 import i18n from "../../i18n";
+import SidebarNavItem from "./SidebarNavItem";
 
 export default {
     name: 'Sidebar',
+    components:{SidebarNavItem},
     nav,
     computed: {
         show() {

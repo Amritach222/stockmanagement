@@ -9,16 +9,11 @@ class Transfer extends Model
 
     protected $table = 'transfers';
     public $timestamps = true;
-    protected $fillable = array('reference_no', 'user_id', 'from', 'to', 'item_id', 'item_variant_id', 'total_quantity', 'total_cost', 'total_tax', 'shipping_cost', 'grand_total', 'file_id', 'note', 'status');
+    protected $fillable = array('reference_no', 'user_id', 'from', 'to', 'item_id', 'total_quantity', 'total_cost', 'total_tax', 'shipping_cost', 'grand_total', 'file_id', 'note', 'status');
 
     public function item()
     {
         return $this->belongsTo(Item::class, 'item_id');
-    }
-
-    public function itemVariant()
-    {
-        return $this->belongsTo(ItemVariant::class, 'item_variant_id');
     }
 
     public function user()

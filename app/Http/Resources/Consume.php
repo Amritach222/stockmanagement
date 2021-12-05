@@ -19,7 +19,6 @@ class Consume extends JsonResource
             'user_id' => $this->user_id,
             'department_id' => $this->department_id,
             'item_id' => $this->item_id,
-            'item_variant_id' => $this->item_variant_id,
             'approved_by' => $this->approved_by,
             'image_id' => $this->image_id,
             'note' => $this->note

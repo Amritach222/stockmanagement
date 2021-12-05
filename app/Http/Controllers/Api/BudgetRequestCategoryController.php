@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 
 class BudgetRequestCategoryController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('budgetRequestCategories');
+    }
     /**
      * Display a listing of the resource.
      *

@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 
 class FreezeBudgetController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('freezeBudgets');
+    }
+
     public function index()
     {
         $data['success'] = true;

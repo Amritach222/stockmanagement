@@ -13,6 +13,11 @@ use Samundra\File\SamundraFileHelper;
 
 class PurchaseController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('purchases');
+    }
+
     public function index()
     {
         $data['success'] = true;

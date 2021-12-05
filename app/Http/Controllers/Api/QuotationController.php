@@ -9,7 +9,7 @@ use App\Http\Requests\QuotationRequest;
 use App\Http\Resources\Quotation as QuotationResource;
 use App\Models\File;
 use App\Models\Item;
-use App\Models\ItemVariant;
+use App\Models\ProductVariant;
 use App\Models\Quotation;
 use App\Models\QuotationProduct;
 use App\Models\Setting;
@@ -19,6 +19,11 @@ use Samundra\File\SamundraFileHelper;
 
 class QuotationController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('quotations');
+    }
+
     public function index()
     {
         $data['success'] = true;

@@ -9,7 +9,7 @@ class Product extends Model
 
     protected $table = 'products';
     public $timestamps = true;
-    protected $fillable = array('name', 'code', 'brand_id', 'category_id', 'image_id', 'is_active', 'details');
+    protected $guarded = ['id'];
 
     public function brand()
     {
@@ -24,6 +24,11 @@ class Product extends Model
     public function items()
     {
         return $this->hasMany(Item::class, 'product_id');
+    }
+
+    public function productVariants()
+    {
+        return $this->hasMany(ProductVariant::class, 'product_id');
     }
 
     public function purchaseProducts()

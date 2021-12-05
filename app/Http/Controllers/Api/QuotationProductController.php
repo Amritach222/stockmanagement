@@ -7,12 +7,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\QuotationProductRequest;
 use App\Http\Resources\QuotationProduct as QuotationProductResource;
 use App\Models\Item;
-use App\Models\ItemVariant;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\QuotationProduct;
 use Illuminate\Http\Request;
 
 class QuotationProductController extends Controller
 {
+    public function __construct()
+    {
+        parent::generateAllMiddlewareByPermission('quotationProducts');
+    }
+
     public function index()
     {
         $data['success'] = true;
@@ -40,13 +46,13 @@ class QuotationProductController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
-            $item = Item::findOrFail($request->item_id);
-            if ($request->item_variant_id != null) {
-                $variant = ItemVariant::findOrFail($request->item_variant_id);
+            $product = Product::findOrFail($request->product_id);
+            if ($request->product_variant_id != null) {
+                $variant = ProductVariant::findOrFail($request->product_variant_id);
             }
-            $price = $variant->price ?? $item->cost_price;
+            $price = $variant->price ?? $product->cost_price;
             $values['price'] = $price;
-            $values['tax_id'] = $item->tax_id;
+            $values['tax_id'] = $product->tax_id;
             $quotationProduct = new QuotationProduct($values);
             $quotationProduct->save();
             $quotationProduct->taxCalculate();
@@ -87,25 +93,26 @@ class QuotationProductController extends Controller
             $data['success'] = true;
             $quotationProduct = QuotationProduct::findOrFail($id);
             $values = $request->all();
-            if ($request->item_id !== null) {
-                $item = Item::findOrFail($request->item_id);
+            if ($request->product_id !== null) {
+                $product = Product::findOrFail($request->product_id);
             } else {
-                $item = Item::findOrFail($quotationProduct->item_id);
+                $product = Product::findOrFail($quotationProduct->product_id);
             }
-            if ($request->item_variant_id != null) {
-                $variant = ItemVariant::findOrFail($request->item_variant_id);
-            } elseif ($quotationProduct->item_variant_id !== null) {
-                $variant = ItemVariant::findOrFail($quotationProduct->item_variant_id);
+            if ($request->product_variant_id != null) {
+                $variant = ProductVariant::findOrFail($request->product_variant_id);
+            } elseif ($quotationProduct->product_variant_id !== null) {
+                $variant = ProductVariant::findOrFail($quotationProduct->product_variant_id);
             }
-            if($request->item_id != $quotationProduct->item_id){
-                $price = $variant->price ?? $item->cost_price;
+            if($request->product_id != $quotationProduct->product_id){
+                $price = $variant->price ?? $product->cost_price;
                 $values['price'] = $price;
-            }elseif ($request->item_variant_id != $quotationProduct->item_variant_id){
-                $price = $variant->price ?? $item->cost_price;
+            }elseif ($request->product_variant_id != $quotationProduct->product_variant_id){
+                $price = $variant->price ?? $product->cost_price;
                 $values['price'] = $price;
             }
 
-            $values['tax_id'] = $item->tax_id;
+            $values['tax_id'] = $product->tax_id;
+            $quotationProduct->update($values);
             $quotationProduct->update($values);
             $quotationProduct->taxCalculate();
 

@@ -9,21 +9,21 @@ class QuotationProduct extends Model
 
     protected $table = 'quotation_products';
     public $timestamps = true;
-    protected $fillable = array('quotation_id', 'item_id', 'item_variant_id', 'quantity', 'price', 'tax_id', 'shipping_cost', 'grand_total');
+    protected $fillable = array('quotation_id', 'product_id', 'product_variant_id', 'quantity', 'price', 'tax_id', 'shipping_cost', 'grand_total');
 
     public function quotation()
     {
         return $this->belongsTo(Quotation::class, 'quotation_id');
     }
 
-    public function item()
+    public function product()
     {
-        return $this->belongsTo(Item::class, 'item_id');
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
-    public function itemVariant()
+    public function productVariant()
     {
-        return $this->belongsTo(ItemVariant::class, 'item_variant_id');
+        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
     }
 
     public function tax()
@@ -43,7 +43,7 @@ class QuotationProduct extends Model
 
     public function taxCalculate()
     {
-        if ($this->item->tax_method == 'Excluded') {
+        if ($this->product->tax_method == 'Excluded') {
             $taxValue = $this->taxAmount();
             $this->grand_total = $this->quantity * $this->price + $taxValue + $this->shipping_cost;
         } else {

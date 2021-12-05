@@ -14,21 +14,21 @@ class QuotationProduct extends JsonResource
      */
     public function toArray($request)
     {
-        $item = new Item($this->item);
-        $itemVariant = $this->item_variant_id ? new ItemVariant($this->itemVariant) : null;
+        $product = new Product($this->product);
+        $productVariant = $this->product_variant_id ? new ProductVariant($this->productVariant) : null;
         $tax = $this->tax_id ? new Tax($this->tax) : null;
         return [
             'id' => $this->id,
             'quotation_id' => $this->quotation_id,
-            'item_id' => $this->item_id,
-            'item_variant_id' => $this->item_variant_id,
+            'product_id' => $this->product_id,
+            'product_variant_id' => $this->product_variant_id,
             'quantity' => $this->quantity,
             'price' => $this->price,
             'tax_id' => $this->tax_id,
             'shipping_cost' => $this->shipping_cost??0,
             'grand_total' => $this->grand_total,
-            'item' => $item,
-            'item_variant' => $itemVariant,
+            'product' => $product,
+            'product_variant' => $productVariant,
             'tax' => $tax,
         ];
     }
