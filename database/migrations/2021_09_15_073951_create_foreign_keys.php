@@ -65,6 +65,16 @@ class CreateForeignKeys extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
         });
+        Schema::table('products', function (Blueprint $table) {
+            $table->foreign('unit_id')->references('id')->on('units')
+                ->onDelete('cascade')
+                ->onUpdate('restrict');
+        });
+        Schema::table('products', function (Blueprint $table) {
+            $table->foreign('tax_id')->references('id')->on('taxes')
+                ->onDelete('cascade')
+                ->onUpdate('restrict');
+        });
         Schema::table('departments', function (Blueprint $table) {
             $table->foreign('head_of_department')->references('id')->on('users')
                 ->onDelete('cascade')
@@ -461,6 +471,12 @@ class CreateForeignKeys extends Migration
         });
         Schema::table('products', function (Blueprint $table) {
             $table->dropForeign('products_image_id_foreign');
+        });
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign('products_unit_id_foreign');
+        });
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign('products_tax_id_foreign');
         });
         Schema::table('departments', function (Blueprint $table) {
             $table->dropForeign('departments_head_of_department_foreign');

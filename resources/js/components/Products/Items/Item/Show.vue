@@ -30,12 +30,12 @@
                                         <p>{{ show.name }}</p>
                                         <h6>{{ $t('code') }}: </h6>
                                         <p>{{ show.code }}</p>
-                                        <h6>{{ $t('stock') }}: </h6>
-                                        <p>{{ show.stock }}</p>
-                                        <h6>{{ $t('alert_stock') }}: </h6>
-                                        <p>{{ show.alert_stock }}</p>
+                                        <h6>{{ $t('quantity') }}: </h6>
+                                        <p>{{ show.quantity }}</p>
                                         <h6 v-if="show.product">{{ $t('product') }}: </h6>
                                         <p v-if="show.product">{{ show.product.name }}</p>
+                                        <h6 v-if="show.product_variant">{{ $t('product') +' '+ $t('variant') }}: </h6>
+                                        <p v-if="show.product_variant">{{ show.product_variant.name }}</p>
                                         <h6 v-if="show.brand">{{ $t('brand') }}: </h6>
                                         <p v-if="show.brand">{{ show.brand.name }}</p>
                                         <h6>{{ $t('cost_price') }}: </h6>
@@ -89,8 +89,8 @@ export default {
             name: '',
             brand_id: '',
             product_id: '',
-            stock: '',
-            alert_stock: '',
+            product_variant_id: '',
+            quantity: '',
             cost_price: '',
             unit_id: '',
             tax_id: '',

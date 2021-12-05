@@ -28,7 +28,6 @@
                                             prepend-icon="mdi-apps-box"
                                             required
                                             @keyup="clearError('name')"
-                                            @keyup.enter="edit"
                                             :rules="rules.name"
                                             solo
                                         />
@@ -45,8 +44,21 @@
                                             prepend-icon="mdi-alpha-p-circle"
                                             required
                                             @keyup="clearError('product_id')"
-                                            @keyup.enter="edit"
                                             :rules="rules.product_id"
+                                            solo
+                                        />
+                                        <v-select
+                                            v-model="editedItem.product_variant_id"
+                                            name="product_variant_id"
+                                            :items="variants"
+                                            item-value="id"
+                                            item-text="name"
+                                            description="Please select a variant."
+                                            autocomplete=""
+                                            :label="$t('variant')"
+                                            placeholder="Select variant..."
+                                            prepend-icon="mdi-alpha-v-circle"
+                                            @keyup="clearError('product_variant_id')"
                                             solo
                                         />
                                         <v-row>
@@ -95,7 +107,6 @@
                                             prepend-icon="mdi-alpha-b-circle"
                                             required
                                             @keyup="clearError('brand_id')"
-                                            @keyup.enter="edit"
                                             :rules="rules.brand_id"
                                             solo
                                         />
@@ -109,33 +120,17 @@
                                             :label="$t('cost_price')"
                                             placeholder="Enter cost price..."
                                             @keyup="clearError('cost_price')"
-                                            @keyup.enter="edit"
                                             solo
                                         />
                                         <v-text-field
-                                            v-model="editedItem.stock"
+                                            v-model="editedItem.quantity"
                                             type="number"
-                                            name="stock"
-                                            description="Please enter stock."
+                                            description="Please enter quantity."
                                             autocomplete=""
-                                            :label="$t('stock')"
-                                            placeholder="Enter stock..."
+                                            :label="$t('quantity')"
+                                            placeholder="Enter quantity..."
                                             prepend-icon="mdi-chart-areaspline"
-                                            @keyup="clearError('stock')"
-                                            @keyup.enter="edit"
-                                            solo
-                                        />
-                                        <v-text-field
-                                            v-model="editedItem.alert_stock"
-                                            type="number"
-                                            name="alert_stock"
-                                            description="Please enter alert stock."
-                                            autocomplete=""
-                                            :label="$t('alert_stock')"
-                                            placeholder="Enter alert stock..."
-                                            prepend-icon="mdi-chart-bell-curve"
-                                            @keyup="clearError('alert_stock')"
-                                            @keyup.enter="edit"
+                                            @keyup="clearError('quantity')"
                                             solo
                                         />
                                         <v-select
@@ -151,7 +146,6 @@
                                             prepend-icon="mdi-google-circles-communities"
                                             required
                                             @keyup="clearError('unit_id')"
-                                            @keyup.enter="edit"
                                             solo
                                         />
                                         <v-select
@@ -166,7 +160,6 @@
                                             placeholder="Select a tax..."
                                             prepend-icon="mdi-alpha-t-circle"
                                             @keyup="clearError('tax_id')"
-                                            @keyup.enter="edit"
                                             solo
                                         />
                                         <v-select
@@ -179,7 +172,6 @@
                                             placeholder="Select a method..."
                                             prepend-icon="mdi-chart-bubble"
                                             @keyup="clearError('tax_method')"
-                                            @keyup.enter="edit"
                                             solo
                                         />
                                     </v-form>
@@ -224,8 +216,8 @@ export default {
             name: '',
             brand_id: '',
             product_id: '',
-            stock: '',
-            alert_stock: '',
+            product_variant_id: '',
+            quantity: '',
             cost_price: '',
             unit_id: '',
             tax_id: '',
@@ -236,12 +228,13 @@ export default {
         brands: [],
         units: [],
         taxes: [],
+        variants: [],
         changeProgress: false,
         error: {
             name: '',
             product_id: '',
-            stock: '',
-            alert_stock: '',
+            product_variant_id: '',
+            quantity: '',
             cost_price: '',
             unit_id: '',
             tax_id: '',
@@ -313,11 +306,11 @@ export default {
             if (name === 'product_id') {
                 this.error.product_id = '';
             }
-            if (name === 'stock') {
-                this.error.stock = '';
+            if (name === 'product_variant_id') {
+                this.error.product_variant_id = '';
             }
-            if (name === 'alert_stock') {
-                this.error.alert_stock = '';
+            if (name === 'quantity') {
+                this.error.quantity = '';
             }
             if (name === 'cost_price') {
                 this.error.cost_price = '';
@@ -343,10 +336,12 @@ export default {
             if (this.editedItem.brand_id !== null) {
                 data.append('brand_id', this.editedItem.brand_id);
             }
-            data.append('stock', this.editedItem.stock);
-            data.append('alert_stock', this.editedItem.alert_stock);
+            data.append('quantity', this.editedItem.quantity);
             if (this.editedItem.product_id !== null) {
                 data.append('product_id', this.editedItem.product_id);
+            }
+            if (this.editedItem.product_variant_id !== null) {
+                data.append('product_variant_id', this.editedItem.product_id);
             }
             data.append('cost_price', this.editedItem.cost_price);
             if (this.editedItem.unit_id !== null) {

@@ -24,9 +24,6 @@ class CreateProductsTable extends Migration
             $table->enum('tax_method', array('Included', 'Excluded'))->nullable();
             $table->integer('cost_price')->nullable()->default('0');
             $table->text('details')->nullable();
-
-            $table->foreign('unit_id')->references('id')->on('units');
-            $table->foreign('tax_id')->references('id')->on('taxes');
         });
     }
 

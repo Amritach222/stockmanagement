@@ -155,16 +155,6 @@ class ModelSeeder extends Seeder
         $itemP->code = CodeGenerator::code();
         $itemP->save();
 
-        $item = new Item([
-            'name' => 'Sofa',
-            'brand_id' => $itemB->id,
-            'stock' => 50,
-            'alert_stock' => 5,
-            'product_id' => $itemP->id,
-        ]);
-        $item->code = CodeGenerator::code();
-        $item->save();
-
         $item = new ExpenseCategory([
             'name' => 'Maintenance'
         ]);

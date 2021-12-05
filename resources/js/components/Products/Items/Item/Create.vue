@@ -49,6 +49,18 @@
                                             :rules="rules.product_id"
                                             solo
                                         />
+                                        <v-select
+                                            v-model="product_variant_id"
+                                            :items="variants"
+                                            item-text="name"
+                                            item-value="id"
+                                            description="Please select a variant."
+                                            autocomplete=""
+                                            :label="$t('variants')"
+                                            placeholder="Select variant..."
+                                            prepend-icon="mdi-alpha-v-circle"
+                                            solo
+                                        />
                                         <v-file-input
                                             v-model="image"
                                             :label="$t('image')"
@@ -182,6 +194,7 @@ export default {
         name: '',
         brand_id: '',
         product_id: '',
+        product_variant_id: '',
         quantity: '',
         cost_price: '',
         unit_id: '',
@@ -192,12 +205,11 @@ export default {
         products: [],
         units: [],
         taxes: [],
+        variants: [],
         createProgress: false,
         error: {
             name: '',
             product_id: '',
-            stock: '',
-            alert_stock: '',
             cost_price: '',
             unit_id: '',
             tax_id: '',
@@ -304,6 +316,7 @@ export default {
             data.append('name', this.name);
             data.append('brand_id', this.brand_id);
             data.append('product_id', this.product_id);
+            data.append('product_variant_id', this.product_variant_id);
             data.append('quantity', this.quantity);
             data.append('cost_price', this.cost_price);
             data.append('unit_id', this.unit_id);

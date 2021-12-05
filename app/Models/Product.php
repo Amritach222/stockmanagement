@@ -9,7 +9,7 @@ class Product extends Model
 
     protected $table = 'products';
     public $timestamps = true;
-    protected $fillable = array('name', 'code', 'brand_id', 'category_id', 'image_id', 'is_active', 'details');
+    protected $guarded = ['id'];
 
     public function brand()
     {

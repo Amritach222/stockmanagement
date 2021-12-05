@@ -704,7 +704,7 @@ export default {
                 if (this.variants.length > 0) {
                     let rtn = this.createVariant(res.data.id);
                 } else {
-                    // route.replace('/products/');
+                    route.replace('/products/');
                 }
             }
         },
@@ -725,7 +725,7 @@ export default {
 
                 let res = await ApiServices.productVariantCreate(data);
             }
-            // route.replace('/products/');
+            route.replace('/products/');
         },
 
         validate() {
