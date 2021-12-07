@@ -156,35 +156,7 @@
                 </v-icon>
             </template>
             <template #expanded-item="{headers,item}">
-                <v-row>
-                    <v-col cols="3" md="8">
-                        <v-btn
-                            depressed
-                            color="dark"
-                        >
-                            {{ item.user_id }}
-                        </v-btn>
-
-                    </v-col>
-                    <v-col cols="6" md="8">
-                        <v-btn
-                            depressed
-                            color="dark"
-                        >
-                            {{ item.user_id }}
-                        </v-btn>
-
-                    </v-col>
-                    <v-col cols="3" md="8">
-                        <v-btn
-                            depressed
-                            color="dark"
-                        >
-                            {{ item.user_id }}
-                        </v-btn>
-
-                    </v-col>
-                </v-row>
+               <PurchaseTableDetail :item="item"></PurchaseTableDetail>
             </template>
             <template v-slot:no-data>
                 <div>No Data</div>
@@ -196,10 +168,11 @@
 <script>
 import config from "../../config";
 import ApiServices from "../../services/ApiServices";
+import PurchaseTableDetail from "./PurchaseTableDetail";
 
 export default {
     name: "PurchaseRequestHistory",
-
+    components: {PurchaseTableDetail},
     data: () => ({
         cdnURL: config.cdnURL,
         search: '',
