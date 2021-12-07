@@ -16,19 +16,21 @@ class MailConfigServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $mail = DB::table('mail_settings')->first();
-        if ($mail) //checking if table is not empty
-        {
-            $config = array(
+        if(DB::getSchemaBuilder()->hasTable('mail_settings')) {
+            $mail = DB::table('mail_settings')->first();
+            if ($mail) //checking if table is not empty
+            {
+                $config = array(
 //                 'driver' => $mail->mail_mailer,
-                'host' => $mail->mail_host,
-                'port' => $mail->mail_port,
-                'from' => array('address' => $mail->mail_address, 'name' => $mail->mail_from_name),
-                'encryption' => $mail->encryption,
+                    'host' => $mail->mail_host,
+                    'port' => $mail->mail_port,
+                    'from' => array('address' => $mail->mail_address, 'name' => $mail->mail_from_name),
+                    'encryption' => $mail->encryption,
 //                 'username' => $mail->username,
-                'password' => $mail->password,
-            );
-            Config::set('mail', $config);
+                    'password' => $mail->password,
+                );
+                Config::set('mail', $config);
+            }
         }
     }
 
