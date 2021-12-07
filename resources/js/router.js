@@ -138,13 +138,13 @@ import QuotationIndex from './components/quotations/quotation/Index'
 import QuotationCreate from './components/quotations/quotation/Create'
 import QuotationEdit from './components/quotations/quotation/Edit'
 import QuotationShow from './components/quotations/quotation/Show'
-
 import ExpenseIndex from './components/expenses/Expense/Index'
+
 import ExpenseCreate from './components/expenses/Expense/Create'
 import ExpenseShow from './components/expenses/Expense/Show'
 import ExpenseEdit from './components/expenses/Expense/Edit'
-
 import ExpenseCategoryIndex from './components/expenses/ExpenseCategory/Index'
+
 import ExpenseCategoryShow from './components/expenses/ExpenseCategory/Show'
 
 import ProfileSetting from './components/Settings/profile/Index'
@@ -153,6 +153,8 @@ import i18n from './i18n'
 
 import NewPurchaseRequest from './components/purchaseRequest/NewPurchaseRequest'
 import PurchaseRequestHistory from './components/purchaseRequest/PurchaseRequestHistory'
+import EditPurchaseRequest from './components/purchaseRequest/EditPurchaseRequest'
+import PurchaseRequestProducts from './components/purchaseRequest/PurchaseRequestProducts'
 
 Vue.use(Router)
 
@@ -230,7 +232,7 @@ export default new Router({
             }
         },
         {
-            path: '/new-purchase-request',
+            path: '/purchase/new-purchase-request',
             name: i18n.t('new') +' '+ i18n.t('purchase') +' '+ i18n.t('request'),
             component: NewPurchaseRequest,
             beforeEnter: async (to, from, next) => {
@@ -239,9 +241,27 @@ export default new Router({
             }
         },
         {
-            path: '/purchase-request-history',
+            path: '/purchase/purchase-request-history',
             name: i18n.t('purchase') +' '+ i18n.t('request') +' '+ i18n.t('history'),
             component: PurchaseRequestHistory,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchase/edit-purchase-request',
+            name: 'Purchase Request Edit',
+            component: EditPurchaseRequest,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchase/view-purchase-request-product',
+            name: 'Purchase Request Products',
+            component: PurchaseRequestProducts,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
