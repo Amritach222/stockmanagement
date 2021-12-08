@@ -91,6 +91,7 @@
     "dispatched_amounts": "Dispatched Amounts",
     "date": "Date",
     "user": "User",
+    "users": "Users",
     "approver": "Approver",
     "request": "Request",
     "requests": "Requests",
@@ -161,6 +162,7 @@
     "purchase": "Purchase",
     "purchases": "Purchases",
     "history": "History",
+    "time_span": "Time Span",
 
     "validation": {
         "required": "This field is required!",

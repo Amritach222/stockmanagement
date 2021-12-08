@@ -45,20 +45,23 @@
                                             @keyup="clearError('product_id')"
                                             prepend-icon="mdi-alpha-p-circle"
                                             :rules="rules.product_id"
+                                            v-on:change="getVariants(product_id)"
                                             solo
                                         />
-                                        <v-select
-                                            v-model="product_variant_id"
-                                            :items="variants"
-                                            item-text="name"
-                                            item-value="id"
-                                            description="Please select a variant."
-                                            autocomplete=""
-                                            :label="$t('variants')"
-                                            placeholder="Select variant..."
-                                            prepend-icon="mdi-alpha-v-circle"
-                                            solo
-                                        />
+                                        <div v-if="hasVariants">
+                                            <v-select
+                                                v-model="product_variant_id"
+                                                :items="variants"
+                                                item-text="name"
+                                                item-value="id"
+                                                description="Please select a variant."
+                                                autocomplete=""
+                                                :label="$t('variants')"
+                                                placeholder="Select variant..."
+                                                prepend-icon="mdi-alpha-v-circle"
+                                                solo
+                                            />
+                                        </div>
                                         <v-select
                                             v-model="user_id"
                                             :items="users"
@@ -124,7 +127,7 @@
                                             v-model="unit_id"
                                             name="unit_id"
                                             :items="units"
-                                            item-text="name"
+                                            item-text="base_unit"
                                             item-value="id"
                                             description="Please select a unit."
                                             autocomplete=""
@@ -186,6 +189,7 @@ export default {
         variants: [],
         users: [],
         createProgress: false,
+        hasVariants: false,
         error: {
             name: '',
             product_id: '',
@@ -228,6 +232,17 @@ export default {
             let res = await ApiServices.productIndex();
             if (res.success === true) {
                 this.products = res.data;
+            }
+        },
+        async getVariants(product) {
+            let res = await ApiServices.productShow(product);
+            if (res.success === true) {
+                if (res.data.product_variants.length > 0) {
+                    this.hasVariants = true;
+                } else {
+                    this.hasVariants = false;
+                }
+                this.variants = res.data.product_variants;
             }
         },
         async loadUsers() {
@@ -283,11 +298,21 @@ export default {
             data.append('name', this.name);
             data.append('brand_id', this.brand_id);
             data.append('product_id', this.product_id);
-            data.append('product_variant_id', this.product_variant_id);
-            data.append('quantity', this.quantity);
-            data.append('cost_price', this.cost_price);
-            data.append('unit_id', this.unit_id);
-            data.append('user_id', this.user_id);
+            if (this.product_variant_id !== null && this.product_variant_id !== '') {
+                data.append('product_variant_id', this.product_variant_id);
+            }
+            if (this.quantity !== null && this.quantity !== '') {
+                data.append('quantity', this.quantity);
+            }
+            if (this.cost_price !== null && this.cost_price !== '') {
+                data.append('cost_price', this.cost_price);
+            }
+            if (this.unit_id !== null && this.unit_id !== '') {
+                data.append('unit_id', this.unit_id);
+            }
+            if (this.user_id !== null && this.user_id !== '') {
+                data.append('user_id', this.user_id);
+            }
 
             if (typeof this.image.name == 'string') {
                 data.append('image', this.image);
@@ -296,7 +321,7 @@ export default {
             let res = await ApiServices.itemCreate(data);
             this.createProgress = false;
             if (res.success === true) {
-                    route.replace('/items/');
+                route.replace('/items/');
             }
         },
     }

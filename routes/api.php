@@ -94,6 +94,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('items/{id}', [\App\Http\Controllers\Api\ItemController::class, 'update']);
             Route::apiResource('itemUsers', \App\Http\Controllers\Api\ItemUserController::class);
             Route::post('itemUsers/{id}', [\App\Http\Controllers\Api\ItemUserController::class, 'update']);
+            Route::get('getItemUsers/{id}', [\App\Http\Controllers\Api\ItemUserController::class, 'getItemUsers']);
         });
     });
 

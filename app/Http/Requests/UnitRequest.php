@@ -27,16 +27,16 @@ class UnitRequest extends FormRequest
         if ($this->id) {
             return [
                 'name' => 'string',
-                'parent_id' => 'int|exists:units,id',
-                'value' =>'int',
-                'short_code'=>'string',
+                'base_unit' => 'string',
+                'value' => 'int',
+                'short_code' => 'string',
             ];
         } else {
             return [
                 'name' => 'required|string|unique:units,name',
-                'parent_id' => 'int|exists:units,id',
-                'value' =>'int',
-                'short_code'=>'string',
+                'base_unit' => 'required|string',
+                'value' => 'int',
+                'short_code' => 'string',
             ];
         }
     }

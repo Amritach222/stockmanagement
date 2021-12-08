@@ -182,7 +182,7 @@ class ItemController extends Controller
             }
             $item->update($values);
             $itemUser = ItemUser::where('item_id', $item->id)->orderBy('created_at', 'desc')->first();
-            if ($item->user_id != $request->user_id) {
+            if ($itemUser->user_id != $request->user_id) {
                 $userValues['item_id'] = $item->id;
                 $user = User::findOrFail($request->user_id);
                 $userValues['user_id'] = $user->id;

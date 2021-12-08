@@ -45,22 +45,25 @@
                                             required
                                             @keyup="clearError('product_id')"
                                             :rules="rules.product_id"
+                                            v-on:change="getVariants(editedItem.product_id)"
                                             solo
                                         />
-                                        <v-select
-                                            v-model="editedItem.product_variant_id"
-                                            name="product_variant_id"
-                                            :items="variants"
-                                            item-value="id"
-                                            item-text="name"
-                                            description="Please select a variant."
-                                            autocomplete=""
-                                            :label="$t('variant')"
-                                            placeholder="Select variant..."
-                                            prepend-icon="mdi-alpha-v-circle"
-                                            @keyup="clearError('product_variant_id')"
-                                            solo
-                                        />
+                                        <div v-if="hasVariants">
+                                            <v-select
+                                                v-model="editedItem.product_variant_id"
+                                                name="product_variant_id"
+                                                :items="variants"
+                                                item-value="id"
+                                                item-text="name"
+                                                description="Please select a variant."
+                                                autocomplete=""
+                                                :label="$t('variant')"
+                                                placeholder="Select variant..."
+                                                prepend-icon="mdi-alpha-v-circle"
+                                                @keyup="clearError('product_variant_id')"
+                                                solo
+                                            />
+                                        </div>
                                         <v-select
                                             v-model="editedItem.user_id"
                                             :items="users"
@@ -201,6 +204,14 @@
                                                     </v-row>
                                                 </v-toolbar>
                                             </template>
+                                            <template v-slot:item.user_id="{ item }">
+                                                <p v-if="item.user_id" class="mt-3">{{ item.user.name }}</p>
+                                                <p v-else class="mt-3">---</p>
+                                            </template>
+                                            <template v-slot:item.department_id="{ item }">
+                                                <p v-if="item.department_id" class="mt-3">{{ item.department.name }}</p>
+                                                <p v-else class="mt-3">---</p>
+                                            </template>
                                             <template v-slot:no-data>
                                                 <div>No Data</div>
                                             </template>
@@ -261,6 +272,20 @@ export default {
         variants: [],
         itemUsers: [],
         changeProgress: false,
+        search: '',
+        progressL: false,
+        dialog: false,
+        editDialog: false,
+        dialogDelete: false,
+        headers: [
+            {text: i18n.t('user'), value: 'user_id'},
+            {text: i18n.t('department'), value: 'department_id'},
+            {text: i18n.t('time_span'), value: 'time_span'},
+        ],
+        tableLoad: false,
+        productCount: 0,
+        editedIndex: -1,
+        hasVariants: false,
         error: {
             name: '',
             product_id: '',
@@ -326,7 +351,27 @@ export default {
             let res = await ApiServices.itemShow(this.$route.params.id);
             if (res.success === true) {
                 this.editedItem = res.data;
-                this.itemUsers = res.data.item_users;
+                let rtn = await this.loadItemUsers(res.data.id);
+                if (res.data.product_id !== null) {
+                    this.getVariants(res.data.product_id);
+                }
+            }
+        },
+        async loadItemUsers(id) {
+            let res = await ApiServices.itemUsers(id);
+            if (res.success === true) {
+                this.itemUsers = res.data;
+            }
+        },
+        async getVariants(product) {
+            let res = await ApiServices.productShow(product);
+            if (res.success === true) {
+                if (res.data.product_variants.length > 0) {
+                    this.hasVariants = true;
+                    this.variants = res.data.product_variants;
+                } else {
+                    this.hasVariants = false;
+                }
             }
         },
 
@@ -367,14 +412,18 @@ export default {
             if (this.editedItem.brand_id !== null) {
                 data.append('brand_id', this.editedItem.brand_id);
             }
-            data.append('quantity', this.editedItem.quantity);
+            if (this.editedItem.quantity !== null && this.editedItem.quantity !== undefined) {
+                data.append('quantity', this.editedItem.quantity);
+            }
             if (this.editedItem.product_id !== null) {
                 data.append('product_id', this.editedItem.product_id);
             }
-            if (this.editedItem.product_variant_id !== null) {
+            if (this.editedItem.product_variant_id !== null && this.editedItem.product_variant_id !== undefined) {
                 data.append('product_variant_id', this.editedItem.product_id);
             }
-            data.append('cost_price', this.editedItem.cost_price);
+            if (this.editedItem.cost_price !== null && this.editedItem.cost_price !== undefined) {
+                data.append('cost_price', this.editedItem.cost_price);
+            }
             if (this.editedItem.user_id !== null) {
                 data.append('user_id', this.editedItem.user_id);
             }

@@ -93,6 +93,7 @@
     "dispatched_amounts": "पठाईएका रकमहरु",
     "date": "मिति",
     "user": "प्रयोगकर्ता",
+    "users": "प्रयोगकर्ताहरु",
     "approver": "अनुमोदनकर्ता",
     "request": "अनुरोध",
     "requests": "अनुरोधहरु",
@@ -164,6 +165,7 @@
     "purchase": "खरिद",
     "purchases": "खरिदहरू",
     "history": "इतिहास",
+    "time_span": "समय अवधि",
 
     "validation": {
         "required": "यो क्षेत्र आवश्यक छ!",

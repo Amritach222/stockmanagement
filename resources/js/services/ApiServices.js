@@ -196,20 +196,23 @@ export default {
         return await apiCall(DELETE, `api/product/item/items/${id}`)
     },
 
-    async itemUnitIndex() {
-        return await apiCall(GET, `api/product/item/itemUnits`)
+    async itemUserIndex() {
+        return await apiCall(GET, `api/product/item/itemUsers`)
     },
-    async itemUnitCreate(data) {
-        return await apiCall(POST, `api/product/item/itemUnits`, data)
+    async itemUserCreate(data) {
+        return await apiCall(POST, `api/product/item/itemUsers`, data)
     },
-    async itemUnitShow(id) {
-        return await apiCall(GET, `api/product/item/itemUnits/${id}`)
+    async itemUserShow(id) {
+        return await apiCall(GET, `api/product/item/itemUsers/${id}`)
     },
-    async itemUnitEdit(id, data) {
+    async itemUserEdit(id, data) {
         return await apiCall(POST, `api/product/item/itemUnits/${id}`, data)
     },
-    async itemUnitDelete(id) {
-        return await apiCall(DELETE, `api/product/item/itemUnits/${id}`)
+    async itemUserDelete(id) {
+        return await apiCall(DELETE, `api/product/item/itemUsers/${id}`)
+    },
+    async itemUsers(id) {
+        return await apiCall(GET, `api/product/item/getItemUsers/${id}`)
     },
 
     async productAttributeGroupIndex() {

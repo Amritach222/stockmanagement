@@ -6,6 +6,7 @@ use App\Events\ActivityLogEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Item as ItemResource;
 use App\Http\Resources\ItemUser as ItemUserResource;
+use App\Models\Item;
 use App\Models\ItemUser;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -27,6 +28,34 @@ class ItemUserController extends Controller
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = "Error occurred.";
+        }
+        return $data;
+    }
+
+    public function getItemUsers($id)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $item = Item::findOrFail($id);
+            $itemUsers = $item->users;
+            $count = count($itemUsers);
+            foreach ($itemUsers as $k => $itemUser) {
+                $itemUser->user = $itemUser->user;
+                $itemUser->department = $itemUser->department;
+                if ($count == $k + 1) {
+                    $itemUser->time_span = $itemUser->created_at->format('Y-m-d') . ' To Present';
+                } else {
+                    $next = ItemUser::where('id', '>', $itemUser->id)->first();
+                    $itemUser->time_span = $itemUser->created_at->format('Y-m-d') . ' To ' . $next->created_at->format('Y-m-d');
+                }
+            }
+            $data['data'] = $itemUsers;
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = "Error occurred.";
+            $data['data'] = $e;
         }
         return $data;
     }
@@ -140,18 +169,18 @@ class ItemUserController extends Controller
      */
     public function destroy($id)
     {
-        $data['success']=true;
-        $data['message']='';
-        $data['data']=[];
-        try{
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
             $itemUser = ItemUser::findOrFail($id);
             $itemUser->delete();
             event(new ActivityLogEvent('Delete', 'Item User', $id));
             $data['message'] = "Item User deleted successfully";
-        }catch (\Exception $e){
-            $data['success']=true;
-            $data['message']='Error occurred.';
-            $data['data']=$e;
+        } catch (\Exception $e) {
+            $data['success'] = true;
+            $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
         }
         return $data;
     }

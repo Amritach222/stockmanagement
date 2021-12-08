@@ -81,12 +81,11 @@
                                         <v-row>
                                             <v-col>
                                                 <v-text-field
-                                                    v-model="editedItem.parent_id"
-                                                    :label="$t('parent') +' '+ $t('unit')"
-                                                    :items="parents"
-                                                    item-text="name"
-                                                    item-value="id"
+                                                    v-model="editedItem.base_unit"
+                                                    :label="$t('base') +' '+ $t('unit')"
                                                     outlined
+                                                    required
+                                                    :rules="rules"
                                                 ></v-text-field>
                                             </v-col>
                                         </v-row>
@@ -133,8 +132,14 @@
                             <v-card-title class="text-h6"> {{ $t('message.delete') }}</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete"> {{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm"> {{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete"> {{
+                                        $t('button.cancel')
+                                    }}
+                                </v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm"> {{
+                                        $t('button.confirm')
+                                    }}
+                                </v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -180,25 +185,24 @@ export default {
             {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
             {text: i18n.t('name'), value: 'name'},
             {text: i18n.t('short_code'), value: 'short_code'},
-            {text: i18n.t('parent') +' '+ i18n.t('unit'), value: 'parent_id'},
+            {text: i18n.t('base') + ' ' + i18n.t('unit'), value: 'base_unit'},
             {text: i18n.t('value'), value: 'value'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         units: [],
         editedIndex: -1,
-        parent:[],
         editedItem: {
             id: null,
             name: '',
             short_code: '',
-            parent_id: '',
+            base_unit: '',
             value: '',
         },
         defaultItem: {
             id: null,
             name: '',
             short_code: '',
-            parent_id: '',
+            base_unit: '',
             value: '',
         },
         rules: [
@@ -224,7 +228,6 @@ export default {
 
     async created() {
         this.loadItems();
-        this.loadParent();
     },
 
     methods: {
@@ -233,7 +236,6 @@ export default {
             if (res.success === true) {
                 this.tableLoad = false;
                 this.units = res.data;
-                this.parent = res.data;
             }
         },
         editItem(item) {
@@ -278,7 +280,15 @@ export default {
             if (this.editedIndex > -1) {
                 //edit goes here
                 this.progressL = true;
-                const data = {'name':this.editedItem.name,'short_code':this.editedItem.short_code,'parent_id':this.editedItem.parent_id,'value':this.editedItem.value};
+                const data = new FormData();
+                data.append('name', this.editedItem.name);
+                data.append('short_code', this.editedItem.short_code);
+                if (this.editedItem.base_unit !== null && this.editedItem.base_unit !== '') {
+                    data.append('base_unit', this.editedItem.base_unit);
+                }
+                if (this.editedItem.value !== null && this.editedItem.value !== '') {
+                    data.append('value', this.editedItem.value);
+                }
                 let res = await ApiServices.unitEdit(this.editedItem.id, data);
                 if (res.success === true) {
                     Object.assign(this.units[this.editedIndex], this.editedItem)
@@ -293,8 +303,12 @@ export default {
                     const data = new FormData();
                     data.append('name', this.editedItem.name);
                     data.append('short_code', this.editedItem.short_code);
-                    data.append('parent_id',this.editedItem.parent_id);
-                    data.append('value',this.editedItem.value);
+                    if (this.editedItem.base_unit !== null && this.editedItem.base_unit !== '') {
+                        data.append('base_unit', this.editedItem.base_unit);
+                    }
+                    if (this.editedItem.value !== null && this.editedItem.value !== '') {
+                        data.append('value', this.editedItem.value);
+                    }
                     let res = await ApiServices.unitCreate(data);
                     if (res.success === true) {
                         this.units.push(this.editedItem);
@@ -308,6 +322,8 @@ export default {
             this.$refs.form.validate();
             if (this.editedItem.name === null) {
                 this.validated = false
+            } else if (this.editedItem.base_unit === null) {
+                this.validated = false;
             } else {
                 this.validated = true
             }

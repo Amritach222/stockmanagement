@@ -51,13 +51,17 @@ class ModelSeeder extends Seeder
 
         $itemU = new Unit([
             'name' => 'Kilogram',
-            'short_code' => 'Kg'
+            'short_code' => 'Kg',
+            'base_unit' => 'Gram',
+            'value' => '1000',
         ]);
         $itemU->save();
 
         $itemU = new Unit([
-            'name' => 'Meter',
-            'short_code' => 'm'
+            'name' => 'Kilometer',
+            'short_code' => 'Km',
+            'base_unit' => 'Meter',
+            'value' => '1000',
         ]);
         $itemU->save();
 

@@ -14,14 +14,12 @@ class Unit extends JsonResource
      */
     public function toArray($request)
     {
-        $children = Unit::collection($this->children);
         return [
             'id' => $this->id,
             'name' => $this->name,
             'short_code' => $this->short_code,
-            'parent_id' => $this->parent_id,
+            'base_unit' => $this->base_unit,
             'value' => $this->value,
-            'children' => $children,
         ];
     }
 }
