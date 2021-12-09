@@ -164,6 +164,22 @@ export default {
         return await apiCall(DELETE, `api/setting/units/${id}`)
     },
 
+    async unitCategoryIndex() {
+        return await apiCall(GET, `api/setting/unitCategories`)
+    },
+    async unitCategoryCreate(data) {
+        return await apiCall(POST, `api/setting/unitCategories`, data)
+    },
+    async unitCategoryShow(id) {
+        return await apiCall(GET, `api/setting/unitCategories/${id}`)
+    },
+    async unitCategoryEdit(id, data) {
+        return await apiCall(POST, `api/setting/unitCategories/${id}`, data)
+    },
+    async unitCategoryDelete(id) {
+        return await apiCall(DELETE, `api/setting/unitCategories/${id}`)
+    },
+
     async categoryIndex() {
         return await apiCall(GET, `api/product/categories`)
     },

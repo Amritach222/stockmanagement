@@ -17,6 +17,7 @@ use App\Models\ProductAttributeGroup;
 use App\Models\Product;
 use App\Models\Tax;
 use App\Models\Unit;
+use App\Models\UnitCategory;
 use App\Models\Vendor;
 use Illuminate\Database\Seeder;
 
@@ -49,10 +50,21 @@ class ModelSeeder extends Seeder
         ]);
         $itemB->save();
 
+        $itemUC1 = new UnitCategory([
+            'name' => 'Weight',
+        ]);
+        $itemUC1->save();
+
+        $itemUC2 = new UnitCategory([
+            'name' => 'Length',
+        ]);
+        $itemUC2->save();
+
         $itemU = new Unit([
             'name' => 'Kilogram',
             'short_code' => 'Kg',
-            'base_unit' => 'Gram',
+            'category_id' => $itemUC1->id,
+            'type' => 'equal',
             'value' => '1000',
         ]);
         $itemU->save();
@@ -60,7 +72,8 @@ class ModelSeeder extends Seeder
         $itemU = new Unit([
             'name' => 'Kilometer',
             'short_code' => 'Km',
-            'base_unit' => 'Meter',
+            'category_id' => $itemUC2->id,
+            'type' => 'equal',
             'value' => '1000',
         ]);
         $itemU->save();

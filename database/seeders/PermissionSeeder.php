@@ -48,6 +48,7 @@ class PermissionSeeder extends Seeder
             $this->createAutoAllPermissions('brands', $guard);
             $this->createAutoAllPermissions('categories', $guard);
             $this->createAutoAllPermissions('units', $guard);
+            $this->createAutoAllPermissions('unitCategories', $guard);
             $this->createAutoAllPermissions('taxes', $guard);
             $this->createAutoAllPermissions('signatures', $guard);
             $this->createAutoAllPermissions('signatureUseDepartments', $guard);

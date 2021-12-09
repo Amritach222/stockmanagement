@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('brands/{id}', [\App\Http\Controllers\Api\BrandController::class, 'update']);
         Route::apiResource('units', \App\Http\Controllers\Api\UnitController::class);
         Route::post('units/{id}', [\App\Http\Controllers\Api\UnitController::class, 'update']);
+        Route::apiResource('unitCategories', \App\Http\Controllers\Api\UnitCategoryController::class);
+        Route::post('unitCategories/{id}', [\App\Http\Controllers\Api\UnitCategoryController::class, 'update']);
         Route::apiResource('taxes', \App\Http\Controllers\Api\TaxController::class);
         Route::post('taxes/{id}', [\App\Http\Controllers\Api\TaxController::class, 'update']);
 

@@ -1,12 +1,12 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('units') }}
+            {{ $t('unit') +' '+ $t('categories') }}
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
             :headers="headers"
-            :items="units"
+            :items="categories"
             sort-by="id"
             :loading=tableLoad
             loading-text="Loading... Please wait..."
@@ -45,7 +45,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                {{ $t('button.add_new_unit') }}
+                                {{ $t('button.add_new_unit_category') }}
                             </v-btn>
                         </template>
                         <v-card>
@@ -60,60 +60,10 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.name"
-                                                    :label="$t('unit') +' '+ $t('name')"
+                                                    :label="$t('name')"
                                                     required
                                                     outlined
                                                     :rules="rules"
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col>
-                                                <v-text-field
-                                                    v-model="editedItem.short_code"
-                                                    :label="$t('unit') +' '+ $t('short_code')"
-                                                    required
-                                                    outlined
-                                                    :rules="rules"
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col>
-                                                <v-select
-                                                    v-model="editedItem.category_id"
-                                                    :label="$t('unit') +' '+ $t('category')"
-                                                    :items="categories"
-                                                    item-text="name"
-                                                    item-value="id"
-                                                    outlined
-                                                    required
-                                                    :rules="rules"
-                                                ></v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col>
-                                                <v-select
-                                                    v-model="editedItem.type"
-                                                    :label="$t('type')"
-                                                    :items="types"
-                                                    item-value="value"
-                                                    item-text="name"
-                                                    outlined
-                                                    required
-                                                    :rules="rules"
-                                                    v-on:change="valueCheck(editedItem.type)"
-                                                ></v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row v-if="needsValue">
-                                            <v-col>
-                                                <v-text-field
-                                                    v-model="editedItem.value"
-                                                    :label="$t('value')"
-                                                    type="number"
-                                                    outlined
                                                 ></v-text-field>
                                             </v-col>
                                         </v-row>
@@ -164,16 +114,6 @@
                     </v-dialog>
                 </v-toolbar>
             </template>
-            <template v-slot:item.category_id="{ item }">
-                <p v-if="item.category_id">{{ item.category.name }}</p>
-                <p v-else>---</p>
-            </template>
-            <template v-slot:item.type="{ item }">
-                <p v-if="item.type === 'smaller'">Smaller than base unit</p>
-                <p v-else-if="item.type === 'equal'">Base unit</p>
-                <p v-else-if="item.type === 'bigger'">Bigger than base unit</p>
-                <p v-else>---</p>
-            </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
                     small
@@ -212,34 +152,17 @@ export default {
         headers: [
             {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
             {text: i18n.t('name'), value: 'name'},
-            {text: i18n.t('short_code'), value: 'short_code'},
-            {text: i18n.t('category'), value: 'category_id'},
-            {text: i18n.t('type'), value: 'type'},
-            {text: i18n.t('value'), value: 'value'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
-        units: [],
         editedIndex: -1,
-        needsValue: false,
         categories: [],
-        types: [
-            {name: 'Smaller than base unit', value: 'smaller'},
-            {name: 'Base unit', value: 'equal'},
-            {name: 'Bigger than base unit', value: 'bigger'},
-        ],
         editedItem: {
             id: null,
             name: '',
-            short_code: '',
-            base_unit: '',
-            value: '',
         },
         defaultItem: {
             id: null,
             name: '',
-            short_code: '',
-            base_unit: '',
-            value: '',
         },
         rules: [
             value => !!value || 'Required.',
@@ -249,7 +172,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? i18n.t('card_title.add_unit') : i18n.t('card_title.edit_unit')
+            return this.editedIndex === -1 ? i18n.t('card_title.add_unit_category') : i18n.t('card_title.edit_unit_category')
         },
     },
 
@@ -264,48 +187,32 @@ export default {
 
     async created() {
         this.loadItems();
-        this.loadCategories();
     },
 
     methods: {
         async loadItems() {
-            let res = await ApiServices.unitIndex();
-            if (res.success === true) {
-                this.tableLoad = false;
-                this.units = res.data;
-            }
-        },
-        async loadCategories() {
             let res = await ApiServices.unitCategoryIndex();
             if (res.success === true) {
                 this.tableLoad = false;
                 this.categories = res.data;
             }
         },
-        async valueCheck(type) {
-            if (type !== 'equal') {
-                this.needsValue = true;
-            } else {
-                this.needsValue = false;
-            }
-        },
         editItem(item) {
-            this.editedIndex = this.units.indexOf(item)
+            this.editedIndex = this.categories.indexOf(item)
             this.editedItem = Object.assign({}, item)
-            this.valueCheck(this.editedItem.type);
             this.dialog = true
         },
 
         deleteItem(item) {
-            this.editedIndex = this.units.indexOf(item)
+            this.editedIndex = this.categories.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
         },
 
         async deleteItemConfirm() {
-            let res = await ApiServices.unitDelete(this.editedItem.id);
+            let res = await ApiServices.unitCategoryDelete(this.editedItem.id);
             if (res.success === true) {
-                this.units.splice(this.editedIndex, 1)
+                this.categories.splice(this.editedIndex, 1)
             }
             this.closeDelete()
         },
@@ -334,16 +241,9 @@ export default {
                 this.progressL = true;
                 const data = new FormData();
                 data.append('name', this.editedItem.name);
-                data.append('short_code', this.editedItem.short_code);
-                if (this.editedItem.base_unit !== null && this.editedItem.base_unit !== '') {
-                    data.append('base_unit', this.editedItem.base_unit);
-                }
-                if (this.editedItem.value !== null && this.editedItem.value !== '') {
-                    data.append('value', this.editedItem.value);
-                }
-                let res = await ApiServices.unitEdit(this.editedItem.id, data);
+                let res = await ApiServices.unitCategoryEdit(this.editedItem.id, data);
                 if (res.success === true) {
-                    Object.assign(this.units[this.editedIndex], this.editedItem)
+                    Object.assign(this.categories[this.editedIndex], this.editedItem)
                     this.$refs.form.reset();
                     this.close();
                 }
@@ -354,16 +254,9 @@ export default {
                     this.progressL = true;
                     const data = new FormData();
                     data.append('name', this.editedItem.name);
-                    data.append('short_code', this.editedItem.short_code);
-                    if (this.editedItem.base_unit !== null && this.editedItem.base_unit !== '') {
-                        data.append('base_unit', this.editedItem.base_unit);
-                    }
-                    if (this.editedItem.value !== null && this.editedItem.value !== '') {
-                        data.append('value', this.editedItem.value);
-                    }
-                    let res = await ApiServices.unitCreate(data);
+                    let res = await ApiServices.unitCategoryCreate(data);
                     if (res.success === true) {
-                        this.units.push(this.editedItem);
+                        this.categories.push(this.editedItem);
                         this.$refs.form.reset();
                         this.close()
                     }
@@ -374,8 +267,6 @@ export default {
             this.$refs.form.validate();
             if (this.editedItem.name === null) {
                 this.validated = false
-            } else if (this.editedItem.base_unit === null) {
-                this.validated = false;
             } else {
                 this.validated = true
             }

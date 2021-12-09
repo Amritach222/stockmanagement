@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 
-class UnitRequest extends FormRequest
+class UnitCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,18 +27,10 @@ class UnitRequest extends FormRequest
         if ($this->id) {
             return [
                 'name' => 'string',
-                'category_id' => 'int|exists:unit_categories,id',
-                'type' => 'string',
-                'value' => 'int',
-                'short_code' => 'string',
             ];
         } else {
             return [
-                'name' => 'required|string',
-                'category_id' => 'required|int|exists:unit_categories,id',
-                'type' => 'required|string',
-                'value' => 'int',
-                'short_code' => 'string',
+                'name' => 'required|string|unique:unit_categories,name',
             ];
         }
     }
