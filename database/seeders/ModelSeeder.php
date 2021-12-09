@@ -65,7 +65,7 @@ class ModelSeeder extends Seeder
             'short_code' => 'Kg',
             'category_id' => $itemUC1->id,
             'type' => 'equal',
-            'value' => '1000',
+            'value' => '1',
         ]);
         $itemU->save();
 
@@ -74,7 +74,7 @@ class ModelSeeder extends Seeder
             'short_code' => 'Km',
             'category_id' => $itemUC2->id,
             'type' => 'equal',
-            'value' => '1000',
+            'value' => '1',
         ]);
         $itemU->save();
 

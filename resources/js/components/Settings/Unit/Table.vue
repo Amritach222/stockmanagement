@@ -137,7 +137,7 @@
                                     <v-btn
                                         color="blue darken-1"
                                         text
-                                        @click="save"
+                                        @click="checkIfAvailable"
                                     >
                                         {{ $t('button.submit') }}
                                     </v-btn>
@@ -231,14 +231,16 @@ export default {
             id: null,
             name: '',
             short_code: '',
-            base_unit: '',
+            category_id: '',
+            type: '',
             value: '',
         },
         defaultItem: {
             id: null,
             name: '',
             short_code: '',
-            base_unit: '',
+            category_id: '',
+            type: '',
             value: '',
         },
         rules: [
@@ -328,6 +330,45 @@ export default {
             })
         },
 
+        async checkIfAvailable({rootState}) {
+            let common = 0;
+            let unique = 0;
+            if (this.editedIndex > -1) {
+                for (var i = 0; i < this.units.length; i++) {
+                    if (this.editedItem.type === 'equal') {
+                        if (this.editedItem.id !== this.units[i].id) {
+                            if (this.editedItem.category_id !== this.units[i].category_id) {
+                                if (this.editedItem.type !== this.units[i].type) {
+                                    unique = 1;
+                                } else {
+                                    common = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (var i = 0; i < this.units.length; i++) {
+                    if (this.editedItem.type === 'equal') {
+                        if (this.editedItem.category_id !== this.units[i].category_id) {
+                            if (this.editedItem.type !== this.units[i].type) {
+                                unique = 1;
+                            } else {
+                                common = 1;
+                            }
+                        }
+                    }
+                }
+            }
+            if (common === 0) {
+                let res = await this.save();
+            } else {
+                rootState.home.snackbar = false;
+                rootState.home.snackbarText = 'Please select a different unit type for this category.';
+                rootState.home.snackbarColor = 'failed';
+            }
+        },
+
         async save() {
             if (this.editedIndex > -1) {
                 //edit goes here
@@ -335,10 +376,15 @@ export default {
                 const data = new FormData();
                 data.append('name', this.editedItem.name);
                 data.append('short_code', this.editedItem.short_code);
-                if (this.editedItem.base_unit !== null && this.editedItem.base_unit !== '') {
-                    data.append('base_unit', this.editedItem.base_unit);
+                if (this.editedItem.category_id !== null && this.editedItem.category_id !== '') {
+                    data.append('category_id', this.editedItem.category_id);
                 }
-                if (this.editedItem.value !== null && this.editedItem.value !== '') {
+                if (this.editedItem.type !== null && this.editedItem.type !== '') {
+                    data.append('type', this.editedItem.type);
+                }
+                if (this.editedItem.type === 'equal') {
+                    data.append('value', 1);
+                } else if (this.editedItem.value !== null && this.editedItem.value !== '') {
                     data.append('value', this.editedItem.value);
                 }
                 let res = await ApiServices.unitEdit(this.editedItem.id, data);
@@ -355,10 +401,15 @@ export default {
                     const data = new FormData();
                     data.append('name', this.editedItem.name);
                     data.append('short_code', this.editedItem.short_code);
-                    if (this.editedItem.base_unit !== null && this.editedItem.base_unit !== '') {
-                        data.append('base_unit', this.editedItem.base_unit);
+                    if (this.editedItem.category_id !== null && this.editedItem.category_id !== '') {
+                        data.append('category_id', this.editedItem.category_id);
                     }
-                    if (this.editedItem.value !== null && this.editedItem.value !== '') {
+                    if (this.editedItem.type !== null && this.editedItem.type !== '') {
+                        data.append('type', this.editedItem.type);
+                    }
+                    if (this.editedItem.type === 'equal') {
+                        data.append('value', 1);
+                    } else if (this.editedItem.value !== null && this.editedItem.value !== '') {
                         data.append('value', this.editedItem.value);
                     }
                     let res = await ApiServices.unitCreate(data);
