@@ -163,6 +163,7 @@
     "purchases": "Purchases",
     "history": "History",
     "time_span": "Time Span",
+    "ratio": "Ratio",
 
     "validation": {
         "required": "This field is required!",

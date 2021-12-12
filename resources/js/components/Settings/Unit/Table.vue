@@ -64,7 +64,10 @@
                                                     required
                                                     outlined
                                                     :rules="rules"
+                                                    v-on:keyup="clearValidation()"
                                                 ></v-text-field>
+                                                <p v-if="nameValidation" class="notify-validation">Unit name already
+                                                    exist.</p>
                                             </v-col>
                                         </v-row>
                                         <v-row>
@@ -105,16 +108,21 @@
                                                     :rules="rules"
                                                     v-on:change="valueCheck(editedItem.type)"
                                                 ></v-select>
+                                                <p v-if="typeValidation" class="notify-validation">Please select a
+                                                    different type for this category unit.</p>
                                             </v-col>
                                         </v-row>
                                         <v-row v-if="needsValue">
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.value"
-                                                    :label="$t('value')"
+                                                    :label="$t('ratio')"
                                                     type="number"
                                                     outlined
+                                                    v-on:keyup="clearValidation()"
                                                 ></v-text-field>
+                                                <p v-if="ratioValidation" class="notify-validation">Please enter a
+                                                    different ratio for this unit type.</p>
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -137,7 +145,7 @@
                                     <v-btn
                                         color="blue darken-1"
                                         text
-                                        @click="checkIfAvailable"
+                                        @click="checkValidation"
                                     >
                                         {{ $t('button.submit') }}
                                     </v-btn>
@@ -215,12 +223,15 @@ export default {
             {text: i18n.t('short_code'), value: 'short_code'},
             {text: i18n.t('category'), value: 'category_id'},
             {text: i18n.t('type'), value: 'type'},
-            {text: i18n.t('value'), value: 'value'},
+            {text: i18n.t('ratio'), value: 'value'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         units: [],
         editedIndex: -1,
         needsValue: false,
+        typeValidation: false,
+        nameValidation: false,
+        ratioValidation: false,
         categories: [],
         types: [
             {name: 'Smaller than base unit', value: 'smaller'},
@@ -285,6 +296,7 @@ export default {
             }
         },
         async valueCheck(type) {
+            this.typeValidation = false;
             if (type !== 'equal') {
                 this.needsValue = true;
             } else {
@@ -315,6 +327,9 @@ export default {
         close() {
             this.progressL = false;
             this.dialog = false;
+            this.typeValidation = false;
+            this.nameValidation = false;
+            this.ratioValidation = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
@@ -330,42 +345,49 @@ export default {
             })
         },
 
-        async checkIfAvailable({rootState}) {
-            let common = 0;
+        async clearValidation() {
+            this.typeValidation = false;
+            this.nameValidation = false;
+            this.ratioValidation = false;
+        },
+
+        async checkValidation() {
+            let type = 0;
+            let name = 0;
+            let ratio = 0;
             let unique = 0;
-            if (this.editedIndex > -1) {
-                for (var i = 0; i < this.units.length; i++) {
-                    if (this.editedItem.type === 'equal') {
-                        if (this.editedItem.id !== this.units[i].id) {
-                            if (this.editedItem.category_id !== this.units[i].category_id) {
-                                if (this.editedItem.type !== this.units[i].type) {
-                                    unique = 1;
-                                } else {
-                                    common = 1;
-                                }
-                            }
-                        }
+            for (var i = 0; i < this.units.length; i++) {
+                if (this.editedIndex > -1) {
+                    if ((this.editedItem.id !== this.units[i].id) && (this.editedItem.name.toLowerCase() === this.units[i].name.toLowerCase())) {
+                        name = 1;
+                    } else if (((this.editedItem.type !== 'equal') && (this.editedItem.id !== this.units[i].id)) && ((this.editedItem.category_id === this.units[i].category_id) && ((this.editedItem.type === this.units[i].type) && (parseInt(this.editedItem.value) === parseInt(this.units[i].value))))) {
+                        ratio = 1;
+                    } else if (((this.editedItem.type === 'equal') && (this.editedItem.type === this.units[i].type)) && ((this.editedItem.category_id === this.units[i].category_id) && (this.editedItem.id !== this.units[i].id))) {
+                        type = 1;
+                    } else {
+                        unique = 1;
                     }
-                }
-            } else {
-                for (var i = 0; i < this.units.length; i++) {
-                    if (this.editedItem.type === 'equal') {
-                        if (this.editedItem.category_id !== this.units[i].category_id) {
-                            if (this.editedItem.type !== this.units[i].type) {
-                                unique = 1;
-                            } else {
-                                common = 1;
-                            }
-                        }
+                } else {
+                    if (this.editedItem.name.toLowerCase() === this.units[i].name.toLowerCase()) {
+                        name = 1;
+                    } else if (((this.editedItem.type === 'equal') && (this.editedItem.category_id === this.units[i].category_id)) && (this.editedItem.type === this.units[i].type)) {
+                        type = 1;
+                    } else if (((this.editedItem.type !== 'equal') && (this.editedItem.category_id === this.units[i].category_id)) && ((this.editedItem.type === this.units[i].type) && (parseInt(this.editedItem.value) === parseInt(this.units[i].value)))) {
+                        ratio = 1;
                     }
                 }
             }
-            if (common === 0) {
+            if (((type === 0) && (ratio === 0)) && (name === 0)) {
+                this.typeValidation = false;
+                this.nameValidation = false;
+                this.ratioValidation = false;
                 let res = await this.save();
-            } else {
-                rootState.home.snackbar = false;
-                rootState.home.snackbarText = 'Please select a different unit type for this category.';
-                rootState.home.snackbarColor = 'failed';
+            } else if (name === 1) {
+                this.nameValidation = true;
+            } else if (ratio === 1) {
+                this.ratioValidation = true;
+            } else if (type === 1) {
+                this.typeValidation = true;
             }
         },
 
@@ -437,5 +459,7 @@ export default {
 
 
 <style scoped>
-
+.notify-validation {
+    color: #f65050;
+}
 </style>
