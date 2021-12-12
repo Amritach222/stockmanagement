@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('budgets') }}
+            Budgets
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -27,7 +27,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                :label="$t('search')"
+                                label="Search"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -47,17 +47,17 @@
                                 v-on="on"
                                 :to="'/budgets/create'"
                             >
-                                {{ $t('button.add_new_budget') }}
+                                Add New Budget
                             </v-btn>
                         </template>
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -79,18 +79,9 @@
                 {{ item.department.name }}
             </template>
             <template v-slot:item.fiscal_year_id="{ item }">
-                {{ item.fiscal_year.name}}
+                {{ item.fiscal_year.from + ' || ' + item.fiscal_year.to }}
             </template>
             <template v-slot:item.actions="{ item }">
-                <router-link
-                    :to="'/budgets/'+item.id"
-                >
-                    <v-icon
-                        small
-                    >
-                        mdi-eye
-                    </v-icon>
-                </router-link>
                 <router-link
                     :to="'/budgets/edit/'+item.id"
                 >
@@ -118,7 +109,6 @@
 import config from "../../../config";
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
-import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -131,14 +121,13 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
-            {text: i18n.t('title'), value: 'title'},
-            {text: i18n.t('department'), value: 'department_id'},
-            {text: i18n.t('fiscal_year'), value: 'fiscal_year_id', sortable: false},
-            {text: i18n.t('allocated_budget') +' '+ i18n.t('amount'), value: 'allocated_budget_amount'},
-            {text: i18n.t('initial_dispatch') +' '+ i18n.t('amount'), value: 'initial_dispatched_amount'},
-            {text: i18n.t('total_dispatch') +' '+ i18n.t('amount'), value: 'total_dispatched_amount'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: 'Id', align: 'start', sortable: true, value: 'id'},
+            {text: 'Department', value: 'department_id'},
+            {text: 'Fiscal Year', value: 'fiscal_year_id', sortable: false},
+            {text: 'Allocated Amount', value: 'allocated_budget_amount'},
+            {text: 'Initial Amount', value: 'initial_dispatched_amount'},
+            {text: 'Final Amount', value: 'final_dispatched_amount'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         budgets: [],
         editedItem: {

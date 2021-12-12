@@ -103,8 +103,6 @@ export default {
                 localStorage.setItem('access_token', res.data.access_token);
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('userData', JSON.stringify(res.data));
-                localStorage.setItem('permissions', res.data.permissions);
-                localStorage.setItem('roles', res.data.roles);
                 rootState.home.snackbar = true;
                 rootState.home.snackbarText = res.message;
                 rootState.home.snackbarColor = 'success';

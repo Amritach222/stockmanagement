@@ -13,7 +13,7 @@
                                             type="text"
                                             name="Name"
                                             description="Enter Name"
-                                            :label="$t('name_of_user')"
+                                            label="Name of User"
                                             placeholder="Enter Name"
                                             :error-messages="error.name"
                                             @change="changeDetected('name')"
@@ -32,12 +32,12 @@
                                                     class="grey darken-4"
                                                 ></v-img>
                                                 <v-card-title class="title">
-                                                    {{ $t('profile_picture') }}
+                                                    Profile Picture
                                                 </v-card-title>
                                             </v-card>
                                             <v-file-input
                                                 v-model="editedItem.image"
-                                                :label="$t('profile_picture')"
+                                                label="Profile Picture"
                                                 filled
                                                 outlined
                                                 :error-messages="error.image"
@@ -48,7 +48,7 @@
                                         <v-col v-else>
                                             <v-file-input
                                                 v-model="editedItem.image"
-                                                :label="$t('profile_picture')"
+                                                label="Profile Picture"
                                                 filled
                                                 outlined
                                                 :error-messages="error.image"
@@ -62,7 +62,7 @@
                                             name="address"
                                             description="Please enter address."
                                             autocomplete=""
-                                            :label="$t('address')"
+                                            label="Address"
                                             placeholder="Enter address"
                                             :error-messages="error.address"
                                             @change="changeDetected('address')"
@@ -76,7 +76,7 @@
                                             name="Mobile Number"
                                             description="Please enter mobile number"
                                             autocomplete=""
-                                            :label="$t('mobile') +' '+ $t('number')"
+                                            label="Mobile Number"
                                             placeholder="Enter Mobile Number"
                                             :error-messages="error.mobile_no"
                                             @change="changeDetected('mobile_no')"
@@ -103,7 +103,7 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            {{ $t('button.submit') }}
+                                            Submit
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

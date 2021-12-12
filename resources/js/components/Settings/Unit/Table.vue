@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('units') }}
+            Unit
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -26,7 +26,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                :label="$t('search')"
+                                label="Search"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -45,7 +45,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                {{ $t('button.add_new_unit') }}
+                                Add New Unit
                             </v-btn>
                         </template>
                         <v-card>
@@ -60,7 +60,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.name"
-                                                    :label="$t('unit') +' '+ $t('name')"
+                                                    label="Unit Name"
                                                     required
                                                     outlined
                                                     :rules="rules"
@@ -71,32 +71,10 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.short_code"
-                                                    :label="$t('unit') +' '+ $t('short_code')"
+                                                    label="Unit Short Code"
                                                     required
                                                     outlined
                                                     :rules="rules"
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col>
-                                                <v-text-field
-                                                    v-model="editedItem.parent_id"
-                                                    :label="$t('parent') +' '+ $t('unit')"
-                                                    :items="parents"
-                                                    item-text="name"
-                                                    item-value="id"
-                                                    outlined
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col>
-                                                <v-text-field
-                                                    v-model="editedItem.value"
-                                                    :label="$t('value')"
-                                                    type="number"
-                                                    outlined
                                                 ></v-text-field>
                                             </v-col>
                                         </v-row>
@@ -115,14 +93,14 @@
                                         text
                                         @click="close"
                                     >
-                                        {{ $t('button.cancel') }}
+                                        Cancel
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        {{ $t('button.submit') }}
+                                        Save
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>
@@ -130,11 +108,11 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6"> {{ $t('message.delete') }}</v-card-title>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete"> {{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm"> {{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -166,7 +144,6 @@
 <script>
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
-import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -177,29 +154,22 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
-            {text: i18n.t('name'), value: 'name'},
-            {text: i18n.t('short_code'), value: 'short_code'},
-            {text: i18n.t('parent') +' '+ i18n.t('unit'), value: 'parent_id'},
-            {text: i18n.t('value'), value: 'value'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: 'Id', align: 'start', sortable: false, value: 'id'},
+            {text: 'Name', value: 'name'},
+            {text: 'Short Code', value: 'short_code'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         units: [],
         editedIndex: -1,
-        parent:[],
         editedItem: {
             id: null,
             name: '',
             short_code: '',
-            parent_id: '',
-            value: '',
         },
         defaultItem: {
             id: null,
             name: '',
             short_code: '',
-            parent_id: '',
-            value: '',
         },
         rules: [
             value => !!value || 'Required.',
@@ -209,7 +179,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? i18n.t('card_title.add_unit') : i18n.t('card_title.edit_unit')
+            return this.editedIndex === -1 ? 'Add Unit' : 'Edit Unit'
         },
     },
 
@@ -224,7 +194,6 @@ export default {
 
     async created() {
         this.loadItems();
-        this.loadParent();
     },
 
     methods: {
@@ -233,7 +202,6 @@ export default {
             if (res.success === true) {
                 this.tableLoad = false;
                 this.units = res.data;
-                this.parent = res.data;
             }
         },
         editItem(item) {
@@ -278,7 +246,7 @@ export default {
             if (this.editedIndex > -1) {
                 //edit goes here
                 this.progressL = true;
-                const data = {'name':this.editedItem.name,'short_code':this.editedItem.short_code,'parent_id':this.editedItem.parent_id,'value':this.editedItem.value};
+                const data = {'name':this.editedItem.name,'short_code':this.editedItem.short_code};
                 let res = await ApiServices.unitEdit(this.editedItem.id, data);
                 if (res.success === true) {
                     Object.assign(this.units[this.editedIndex], this.editedItem)
@@ -293,8 +261,6 @@ export default {
                     const data = new FormData();
                     data.append('name', this.editedItem.name);
                     data.append('short_code', this.editedItem.short_code);
-                    data.append('parent_id',this.editedItem.parent_id);
-                    data.append('value',this.editedItem.value);
                     let res = await ApiServices.unitCreate(data);
                     if (res.success === true) {
                         this.units.push(this.editedItem);

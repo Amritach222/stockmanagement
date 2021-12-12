@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('signatures') }}
+            Signatures
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -27,7 +27,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                :label="$t('search')"
+                                label="Search"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -46,7 +46,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                {{ $t('button.add_new_signature') }}
+                                Add New Signature
                             </v-btn>
                         </template>
                         <v-card>
@@ -67,12 +67,12 @@
                                                         class="grey darken-4"
                                                     ></v-img>
                                                     <v-card-title class="title">
-                                                        {{ $t('image') }}
+                                                        Image
                                                     </v-card-title>
                                                 </v-card>
                                                 <v-file-input
                                                     v-model="editedItem.image"
-                                                    :label="$t('image')"
+                                                    label="Image"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -82,7 +82,7 @@
                                             <v-col v-else>
                                                 <v-file-input
                                                     v-model="editedItem.image"
-                                                    :label="$t('image')"
+                                                    label="Image"
                                                     filled
                                                     outlined
                                                     required
@@ -95,7 +95,7 @@
                                             <v-col>
                                                 <v-select
                                                     v-model="editedItem.user_id"
-                                                    :label="$t('user')"
+                                                    label="User"
                                                     :items="users"
                                                     item-value="id"
                                                     item-text="name"
@@ -109,7 +109,7 @@
                                             <v-col>
                                                 <v-select
                                                     v-model="editedItem.designation_id"
-                                                    :label="$t('designation')"
+                                                    label="Designation"
                                                     :items="designations"
                                                     item-value="id"
                                                     item-text="name"
@@ -132,14 +132,14 @@
                                         text
                                         @click="close"
                                     >
-                                        {{ $t('button.cancel') }}
+                                        Cancel
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        {{ $t('button.submit') }}
+                                        Save
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>
@@ -147,11 +147,11 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -201,7 +201,6 @@
 import config from "../../../../config";
 import store from "../../../../store";
 import ApiServices from "../../../../services/ApiServices";
-import i18n from "../../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -215,11 +214,11 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
-            {text: i18n.t('user'), value: 'user_id'},
-            {text: i18n.t('image'), value: 'link'},
-            {text: i18n.t('designation'), value: 'designation_id'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: 'Id', align: 'start', sortable: false, value: 'id'},
+            {text: 'User', value: 'user_id'},
+            {text: 'Logo', value: 'link'},
+            {text: 'Designation', value: 'designation_id'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         signatures: [],
         designations: [],
@@ -245,7 +244,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? i18n.t('card_title.add_signature') : i18n.t('card_title.edit_signature')
+            return this.editedIndex === -1 ? 'Add Signature' : 'Edit Signature'
         },
     },
 

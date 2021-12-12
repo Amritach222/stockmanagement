@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>{{ $t('card_title.add_quotation') }}</strong>
+                                <strong>Edit</strong> Quotation
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate
@@ -23,7 +23,7 @@
                                             item-text="name"
                                             item-value="id"
                                             prepend-icon="mdi-alpha-b-circle"
-                                            :label="$t('department')"
+                                            label="Department"
                                             placeholder="Select department ..."
                                             required
                                             :rules="rules"
@@ -33,7 +33,7 @@
                                             <v-col v-if="typeof(editedItem.link) === 'string'">
                                                 <v-file-input
                                                     v-model="editedItem.file"
-                                                    :label="$t('file')"
+                                                    label="File"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -41,13 +41,13 @@
                                                 ></v-file-input>
                                                 <v-col width="200" class="ml-3 file-link"
                                                        v-on:click="openImage(editedItem.link)">
-                                                    <h5> {{ $t('open_file') }} </h5>
+                                                    <h5> Open File </h5>
                                                 </v-col>
                                             </v-col>
                                             <v-col v-else>
                                                 <v-file-input
                                                     v-model="editedItem.file"
-                                                    :label="$t('file')"
+                                                    label="File"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -57,197 +57,19 @@
                                         </v-row>
                                         <v-textarea
                                             v-model="editedItem.note"
-                                            :label="$t('note')"
+                                            label="Note"
                                             placeholder="Enter quotation notes..."
                                             solo
                                         />
                                     </v-form>
-
-                                    <hr>
-                                    <v-card>
-                                        <v-card-title>
-                                            {{ $t('products') }}
-                                            <v-spacer></v-spacer>
-                                        </v-card-title>
-                                        <v-data-table
-                                            :headers="headers"
-                                            :items="quoProducts"
-                                            sort-by="id"
-                                            loading
-                                            loading-text="Loading... Please wait..."
-                                            :search="search"
-                                        >
-                                            <template v-slot:top>
-                                                <v-toolbar
-                                                    flat
-                                                >
-                                                    <v-row>
-                                                        <v-col
-                                                            cols="12"
-                                                            sm="4"
-                                                            md="6"
-                                                            lg="8"
-                                                        >
-                                                            <v-text-field
-                                                                v-model="search"
-                                                                append-icon="mdi-magnify"
-                                                                :label="$t('search')"
-                                                                solo
-                                                                hide-details
-                                                                max-width="100px"
-                                                            ></v-text-field>
-                                                        </v-col>
-                                                    </v-row>
-                                                    <v-dialog
-                                                        v-model="dialog"
-                                                        max-width="600px"
-                                                    >
-                                                        <template v-slot:activator="{ on, attrs }">
-                                                            <v-btn
-                                                                color="green"
-                                                                dark
-                                                                class="mb-2"
-                                                                v-bind="attrs"
-                                                                v-on="on"
-                                                            >
-                                                                {{ $t('button.add_new_product') }}
-                                                            </v-btn>
-                                                        </template>
-                                                        <v-card>
-                                                            <v-form ref="form">
-                                                                <v-card-title>
-                                                                    <span class="headline">{{ formTitle }}</span>
-                                                                </v-card-title>
-
-                                                                <v-card-text>
-                                                                    <v-container>
-                                                                        <v-row>
-                                                                            <v-col>
-                                                                                <v-select
-                                                                                    v-model="addQuoProduct.product_id"
-                                                                                    :label="$t('product')"
-                                                                                    :items="products"
-                                                                                    item-text="name"
-                                                                                    item-value="id"
-                                                                                    required
-                                                                                    outlined
-                                                                                    :rules="rules"
-                                                                                    v-on:change="getVariants(addQuoProduct.product_id)"
-                                                                                ></v-select>
-                                                                                <div v-if="hasVariants">
-                                                                                    <v-select
-                                                                                        v-model="addQuoProduct.product_variant_id"
-                                                                                        :label="$t('product') +' '+ $t('variant')"
-                                                                                        :items="variants"
-                                                                                        item-text="name"
-                                                                                        item-value="id"
-                                                                                        outlined
-                                                                                    ></v-select>
-                                                                                </div>
-                                                                                <v-text-field
-                                                                                    v-model="addQuoProduct.quantity"
-                                                                                    :label="$t('quantity')"
-                                                                                    type="number"
-                                                                                    outlined
-                                                                                ></v-text-field>
-                                                                                <v-text-field
-                                                                                    v-model="addQuoProduct.shipping_cost"
-                                                                                    :label="$t('shipping_cost')"
-                                                                                    type="number"
-                                                                                    outlined
-                                                                                ></v-text-field>
-                                                                            </v-col>
-                                                                        </v-row>
-                                                                    </v-container>
-                                                                </v-card-text>
-
-                                                                <v-card-actions>
-                                                                    <v-progress-linear
-                                                                        v-if="progressL"
-                                                                        indeterminate
-                                                                        color="green"
-                                                                    ></v-progress-linear>
-                                                                    <v-spacer></v-spacer>
-                                                                    <v-btn
-                                                                        color="blue darken-1"
-                                                                        text
-                                                                        @click="close"
-                                                                    >
-                                                                        {{ $t('button.cancel') }}
-                                                                    </v-btn>
-                                                                    <v-btn
-                                                                        color="blue darken-1"
-                                                                        text
-                                                                        @click="editQuoProduct"
-                                                                    >
-                                                                        {{ $t('button.submit') }}
-                                                                    </v-btn>
-                                                                </v-card-actions>
-                                                            </v-form>
-                                                        </v-card>
-                                                    </v-dialog>
-                                                    <v-dialog v-model="dialogDelete" max-width="500px">
-                                                        <v-card>
-                                                            <v-card-title class="text-h6">
-                                                                {{ $t('message.delete') }}
-                                                            </v-card-title>
-                                                            <v-card-actions>
-                                                                <v-spacer></v-spacer>
-                                                                <v-btn color="blue darken-1" text @click="closeDelete">
-                                                                    {{ $t('button.cancel') }}
-                                                                </v-btn>
-                                                                <v-btn color="blue darken-1" text
-                                                                       @click="deleteItemConfirm">
-                                                                    {{ $t('button.submit') }}
-                                                                </v-btn>
-                                                                <v-spacer></v-spacer>
-                                                            </v-card-actions>
-                                                        </v-card>
-                                                    </v-dialog>
-                                                </v-toolbar>
-                                            </template>
-                                            <template v-slot:item.product_id="{ item }">
-                                                <p v-if="item.product_id" class="mt-3">{{ item.product.name }}</p>
-                                            </template>
-                                            <template v-slot:item.product_variant_id="{ item }">
-                                                <p v-if="item.product_variant_id" class="mt-3">{{
-                                                        item.product_variant.name
-                                                    }}</p>
-                                                <p v-else class="mt-3">---</p>
-                                            </template>
-                                            <template v-slot:item.tax_id="{ item }">
-                                                <p v-if="item.tax_id" class="mt-3">{{ item.tax.value }}%</p>
-                                                <p v-else class="mt-3">0</p>
-                                            </template>
-                                            <template v-slot:item.actions="{ item }">
-                                                <v-icon
-                                                    small
-                                                    class="mr-2"
-                                                    @click="editItem(item)"
-                                                >
-                                                    mdi-pencil
-                                                </v-icon>
-                                                <v-icon
-                                                    small
-                                                    @click="deleteItem(item)"
-                                                >
-                                                    mdi-delete
-                                                </v-icon>
-                                            </template>
-                                            <template v-slot:no-data>
-                                                <div>No Data</div>
-                                            </template>
-                                        </v-data-table>
-                                    </v-card>
-
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            {{ $t('button.submit') }}
+                                            Submit
                                         </CButton>
                                         <CButton :to="'/quotations'" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
-                                            {{ $t('button.cancel') }}
+                                            Cancel
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -261,238 +83,93 @@
 </template>
 
 <script>
-import store from "../../../store";
-import route from "../../../router";
-import i18n from "../../../i18n";
-import ApiServices from "../../../services/ApiServices";
-import config from "../../../config";
+    import store from "../../../store";
+    import route from "../../../router";
+    import i18n from "../../../i18n";
+    import ApiServices from "../../../services/ApiServices";
+    import config from "../../../config";
 
-export default {
-    name: "QuotationEdit",
+    export default {
+        name: "QuotationEdit",
 
-    props: {
-        source: String,
-    },
-    data: () => ({
-        cdnURL: config.cdnURL,
-        createProgress: false,
-        search: '',
-        progressL: false,
-        dialog: false,
-        dialogDelete: false,
-        headers: [
-            {text: i18n.t('product'), value: 'product_id'},
-            {text: i18n.t('product') +' '+ i18n.t('variant'), value: 'product_variant_id'},
-            {text: i18n.t('quantity'), value: 'quantity'},
-            {text: i18n.t('price'), value: 'price'},
-            {text: i18n.t('tax'), value: 'tax_id'},
-            {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
-            {text: i18n.t('total'), value: 'grand_total'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
-        ],
-        quotations: [],
-        tableLoad: false,
-        productCount: 0,
-        editedIndex: -1,
-        quoProducts: [],
-        products: [],
-        addQuoProduct: {
-            product_id: '',
-            product_variant_id: '',
-            quantity: '',
-            shipping_cost: '',
+        props: {
+            source: String,
         },
-        changeProgress: false,
-        validated: false,
-        departments: [],
-        variants: [],
-        hasVariants: false,
-        editedItem: {
-            id: null,
-            department_id: '',
-            file: [],
-            note: '',
+        data: () => ({
+            cdnURL: config.cdnURL,
+            changeProgress: false,
+            validated: false,
+            departments: [],
+            editedItem: {
+                id: null,
+                department_id: '',
+                file: [],
+                note: '',
+            },
+            error: {
+                department_id: '',
+                file: [],
+                note: '',
+            },
+            rules: [
+                value => !!value || 'Required.',
+            ]
+        }),
+        async created() {
+            this.loadData();
+            this.loadDepartments();
         },
-        error: {
-            department_id: '',
-            file: [],
-            note: '',
-        },
-        rules: [
-            value => !!value || 'Required.',
-        ]
-    }),
-    computed: {
-        formTitle() {
-            return this.editedIndex === -1 ? i18n.t('card_title.add_quotation_product') : i18n.t('card_title.edit_quotation_product')
-        },
-    },
-    async created() {
-        this.loadData();
-        this.loadDepartments();
-        this.loadItems();
-        // this.loadQuoProducts();
-    },
-    methods: {
-        openImage(data) {
-            window.open(config.cdnURL + data, `_blank`);
-        },
-        async loadDepartments() {
-            let res = await ApiServices.departmentIndex();
-            if (res.success === true) {
-                this.departments = res.data;
-            }
-        },
-
-        async loadItems() {
-            let res = await ApiServices.productIndex();
-            if (res.success === true) {
-                this.products = res.data;
-            }
-        },
-
-        async loadData() {
-            let res = await ApiServices.quotationShow(this.$route.params.id);
-            if (res.success === true) {
-                this.editedItem = res.data;
-                this.quoProducts = res.data.quotation_products;
-            }
-        },
-
-        async getVariants(product) {
-            let res = await ApiServices.productShow(product);
-            if (res.success === true) {
-                if (res.data.product_variants.length > 0) {
-                    this.hasVariants = true;
-                } else {
-                    this.hasVariants = false;
-                }
-                this.variants = res.data.product_variants;
-            }
-        },
-
-        editItem(item) {
-            this.editedIndex = this.quoProducts.indexOf(item)
-            this.addQuoProduct = Object.assign({}, item)
-            this.getVariants(this.addQuoProduct.item_id)
-            this.dialog = true
-        },
-
-        deleteItem(item) {
-            this.editedIndex = this.quoProducts.indexOf(item)
-            this.addQuoProduct = Object.assign({}, item)
-            this.dialogDelete = true
-        },
-
-        async deleteItemConfirm() {
-            let res = await ApiServices.quotationProductDelete(this.addQuoProduct.id);
-            if (res.success === true) {
-                this.quoProducts.splice(this.editedIndex, 1)
-            }
-            this.closeDelete()
-        },
-
-        close() {
-            this.progressL = false;
-            this.dialog = false;
-            this.$nextTick(() => {
-                this.addQuoProduct = Object.assign({}, this.defaultItem)
-                this.editedIndex = -1
-            });
-            this.loadItems();
-        },
-
-        closeDelete() {
-            this.dialogDelete = false
-            this.$nextTick(() => {
-                this.addQuoProduct = Object.assign({}, this.defaultItem)
-                this.editedIndex = -1
-            })
-        },
-
-        async edit() {
-            this.validate();
-            if (this.validated) {
-                this.changeProgress = true;
-                const data = new FormData();
-                data.append('department_id', this.editedItem.department_id);
-                data.append('note', this.editedItem.note);
-
-                if ('file' in this.editedItem) {
-                    if (typeof this.editedItem.file.name == 'string') {
-                        data.append('file', this.editedItem.file);
-                    }
-                }
-
-                let res = await ApiServices.quotationEdit(this.editedItem.id, data);
-                this.changeProgress = false;
+        methods: {
+            openImage(data) {
+                window.open(config.cdnURL + data, `_blank`);
+            },
+            async loadDepartments() {
+                let res = await ApiServices.departmentIndex();
                 if (res.success === true) {
-                    route.replace('/quotations/');
+                    this.departments = res.data;
                 }
-            }
-        },
-
-        async editQuoProduct() {
-            this.productValidate();
-            if (this.validated) {
-                if (this.editedIndex > -1) {
-                    //edit goes here
-                    this.progressL = true;
+            },
+            async loadData() {
+                let res = await ApiServices.quotationShow(this.$route.params.id);
+                if (res.success === true) {
+                    this.editedItem = res.data;
+                }
+            },
+            async edit() {
+                this.validate();
+                if (this.validated) {
+                    this.changeProgress = true;
                     const data = new FormData();
-                    data.append('product_id', this.addQuoProduct.product_id);
-                    if (this.addQuoProduct.product_variant_id !== null) {
-                        data.append('product_variant_id', this.addQuoProduct.product_variant_id);
+                    data.append('department_id', this.editedItem.department_id);
+                    data.append('note', this.editedItem.note);
+
+                    if ('file' in this.editedItem) {
+                        if (typeof this.editedItem.file.name == 'string') {
+                            data.append('file', this.editedItem.file);
+                        }
                     }
-                    data.append('quantity', this.addQuoProduct.quantity);
-                    data.append('shipping_cost', this.addQuoProduct.shipping_cost);
-                    let res = await ApiServices.quotationProductEdit(this.addQuoProduct.id, data);
+
+                    let res = await ApiServices.quotationEdit(this.editedItem.id, data);
+                    this.changeProgress = false;
                     if (res.success === true) {
-                        Object.assign(this.quoProducts[this.editedIndex], res.data)
-                        this.$refs.form.reset();
-                        this.close();
+                        route.replace('/quotations/');
                     }
+                }
+            },
+
+            validate() {
+                if (this.department_id === '') {
+                    this.validated = false;
                 } else {
-                    //add new
-                    this.progressL = true;
-                    const data = new FormData();
-                    data.append('product_id', this.addQuoProduct.product_id);
-                    if (this.addQuoProduct.product_variant_id !== null) {
-                        data.append('product_variant_id', this.addQuoProduct.product_variant_id);
-                    }
-                    data.append('quantity', this.addQuoProduct.quantity);
-                    data.append('shipping_cost', this.addQuoProduct.shipping_cost);
-                    data.append('quotation_id', this.editedItem.id);
-                    let res = await ApiServices.quotationProductCreate(data);
-                    if (res.success === true) {
-                        this.quoProducts.push(res.data);
-                        this.$refs.form.reset();
-                        this.close()
-                    }
+                    this.validated = true;
                 }
-            }
-        },
-
-        validate() {
-            if (this.department_id === '') {
-                this.validated = false;
-            } else {
-                this.validated = true;
-            }
-        },
-
-        productValidate() {
-            if (this.product_id === '') {
-                this.validated = false;
-            } else {
-                this.validated = true;
-            }
-        },
+            },
+        }
     }
-}
 </script>
 
 <style scoped>
-.file-link {
+.file-link{
     cursor: pointer;
     text-decoration: underline;
 }

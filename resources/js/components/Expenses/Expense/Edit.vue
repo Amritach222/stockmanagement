@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>{{ $t('card_title.edit_expense') }}</strong>
+                                <strong>Edit</strong> Expense
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate
@@ -19,7 +19,7 @@
                                     <v-form>
                                         <v-select
                                             v-model="editedItem.department_id"
-                                            :label="$t('department')"
+                                            label="Department"
                                             :items="departments"
                                             item-value="id"
                                             item-text="name"
@@ -30,7 +30,7 @@
                                         ></v-select>
                                         <v-select
                                             v-model="editedItem.user_id"
-                                            :label="$t('user')"
+                                            label="User"
                                             :items="users"
                                             item-value="id"
                                             item-text="name"
@@ -41,7 +41,7 @@
                                         ></v-select>
                                         <v-select
                                             v-model="editedItem.expense_category_id"
-                                            :label="$t('expense') +' '+ $t('category')"
+                                            label="Expense Category"
                                             :items="expenseCategories"
                                             item-value="id"
                                             item-text="name"
@@ -52,7 +52,7 @@
                                         ></v-select>
                                         <v-text-field
                                             v-model="editedItem.amount"
-                                            :label="$t('amount')"
+                                            label="Amount"
                                             type="number"
                                             prepend-icon="mdi-currency-usd"
                                             required
@@ -61,36 +61,33 @@
                                         ></v-text-field>
                                         <v-select
                                             v-model="editedItem.transaction_type"
-                                            :label="$t('transaction') +' '+ $t('type')"
+                                            label="Transaction Type"
                                             id="transaction_type"
                                             :items="['Cash', 'Cheque', 'OnlineTransaction']"
                                             prepend-icon="mdi-swap-horizontal"
-                                            v-on:change="transaction"
                                             solo
                                         ></v-select>
-                                        <div v-if="this.bank_account">
-                                            <v-select
-                                                v-model="editedItem.bank_account_id"
-                                                :label="$t('bank') +' '+ $t('account')"
-                                                :items="bankAccounts"
-                                                :item-text="bankAccount => bankAccount.bank_name + ' - ' + bankAccount.account_name"
-                                                item-value="id"
-                                                prepend-icon="mdi-bank"
-                                                solo
-                                            ></v-select>
-                                        </div>
-                                        <div v-if="this.cheque">
-                                            <v-text-field
-                                                v-model="editedItem.cheque_no"
-                                                :label="$t('cheque') +' '+ $t('number')"
-                                                type="number"
-                                                prepend-icon="mdi-checkbook"
-                                                solo
-                                            ></v-text-field>
-                                        </div>
+                                        <v-select
+                                            v-model="editedItem.bank_account_id"
+                                            label="Bank Account"
+                                            :items="bankAccounts"
+                                            :item-text="bankAccount => bankAccount.bank_name + ' - ' + bankAccount.account_name"
+                                            item-value="id"
+                                            prepend-icon="mdi-bank"
+                                            class="hide"
+                                            solo
+                                        ></v-select>
+                                        <v-text-field
+                                            v-model="editedItem.cheque_no"
+                                            label="Cheque No."
+                                            type="number"
+                                            prepend-icon="mdi-checkbook"
+                                            class="hide"
+                                            solo
+                                        ></v-text-field>
                                         <v-text-field
                                             v-model="editedItem.note"
-                                            :label="$t('note')"
+                                            label="Note"
                                             prepend-icon="mdi-pen"
                                             solo
                                         ></v-text-field>
@@ -98,7 +95,7 @@
                                             <v-col v-if="typeof(editedItem.link) === 'string'">
                                                 <v-file-input
                                                     v-model="editedItem.file"
-                                                    :label="$t('file')"
+                                                    label="File"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -106,13 +103,13 @@
                                                 ></v-file-input>
                                                 <v-col width="200" class="ml-3 file-link"
                                                        v-on:click="openImage(editedItem.link)">
-                                                    <h5> {{ $t('open_file') }} </h5>
+                                                    <h5> Open File </h5>
                                                 </v-col>
                                             </v-col>
                                             <v-col v-else>
                                                 <v-file-input
                                                     v-model="editedItem.file"
-                                                    :label="$t('file')"
+                                                    label="File"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -124,11 +121,11 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            {{ $t('button.submit') }}
+                                            Submit
                                         </CButton>
-                                        <CButton type="reset" size="sm" color="danger" :to="'/expenses/'">
+                                        <CButton type="reset" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
-                                            {{ $t('button.cancel') }}
+                                            Reset
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -167,14 +164,12 @@ export default {
             file: [],
         },
         cdnURL: config.cdnURL,
+        validated: false,
         departments: [],
         users: [],
         bankAccounts: [],
         expenseCategories: [],
-        validated: false,
         changeProgress: false,
-        bank_account: false,
-        cheque: false,
         error: {
             user_id: '',
             department_id: '',
@@ -237,38 +232,27 @@ export default {
             }
         },
 
-        async transaction() {
-            this.bank_account = false;
-            this.cheque = false;
-            if (this.editedItem.transaction_type === 'OnlineTransaction') {
-                this.bank_account = true;
-            } else if (this.editedItem.transaction_type === 'Cheque') {
-                this.bank_account = true;
-                this.cheque = true;
-            }
-        },
-
         async edit() {
             this.changeProgress = true;
             const data = new FormData();
-            data.append('department_id', this.editedItem.department_id);
-            data.append('user_id', this.editedItem.user_id);
-            data.append('expense_category_id', this.editedItem.expense_category_id);
-            data.append('amount', parseInt(this.editedItem.amount));
-            data.append('transaction_type', this.editedItem.transaction_type);
-            if (this.editedItem.cheque_no !== '') {
-                data.append('cheque_no', this.editedItem.cheque_no);
+            data.append('department_id', this.department_id);
+            data.append('user_id', this.user_id);
+            data.append('expense_category_id', this.expense_category_id);
+            data.append('amount', this.amount);
+            data.append('transaction_type', this.transaction_type);
+            if (this.cheque_no !== '') {
+                data.append('cheque_no', this.cheque_no);
             }
             if (this.bank_account_id !== '') {
-                data.append('bank_account_id', this.editedItem.bank_account_id);
+                data.append('bank_account_id', this.bank_account_id);
             }
-            data.append('note', this.editedItem.note);
+            data.append('note', this.note);
             if ('file' in this.editedItem) {
                 if (typeof this.file.name == 'string') {
                     data.append('file', this.file);
                 }
             }
-            let res = await ApiServices.expenseEdit(this.editedItem.id, data);
+            let res = await ApiServices.expenseEdit(data);
             this.changeProgress = false;
             if (res.success === true) {
                 route.replace('/expenses/');

@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('vendors') }}
+            Vendor
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -26,7 +26,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                :label="$t('search')"
+                                label="Search"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -45,7 +45,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                {{ $t('button.add_new_vendor') }}
+                                Add New Vendor
                             </v-btn>
                         </template>
                         <v-card>
@@ -60,7 +60,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.name"
-                                                    :label="$t('name')"
+                                                    label="Name"
                                                     required
                                                     outlined
                                                     :rules="rules.name"
@@ -70,7 +70,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.company_name"
-                                                    :label="$t('company_name')"
+                                                    label="Company Name"
                                                     required
                                                     outlined
                                                     :rules="rules.company_name"
@@ -79,7 +79,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.vat_no"
-                                                    :label="$t('vat_pan')"
+                                                    label="Vat/Pan No"
                                                     outlined
                                                     type="number"
                                                     :rules="rules.vat_no"
@@ -90,7 +90,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.email"
-                                                    :label="$t('email')"
+                                                    label="Email"
                                                     required
                                                     outlined
                                                     :rules="rules.email"
@@ -99,7 +99,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.landline"
-                                                    :label="$t('landline')"
+                                                    label="Landline No."
                                                     required
                                                     outlined
                                                     type="number"
@@ -109,7 +109,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.mobile"
-                                                    :label="$t('mobile')"
+                                                    label="Mobile No."
                                                     required
                                                     outlined
                                                     type="number"
@@ -124,7 +124,7 @@
                                                     :items="country"
                                                     item-text="name"
                                                     item-value="name"
-                                                    :label="$t('country')"
+                                                    label="Country"
                                                     dense
                                                     outlined
                                                     required
@@ -139,7 +139,7 @@
                                                     :items="state"
                                                     item-text="name"
                                                     item-value="name"
-                                                    :label="$t('state')"
+                                                    label="State"
                                                     dense
                                                     outlined
                                                     required
@@ -154,7 +154,7 @@
                                                     :items="city"
                                                     item-text="name"
                                                     item-value="name"
-                                                    :label="$t('city')"
+                                                    label="City"
                                                     dense
                                                     outlined
                                                     required
@@ -167,7 +167,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.postal_code"
-                                                    :label="$t('postal_code')"
+                                                    label="Postal Code"
                                                     required
                                                     outlined
                                                     type="number"
@@ -179,7 +179,7 @@
                                                     :items="categories"
                                                     item-text="name"
                                                     item-value="id"
-                                                    :label="$t('categories')"
+                                                    label="Categories"
                                                     dense
                                                     outlined
                                                     required
@@ -192,7 +192,7 @@
                                                     :items="activePassive"
                                                     item-text="text"
                                                     item-value="value"
-                                                    :label="$t('active_inactive')"
+                                                    label="Active or Inactive"
                                                     dense
                                                     outlined
                                                     required
@@ -216,14 +216,14 @@
                                         text
                                         @click="close"
                                     >
-                                        {{ $t('button.cancel') }}
+                                        Cancel
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        {{ $t('button.submit') }}
+                                        Save
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>
@@ -231,14 +231,11 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{
-                                        $t('button.confirm')
-                                    }}
-                                </v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -246,7 +243,7 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.city="{ item }">
-                {{ getCityName(item) }}
+                {{getCityName(item)}}
             </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
@@ -288,19 +285,19 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
-            {text: i18n.t('name'), value: 'name'},
-            {text: i18n.t('company_name'), value: 'company_name'},
-            {text: i18n.t('vat_pan') + ' ' + i18n.t('number'), value: 'vat_no'},
-            {text: i18n.t('email'), value: 'email'},
-            {text: i18n.t('mobile'), value: 'landline'},
-            {text: i18n.t('city'), value: 'city'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: 'Id', align: 'start', sortable: false, value: 'id'},
+            {text: 'Name', value: 'name'},
+            {text: 'Company Name', value: 'company_name'},
+            {text: 'Vat/Pan No', value: 'vat_no'},
+            {text: 'Email', value: 'email'},
+            {text: 'Phone No', value: 'landline'},
+            {text: 'City', value: 'city'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         activePassive: [
             {text: 'Active', value: 1},
             {text: 'Inactive', value: 0},
-        ],
+            ],
         categories: [],
         vendors: [],
         editedIndex: -1,
@@ -337,29 +334,29 @@ export default {
         rules: {
             name: [
                 val => (val || '').length > 0 || i18n.t('validation.required'),
-            ], company_name: [
+            ],company_name: [
                 val => (val || '').length > 0 || i18n.t('validation.required'),
-            ], vat_no: [
+            ],vat_no: [
                 val => (val || '').length > 0 || i18n.t('validation.required'),
-            ], email: [
+            ],email: [
                 val => (val || '').length > 0 || i18n.t('validation.required'),
                 val => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(val) || i18n.t('validation.email'),
-            ], landline: [
+            ],landline: [
                 val => /(\d{0,3})(\d{0,3})(\d{0,4})/.test(val) || i18n.t('validation.phone'),
-            ], mobile: [
+            ],mobile: [
                 val => (val || '').length > 0 || i18n.t('validation.required'),
                 val => /(\d{0,3})(\d{0,3})(\d{0,4})/.test(val) || i18n.t('validation.phone'),
             ],
         },
         tableLoad: true,
-        country: [],
-        state: [],
-        city: [],
+        country:[],
+        state:[],
+        city:[],
     }),
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? i18n.t('card_title.add_vendor') : i18n.t('card_title.edit_vendor')
+            return this.editedIndex === -1 ? 'Add Vendor' : 'Edit Vendor'
         },
     },
 
@@ -379,16 +376,16 @@ export default {
     },
 
     methods: {
-        getCityName(item) {
-            if (item.city !== null) return JSON.parse(item.city).name;
+        getCityName(item){
+            if(item.city !== null) return JSON.parse(item.city).name;
         },
-        async getStates(country) {
-            this.state = stateList.filter(function (value, index) {
+        async getStates(country){
+            this.state = stateList.filter(function(value, index) {
                 return value.country_id === country.id;
             })
         },
-        async getCities(state) {
-            this.city = cityList.filter(function (value, index) {
+        async getCities(state){
+            this.city = cityList.filter(function(value, index) {
                 return value.state_id === state.id
             })
         },
@@ -412,13 +409,9 @@ export default {
             this.editedItem.country = JSON.parse(this.editedItem.country);
             this.editedItem.state = JSON.parse(this.editedItem.state);
             this.editedItem.city = JSON.parse(this.editedItem.city);
-            // console.log('edit but', this.editedItem);
-            if (this.editedItem.country) {
-                this.getStates(this.editedItem.country);
-            }
-            if (this.editedItem.state) {
-                this.getCities(this.editedItem.state);
-            }
+            console.log('edit but', this.editedItem);
+            this.getStates(this.editedItem.country);
+            this.getCities(this.editedItem.state);
             this.dialog = true
         },
 
@@ -508,38 +501,27 @@ export default {
             this.$refs.form.validate();
             if (this.editedItem.name === null) {
                 this.validated = false
-            }
-            if (this.editedItem.company_name === null) {
+            }if (this.editedItem.company_name === null) {
                 this.validated = false
-            }
-            if (this.editedItem.vat_no === null) {
+            }if (this.editedItem.vat_no === null) {
                 this.validated = false
-            }
-            if (this.editedItem.email === null) {
+            }if (this.editedItem.email === null) {
                 this.validated = false
-            }
-            if (this.editedItem.landline === null) {
+            }if (this.editedItem.landline === null) {
                 this.validated = false
-            }
-            if (this.editedItem.mobile === null) {
+            }if (this.editedItem.mobile === null) {
                 this.validated = false
-            }
-            if (this.editedItem.country === null) {
+            }if (this.editedItem.country === null) {
                 this.validated = false
-            }
-            if (this.editedItem.state === null) {
+            }if (this.editedItem.state === null) {
                 this.validated = false
-            }
-            if (this.editedItem.city === null) {
+            }if (this.editedItem.city === null) {
                 this.validated = false
-            }
-            if (this.editedItem.postal_code === null) {
+            }if (this.editedItem.postal_code === null) {
                 this.validated = false
-            }
-            if (this.editedItem.category_id === null) {
+            }if (this.editedItem.category_id === null) {
                 this.validated = false
-            }
-            if (this.editedItem.is_active === null) {
+            }if (this.editedItem.is_active === null) {
                 this.validated = false
             } else {
                 this.validated = true

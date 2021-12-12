@@ -72,9 +72,6 @@ export default {
     async getUserProfilePic() {
         return await apiCall(GET, `api/user/profile-picture`)
     },
-    async getUserPermissions() {
-        return await apiCall(GET, `api/get-permissions`)
-    },
     async logout() {
         return await apiCall(GET, `api/user/logout`)
     },
@@ -196,52 +193,52 @@ export default {
         return await apiCall(DELETE, `api/product/item/items/${id}`)
     },
 
-    async productAttributeGroupIndex() {
-        return await apiCall(GET, `api/product/productAttributeGroups`)
+    async itemAttributeGroupIndex() {
+        return await apiCall(GET, `api/product/item/itemAttributeGroups`)
     },
-    async productAttributeGroupCreate(data) {
-        return await apiCall(POST, `api/product/productAttributeGroups`, data)
+    async itemAttributeGroupCreate(data) {
+        return await apiCall(POST, `api/product/item/itemAttributeGroups`, data)
     },
-    async productAttributeGroupShow(id) {
-        return await apiCall(GET, `api/product/productAttributeGroups/${id}`)
+    async itemAttributeGroupShow(id) {
+        return await apiCall(GET, `api/product/item/itemAttributeGroups/${id}`)
     },
-    async productAttributeGroupEdit(id, data) {
-        return await apiCall(POST, `api/product/productAttributeGroups/${id}`, data)
+    async itemAttributeGroupEdit(id, data) {
+        return await apiCall(POST, `api/product/item/itemAttributeGroups/${id}`, data)
     },
-    async productAttributeGroupDelete(id) {
-        return await apiCall(DELETE, `api/product/productAttributeGroups/${id}`)
-    },
-
-    async productAttributeIndex() {
-        return await apiCall(GET, `api/product/productAttributes`)
-    },
-    async productAttributeCreate(data) {
-        return await apiCall(POST, `api/product/productAttributes`, data)
-    },
-    async productAttributeShow(id) {
-        return await apiCall(GET, `api/product/productAttributes/${id}`)
-    },
-    async productAttributeEdit(id, data) {
-        return await apiCall(POST, `api/product/productAttributes/${id}`, data)
-    },
-    async productAttributeDelete(id) {
-        return await apiCall(DELETE, `api/product/productAttributes/${id}`)
+    async itemAttributeGroupDelete(id) {
+        return await apiCall(DELETE, `api/product/item/itemAttributeGroups/${id}`)
     },
 
-    async productVariantIndex() {
-        return await apiCall(GET, `api/product/productVariants`)
+    async itemAttributeIndex() {
+        return await apiCall(GET, `api/product/item/itemAttributes`)
     },
-    async productVariantCreate(data) {
-        return await apiCall(POST, `api/product/productVariants`, data)
+    async itemAttributeCreate(data) {
+        return await apiCall(POST, `api/product/item/itemAttributes`, data)
     },
-    async productVariantShow(id) {
-        return await apiCall(GET, `api/product/productVariants/${id}`)
+    async itemAttributeShow(id) {
+        return await apiCall(GET, `api/product/item/itemAttributes/${id}`)
     },
-    async productVariantEdit(id, data) {
-        return await apiCall(POST, `api/product/productVariants/${id}`, data)
+    async itemAttributeEdit(id, data) {
+        return await apiCall(POST, `api/product/item/itemAttributes/${id}`, data)
     },
-    async productVariantDelete(id) {
-        return await apiCall(DELETE, `api/product/productVariants/${id}`)
+    async itemAttributeDelete(id) {
+        return await apiCall(DELETE, `api/product/item/itemAttributes/${id}`)
+    },
+
+    async itemVariantIndex() {
+        return await apiCall(GET, `api/product/item/itemVariants`)
+    },
+    async itemVariantCreate(data) {
+        return await apiCall(POST, `api/product/item/itemVariants`, data)
+    },
+    async itemVariantShow(id) {
+        return await apiCall(GET, `api/product/item/itemVariants/${id}`)
+    },
+    async itemVariantEdit(id, data) {
+        return await apiCall(POST, `api/product/item/itemVariants/${id}`, data)
+    },
+    async itemVariantDelete(id) {
+        return await apiCall(DELETE, `api/product/item/itemVariants/${id}`)
     },
 
     async taxIndex() {
@@ -562,10 +559,6 @@ export default {
     },
     async quotationProductDelete(id) {
         return await apiCall(DELETE, `api/quotation/quotationProducts/${id}`)
-    },
-
-    async createVariant(data) {
-        return await apiCall(POST, `api/create-variants`, data)
     },
 
     async addPurchaseRequest(data) {

@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>{{ $t('card_title.add_budget') }}</strong>
+                                <strong>Add</strong> Budget
                                 <v-progress-circular
                                     v-if="createProgress"
                                     indeterminate
@@ -17,21 +17,12 @@
                             <CCardBody>
                                 <CForm>
                                     <v-form>
-                                        <v-text-field
-                                            v-model="title"
-                                            :label="$t('title')"
-                                            placeholder="Enter title..."
-                                            prepend-icon="mdi-alpha-t-circle"
-                                            required
-                                            :rules="rules.title"
-                                            solo
-                                        />
                                         <v-select
                                             v-model="department_id"
                                             :items="departments"
                                             item-text="name"
                                             item-value="id"
-                                            :label="$t('department')"
+                                            label="Department"
                                             placeholder="Select a department..."
                                             prepend-icon="mdi-alpha-d-circle"
                                             required
@@ -41,27 +32,19 @@
                                         <v-select
                                             v-model="fiscal_year_id"
                                             :items="fiscalYears"
-                                            item-text="name"
+                                            :item-text="fiscalYear => fiscalYear.from +' || '+ fiscalYear.to"
                                             item-value="id"
-                                            :label="$t('fiscal_year')"
+                                            label="Fiscal Year"
                                             placeholder="Select a fiscal year..."
                                             prepend-icon="mdi-calendar-clock"
                                             required
                                             :rules="rules.fiscal_year_id"
                                             solo
                                         />
-                                        <v-select
-                                            v-model="type"
-                                            :items="['Annual','Extra']"
-                                            :label="$t('type')"
-                                            placeholder="Select a budget type..."
-                                            prepend-icon="mdi-shape"
-                                            solo
-                                        />
                                         <v-text-field
                                             v-model="allocated_budget_amount"
                                             type="number"
-                                            :label="$t('allocated_budget') +' '+ $t('amount')"
+                                            label="Allocated Budget Amount"
                                             placeholder="Enter the allocate budget amount..."
                                             prepend-icon="mdi-cash-check"
                                             required
@@ -71,7 +54,7 @@
                                         <v-text-field
                                             v-model="initial_dispatched_amount"
                                             type="number"
-                                            :label="$t('initial_dispatched') +' '+ $t('amount')"
+                                            label="Initial Dispatched Amount"
                                             placeholder="Enter the initial dispatched amount..."
                                             prepend-icon="mdi-cash-marker"
                                             required
@@ -81,7 +64,7 @@
                                         <v-text-field
                                             v-model="date_first_received"
                                             type="date"
-                                            :label="$t('date_first_received')"
+                                            label="Initial Dispatched Amount"
                                             placeholder="Enter the first amount received date..."
                                             prepend-icon="mdi-calendar-month"
                                             :rules="rules.date_first_received"
@@ -90,14 +73,14 @@
                                         <v-text-field
                                             v-model="remarks"
                                             type="text"
-                                            :label="$t('remarks')"
+                                            label="Remarks"
                                             placeholder="Enter remarks..."
                                             prepend-icon="mdi-pen"
                                             solo
                                         />
                                         <v-file-input
                                             v-model="file"
-                                            :label="$t('file')"
+                                            label="File"
                                             filled
                                             outlined
                                             prepend-icon="mdi-camera"
@@ -107,11 +90,11 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="create">
                                             <CIcon name="cil-check-circle"/>
-                                            {{ $t('button.submit') }}
+                                            Submit
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/budgets/'">
                                             <CIcon name="cil-ban"/>
-                                            {{ $t('button.cancel') }}
+                                            Reset
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -144,13 +127,10 @@ export default {
         date_first_received: '',
         remarks: '',
         file: [],
-        title: '',
-        type: '',
         departments: [],
         fiscalYears: [],
         createProgress: false,
         error: {
-            title: '',
             department_id: '',
             fiscal_year_id: '',
             allocated_budget_amount: '',
@@ -160,9 +140,6 @@ export default {
             file: [],
         },
         rules: {
-            title: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],
             department_id: [
                 val => val > 0 || i18n.t('validation.required'),
             ],
@@ -199,9 +176,6 @@ export default {
             }
         },
         clearError(name) {
-            if (name === 'title') {
-                this.error.title = '';
-            }
             if (name === 'department_id') {
                 this.error.department_id = '';
             }
@@ -224,10 +198,8 @@ export default {
         async create() {
             this.createProgress = true;
             const data = new FormData();
-            data.append('title', this.title);
             data.append('department_id', this.department_id);
             data.append('fiscal_year_id', this.fiscal_year_id);
-            data.append('type', this.type);
             data.append('allocated_budget_amount', this.allocated_budget_amount);
             data.append('initial_dispatched_amount', this.initial_dispatched_amount);
             data.append('date_first_received', this.date_first_received);

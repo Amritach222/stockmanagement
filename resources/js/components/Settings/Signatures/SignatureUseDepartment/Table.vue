@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('signature') +' '+ $t('use') +' '+ $t('departments') }}
+            Signature Use Departments
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -27,7 +27,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                :label="$t('search')"
+                                label="Search"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -46,7 +46,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                {{ $t('button.add_new_signature_use_department') }}
+                                Add New Signature Use Department
                             </v-btn>
                         </template>
                         <v-card>
@@ -61,7 +61,7 @@
                                             <v-col>
                                                 <v-select
                                                     v-model="editedItem.department_id"
-                                                    :label="$t('department')"
+                                                    label="Department"
                                                     :items="departments"
                                                     item-text="name"
                                                     item-value="id"
@@ -75,7 +75,7 @@
                                             <v-col>
                                                 <v-select
                                                     v-model="editedItem.signature_id"
-                                                    :label="$t('signature')"
+                                                    label="Signature"
                                                     :items="signatures"
                                                     :item-text="signature => signature.user_name +' - '+ signature.designation_name"
                                                     item-value="id"
@@ -100,14 +100,14 @@
                                         text
                                         @click="close"
                                     >
-                                        {{ $t('button.cancel') }}
+                                        Cancel
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        {{ $t('button.submit') }}
+                                        Save
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>
@@ -115,11 +115,11 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -166,7 +166,6 @@
 import config from "../../../../config";
 import store from "../../../../store";
 import ApiServices from "../../../../services/ApiServices";
-import i18n from "../../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -180,10 +179,10 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
-            {text: i18n.t('department'), value: 'department_id'},
-            {text: i18n.t('signature'), value: 'signature_id'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: 'Id', align: 'start', sortable: false, value: 'id'},
+            {text: 'Department', value: 'department_id'},
+            {text: 'Signature', value: 'signature_id'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         signatures: [],
         signatureUseDepartments: [],
@@ -207,7 +206,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? i18n.t('card_title.add_signature_use_department') : i18n.t('card_title.edit_signature_use_department')
+            return this.editedIndex === -1 ? 'Add Signature Use Department' : 'Edit Signature Use Department'
         },
     },
 

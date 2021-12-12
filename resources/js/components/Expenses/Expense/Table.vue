@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('expenses') }}
+            Expenses
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -26,7 +26,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                :label="$t('search')"
+                                label="Search"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -46,7 +46,7 @@
                                 v-on="on"
                                 :to="'/expenses/create/'"
                             >
-                                {{ $t('button.add_new_expense') }}
+                                Add New Expense
                             </v-btn>
                         </template>
                         <v-card>
@@ -55,11 +55,11 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -76,15 +76,6 @@
                 <p v-if="item.expense_category_id">{{ item.expense_category.name }}</p>
             </template>
             <template v-slot:item.actions="{ item }">
-                <router-link
-                    :to="'/expenses/'+item.id"
-                >
-                    <v-icon
-                        small
-                    >
-                        mdi-eye
-                    </v-icon>
-                </router-link>
                 <router-link
                     :to="'/expenses/edit/'+item.id"
                 >
@@ -111,7 +102,6 @@
 <script>
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
-import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -122,13 +112,13 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
-            {text: i18n.t('department'), value: 'department_id'},
-            {text: i18n.t('user'), value: 'user_id'},
-            {text: i18n.t('expense') +' '+ i18n.t('category'), value: 'expense_category_id'},
-            {text: i18n.t('amount'), value: 'amount'},
-            {text: i18n.t('type'), value: 'transaction_type'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: 'Id', align: 'start', sortable: false, value: 'id'},
+            {text: 'Department', value: 'department_id'},
+            {text: 'User', value: 'user_id'},
+            {text: 'Expense Category', value: 'expense_category_id'},
+            {text: 'Amount', value: 'amount'},
+            {text: 'Type', value: 'transaction_type'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         expenses: [],
         editedIndex: -1,

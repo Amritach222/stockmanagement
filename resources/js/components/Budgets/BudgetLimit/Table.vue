@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('budget_limits') }}
+            Budget Limit
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -26,7 +26,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                :label="$t('search')"
+                                label="Search"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -45,7 +45,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                {{ $t('button.add_new_budget_limit') }}
+                                Add New Budget Limit
                             </v-btn>
                         </template>
                         <v-card>
@@ -59,22 +59,11 @@
                                         <v-row>
                                             <v-col>
                                                 <v-select
-                                                    v-model="editedItem.department_id"
-                                                    :items="departments"
-                                                    item-value="id"
-                                                    item-text="name"
-                                                    :label="$t('department')"
-                                                    required
-                                                    outlined
-                                                    :rules="rules"
-                                                    v-on:change="changeCategories(editedItem.department_id)"
-                                                ></v-select>
-                                                <v-select
                                                     v-model="editedItem.category_id"
                                                     :items="categories"
                                                     item-value="id"
                                                     item-text="name"
-                                                    :label="$t('category')"
+                                                    label="Category"
                                                     required
                                                     outlined
                                                     :rules="rules"
@@ -82,7 +71,7 @@
                                                 <v-text-field
                                                     v-model="editedItem.amount"
                                                     type="number"
-                                                    :label="$t('amount')"
+                                                    label="Amount"
                                                     required
                                                     outlined
                                                     :rules="rules"
@@ -104,14 +93,14 @@
                                         text
                                         @click="close"
                                     >
-                                        {{ $t('button.cancel') }}
+                                        Cancel
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        {{ $t('button.submit') }}
+                                        Save
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>
@@ -119,22 +108,19 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
                 </v-toolbar>
             </template>
-            <template v-slot:item.department_id="{ item }">
-                <p v-if="item.department_id">{{ item.department.name }}</p>
-            </template>
             <template v-slot:item.category_id="{ item }">
-                <p v-if="item.category_id">{{ item.category.name }}</p>
+                <p v-if="item.category_id">{{ item.category_name }}</p>
             </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
@@ -161,7 +147,6 @@
 <script>
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
-import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -173,25 +158,21 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
-            {text: i18n.t('department'), value: 'department_id'},
-            {text: i18n.t('category'), value: 'category_id'},
-            {text: i18n.t('amount'), value: 'amount'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: 'Id', align: 'start', sortable: true, value: 'id'},
+            {text: 'Category', value: 'category_id'},
+            {text: 'Amount', value: 'amount'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         budgetLimits: [],
         categories: [],
-        departments: [],
         editedIndex: -1,
         editedItem: {
             id: null,
-            department_id: '',
             category_id: '',
             amount: '',
         },
         defaultItem: {
             id: null,
-            department_id: '',
             category_id: '',
             amount: '',
         },
@@ -203,7 +184,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? i18n.t('card_title.add_budget_limit') : i18n.t('card_title.edit_budget_limit')
+            return this.editedIndex === -1 ? 'Add Budget Limit' : 'Edit Budget Limit'
         },
     },
 
@@ -219,7 +200,6 @@ export default {
     async created() {
         this.loadItems();
         this.loadCategories();
-        this.loadDepartments();
     },
 
     methods: {
@@ -231,14 +211,6 @@ export default {
             }
         },
 
-        async loadDepartments() {
-            let res = await ApiServices.departmentIndex();
-            if (res.success === true) {
-                this.tableLoad = false;
-                this.departments = res.data;
-            }
-        },
-
         async loadItems() {
             let res = await ApiServices.budgetLimitIndex();
             if (res.success === true) {
@@ -246,32 +218,6 @@ export default {
                 this.budgetLimits = res.data;
             }
         },
-
-        async changeCategories(id) {
-            let res = await ApiServices.categoryIndex();
-            if (res.success === true) {
-                this.tableLoad = false;
-                for (var i = 0; i < this.budgetLimits.length; i++) {
-                    if (this.budgetLimits[i].department_id === id) {
-                        this.categories = [];
-                        for (var j = 0; j < res.data.length; j++) {
-                            if (this.budgetLimits[i].category_id !== res.data[j].id) {
-                                this.categories.push(res.data[j]);
-                            } else {
-                                if (this.editedIndex > 0) {
-                                    if (res.data[j].id === this.editedItem.category_id) {
-                                        this.categories.push(res.data[j]);
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        this.categories = res.data;
-                    }
-                }
-            }
-        },
-
         editItem(item) {
             this.editedIndex = this.budgetLimits.indexOf(item)
             this.editedItem = Object.assign({}, item)
@@ -312,29 +258,27 @@ export default {
 
         async save() {
             this.validateData();
-            if (this.validated2) {
+            if (this.validated1 && this.validated2) {
                 if (this.editedIndex > -1) {
                     //edit goes her
                     this.progressL = true;
                     const data = new FormData();
-                    data.append('department_id', this.editedItem.department_id);
                     data.append('category_id', this.editedItem.category_id);
                     data.append('amount', this.editedItem.amount);
                     let res = await ApiServices.budgetLimitEdit(this.editedItem.id, data);
                     if (res.success === true) {
-                        Object.assign(this.budgetLimits[this.editedIndex], res.data)
+                        Object.assign(this.budgetLimits[this.editedIndex], this.editedItem)
                         this.$refs.form.reset();
                         this.close();
                     }
                 } else {
                     this.progressL = true;
                     const data = new FormData();
-                    data.append('department_id', this.editedItem.department_id);
                     data.append('category_id', this.editedItem.category_id);
                     data.append('amount', this.editedItem.amount);
                     let res = await ApiServices.budgetLimitCreate(data);
                     if (res.success === true) {
-                        this.budgetLimits.push(res.data);
+                        this.budgetLimits.push(this.editedItem);
                         this.$refs.form.reset();
                         this.close()
                     }
@@ -344,10 +288,11 @@ export default {
         validateData() {
             this.$refs.form.validate();
             if (this.editedItem.category_id === '') {
-                this.validated2 = false
-            } else if (this.editedItem.department_id === '') {
-                this.validated2 = false
-            } else if (this.editedItem.amount === '') {
+                this.validated1 = false
+            } else {
+                this.validated1 = true
+            }
+            if (this.editedItem.amount === '') {
                 this.validated2 = false
             } else {
                 this.validated2 = true

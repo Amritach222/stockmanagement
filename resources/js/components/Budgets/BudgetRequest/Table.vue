@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('budget_requests') }}
+            Budget Request
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -26,7 +26,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                :label="$t('search')"
+                                label="Search"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -44,19 +44,75 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
-                                :to="'/budgetRequests/create'"
                             >
-                                {{ $t('button.add_new_budget_request') }}
+                                Add New Budget Request
                             </v-btn>
                         </template>
+                        <v-card>
+                            <v-form ref="form">
+                                <v-card-title>
+                                    <span class="headline">{{ formTitle }}</span>
+                                </v-card-title>
+
+                                <v-card-text>
+                                    <v-container>
+                                        <v-row>
+                                            <v-col>
+                                                <v-select
+                                                    v-model="editedItem.department_id"
+                                                    :items="departments"
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    label="Department"
+                                                    required
+                                                    outlined
+                                                    :rules="rules"
+                                                ></v-select>
+                                                <v-text-field
+                                                    v-model="editedItem.request_amount"
+                                                    type="number"
+                                                    label="Amount"
+                                                    required
+                                                    outlined
+                                                    :rules="rules"
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </v-card-text>
+
+                                <v-card-actions>
+                                    <v-progress-linear
+                                        v-if="progressL"
+                                        indeterminate
+                                        color="green"
+                                    ></v-progress-linear>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                        color="blue darken-1"
+                                        text
+                                        @click="close"
+                                    >
+                                        Cancel
+                                    </v-btn>
+                                    <v-btn
+                                        color="blue darken-1"
+                                        text
+                                        @click="save"
+                                    >
+                                        Save
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-form>
+                        </v-card>
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -64,41 +120,16 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.department_id="{ item }">
-                <p v-if="item.department_id" class="mt-3">{{ item.department.name }}</p>
-            </template>
-            <template v-slot:item.fiscal_year_id="{ item }">
-                <p v-if="item.fiscal_year_id" class="mt-3">{{ item.fiscal_year.name }}</p>
-            </template>
-            <template v-slot:item.status="{ item }">
-                <CButton size="sm" color="secondary" v-if="item.status == 'Pending'">
-                    {{ item.status }}
-                </CButton>
-                <CButton size="sm" color="success" v-else-if="item.status == 'Approved'">
-                    {{ item.status }}
-                </CButton>
-                <CButton size="sm" color="danger" v-else-if="item.status == 'Rejected'">
-                    {{ item.status }}
-                </CButton>
+                <p v-if="item.department_id">{{ item.department_name }}</p>
             </template>
             <template v-slot:item.actions="{ item }">
-                <router-link
-                    :to="'/budgetRequests/'+item.id"
+                <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
                 >
-                    <v-icon
-                        small
-                    >
-                        mdi-eye
-                    </v-icon>
-                </router-link>
-                <router-link
-                    :to="'/budgetRequests/edit/'+item.id"
-                >
-                    <v-icon
-                        small
-                    >
-                        mdi-pencil
-                    </v-icon>
-                </router-link>
+                    mdi-pencil
+                </v-icon>
                 <v-icon
                     small
                     @click="deleteItem(item)"
@@ -115,7 +146,6 @@
 
 <script>
 import store from "../../../store";
-import i18n from "../../../i18n";
 import ApiServices from "../../../services/ApiServices";
 
 export default {
@@ -127,13 +157,11 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
-            {text: i18n.t('department'), value: 'department_id'},
-            {text: i18n.t('fiscal_year'), value: 'fiscal_year_id'},
-            {text: i18n.t('type'), value: 'type'},
-            {text: i18n.t('amount'), value: 'request_amount'},
-            {text: i18n.t('status'), value: 'status'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: 'Id', align: 'start', sortable: true, value: 'id'},
+            {text: 'Department', value: 'department_id'},
+            {text: 'Amount', value: 'request_amount'},
+            {text: 'Status', value: 'status'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         budgetRequests: [],
         departments: [],
@@ -154,6 +182,12 @@ export default {
         tableLoad: true
     }),
 
+    computed: {
+        formTitle() {
+            return this.editedIndex === -1 ? 'Add Budget Request' : 'Edit Budget Request'
+        },
+    },
+
     watch: {
         dialog(val) {
             val || this.close()
@@ -165,15 +199,29 @@ export default {
 
     async created() {
         this.loadItems();
+        this.loadDepartments();
     },
 
     methods: {
+        async loadDepartments() {
+            let res = await ApiServices.departmentIndex('department');
+            if (res.success === true) {
+                this.tableLoad = false;
+                this.departments = res.data;
+            }
+        },
+
         async loadItems() {
             let res = await ApiServices.budgetRequestIndex();
             if (res.success === true) {
                 this.tableLoad = false;
                 this.budgetRequests = res.data;
             }
+        },
+        editItem(item) {
+            this.editedIndex = this.budgetRequests.indexOf(item)
+            this.editedItem = Object.assign({}, item)
+            this.dialog = true
         },
 
         deleteItem(item) {
@@ -207,6 +255,44 @@ export default {
                 this.editedIndex = -1
             })
         },
+
+        async save() {
+            this.validateData();
+            if (this.validated) {
+                if (this.editedIndex > -1) {
+                    //edit goes her
+                    this.progressL = true;
+                    const data = new FormData();
+                    data.append('department_id', this.editedItem.department_id);
+                    data.append('request_amount', this.editedItem.request_amount);
+                    let res = await ApiServices.budgetRequestEdit(this.editedItem.id, data);
+                    if (res.success === true) {
+                        Object.assign(this.budgetRequests[this.editedIndex], this.editedItem)
+                        this.$refs.form.reset();
+                        this.close();
+                    }
+                } else {
+                    this.progressL = true;
+                    const data = new FormData();
+                    data.append('department_id', this.editedItem.department_id);
+                    data.append('request_amount', this.editedItem.request_amount);
+                    let res = await ApiServices.budgetRequestCreate(data);
+                    if (res.success === true) {
+                        this.budgetRequests.push(this.editedItem);
+                        this.$refs.form.reset();
+                        this.close()
+                    }
+                }
+            }
+        },
+        validateData() {
+            this.$refs.form.validate();
+            if (this.editedItem.department_id === '') {
+                this.validated = false
+            } else {
+                this.validated = true
+            }
+        }
     },
 }
 </script>

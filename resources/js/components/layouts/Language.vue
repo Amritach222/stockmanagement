@@ -35,20 +35,12 @@ export default {
             store.state.home.snackbar = true;
             store.state.home.snackbarText = this.$i18n.t('languageChangedTo');
             store.state.home.snackbarColor = 'green';
-            this.loadNav();
-            this.$forceUpdate();
         }
     },
     created() {
         this.selectedLanguage = localStorage.getItem('lang');
         store.state.home.lang = this.selectedLanguage;
     },
-    methods:{
-        loadNav(){
-            console.log('here')
-            this.$root.$emit('navComponent')
-        }
-    }
 }
 </script>
 

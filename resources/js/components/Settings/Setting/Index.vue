@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>{{ $t('card_title.edit_setting') }}</strong>
+                                <strong>Edit</strong> Settings
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate
@@ -24,7 +24,7 @@
                                             description="Please enter site title."
                                             prepend-inner-icon="mdi-alpha-c-circle"
                                             autocomplete=""
-                                            :label="$t('title')"
+                                            label="Title"
                                             placeholder="Enter title..."
                                             required
                                             @keyup="clearError('title')"
@@ -41,12 +41,12 @@
                                                     class="grey darken-4"
                                                 ></v-img>
                                                 <v-card-title class="title">
-                                                    {{ $t('logo') }}
+                                                    Logo
                                                 </v-card-title>
                                             </v-card>
                                             <v-file-input
                                                 v-model="editedItem.image"
-                                                :label="$t('logo')"
+                                                label="Logo"
                                                 filled
                                                 outlined
                                                 prepend-icon="mdi-camera"
@@ -56,7 +56,7 @@
                                         <v-col v-else>
                                             <v-file-input
                                                 v-model="editedItem.image"
-                                                :label="$t('logo')"
+                                                label="Logo"
                                                 filled
                                                 outlined
                                                 prepend-icon="mdi-camera"
@@ -68,12 +68,12 @@
                                             type="text"
                                             name="fiscal_year_id"
                                             :items="options"
-                                            item-text="name"
+                                            :item-text="option => option.from +' || '+ option.to"
                                             item-value="id"
                                             description="Please select system current fiscal year."
                                             prepend-inner-icon="mdi-calendar-month"
                                             autocomplete=""
-                                            :label="$t('fiscal_year')"
+                                            label="Fiscal Year"
                                             placeholder="Select current fiscal year..."
                                             @keyup="clearError('fiscal_year_id')"
                                             @keyup.enter="edit"
@@ -87,7 +87,7 @@
                                             description="Please enter site currency."
                                             prepend-inner-icon="mdi-currency-usd"
                                             autocomplete=""
-                                            :label="$t('currency')"
+                                            label="Currency"
                                             placeholder="Enter currency..."
                                             @keyup="clearError('currency')"
                                             @keyup.enter="edit"
@@ -102,7 +102,7 @@
                                             description="Please enter site time zone."
                                             prepend-inner-icon="mdi-clock"
                                             autocomplete=""
-                                            :label="$t('time_zone')"
+                                            label="Time Zone"
                                             placeholder="Enter time zone..."
                                             @keyup="clearError('time_zone')"
                                             @keyup.enter="edit"
@@ -115,7 +115,7 @@
                                             prepend-inner-icon="mdi-calendar-month"
                                             :items="['y-m-d','y/m/d','d-m-y','d/m/y','m-d-y']"
                                             autocomplete=""
-                                            :label="$t('date_format')"
+                                            label="Date Format"
                                             placeholder="Select date format..."
                                             :rules="rules.date_format"
                                             solo
@@ -124,7 +124,7 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            {{ $t('button.submit') }}
+                                            Submit
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

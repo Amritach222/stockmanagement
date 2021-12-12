@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('categories') }}
+            Categories
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -26,7 +26,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                :label="$t('search')"
+                                label="Search"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -45,7 +45,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                {{ $t('button.add_new_category') }}
+                                Add New Category
                             </v-btn>
                         </template>
                         <v-card>
@@ -60,7 +60,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.name"
-                                                    :label="$t('category') + ' ' + $t('name')"
+                                                    label="Category Name"
                                                     required
                                                     outlined
                                                     :rules="rules"
@@ -82,14 +82,14 @@
                                         text
                                         @click="close"
                                     >
-                                        {{ $t('button.cancel') }}
+                                        Cancel
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        {{ $t('button.submit') }}
+                                        Save
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>
@@ -97,11 +97,11 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -133,7 +133,6 @@
 <script>
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
-import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -144,9 +143,9 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
-            {text: i18n.t('name'), value: 'name'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: 'Id', align: 'start', sortable: false, value: 'id'},
+            {text: 'Name', value: 'name'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         categories: [],
         editedIndex: -1,
@@ -166,7 +165,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? i18n.t('card_title.add_category') : i18n.t('card_title.edit_category')
+            return this.editedIndex === -1 ? 'Add Category' : 'Edit Category'
         },
     },
 
@@ -233,7 +232,7 @@ export default {
             if (this.editedIndex > -1) {
                 //edit goes here
                 this.progressL = true;
-                const data = {'name': this.editedItem.name};
+                const data = {'name':this.editedItem.name};
                 let res = await ApiServices.categoryEdit(this.editedItem.id, data);
                 if (res.success === true) {
                     Object.assign(this.categories[this.editedIndex], this.editedItem)

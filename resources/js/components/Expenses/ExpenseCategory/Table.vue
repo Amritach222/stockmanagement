@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('expense') +' '+ $t('categories') }}
+            Expense Categories
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -26,7 +26,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                :label="$t('search')"
+                                label="Search"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -45,7 +45,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                {{ $t('button.add_new_expense_category') }}
+                                Add New Expense Category
                             </v-btn>
                         </template>
                         <v-card>
@@ -60,7 +60,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.name"
-                                                    :label="$t('category') +' '+ $t('name')"
+                                                    label="Category Name"
                                                     required
                                                     outlined
                                                     :rules="rules"
@@ -68,7 +68,7 @@
                                                 <v-checkbox
                                                     v-model="editedItem.is_active"
                                                     id="is_active"
-                                                    :label="$t('active')"
+                                                    label="Active"
                                                     outlined
                                                 ></v-checkbox>
                                             </v-col>
@@ -88,14 +88,14 @@
                                         text
                                         @click="close"
                                     >
-                                        {{ $t('button.cancel') }}
+                                        Cancel
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        {{ $t('button.submit') }}
+                                        Save
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>
@@ -103,11 +103,11 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.submit') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -147,7 +147,6 @@
 <script>
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
-import i18n from "../../../i18n";
 
 export default {
     name: "TableWrapper",
@@ -158,10 +157,10 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
-            {text: i18n.t('name'), value: 'name'},
-            {text: i18n.t('active'), value: 'is_active'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: 'Id', align: 'start', sortable: false, value: 'id'},
+            {text: 'Name', value: 'name'},
+            {text: 'Active', value: 'is_active'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         expenseCategories: [],
         editedIndex: -1,
@@ -183,7 +182,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? i18n.t('card_title.add_expense_category') : i18n.t('card_title.edit_expense_category')
+            return this.editedIndex === -1 ? 'Add Expense Category' : 'Edit Expense Category'
         },
     },
 

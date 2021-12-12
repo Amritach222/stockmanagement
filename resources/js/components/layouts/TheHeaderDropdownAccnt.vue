@@ -16,16 +16,16 @@
             </CHeaderNavLink>
         </template>
         <CDropdownHeader tag="div" class="text-center" color="light">
-            <strong>{{ $t('account') }}</strong>
+            <strong>Account</strong>
         </CDropdownHeader>
         <CDropdownItem>
             <CIcon name="cil-bell"/>
-            {{ $t('profileDropdown.updates') }}
+            Updates
             <CBadge color="info" class="mfs-auto">{{ itemsCount }}</CBadge>
         </CDropdownItem>
         <CDropdownItem>
             <CIcon name="cil-envelope-open"/>
-            {{ $t('profileDropdown.messages') }}
+            Messages
             <CBadge color="success" class="mfs-auto">{{ itemsCount }}</CBadge>
         </CDropdownItem>
         <CDropdownHeader
@@ -33,19 +33,19 @@
             class="text-center"
             color="light"
         >
-            <strong>{{ $t('settings') }}</strong>
+            <strong>Settings</strong>
         </CDropdownHeader>
         <CDropdownItem v-on:click="profileSetting">
             <CIcon name="cil-user"/>
-            {{ $t('profile') }}
+            Profile
         </CDropdownItem>
         <CDropdownItem>
             <CIcon name="cil-settings"/>
-            {{ $t('settings') }}
+            Settings
         </CDropdownItem>
         <CDropdownItem v-on:click="logoutUser">
             <CIcon name="cil-lock-locked"/>
-            {{ $t('profileDropdown.logout') }}
+            Logout
         </CDropdownItem>
     </CDropdown>
 </template>

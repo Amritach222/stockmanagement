@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>{{ $t('card_title.edit_mail_setting') }}</strong>
+                                <strong>Edit</strong> Mail Setting
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate
@@ -24,7 +24,7 @@
                                             description="Please enter mail mailer."
                                             prepend-inner-icon="mdi-email-multiple"
                                             autocomplete=""
-                                            :label="$t('mail') +' '+ $t('mailer')"
+                                            label="Mail Mailer"
                                             placeholder="Enter mail mailer..."
                                             required
                                             @keyup="clearError('mail_mailer')"
@@ -39,7 +39,7 @@
                                             description="Please enter mail host."
                                             prepend-inner-icon="mdi-email-multiple"
                                             autocomplete=""
-                                            :label="$t('mail') +' '+ $t('host')"
+                                            label="Mail Host"
                                             placeholder="Enter mail host..."
                                             required
                                             @keyup="clearError('mail_host')"
@@ -54,7 +54,7 @@
                                             description="Please enter mail port."
                                             prepend-inner-icon="mdi-swap-vertical"
                                             autocomplete=""
-                                            :label="$t('mail') +' '+ $t('port')"
+                                            label="Mail Port"
                                             placeholder="Enter mail port..."
                                             required
                                             @keyup="clearError('mail_port')"
@@ -69,7 +69,7 @@
                                             description="Please enter mail address."
                                             prepend-inner-icon="mdi-email-edit"
                                             autocomplete=""
-                                            :label="$t('mail_address')"
+                                            label="Mail Address"
                                             placeholder="Enter mail address..."
                                             required
                                             @keyup="clearError('mail_address')"
@@ -77,21 +77,21 @@
                                             :rules="rules.mail_address"
                                             solo
                                         />
-<!--                                        <v-text-field-->
-<!--                                            v-model="edited.username"-->
-<!--                                            type="text"-->
-<!--                                            name="username"-->
-<!--                                            description="Please enter username."-->
-<!--                                            prepend-inner-icon="mdi-account"-->
-<!--                                            autocomplete=""-->
-<!--                                            label="Username"-->
-<!--                                            placeholder="Enter username..."-->
-<!--                                            required-->
-<!--                                            @keyup="clearError('username')"-->
-<!--                                            @keyup.enter="edit"-->
-<!--                                            :rules="rules.username"-->
-<!--                                            solo-->
-<!--                                        />-->
+                                        <v-text-field
+                                            v-model="edited.username"
+                                            type="text"
+                                            name="username"
+                                            description="Please enter username."
+                                            prepend-inner-icon="mdi-account"
+                                            autocomplete=""
+                                            label="Username"
+                                            placeholder="Enter username..."
+                                            required
+                                            @keyup="clearError('username')"
+                                            @keyup.enter="edit"
+                                            :rules="rules.username"
+                                            solo
+                                        />
                                         <v-text-field
                                             v-model="edited.password"
                                             type="password"
@@ -99,7 +99,7 @@
                                             description="Please enter password."
                                             prepend-inner-icon="mdi-key"
                                             autocomplete=""
-                                            :label="$t('password')"
+                                            label="Password"
                                             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                                             :type="show1 ? 'text' : 'password'"
                                             @click:append="show1 = !show1"
@@ -117,7 +117,7 @@
                                             description="Please enter mail from name."
                                             prepend-inner-icon="mdi-email-send"
                                             autocomplete=""
-                                            :label="$t('from_name')"
+                                            label="From Name"
                                             placeholder="Enter mail from name..."
                                             required
                                             @keyup="clearError('mail_from_name')"
@@ -132,7 +132,7 @@
                                             description="Please enter encryption."
                                             prepend-inner-icon="mdi-lock-clock"
                                             autocomplete=""
-                                            :label="$t('encryption')"
+                                            label="Encryption"
                                             placeholder="Enter encryption..."
                                             required
                                             @keyup="clearError('encryption')"
@@ -144,7 +144,7 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            {{ $t('button.submit') }}
+                                            Submit
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

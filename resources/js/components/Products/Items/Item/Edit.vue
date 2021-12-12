@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>{{ $t('card_title.edit_item') }}</strong>
+                                <strong>Edit</strong> Item
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate
@@ -23,11 +23,12 @@
                                             name="name"
                                             description="Please enter item name."
                                             autocomplete=""
-                                            :label="$t('name')"
+                                            label="Name"
                                             placeholder="Enter item name..."
                                             prepend-icon="mdi-apps-box"
                                             required
                                             @keyup="clearError('name')"
+                                            @keyup.enter="edit"
                                             :rules="rules.name"
                                             solo
                                         />
@@ -39,26 +40,13 @@
                                             item-text="name"
                                             description="Please select a product."
                                             autocomplete=""
-                                            :label="$t('product')"
+                                            label="Product"
                                             placeholder="Select product..."
                                             prepend-icon="mdi-alpha-p-circle"
                                             required
                                             @keyup="clearError('product_id')"
+                                            @keyup.enter="edit"
                                             :rules="rules.product_id"
-                                            solo
-                                        />
-                                        <v-select
-                                            v-model="editedItem.product_variant_id"
-                                            name="product_variant_id"
-                                            :items="variants"
-                                            item-value="id"
-                                            item-text="name"
-                                            description="Please select a variant."
-                                            autocomplete=""
-                                            :label="$t('variant')"
-                                            placeholder="Select variant..."
-                                            prepend-icon="mdi-alpha-v-circle"
-                                            @keyup="clearError('product_variant_id')"
                                             solo
                                         />
                                         <v-row>
@@ -71,12 +59,12 @@
                                                         class="grey darken-4"
                                                     ></v-img>
                                                     <v-card-title class="title">
-                                                        {{ $t('image') }}
+                                                        Image
                                                     </v-card-title>
                                                 </v-card>
                                                 <v-file-input
                                                     v-model="editedItem.image"
-                                                    :label="$t('image')"
+                                                    label="Image"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -86,7 +74,7 @@
                                             <v-col v-else>
                                                 <v-file-input
                                                     v-model="editedItem.image"
-                                                    :label="$t('image')"
+                                                    label="Image"
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
@@ -102,11 +90,12 @@
                                             item-text="name"
                                             description="Please select brand."
                                             autocomplete=""
-                                            :label="$t('brand')"
+                                            label="Brand"
                                             placeholder="Select brand ..."
                                             prepend-icon="mdi-alpha-b-circle"
                                             required
                                             @keyup="clearError('brand_id')"
+                                            @keyup.enter="edit"
                                             :rules="rules.brand_id"
                                             solo
                                         />
@@ -117,20 +106,36 @@
                                             description="Please enter cost price."
                                             prepend-icon="mdi-currency-usd"
                                             autocomplete=""
-                                            :label="$t('cost_price')"
+                                            label="Cost Price"
                                             placeholder="Enter cost price..."
                                             @keyup="clearError('cost_price')"
+                                            @keyup.enter="edit"
                                             solo
                                         />
                                         <v-text-field
-                                            v-model="editedItem.quantity"
+                                            v-model="editedItem.stock"
                                             type="number"
-                                            description="Please enter quantity."
+                                            name="stock"
+                                            description="Please enter stock."
                                             autocomplete=""
-                                            :label="$t('quantity')"
-                                            placeholder="Enter quantity..."
+                                            label="Stock"
+                                            placeholder="Enter stock..."
                                             prepend-icon="mdi-chart-areaspline"
-                                            @keyup="clearError('quantity')"
+                                            @keyup="clearError('stock')"
+                                            @keyup.enter="edit"
+                                            solo
+                                        />
+                                        <v-text-field
+                                            v-model="editedItem.alert_stock"
+                                            type="number"
+                                            name="alert_stock"
+                                            description="Please enter alert stock."
+                                            autocomplete=""
+                                            label="Alert Stock"
+                                            placeholder="Enter alert stock..."
+                                            prepend-icon="mdi-chart-bell-curve"
+                                            @keyup="clearError('alert_stock')"
+                                            @keyup.enter="edit"
                                             solo
                                         />
                                         <v-select
@@ -141,11 +146,12 @@
                                             item-text="name"
                                             description="Please select a unit."
                                             autocomplete=""
-                                            :label="$t('unit')"
+                                            label="Unit"
                                             placeholder="Select a unit..."
                                             prepend-icon="mdi-google-circles-communities"
                                             required
                                             @keyup="clearError('unit_id')"
+                                            @keyup.enter="edit"
                                             solo
                                         />
                                         <v-select
@@ -156,10 +162,11 @@
                                             item-text="name"
                                             description="Please select a tax."
                                             autocomplete=""
-                                            :label="$t('tax')"
+                                            label="Tax"
                                             placeholder="Select a tax..."
                                             prepend-icon="mdi-alpha-t-circle"
                                             @keyup="clearError('tax_id')"
+                                            @keyup.enter="edit"
                                             solo
                                         />
                                         <v-select
@@ -168,22 +175,22 @@
                                             :items="['Included','Excluded']"
                                             description="Please select a tax method."
                                             autocomplete=""
-                                            :label="$t('tax_method')"
+                                            label="Tax Method"
                                             placeholder="Select a method..."
                                             prepend-icon="mdi-chart-bubble"
                                             @keyup="clearError('tax_method')"
+                                            @keyup.enter="edit"
                                             solo
                                         />
                                     </v-form>
-
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            {{ $t('button.submit') }}
+                                            Submit
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/items'">
                                             <CIcon name="cil-ban"/>
-                                            {{ $t('button.cancel') }}
+                                            Cancel
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -210,14 +217,13 @@ export default {
     },
     data: () => ({
         cdnURL: config.cdnURL,
-        baseURL: config.baseURL,
         editedItem: {
             id: null,
             name: '',
             brand_id: '',
             product_id: '',
-            product_variant_id: '',
-            quantity: '',
+            stock: '',
+            alert_stock: '',
             cost_price: '',
             unit_id: '',
             tax_id: '',
@@ -228,13 +234,12 @@ export default {
         brands: [],
         units: [],
         taxes: [],
-        variants: [],
         changeProgress: false,
         error: {
             name: '',
             product_id: '',
-            product_variant_id: '',
-            quantity: '',
+            stock: '',
+            alert_stock: '',
             cost_price: '',
             unit_id: '',
             tax_id: '',
@@ -253,7 +258,6 @@ export default {
             ],
         },
     }),
-
     async created() {
         this.loadItems();
         this.loadProducts();
@@ -295,7 +299,6 @@ export default {
                 this.editedItem = res.data;
             }
         },
-
         clearError(name) {
             if (name === 'name') {
                 this.error.name = '';
@@ -306,11 +309,11 @@ export default {
             if (name === 'product_id') {
                 this.error.product_id = '';
             }
-            if (name === 'product_variant_id') {
-                this.error.product_variant_id = '';
+            if (name === 'stock') {
+                this.error.stock = '';
             }
-            if (name === 'quantity') {
-                this.error.quantity = '';
+            if (name === 'alert_stock') {
+                this.error.alert_stock = '';
             }
             if (name === 'cost_price') {
                 this.error.cost_price = '';
@@ -328,7 +331,6 @@ export default {
                 this.error.image = '';
             }
         },
-
         async edit() {
             this.changeProgress = true;
             const data = new FormData();
@@ -336,12 +338,10 @@ export default {
             if (this.editedItem.brand_id !== null) {
                 data.append('brand_id', this.editedItem.brand_id);
             }
-            data.append('quantity', this.editedItem.quantity);
+            data.append('stock', this.editedItem.stock);
+            data.append('alert_stock', this.editedItem.alert_stock);
             if (this.editedItem.product_id !== null) {
                 data.append('product_id', this.editedItem.product_id);
-            }
-            if (this.editedItem.product_variant_id !== null) {
-                data.append('product_variant_id', this.editedItem.product_id);
             }
             data.append('cost_price', this.editedItem.cost_price);
             if (this.editedItem.unit_id !== null) {
