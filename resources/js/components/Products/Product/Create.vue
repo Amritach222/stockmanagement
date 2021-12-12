@@ -138,6 +138,20 @@
                                             prepend-icon="mdi-google-circles-communities"
                                             required
                                             @keyup="clearError('unit_id')"
+                                            v-on:change="getSubUnits(unit_id)"
+                                            solo
+                                        />
+                                        <v-select
+                                            v-model="distribute_unit_id"
+                                            :items="subUnits"
+                                            item-text="name"
+                                            item-value="id"
+                                            description="Please select distribute unit."
+                                            :label="$t('distribute'+' '+'unit')"
+                                            placeholder="Select distribute unit..."
+                                            prepend-icon="mdi-google-circles-communities"
+                                            required
+                                            @keyup="clearError('distribute_unit_id')"
                                             solo
                                         />
                                         <v-select
@@ -458,6 +472,7 @@ export default {
         alert_stock: '',
         cost_price: '',
         unit_id: '',
+        distribute_unit_id: '',
         tax_id: '',
         tax_method: '',
         image: [],
@@ -487,6 +502,7 @@ export default {
         },
         variants: [],
         units: [],
+        subUnits: [],
         taxes: [],
         error: {
             name: '',
@@ -498,6 +514,7 @@ export default {
             alert_stock: '',
             cost_price: '',
             unit_id: '',
+            distribute_unit_id: '',
             tax_id: '',
             tax_method: '',
         },
@@ -545,6 +562,15 @@ export default {
             let res = await ApiServices.unitIndex();
             if (res.success === true) {
                 this.units = res.data;
+            }
+        },
+        async getSubUnits(unit) {
+            this.subUnits = [];
+            let res = await ApiServices.unitShow(unit);
+            for (var i = 0; i < this.units.length; i++) {
+                    if (this.units[i].category_id === res.data.category_id) {
+                        this.subUnits.push(this.units[i]);
+                    }
             }
         },
         async loadTaxes() {
@@ -639,6 +665,9 @@ export default {
             if (name === 'unit_id') {
                 this.error.unit_id = '';
             }
+            if (name === 'distribute_unit_id') {
+                this.error.distribute_unit_id = '';
+            }
             if (name === 'tax_id') {
                 this.error.tax_id = '';
             }
@@ -675,16 +704,49 @@ export default {
         async create() {
             this.createProgress = true;
             const data = new FormData();
-            data.append('name', this.name);
-            data.append('brand_id', this.brand_id);
-            data.append('category_id', this.category_id);
-            data.append('details', this.details);
-            data.append('stock', this.stock);
-            data.append('alert_stock', this.alert_stock);
-            data.append('cost_price', this.cost_price);
-            data.append('unit_id', this.unit_id);
-            data.append('tax_id', this.tax_id);
-            data.append('tax_method', this.tax_method);
+            if (this.name !== null && this.name !== '') {
+                data.append('name', this.name);
+            }
+
+            if (this.brand_id !== null && this.brand_id !== '') {
+                data.append('brand_id', this.brand_id);
+            }
+
+            if (this.category_id !== null && this.category_id !== '') {
+                data.append('category_id', this.category_id);
+            }
+
+            if (this.details !== null && this.details !== '') {
+                data.append('details', this.details);
+            }
+
+            if (this.stock !== null && this.stock !== '') {
+                data.append('stock', this.stock);
+            }
+
+            if (this.alert_stock !== null && this.alert_stock !== '') {
+                data.append('alert_stock', this.alert_stock);
+            }
+
+            if (this.cost_price !== null && this.cost_price !== '') {
+                data.append('cost_price', this.cost_price);
+            }
+
+            if (this.unit_id !== null && this.unit_id !== '') {
+                data.append('unit_id', this.unit_id);
+            }
+
+            if (this.distribute_unit_id !== null && this.distribute_unit_id !== '') {
+                data.append('distribute_unit_id', this.distribute_unit_id);
+            }
+
+            if (this.tax_id !== null && this.tax_id !== '') {
+                data.append('tax_id', this.tax_id);
+            }
+
+            if (this.tax_method !== null && this.tax_method !== '') {
+                data.append('tax_method', this.tax_method);
+            }
 
 
             if (typeof this.image.name == 'string') {

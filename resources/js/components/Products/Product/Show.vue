@@ -36,6 +36,21 @@
                                         <h6>{{ $t('category') }}: </h6>
                                         <p v-if="show.category_id">{{ show.category.name }}</p>
                                         <p v-else>---</p>
+                                        <h6>{{ $t('cost_price') }}: </h6>
+                                        <p v-if="show.cost_price">Rs. {{ show.cost_price }}</p>
+                                        <p v-else>---</p>
+                                        <h6>{{ $t('stock') }}: </h6>
+                                        <p v-if="show.stock">{{ show.stock }}</p>
+                                        <p v-else>---</p>
+                                        <h6>{{ $t('alert')+' '+$t('stock') }}: </h6>
+                                        <p v-if="show.alert_stock">{{ show.alert_stock }}</p>
+                                        <p v-else>---</p>
+                                        <h6>{{ $t('unit') }}: </h6>
+                                        <p v-if="show.unit_id">{{ show.unit.name }}</p>
+                                        <p v-else>---</p>
+                                        <h6>{{ $t('distribute')+' '+$t('unit') }}: </h6>
+                                        <p v-if="show.distribute_unit_id">{{ show.distribute_unit.name }}</p>
+                                        <p v-else>---</p>
                                         <h6>{{ $t('status') }}: </h6>
                                         <div v-if="show.is_active === 1" class="mb-2">
                                             <CButton size="sm" color="success">

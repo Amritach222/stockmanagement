@@ -164,6 +164,7 @@
     "history": "History",
     "time_span": "Time Span",
     "ratio": "Ratio",
+    "distribute": "Distribute",
 
     "validation": {
         "required": "This field is required!",

@@ -150,21 +150,22 @@
                                             @keyup="clearError('quantity')"
                                             solo
                                         />
-                                        <v-select
-                                            v-model="editedItem.unit_id"
-                                            name="unit_id"
-                                            :items="units"
-                                            item-value="id"
-                                            item-text="name"
-                                            description="Please select a unit."
-                                            autocomplete=""
-                                            :label="$t('unit')"
-                                            placeholder="Select a unit..."
-                                            prepend-icon="mdi-google-circles-communities"
-                                            required
-                                            @keyup="clearError('unit_id')"
-                                            solo
-                                        />
+                                        <p v-if="unitType">Please enter quantity on the measurement of {{ unit }}</p>
+                                        <!--                                        <v-select-->
+                                        <!--                                            v-model="editedItem.unit_id"-->
+                                        <!--                                            name="unit_id"-->
+                                        <!--                                            :items="units"-->
+                                        <!--                                            item-value="id"-->
+                                        <!--                                            item-text="name"-->
+                                        <!--                                            description="Please select a unit."-->
+                                        <!--                                            autocomplete=""-->
+                                        <!--                                            :label="$t('unit')"-->
+                                        <!--                                            placeholder="Select a unit..."-->
+                                        <!--                                            prepend-icon="mdi-google-circles-communities"-->
+                                        <!--                                            required-->
+                                        <!--                                            @keyup="clearError('unit_id')"-->
+                                        <!--                                            solo-->
+                                        <!--                                        />-->
                                     </v-form>
 
                                     <hr>
@@ -277,6 +278,8 @@ export default {
         dialog: false,
         editDialog: false,
         dialogDelete: false,
+        unitType: false,
+        unit: '',
         headers: [
             {text: i18n.t('user'), value: 'user_id'},
             {text: i18n.t('department'), value: 'department_id'},
@@ -366,12 +369,29 @@ export default {
         async getVariants(product) {
             let res = await ApiServices.productShow(product);
             if (res.success === true) {
+                if (res.data.distribute_unit_id) {
+                    if (res.data.distribute_unit_id !== null) {
+                        let unit = await this.getUnit(res.data.distribute_unit_id);
+                    } else {
+                        let unit = await this.getUnit(res.data.unit_id);
+                    }
+                } else {
+                    let unit = await this.getUnit(res.data.unit_id);
+                }
                 if (res.data.product_variants.length > 0) {
                     this.hasVariants = true;
                     this.variants = res.data.product_variants;
                 } else {
                     this.hasVariants = false;
                 }
+            }
+        },
+        async getUnit(id) {
+            let res = await ApiServices.unitShow(id);
+            if (res.success === true) {
+                this.unitType = true;
+                this.unit = res.data.name;
+                this.editedItem.unit_id = res.data.id;
             }
         },
 

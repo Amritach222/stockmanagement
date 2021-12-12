@@ -27,9 +27,11 @@ class Product extends JsonResource
             'code' => $this->code,
             'brand_id' => $this->brand_id,
             'category_id' => $this->category_id,
+            'cost_price' => $this->cost_price,
             'stock' => $this->stock,
             'alert_stock' => $this->alert_stock,
             'unit_id' => $this->unit_id,
+            'distribute_unit_id' => $this->distribute_unit_id,
             'tax_id' => $this->tax_id,
             'tax_method' => $this->tax_method,
             'image_id' => $this->image_id,
@@ -40,6 +42,8 @@ class Product extends JsonResource
             'brand' => $this->brand,
             'category' => $this->category,
             'product_variants' => $variants,
+            'unit' => $this->unit,
+            'distribute_unit' => $this->distributeUnit,
         ];
     }
 }

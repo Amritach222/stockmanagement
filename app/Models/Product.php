@@ -40,4 +40,14 @@ class Product extends Model
     {
         return $this->belongsTo(File::class, 'image_id');
     }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'unit_id');
+    }
+
+    public function distributeUnit()
+    {
+        return $this->belongsTo(Unit::class, 'distribute_unit_id');
+    }
 }

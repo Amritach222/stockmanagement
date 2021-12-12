@@ -10,8 +10,11 @@ use App\Http\Resources\Item as ItemResource;
 use App\Models\File;
 use App\Models\Item;
 use App\Models\ItemUser;
+use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductAttributeGroup;
+use App\Models\ProductVariant;
+use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -85,6 +88,37 @@ class ItemController extends Controller
             }
             $item = new Item($values);
             $item->save();
+
+            $product = Product::findOrFail($request->product_id);
+            if ($product->distribute_unit_id) {
+                $unit = Unit::findOrFail($product->distribute_unit_id);
+            } else {
+                $unit = Unit::findOrFail($product->unit_id);
+            }
+            if ($request->product_variant_id) {
+                $variant = ProductVariant::findOrFail($request->product_variant_id);
+                if ($unit->type == 'smaller') {
+                    $quantity = ($variant->quantity * $unit->value) - $request->quantity;
+                    $variant->quantity = $quantity / $unit->value;
+                } elseif ($unit->type == 'bigger') {
+                    $quantity = ($variant->quantity / $unit->value) - $request->quantity;
+                    $variant->quantity = $quantity * $unit->value;
+                } else {
+                    $variant->quantity = $variant->quantity - $request->quantity;
+                }
+                $variant->save();
+            }else{
+                if ($unit->type == 'smaller') {
+                    $quantity = ($product->stock * $unit->value) - $request->quantity;
+                    $product->stock = $quantity / $unit->value;
+                } elseif ($unit->type == 'bigger') {
+                    $quantity = ($product->stock / $unit->value) - $request->quantity;
+                    $product->stock = $quantity * $unit->value;
+                } else {
+                    $product->stock = $product->stock - $request->quantity;
+                }
+                $product->save();
+            }
             if ($request->user_id) {
                 $userValues['item_id'] = $item->id;
                 $user = User::findOrFail($request->user_id);

@@ -160,7 +160,22 @@
                                             placeholder="Select a unit..."
                                             prepend-icon="mdi-google-circles-communities"
                                             required
+                                            v-on:change="getSubUnits(editedItem.unit_id)"
                                             @keyup="clearError('unit_id')"
+                                            solo
+                                        />
+                                        <v-select
+                                            v-model="editedItem.distribute_unit_id"
+                                            :items="subUnits"
+                                            item-text="name"
+                                            item-value="id"
+                                            description="Please select distribute unit."
+                                            autocomplete=""
+                                            :label="$t('distribute') +' '+ $t('unit')"
+                                            placeholder="Select distribute unit..."
+                                            prepend-icon="mdi-google-circles-communities"
+                                            required
+                                            @keyup="clearError('distribute_unit_id')"
                                             solo
                                         />
                                         <v-select
@@ -362,7 +377,8 @@
                                                                                     outlined
                                                                                 ></v-text-field>
                                                                                 <v-row>
-                                                                                    <v-col v-if="typeof(addVariant.link) === 'string'">
+                                                                                    <v-col
+                                                                                        v-if="typeof(addVariant.link) === 'string'">
                                                                                         <v-card width="200"
                                                                                                 v-on:click="openImage(addVariant.link)">
                                                                                             <v-img
@@ -542,6 +558,7 @@ export default {
         },
         variants: [],
         units: [],
+        subUnits: [],
         taxes: [],
         editedItem: {
             id: null,
@@ -554,6 +571,7 @@ export default {
             alert_stock: '',
             cost_price: '',
             unit_id: '',
+            distribute_unit_id: '',
             tax_id: '',
             tax_method: '',
             image: [],
@@ -568,6 +586,7 @@ export default {
             alert_stock: '',
             cost_price: '',
             unit_id: '',
+            distribute_unit_id: '',
             tax_id: '',
             tax_method: '',
         },
@@ -616,6 +635,15 @@ export default {
             let res = await ApiServices.unitIndex();
             if (res.success === true) {
                 this.units = res.data;
+            }
+        },
+        async getSubUnits(unit) {
+            this.subUnits = [];
+            let res = await ApiServices.unitShow(unit);
+            for (var i = 0; i < this.units.length; i++) {
+                if (this.units[i].category_id === res.data.category_id) {
+                    this.subUnits.push(this.units[i]);
+                }
             }
         },
         async loadTaxes() {
@@ -727,6 +755,9 @@ export default {
             if (name === 'unit_id') {
                 this.error.unit_id = '';
             }
+            if (name === 'distribute_unit_id') {
+                this.error.distribute_unit_id = '';
+            }
             if (name === 'tax_id') {
                 this.error.tax_id = '';
             }
@@ -775,15 +806,44 @@ export default {
         async edit() {
             this.changeProgress = true;
             const data = new FormData();
-            data.append('name', this.editedItem.name);
-            data.append('brand_id', this.editedItem.brand_id);
-            data.append('category_id', this.editedItem.category_id);
-            data.append('stock', this.editedItem.stock);
-            data.append('alert_stock', this.editedItem.alert_stock);
-            data.append('cost_price', this.editedItem.cost_price);
-            data.append('unit_id', this.editedItem.unit_id);
-            data.append('tax_id', this.editedItem.tax_id);
-            data.append('tax_method', this.editedItem.tax_method);
+            if (this.editedItem.name !== null && this.editedItem.name !== '') {
+                data.append('name', this.editedItem.name);
+            }
+
+            if (this.editedItem.brand_id !== null && this.editedItem.brand_id !== '') {
+                data.append('brand_id', this.editedItem.brand_id);
+            }
+
+            if (this.editedItem.category_id !== null && this.editedItem.category_id !== '') {
+                data.append('category_id', this.editedItem.category_id);
+            }
+
+            if (this.editedItem.stock !== null && this.editedItem.stock !== '') {
+                data.append('stock', this.editedItem.stock);
+            }
+
+            if (this.editedItem.alert_stock !== null && this.editedItem.alert_stock !== '') {
+                data.append('alert_stock', this.editedItem.alert_stock);
+            }
+
+            if ((this.editedItem.cost_price !== null && this.editedItem.cost_price !== '') && this.editedItem.cost_price !== undefined) {
+                data.append('cost_price', this.editedItem.cost_price);
+            }
+
+            if (this.editedItem.unit_id !== null && this.editedItem.unit_id !== '') {
+                data.append('unit_id', this.editedItem.unit_id);
+            }
+
+            if ((this.editedItem.distribute_unit_id !== null && this.editedItem.distribute_unit_id !== '') && this.editedItem.distribute_unit_id !== undefined) {
+                data.append('distribute_unit_id', this.editedItem.distribute_unit_id);
+            }
+
+            if (this.editedItem.tax_id !== null && this.editedItem.tax_id !== '') {
+                data.append('tax_id', this.editedItem.tax_id);
+            }
+            if (this.editedItem.tax_method !== null && this.editedItem.tax_method !== '') {
+                data.append('tax_method', this.editedItem.tax_method);
+            }
 
             if (this.editedItem.details !== null) {
                 data.append('details', this.editedItem.details);
