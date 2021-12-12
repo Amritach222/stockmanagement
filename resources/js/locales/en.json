@@ -173,7 +173,10 @@
         "special": "Must have one special character [!@#$%:]",
         "sameNewPassword": "Must be same as new Password entered",
         "samePassword": "Must be same as Password entered",
-        "email": "Must be a valid email address"
+        "email": "Must be a valid email address",
+        "unitType": "Please select a different type for this category unit.",
+        "unitRatio": "Please enter different value for unit ratio.",
+        "unitName": "Unit name already exist."
     },
     "button": {
         "login": "LOGIN",
