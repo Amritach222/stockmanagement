@@ -13,8 +13,8 @@ class CreateUnitsTable extends Migration
             $table->timestamps();
             $table->string('name', 55);
             $table->string('short_code', 55);
-            $table->integer('parent_id')->unsigned()->nullable();
-            $table->foreign('parent_id')->references('id')->on('units');
+            $table->integer('category_id')->unsigned()->nullable();
+            $table->enum('type', ['smaller', 'equal', 'bigger'])->nullable();
             $table->integer('value')->nullable();
         });
     }

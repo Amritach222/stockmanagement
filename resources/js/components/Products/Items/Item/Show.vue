@@ -42,12 +42,58 @@
                                         <p>{{ show.cost_price }}</p>
                                         <h6 v-if="show.unit">{{ $t('unit') }}: </h6>
                                         <p v-if="show.unit">{{ show.unit.name }}</p>
-                                        <h6 v-if="show.tax">{{ $t('tax') }}: </h6>
-                                        <p v-if="show.tax">{{ show.tax.name }}</p>
-                                        <h6>{{ $t('tax_method') }}: </h6>
-                                        <p>{{ show.tax_method }}</p>
                                     </CCol>
                                 </CRow>
+
+                                <hr>
+                                    <v-card-title>
+                                        {{ $t('users') }}
+                                        <v-spacer></v-spacer>
+                                    </v-card-title>
+                                    <v-data-table
+                                        :headers="headers"
+                                        :items="itemUsers"
+                                        sort-by="id"
+                                        loading
+                                        loading-text="Loading... Please wait..."
+                                        :search="search"
+                                    >
+                                        <template v-slot:top>
+                                            <v-toolbar
+                                                flat
+                                            >
+                                                <v-row>
+                                                    <v-col
+                                                        cols="12"
+                                                        sm="4"
+                                                        md="6"
+                                                        lg="8"
+                                                    >
+                                                        <v-text-field
+                                                            v-model="search"
+                                                            append-icon="mdi-magnify"
+                                                            :label="$t('search')"
+                                                            solo
+                                                            hide-details
+                                                            max-width="100px"
+                                                        ></v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-toolbar>
+                                        </template>
+                                        <template v-slot:item.user_id="{ item }">
+                                            <p v-if="item.user_id" class="mt-3">{{ item.user.name }}</p>
+                                            <p v-else class="mt-3">---</p>
+                                        </template>
+                                        <template v-slot:item.department_id="{ item }">
+                                            <p v-if="item.department_id" class="mt-3">{{ item.department.name }}</p>
+                                            <p v-else class="mt-3">---</p>
+                                        </template>
+                                        <template v-slot:no-data>
+                                            <div>No Data</div>
+                                        </template>
+                                    </v-data-table>
+
                                 <CForm>
                                     <CCardFooter>
                                         <CButton size="sm" color="primary" :to="'/items/edit/'+show.id">
@@ -97,6 +143,19 @@ export default {
             tax_method: '',
             image: [],
         },
+        itemUsers: [],
+        changeProgress: false,
+        search: '',
+        progressL: false,
+        dialog: false,
+        editDialog: false,
+        dialogDelete: false,
+        headers: [
+            {text: i18n.t('user'), value: 'user_id'},
+            {text: i18n.t('department'), value: 'department_id'},
+            {text: i18n.t('time_span'), value: 'time_span'},
+        ],
+        tableLoad: false,
     }),
     async created() {
         this.loadItems();
@@ -109,6 +168,13 @@ export default {
             let res = await ApiServices.itemShow(this.$route.params.id);
             if (res.success === true) {
                 this.show = res.data;
+                let rtn = await this.loadItemUsers(res.data.id);
+            }
+        },
+        async loadItemUsers(id) {
+            let res = await ApiServices.itemUsers(id);
+            if (res.success === true) {
+                this.itemUsers = res.data;
             }
         },
     }

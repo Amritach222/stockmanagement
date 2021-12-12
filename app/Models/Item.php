@@ -9,7 +9,7 @@ class Item extends Model
 
     protected $table = 'items';
     public $timestamps = true;
-    protected $fillable = array('name', 'code', 'product_id', 'product_variant_id', 'quantity', 'user_id', 'department_id', 'brand_id', 'unit_id', 'tax_id', 'tax_method', 'cost_price', 'image_id');
+    protected $fillable = array('name', 'code', 'product_id', 'product_variant_id', 'quantity', 'brand_id', 'unit_id', 'cost_price', 'image_id');
 
     public function product()
     {
@@ -64,5 +64,10 @@ class Item extends Model
     public function image()
     {
         return $this->belongsTo(File::class, 'image_id');
+    }
+
+    public function users()
+    {
+        return $this->hasMany(ItemUser::class, 'item_id');
     }
 }

@@ -28,13 +28,17 @@ class ItemRequest extends FormRequest
             return [
                 'name' => 'string',
                 'product_id' => 'int|exists:products,id',
+                'product_variant_id' => 'int|exists:product_variants,id',
                 'brand_id' => 'int|exists:brands,id',
+                'user_id' => 'int|exists:users,id',
             ];
         }else{
             return [
                 'name' => 'required|string',
                 'product_id' => 'required|int|exists:products,id',
+                'product_variant_id' => 'int|exists:product_variants,id',
                 'brand_id' => 'required|int|exists:brands,id',
+                'user_id' => 'required|int|exists:users,id',
             ];
         }
     }

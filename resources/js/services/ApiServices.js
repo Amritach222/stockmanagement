@@ -164,6 +164,22 @@ export default {
         return await apiCall(DELETE, `api/setting/units/${id}`)
     },
 
+    async unitCategoryIndex() {
+        return await apiCall(GET, `api/setting/unitCategories`)
+    },
+    async unitCategoryCreate(data) {
+        return await apiCall(POST, `api/setting/unitCategories`, data)
+    },
+    async unitCategoryShow(id) {
+        return await apiCall(GET, `api/setting/unitCategories/${id}`)
+    },
+    async unitCategoryEdit(id, data) {
+        return await apiCall(POST, `api/setting/unitCategories/${id}`, data)
+    },
+    async unitCategoryDelete(id) {
+        return await apiCall(DELETE, `api/setting/unitCategories/${id}`)
+    },
+
     async categoryIndex() {
         return await apiCall(GET, `api/product/categories`)
     },
@@ -194,6 +210,25 @@ export default {
     },
     async itemDelete(id) {
         return await apiCall(DELETE, `api/product/item/items/${id}`)
+    },
+
+    async itemUserIndex() {
+        return await apiCall(GET, `api/product/item/itemUsers`)
+    },
+    async itemUserCreate(data) {
+        return await apiCall(POST, `api/product/item/itemUsers`, data)
+    },
+    async itemUserShow(id) {
+        return await apiCall(GET, `api/product/item/itemUsers/${id}`)
+    },
+    async itemUserEdit(id, data) {
+        return await apiCall(POST, `api/product/item/itemUnits/${id}`, data)
+    },
+    async itemUserDelete(id) {
+        return await apiCall(DELETE, `api/product/item/itemUsers/${id}`)
+    },
+    async itemUsers(id) {
+        return await apiCall(GET, `api/product/item/getItemUsers/${id}`)
     },
 
     async productAttributeGroupIndex() {

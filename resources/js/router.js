@@ -26,6 +26,8 @@ import BrandCreate from './components/settings/brand/Create'
 import BrandShow from './components/settings/brand/Show'
 import BrandEdit from './components/settings/brand/Edit'
 
+import UnitCategoryIndex from './components/settings/unitCategory/Index'
+
 import UnitIndex from './components/settings/unit/Index'
 import UnitCreate from './components/settings/unit/Create'
 import UnitShow from './components/settings/unit/Show'
@@ -435,6 +437,15 @@ export default new Router({
             path: '/units/:id',
             name: i18n.t('unit'),
             component: UnitShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/unitCategories',
+            name: i18n.t('unit') + ' ' + i18n.t('categories'),
+            component: UnitCategoryIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

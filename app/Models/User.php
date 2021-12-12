@@ -121,4 +121,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UnusedProduct::class, 'approved_by');
     }
+
+    public function items()
+    {
+        return $this->hasMany(ItemUser::class, 'user_id');
+    }
 }

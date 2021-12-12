@@ -3,13 +3,13 @@ export default {
     methods: {
         $can(permissionName) {
             let permissions = localStorage.getItem('permissions')
-            let status = permissions.indexOf(permissionName) !== -1;
-            return status;
+            let permissionStatus = permissions.indexOf(permissionName) !== -1;
+            return permissionStatus;
         },
         $is(roleName) {
             let roles = localStorage.getItem('roles');
-            let status = roles.indexOf(roleName) !== -1;
-            return status;
+            let roleStatus = roles.indexOf(roleName) !== -1;
+            return roleStatus;
         },
         $isAny(rolesName) {
             let roles = localStorage.getItem('roles');

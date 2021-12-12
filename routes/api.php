@@ -45,6 +45,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('brands/{id}', [\App\Http\Controllers\Api\BrandController::class, 'update']);
         Route::apiResource('units', \App\Http\Controllers\Api\UnitController::class);
         Route::post('units/{id}', [\App\Http\Controllers\Api\UnitController::class, 'update']);
+        Route::apiResource('unitCategories', \App\Http\Controllers\Api\UnitCategoryController::class);
+        Route::post('unitCategories/{id}', [\App\Http\Controllers\Api\UnitCategoryController::class, 'update']);
         Route::apiResource('taxes', \App\Http\Controllers\Api\TaxController::class);
         Route::post('taxes/{id}', [\App\Http\Controllers\Api\TaxController::class, 'update']);
 
@@ -94,6 +96,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::group(['prefix' => '/item'], function () {
             Route::apiResource('items', \App\Http\Controllers\Api\ItemController::class);
             Route::post('items/{id}', [\App\Http\Controllers\Api\ItemController::class, 'update']);
+            Route::apiResource('itemUsers', \App\Http\Controllers\Api\ItemUserController::class);
+            Route::post('itemUsers/{id}', [\App\Http\Controllers\Api\ItemUserController::class, 'update']);
+            Route::get('getItemUsers/{id}', [\App\Http\Controllers\Api\ItemUserController::class, 'getItemUsers']);
         });
     });
 
