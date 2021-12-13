@@ -15,4 +15,14 @@ class Vendor extends Model
     {
         return $this->hasMany(PurchaseProduct::class, 'vendor_id');
     }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'vendor_products', 'vendor_id', 'product_id');
+    }
+
+    public function vendorProducts()
+    {
+        return $this->hasMany(VendorProduct::class, 'vendor_id');
+    }
 }

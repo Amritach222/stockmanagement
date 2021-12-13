@@ -192,6 +192,7 @@
         "back": "पछि जानुहोस्",
         "confirm": "पक्का",
         "add_new_vendor": "नयाँ विक्रेता थप्नुहोस्",
+        "add_new_vendor_product": "नयाँ विक्रेताको प्रडक्ट थप्नुहोस्",
         "add_new_category": "नयाँ वर्ग थप्नुहोस्",
         "add_new_product": "नयाँ प्रडक्ट थप्नुहोस्",
         "add_new_product_attribute_group": "नयाँ प्रडक्ट विशेषता समूह थप्नुहोस्",
@@ -223,7 +224,9 @@
     },
     "card_title": {
         "add_vendor": "विक्रेता थप्नुहोस्",
+        "add_vendor_product": "विक्रेताको प्रडक्ट थप्नुहोस्",
         "edit_vendor": "विक्रेता परिवर्तन गर्नुहोस्",
+        "edit_vendor_product": "विक्रेताको प्रडक्ट परिवर्तन गर्नुहोस्",
         "add_category": "वर्ग थप्नुहोस्",
         "edit_category": "वर्ग परिवर्तन गर्नुहोस्",
         "add_product": "प्रडक्ट थप्नुहोस्",

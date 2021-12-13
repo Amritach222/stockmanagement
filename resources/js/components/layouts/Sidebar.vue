@@ -37,6 +37,7 @@ import ApiServices from "../../services/ApiServices";
 import config from "../../config";
 import i18n from "../../i18n";
 import SidebarNavItem from "./SidebarNavItem";
+import permissions from "../../permissions";
 
 export default {
     name: 'Sidebar',
@@ -88,9 +89,11 @@ export default {
         async getSettings() {
             let isLoggedIn = localStorage.getItem('isLoggedIn');
             if (isLoggedIn === 'true') {
-                let res = await ApiServices.settingShow(1);
-                if (res.success === true) {
-                    this.settings = res.data;
+                if(permissions.$can('settings')) {
+                    let res = await ApiServices.settingShow(1);
+                    if (res.success === true) {
+                        this.settings = res.data;
+                    }
                 }
             }
         },

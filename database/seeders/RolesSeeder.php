@@ -97,7 +97,7 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($staff, 'items');
             $this->giveAutoAllPermissions($staff, 'productVariants');
             $this->giveAutoAllPermissions($staff, 'productVariantAttributes');
-            $this->giveAutoAllPermissions($staff, 'quotations', $guard);
+            $this->giveAutoAllPermissions($staff, 'quotations');
             $this->giveAutoAllPermissions($staff, 'quotationProducts');
             $this->giveAutoAllPermissions($staff, 'unusedProducts');
 
@@ -117,6 +117,7 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeKeeper, 'transfers');
             $this->giveAutoAllPermissions($storeKeeper, 'returnProducts');
             $storeKeeper->givePermissionTo('quotations');
+            $storeKeeper->givePermissionTo('vendors');
 
             $storeManager = Role::create([
                 'name' => 'Store Manager',
@@ -140,14 +141,60 @@ class RolesSeeder extends Seeder
         ]);
         $user->save();
         $user->assignRole('Super Admin');
+
         $user = new User([
             'name' => 'Admin',
             'username' => 'admin',
             'email' => 'admin@rkdholdings.com',
-            'password' => bcrypt('Rkd@holdings123'),
+            'password' => bcrypt('Admin@123'),
         ]);
         $user->save();
         $user->assignRole('Admin');
+
+        $user = new User([
+            'name' => 'Store Keeper',
+            'username' => 'storeKeeper',
+            'email' => 'store.keeper@rkdholdings.com',
+            'password' => bcrypt('storeK@123'),
+        ]);
+        $user->save();
+        $user->assignRole('Store Keeper');
+
+        $user = new User([
+            'name' => 'Store Manager',
+            'username' => 'storeManager',
+            'email' => 'store.manager@rkdholdings.com',
+            'password' => bcrypt('storeM@123'),
+        ]);
+        $user->save();
+        $user->assignRole('Store Manager');
+
+        $user = new User([
+            'name' => 'Director',
+            'username' => 'director',
+            'email' => 'director@rkdholdings.com',
+            'password' => bcrypt('Director@123'),
+        ]);
+        $user->save();
+        $user->assignRole('Director');
+
+        $user = new User([
+            'name' => 'Finance Director',
+            'username' => 'financeDirector',
+            'email' => 'finance.director@rkdholdings.com',
+            'password' => bcrypt('financeD@123'),
+        ]);
+        $user->save();
+        $user->assignRole('Finance Director');
+
+        $user = new User([
+            'name' => 'Staff',
+            'username' => 'staff',
+            'email' => 'staff@rkdholdings.com',
+            'password' => bcrypt('Staff@123'),
+        ]);
+        $user->save();
+        $user->assignRole('Staff');
     }
 
     public function giveAutoAllPermissions($role, $permissionName)
