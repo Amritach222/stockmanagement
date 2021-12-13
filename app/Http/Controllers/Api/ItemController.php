@@ -214,7 +214,70 @@ class ItemController extends Controller
                 }
                 $values['image_id'] = $newFile->id;
             }
+            $product = Product::findOrFail($item->product_id);
+            if ($product->distribute_unit_id) {
+                $unit = Unit::findOrFail($product->distribute_unit_id);
+            } else {
+                $unit = Unit::findOrFail($product->unit_id);
+            }
+            if ($item->product_variant_id) {
+                $variant = ProductVariant::findOrFail($item->product_variant_id);
+                if ($unit->type == 'smaller') {
+                    $quantity = ($variant->quantity * $unit->value) + $item->quantity;
+                    $variant->quantity = $quantity / $unit->value;
+                } elseif ($unit->type == 'bigger') {
+                    $quantity = ($variant->quantity / $unit->value) + $item->quantity;
+                    $variant->quantity = $quantity * $unit->value;
+                } else {
+                    $variant->quantity = $variant->quantity + $item->quantity;
+                }
+                $variant->save();
+            }else{
+                if ($unit->type == 'smaller') {
+                    $quantity = ($product->stock * $unit->value) + $item->quantity;
+                    $product->stock = $quantity / $unit->value;
+                } elseif ($unit->type == 'bigger') {
+                    $quantity = ($product->stock / $unit->value) + $item->quantity;
+                    $product->stock = $quantity * $unit->value;
+                } else {
+                    $product->stock = $product->stock + $item->quantity;
+                }
+                $product->save();
+            }
             $item->update($values);
+//            if(!$request->product_id){
+//                $request->merge(['product_id'=>$item->product_id]);
+//            }
+            $product = Product::findOrFail($request->product_id);
+            if ($product->distribute_unit_id) {
+                $unit = Unit::findOrFail($product->distribute_unit_id);
+            } else {
+                $unit = Unit::findOrFail($product->unit_id);
+            }
+            if ($request->product_variant_id) {
+                $variant = ProductVariant::findOrFail($request->product_variant_id);
+                if ($unit->type == 'smaller') {
+                    $quantity = ($variant->quantity * $unit->value) - $request->quantity;
+                    $variant->quantity = $quantity / $unit->value;
+                } elseif ($unit->type == 'bigger') {
+                    $quantity = ($variant->quantity / $unit->value) - $request->quantity;
+                    $variant->quantity = $quantity * $unit->value;
+                } else {
+                    $variant->quantity = $variant->quantity - $request->quantity;
+                }
+                $variant->save();
+            }else{
+                if ($unit->type == 'smaller') {
+                    $quantity = ($product->stock * $unit->value) - $request->quantity;
+                    $product->stock = $quantity / $unit->value;
+                } elseif ($unit->type == 'bigger') {
+                    $quantity = ($product->stock / $unit->value) - $request->quantity;
+                    $product->stock = $quantity * $unit->value;
+                } else {
+                    $product->stock = $product->stock - $request->quantity;
+                }
+                $product->save();
+            }
             $itemUser = ItemUser::where('item_id', $item->id)->orderBy('created_at', 'desc')->first();
             if ($itemUser->user_id != $request->user_id) {
                 $userValues['item_id'] = $item->id;

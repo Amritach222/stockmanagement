@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->integer('category_id')->unsigned();
             $table->integer('image_id')->unsigned()->nullable();
             $table->bigInteger('is_active')->default('1');
-            $table->decimal('stock',8,8)->nullable()->default('0');
+            $table->decimal('stock',8,3)->nullable()->default('0');
             $table->integer('alert_stock')->nullable()->default('0');
             $table->integer('unit_id')->unsigned()->nullable();
             $table->integer('distribute_unit_id')->unsigned()->nullable();

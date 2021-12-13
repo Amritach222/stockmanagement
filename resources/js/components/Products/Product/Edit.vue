@@ -657,6 +657,7 @@ export default {
             if (res.success === true) {
                 this.editedItem = res.data;
                 this.variants = res.data.product_variants;
+                let unit = await this.getSubUnits(res.data.unit_id);
             }
         },
         async loadProductAttributeGroups() {
