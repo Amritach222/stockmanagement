@@ -32,6 +32,8 @@ class PurchaseProductRequest extends FormRequest
                 'vendor_id' => 'int|exists:vendors,id',
                 'quantity' => 'int|min:1',
                 'tax_id' => 'int|exists:taxes,id',
+                'status' => 'string',
+                'unit_id' => 'int|exists:units,id',
             ];
         } else {
             return [
@@ -41,6 +43,8 @@ class PurchaseProductRequest extends FormRequest
                 'vendor_id' => 'int|exists:vendors,id',
                 'quantity' => 'int|min:1',
                 'tax_id' => 'int|exists:taxes,id',
+                'status' => 'string',
+                'unit_id' => 'int|exists:units,id',
             ];
         }
     }
