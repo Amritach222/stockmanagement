@@ -37,6 +37,7 @@ class Product extends JsonResource
             'image_id' => $this->image_id,
             'is_active' => $this->is_active,
             'details' => $this->details,
+            'type' => $this->type,
             'items' => $this->items,
             'link' => $link,
             'brand' => $this->brand,

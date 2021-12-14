@@ -136,6 +136,7 @@ export default {
             {text: i18n.t('image'), value: 'link', sortable: false},
             {text: i18n.t('brand'), value: 'brand', sortable: false},
             {text: i18n.t('category'), value: 'category', sortable: false},
+            {text: i18n.t('type'), value: 'type'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         products: [],

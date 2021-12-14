@@ -204,6 +204,17 @@
                                             @keyup="clearError('tax_method')"
                                             solo
                                         />
+                                        <v-select
+                                            v-model="editedItem.type"
+                                            :items="['Consumable','Stockable','Serviceable']"
+                                            description="Please select a product type."
+                                            autocomplete=""
+                                            :label="$t('type')"
+                                            placeholder="Select a type..."
+                                            prepend-icon="mdi-arrange-bring-to-front"
+                                            @keyup="clearError('type')"
+                                            solo
+                                        />
                                         <v-textarea
                                             v-model="editedItem.details"
                                             type="text"
@@ -574,6 +585,7 @@ export default {
             distribute_unit_id: '',
             tax_id: '',
             tax_method: '',
+            type: '',
             image: [],
         },
         error: {
@@ -589,6 +601,7 @@ export default {
             distribute_unit_id: '',
             tax_id: '',
             tax_method: '',
+            type: '',
         },
         rules: {
             name: [
@@ -765,6 +778,9 @@ export default {
             if (name === 'tax_method') {
                 this.error.tax_method = '';
             }
+            if (name === 'type') {
+                this.error.type = '';
+            }
         },
 
         async variantAdd() {
@@ -848,6 +864,10 @@ export default {
 
             if (this.editedItem.details !== null) {
                 data.append('details', this.editedItem.details);
+            }
+
+            if (this.editedItem.type !== null) {
+                data.append('type', this.editedItem.type);
             }
 
             if ('image' in this.editedItem) {

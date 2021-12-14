@@ -180,6 +180,17 @@
                                             @keyup="clearError('tax_method')"
                                             solo
                                         />
+                                        <v-select
+                                            v-model="type"
+                                            :items="['Consumable','Stockable','Serviceable']"
+                                            description="Please select a product type."
+                                            autocomplete=""
+                                            :label="$t('type')"
+                                            placeholder="Select a type..."
+                                            prepend-icon="mdi-arrange-bring-to-front"
+                                            @keyup="clearError('type')"
+                                            solo
+                                        />
 
                                         <v-textarea
                                             v-model="details"
@@ -475,6 +486,7 @@ export default {
         distribute_unit_id: '',
         tax_id: '',
         tax_method: '',
+        type: '',
         image: [],
         search: '',
         progressL: false,
@@ -517,6 +529,7 @@ export default {
             distribute_unit_id: '',
             tax_id: '',
             tax_method: '',
+            type: '',
         },
         rules: {
             name: [
@@ -568,9 +581,9 @@ export default {
             this.subUnits = [];
             let res = await ApiServices.unitShow(unit);
             for (var i = 0; i < this.units.length; i++) {
-                    if (this.units[i].category_id === res.data.category_id) {
-                        this.subUnits.push(this.units[i]);
-                    }
+                if (this.units[i].category_id === res.data.category_id) {
+                    this.subUnits.push(this.units[i]);
+                }
             }
         },
         async loadTaxes() {
@@ -674,6 +687,9 @@ export default {
             if (name === 'tax_method') {
                 this.error.tax_method = '';
             }
+            if (name === 'type') {
+                this.error.type = '';
+            }
         },
 
         async variantAdd() {
@@ -746,6 +762,10 @@ export default {
 
             if (this.tax_method !== null && this.tax_method !== '') {
                 data.append('tax_method', this.tax_method);
+            }
+
+            if (this.type !== null && this.type !== '') {
+                data.append('type', this.type);
             }
 
 

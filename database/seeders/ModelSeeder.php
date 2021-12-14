@@ -168,6 +168,9 @@ class ModelSeeder extends Seeder
             'name' => 'Sofa',
             'brand_id' => $itemB->id,
             'category_id' => $itemC->id,
+            'cost_price' => 1500,
+            'stock' => 5,
+            'type' => 'Serviceable'
         ]);
         $itemP->code = CodeGenerator::code();
         $itemP->save();
