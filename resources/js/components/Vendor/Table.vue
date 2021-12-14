@@ -249,6 +249,16 @@
                 {{ getCityName(item) }}
             </template>
             <template v-slot:item.actions="{ item }">
+                <router-link
+                    :to="'/vendors/'+item.id"
+                    v-if="$can('vendors')"
+                >
+                    <v-icon
+                        small
+                    >
+                        mdi-eye
+                    </v-icon>
+                </router-link>
                 <v-icon
                     small
                     class="mr-2"
@@ -272,16 +282,6 @@
                         small
                     >
                         mdi-chart-box-plus-outline
-                    </v-icon>
-                </router-link>
-                <router-link
-                    :to="'/vendorProducts/'+item.id"
-                    v-if="$can('vendors')"
-                >
-                    <v-icon
-                        small
-                    >
-                        mdi-alpha-p-circle
                     </v-icon>
                 </router-link>
 

@@ -54,7 +54,7 @@ class VendorProductController extends Controller
         try {
             $vendor = Vendor::findOrFail($request->vendor_id);
             $requestProductIds = json_decode($request->product_ids);
-            $product_ids = VendorProduct::where('id',$vendor->id)->pluck('product_id');
+            $product_ids = VendorProduct::where('vendor_id',$vendor->id)->pluck('product_id');
             $values['vendor_id']=$vendor->id;
                 foreach ($requestProductIds as $id) {
                     if (!$product_ids->contains($id)) {
@@ -64,7 +64,7 @@ class VendorProductController extends Controller
                     }
                 }
                 foreach ($product_ids as $pid){
-                    if (!$requestProductIds->contains($pid)) {
+                    if (!in_array($pid, $requestProductIds)) {
                         $vP = VendorProduct::where('vendor_id',$vendor->id)->where('product_id',$pid)->first();
                         $vP->delete();
                     }

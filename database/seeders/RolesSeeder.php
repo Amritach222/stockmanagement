@@ -106,6 +106,8 @@ class RolesSeeder extends Seeder
                 'guard_name' => $guard
             ]);
             $this->giveAutoAllPermissions($storeKeeper, 'brands');
+            $this->giveAutoAllPermissions($storeKeeper, 'units');
+            $this->giveAutoAllPermissions($storeKeeper, 'taxes');
             $this->giveAutoAllPermissions($storeKeeper, 'categories');
             $this->giveAutoAllPermissions($storeKeeper, 'attributeGroups');
             $this->giveAutoAllPermissions($storeKeeper, 'attributes');

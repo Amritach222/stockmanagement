@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('vendors') }}
+            {{ $t('products') }}
             <v-spacer></v-spacer>
             <v-card-actions>
                 <v-btn
@@ -101,7 +101,7 @@ import route from "../../../router";
 
 
 export default {
-    name: "TableWrapper",
+    name: "VendorProductAdd",
     data: () => ({
         search: '',
         cdnURL: config.cdnURL,
@@ -133,6 +133,9 @@ export default {
     },
 
     methods: {
+        openImage(data) {
+            window.open(config.cdnURL + data, `_blank`);
+        },
         async loadItems() {
             let res = await ApiServices.productIndex();
             if (res.success === true) {
@@ -158,13 +161,14 @@ export default {
 
         async save() {
             console.log(this.selected)
-            if (this.selected.length > 0) {
+            this.product_ids = [];
+            if (this.selected.length >= 0) {
                 for (let i = 0; i < this.selected.length; i++) {
                     this.product_ids.push(this.selected[i].id);
                 }
                 const data = new FormData();
                 data.append('vendor_id', this.$route.params.id);
-                data.append('product_ids', this.product_ids);
+                data.append('product_ids', JSON.stringify(this.product_ids));
                 let res = await ApiServices.vendorProductCreate(data);
                 if (res.success === true) {
                     route.replace('/vendors')
