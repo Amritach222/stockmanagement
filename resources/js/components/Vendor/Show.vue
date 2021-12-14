@@ -256,7 +256,7 @@ export default {
             }
         },
         async loadVendorProductIds() {
-            let res = await ApiServices.vendorProductIds(this.$route.params.id);
+            let res = await ApiServices.vendorProductIds('product',this.$route.params.id);
             if (res.success === true) {
                 this.tableLoad = false;
                 this.product_ids = res.data;

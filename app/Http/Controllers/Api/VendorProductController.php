@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\Vendor;
 use App\Models\VendorProduct;
 use Illuminate\Http\Request;
@@ -14,14 +15,19 @@ class VendorProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index($type, $id)
     {
         $data['success'] = true;
         $data['message'] = '';
         $data['data'] = [];
         try {
-            $vendor = Vendor::findOrFail($id);
-            $data['data'] = VendorProduct::where('vendor_id', $vendor->id)->pluck('product_id');
+            if($type == 'product') {
+                $vendor = Vendor::findOrFail($id);
+                $data['data'] = VendorProduct::where('vendor_id', $vendor->id)->pluck('product_id');
+            }else{
+                $product = Product::findOrFail($id);
+                $data['data'] = VendorProduct::where('product_id', $product->id)->pluck('vendor_id');
+            }
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';

@@ -109,7 +109,7 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item class="ml-3" v-if="$can('vendors')">
+                <v-list-item class="ml-3" v-if="$can('bankAccountTransactions')">
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-swap-horizontal</v-icon>
                     </v-list-item-icon>
@@ -175,18 +175,6 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item class="ml-3" v-if="$can('products')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-alpha-p-box</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/products/'">
-                            {{ $t('product') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
                 <v-list-item class="ml-3" v-if="$can('attributeGroups')">
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-select-group</v-icon>
@@ -207,6 +195,18 @@
                         <router-link
                             :to="'/productAttributes/'">
                             {{ $t('product_attribute') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="ml-3" v-if="$can('products')">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-alpha-p-box</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/products/'">
+                            {{ $t('product') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>

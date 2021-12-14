@@ -423,8 +423,8 @@ export default {
         return await apiCall(DELETE, `api/vendors/${id}`)
     },
 
-    async vendorProductIds(id) {
-        return await apiCall(GET, `api/vendorProductIds/${id}`)
+    async vendorProductIds(type, id) {
+        return await apiCall(GET, `api/vendorProductIds/${type}/${id}`)
     },
     async vendorProductCreate(data) {
         return await apiCall(POST, `api/vendorProducts`, data)
