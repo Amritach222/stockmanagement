@@ -383,6 +383,18 @@
                     </v-list-item-title>
                 </v-list-item>
 
+                <v-list-item class="ml-3" v-if="$can('unitCategories')">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-scale</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/unitCategories/'">
+                            {{ $t('unit') +' '+ $t('category') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
                 <v-list-item class="ml-3" v-if="$can('units')">
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-scale-balance</v-icon>

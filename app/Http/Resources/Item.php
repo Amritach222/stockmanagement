@@ -24,26 +24,26 @@ class Item extends JsonResource
         $product = new Product($this->product);
         $brand = new Brand($this->brand);
         $unit = new Unit($this->unit);
-        $tax = new Tax($this->tax);
+        $currentUser = \App\Models\ItemUser::where('item_id', $this->id)->orderBy('created_at', 'desc')->first();
+        $user = $currentUser->user ?? null;
         return [
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
             'product_id' => $this->product_id,
+            'product_variant_id' => $this->product_variant_id,
             'brand_id' => $this->brand_id,
             'image_ids' => $this->image_ids,
-            'stock' => $this->stock,
-            'alert_stock' => $this->alert_stock,
+            'quantity' => $this->quantity,
             'cost_price' => $this->cost_price,
             'unit_id' => $this->unit_id,
-            'tax_id' => $this->tax_id,
-            'tax_method' => $this->tax_method,
+            'user_id' => $user->id ?? null,
             'link' => $link,
             'product' => $product,
             'product_variant' => $variant,
             'brand' => $brand,
-            'tax' => $tax,
             'unit' => $unit,
+            'user' => $user,
         ];
     }
 }
