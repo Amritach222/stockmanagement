@@ -53,6 +53,7 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($director, 'transfers');
             $this->giveAutoAllPermissions($director, 'users');
             $this->giveAutoAllPermissions($director, 'unusedProducts');
+            $director->givePermissionTo('settings');
 
             $financeDirector = Role::create([
                 'name' => 'Finance Director',
@@ -68,6 +69,7 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($financeDirector, 'expenses');
             $financeDirector->givePermissionTo('budgetRequests.edit');
             $financeDirector->givePermissionTo('budgetRequests');
+            $financeDirector->givePermissionTo('settings');
 
             $departmentHead = Role::create([
                 'name' => 'Department Head',
@@ -87,6 +89,7 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($departmentHead, 'budgetExtends');
             $this->giveAutoAllPermissions($departmentHead, 'unusedProducts');
             $departmentHead->givePermissionTo('freezeBudgets');
+            $departmentHead->givePermissionTo('settings');
 
             $staff = Role::create([
                 'name' => 'Staff',
@@ -123,8 +126,10 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeKeeper, 'unusedProducts');
             $this->giveAutoAllPermissions($storeKeeper, 'transfers');
             $this->giveAutoAllPermissions($storeKeeper, 'returnProducts');
-            $storeKeeper->givePermissionTo('quotations');
+            $storeKeeper->givePermissionTo('quotations.show');
             $storeKeeper->givePermissionTo('vendors');
+            $storeKeeper->givePermissionTo('vendors.show');
+            $storeKeeper->givePermissionTo('settings');
 
             $storeManager = Role::create([
                 'name' => 'Store Manager',
@@ -132,13 +137,15 @@ class RolesSeeder extends Seeder
             ]);
             $this->giveAutoAllPermissions($storeManager, 'products');
             $this->giveAutoAllPermissions($storeManager, 'consumes');
-            $storeManager->givePermissionTo('quotations');
+            $storeManager->givePermissionTo('quotations.show');
+            $storeManager->givePermissionTo('settings');
 
             $financeStaff = Role::create([
                 'name' => 'Finance Staff',
                 'guard_name' => $guard
             ]);
             $this->giveAutoAllPermissions($financeStaff, 'expenses');
+            $financeStaff->givePermissionTo('settings');
         }
         $user = new User([
             'name' => 'Super Admin',

@@ -25,7 +25,7 @@ class SettingController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $data['data'] = SettingResource::collection(Setting::all());
+            $data['data'] = new SettingResource(Setting::findOrFail(1));
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }

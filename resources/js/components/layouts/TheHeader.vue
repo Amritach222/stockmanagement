@@ -86,12 +86,10 @@ export default {
         async getSettings() {
             let isLoggedIn = localStorage.getItem('isLoggedIn');
             if (isLoggedIn === 'true') {
-                if(permissions.$can('settings')) {
-                    let res = await ApiServices.settingShow(1);
+                    let res = await ApiServices.settingIndex();
                     if (res.success === true) {
                         this.settings = res.data;
                     }
-                }
             }
         },
     }

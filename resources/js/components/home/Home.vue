@@ -37,7 +37,7 @@ export default {
         async getSettings() {
             let res = await ApiServices.allSettingInfo();
             if (res.success === true) {
-                console.log(res.data)
+                // console.log(res.data)
                 this.settings = res.data;
             }
         },

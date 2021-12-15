@@ -296,6 +296,9 @@ export default {
     },
 
 
+    async settingIndex() {
+        return await apiCall(GET, `api/setting/settings`)
+    },
     async settingShow(id) {
         return await apiCall(GET, `api/setting/settings/${id}`)
     },
@@ -303,6 +306,9 @@ export default {
         return await apiCall(POST, `api/setting/settings/${id}`, data)
     },
 
+    async smsSettingIndex() {
+        return await apiCall(GET, `api/setting/smsSettings`)
+    },
     async smsSettingShow(id) {
         return await apiCall(GET, `api/setting/smsSettings/${id}`)
     },
@@ -310,6 +316,9 @@ export default {
         return await apiCall(POST, `api/setting/smsSettings/${id}`, data)
     },
 
+    async mailSettingIndex() {
+        return await apiCall(GET, `api/setting/mailSettings`)
+    },
     async mailSettingShow(id) {
         return await apiCall(GET, `api/setting/mailSettings/${id}`)
     },
