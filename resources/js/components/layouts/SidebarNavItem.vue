@@ -32,7 +32,8 @@
                 </v-list-item-title>
             </v-list-item>
 
-            <v-list-group>
+            <v-list-group
+                v-if="(($can('budgets') || $can('budgetRequests')) || ((($can('budgetLimits') || ($can('budgets')) || ($can('freezeBudgets'))))))">
                 <template v-slot:activator>
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-currency-usd</v-icon>
@@ -89,7 +90,7 @@
                 </v-list-item>
             </v-list-group>
 
-            <v-list-group>
+            <v-list-group v-if="($can('bankAccounts')) || ($can('bankAccountTransactions'))">
                 <template v-slot:activator>
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-bank</v-icon>
@@ -122,7 +123,7 @@
                 </v-list-item>
             </v-list-group>
 
-            <v-list-group>
+            <v-list-group v-if="($can('expenses') || $can('expenseCategories'))">
                 <template v-slot:activator>
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-chart-areaspline</v-icon>
@@ -155,7 +156,8 @@
                 </v-list-item>
             </v-list-group>
 
-            <v-list-group>
+            <v-list-group
+                v-if="(($can('categories') || $can('products')) || (($can('attributes') || $can('attributeGroups')) || $can('items')))">
                 <template v-slot:activator>
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-inbox-multiple</v-icon>
@@ -224,7 +226,7 @@
                 </v-list-item>
             </v-list-group>
 
-            <v-list-group>
+            <v-list-group v-if="($can('purchases'))">
                 <template v-slot:activator>
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-account-cash</v-icon>
@@ -239,7 +241,7 @@
                     <v-list-item-title>
                         <router-link
                             :to="'/new-purchase-request/'">
-                            {{ $t('new') +' '+ $t('purchase') +' '+ $t('request') }}
+                            {{ $t('new') + ' ' + $t('purchase') + ' ' + $t('request') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
@@ -251,13 +253,13 @@
                     <v-list-item-title>
                         <router-link
                             :to="'/purchase-request-history/'">
-                            {{ $t('purchase') +' '+ $t('request') +' '+ $t('history') }}
+                            {{ $t('purchase') + ' ' + $t('request') + ' ' + $t('history') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
             </v-list-group>
 
-            <v-list-group>
+            <v-list-group v-if="$can('quotations')">
                 <template v-slot:activator>
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-clipboard-text</v-icon>
@@ -390,7 +392,7 @@
                     <v-list-item-title>
                         <router-link
                             :to="'/unitCategories/'">
-                            {{ $t('unit') +' '+ $t('category') }}
+                            {{ $t('unit') + ' ' + $t('category') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
