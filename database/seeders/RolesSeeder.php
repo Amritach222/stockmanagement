@@ -92,14 +92,19 @@ class RolesSeeder extends Seeder
                 'name' => 'Staff',
                 'guard_name' => $guard
             ]);
-            $this->giveAutoAllPermissions($staff, 'categories');
-            $this->giveAutoAllPermissions($staff, 'products');
-            $this->giveAutoAllPermissions($staff, 'items');
-            $this->giveAutoAllPermissions($staff, 'productVariants');
-            $this->giveAutoAllPermissions($staff, 'productVariantAttributes');
-            $this->giveAutoAllPermissions($staff, 'quotations');
-            $this->giveAutoAllPermissions($staff, 'quotationProducts');
-            $this->giveAutoAllPermissions($staff, 'unusedProducts');
+            $permissions = Permission::where('guard_name', $guard)->where('name', '!=', 'roles')->where('name', '!=', 'permissions')->get();
+            $staff->givePermissionTo($permissions);
+//            $this->giveAutoAllPermissions($staff, 'categories');
+//            $this->giveAutoAllPermissions($staff, 'items');
+//            $this->giveAutoAllPermissions($staff, 'productVariants');
+//            $this->giveAutoAllPermissions($staff, 'productVariantAttributes');
+//            $this->giveAutoAllPermissions($staff, 'quotations');
+//            $this->giveAutoAllPermissions($staff, 'quotationProducts');
+//            $this->giveAutoAllPermissions($staff, 'unusedProducts');
+//            $staff->givePermissionTo('units');
+//            $staff->givePermissionTo('brands');
+//            $staff->givePermissionTo('taxes');
+//            $staff->givePermissionTo('products');
 
             $storeKeeper = Role::create([
                 'name' => 'Store Keeper',
@@ -202,6 +207,7 @@ class RolesSeeder extends Seeder
     public function giveAutoAllPermissions($role, $permissionName)
     {
         $role->givePermissionTo($permissionName);
+        $role->givePermissionTo($permissionName . '.show');
         $role->givePermissionTo($permissionName . '.create');
         $role->givePermissionTo($permissionName . '.edit');
         $role->givePermissionTo($permissionName . '.delete');

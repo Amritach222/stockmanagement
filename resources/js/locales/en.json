@@ -165,6 +165,7 @@
     "time_span": "Time Span",
     "ratio": "Ratio",
     "distribute": "Distribute",
+    "alert": "Alert",
 
     "validation": {
         "required": "This field is required!",

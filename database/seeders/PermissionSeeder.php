@@ -82,6 +82,10 @@ class PermissionSeeder extends Seeder
             'guard_name' => $guard
         ]);
         Permission::create([
+            'name' => $permission . '.show',
+            'guard_name' => $guard
+        ]);
+        Permission::create([
             'name' => $permission . '.create',
             'guard_name' => $guard
         ]);

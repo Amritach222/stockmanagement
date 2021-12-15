@@ -4,7 +4,7 @@
  */
 const printURL = 'http://localhost:3000/';
 const baseURL = 'http://localhost:3000/';
-const cdnURL = 'http://cdn.rkdstock.test/';
+const cdnURL = 'http://cnd.rkdstock.test/';
 
 export default {
     baseURL, cdnURL, printURL
