@@ -101,6 +101,16 @@
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
+                                                                                <v-select
+                                                                                    v-model="addQuoProduct.unit_id"
+                                                                                    label="Unit"
+                                                                                    :items="units"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    required
+                                                                                    outlined
+                                                                                    :rules="rules"
+                                                                                ></v-select>
                                                                             </v-col>
                                                                         </v-row>
                                                                     </v-container>
@@ -284,6 +294,7 @@ export default {
         editedIndex: -1,
         quoProducts: [],
         items: [],
+        units: [],
         variants: [],
         menu1: false,
         dateFormatted: '',
@@ -291,11 +302,13 @@ export default {
             item_id: '',
             item_variant_id: '',
             quantity: '',
+            unit_id: '',
         },
         productQuo: {
             item_id: '',
             item_variant_id: '',
             quantity: '',
+            unit_id: '',
         },
         error: {
             department_id: '',
@@ -314,6 +327,7 @@ export default {
     async created() {
         this.loadDepartments();
         this.loadItems();
+        this.loadUnits();
     },
     methods: {
         async loadDepartments() {
@@ -327,6 +341,12 @@ export default {
             let res = await ApiServices.itemIndex();
             if (res.success === true) {
                 this.items = res.data;
+            }
+        },
+        async loadUnits() {
+            let res = await ApiServices.unitIndex();
+            if (res.success === true) {
+                this.units = res.data;
             }
             this.tableLoad = false;
         },
