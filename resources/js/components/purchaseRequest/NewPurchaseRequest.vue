@@ -77,7 +77,7 @@
                                                                                 <v-select
                                                                                     v-model="addQuoProduct.item_id"
                                                                                     label="Item"
-                                                                                    :items="items"
+                                                                                    :items="products"
                                                                                     item-text="name"
                                                                                     item-value="id"
                                                                                     required
@@ -276,10 +276,10 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Item', value: 'item_name'},
-            {text: 'Item Variant', value: 'item_variant'},
+            {text: 'Product', value: 'item_name'},
+            {text: 'Product Variant', value: 'item_variant'},
             {text: 'Quantity', value: 'quantity'},
-            {text: 'Price', value: 'price'},
+            {text: 'Unit', value: 'unit'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         quotations: [],
@@ -293,7 +293,7 @@ export default {
         productCount: 0,
         editedIndex: -1,
         quoProducts: [],
-        items: [],
+        products: [],
         units: [],
         variants: [],
         menu1: false,
@@ -338,9 +338,9 @@ export default {
         },
 
         async loadItems() {
-            let res = await ApiServices.itemIndex();
+            let res = await ApiServices.productIndex();
             if (res.success === true) {
-                this.items = res.data;
+                this.products = res.data;
             }
         },
         async loadUnits() {
@@ -352,9 +352,9 @@ export default {
         },
 
         async getVariants(item) {
-            let res = await ApiServices.itemShow(item);
+            let res = await ApiServices.productVariantShow(item);
             if (res.success === true) {
-                if (res.data.item_variants.length > 0) {
+                if (res.data.product_variants.length > 0) {
                     this.hasVariants = true;
                 } else {
                     this.hasVariants = false;
@@ -404,9 +404,8 @@ export default {
             let res = await ApiServices.itemShow(this.addQuoProduct.item_id);
             price = res.data.cost_price;
             if (this.addQuoProduct.item_variant_id) {
-                let rtn = await ApiServices.itemVariantShow(this.addQuoProduct.item_variant_id);
+                let rtn = await ApiServices.productVariantShow(this.addQuoProduct.item_variant_id);
                 varName = rtn.data.name;
-                price = rtn.data.price;
             }
             if (this.editedIndex > -1) {
                 Object.assign(this.quoProducts[this.editedIndex], {
@@ -415,8 +414,8 @@ export default {
                     'product_id': res.data.product_id,
                     'item_variant': varName,
                     'item_variant_id': this.addQuoProduct.item_variant_id,
-                    'price': price,
                     'quantity': this.addQuoProduct.quantity,
+                    'unit': this.unit.name,
                     'shipping_cost': this.addQuoProduct.shipping_cost,
                 })
             } else {
@@ -426,8 +425,8 @@ export default {
                     'product_id': res.data.product_id,
                     'item_variant_id': this.addQuoProduct.item_variant_id,
                     'item_variant': varName,
-                    'price': price,
                     'quantity': this.addQuoProduct.quantity,
+                    'unit': this.unit.name,
                     'shipping_cost': this.addQuoProduct.shipping_cost,
                 });
             }
