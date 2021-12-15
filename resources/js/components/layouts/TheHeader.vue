@@ -55,6 +55,7 @@
 import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
 import ApiServices from "../../services/ApiServices";
 import Language from "./Language";
+import permissions from "../../permissions";
 
 export default {
     name: 'TheHeader',
@@ -85,9 +86,11 @@ export default {
         async getSettings() {
             let isLoggedIn = localStorage.getItem('isLoggedIn');
             if (isLoggedIn === 'true') {
-                let res = await ApiServices.settingShow(1);
-                if (res.success === true) {
-                    this.settings = res.data;
+                if(permissions.$can('settings')) {
+                    let res = await ApiServices.settingShow(1);
+                    if (res.success === true) {
+                        this.settings = res.data;
+                    }
                 }
             }
         },

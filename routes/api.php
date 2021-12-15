@@ -142,6 +142,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('unusedProducts/{id}', [\App\Http\Controllers\Api\UnusedProductController::class, 'update']);
     Route::apiResource('vendors', \App\Http\Controllers\Api\VendorController::class);
     Route::post('vendors/{id}', [\App\Http\Controllers\Api\VendorController::class, 'update']);
+    Route::apiResource('vendorProducts', \App\Http\Controllers\Api\VendorProductController::class);
+    Route::get('vendorProductIds/{type}/{id}', [\App\Http\Controllers\Api\VendorProductController::class, 'index']);
+    Route::post('vendorProducts/{id}', [\App\Http\Controllers\Api\VendorProductController::class, 'update']);
 
     Route::group(['prefix' => '/budget'], function () {
         Route::apiResource('budgets', \App\Http\Controllers\Api\BudgetController::class);

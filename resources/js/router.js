@@ -101,6 +101,9 @@ import VendorCreate from './components/vendor/Create'
 import VendorShow from './components/vendor/Show'
 import VendorEdit from './components/vendor/Edit'
 
+import VendorProductShow from './components/vendor/vendorProduct/ShowProduct'
+import VendorProductAdd from './components/vendor/vendorProduct/AddProduct'
+
 import BudgetIndex from './components/budgets/budget/Index'
 import BudgetCreate from './components/budgets/budget/Create'
 import BudgetShow from './components/budgets/budget/Show'
@@ -931,6 +934,25 @@ export default new Router({
             path: '/vendors/:id',
             name: i18n.t('vendor'),
             component: VendorShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/vendorProducts/add/:id',
+            name: i18n.t('card_title.edit_vendor_product'),
+            component: VendorProductAdd,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendorProducts/:id',
+            name: i18n.t('vendor') +' '+ i18n.t('product'),
+            component: VendorProductShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

@@ -423,6 +423,22 @@ export default {
         return await apiCall(DELETE, `api/vendors/${id}`)
     },
 
+    async vendorProductIds(type, id) {
+        return await apiCall(GET, `api/vendorProductIds/${type}/${id}`)
+    },
+    async vendorProductCreate(data) {
+        return await apiCall(POST, `api/vendorProducts`, data)
+    },
+    async vendorProductShow(id) {
+        return await apiCall(GET, `api/vendorProducts/${id}`)
+    },
+    async vendorProductEdit(id, data) {
+        return await apiCall(POST, `api/vendorProducts/${id}`, data)
+    },
+    async vendorProductDelete(id) {
+        return await apiCall(DELETE, `api/vendorProducts/${id}`)
+    },
+
     async budgetIndex() {
         return await apiCall(GET, `api/budget/budgets`)
     },

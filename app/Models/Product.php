@@ -40,4 +40,24 @@ class Product extends Model
     {
         return $this->belongsTo(File::class, 'image_id');
     }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'unit_id');
+    }
+
+    public function distributeUnit()
+    {
+        return $this->belongsTo(Unit::class, 'distribute_unit_id');
+    }
+
+    public function vendors()
+    {
+        return $this->belongsToMany(Vendor::class, 'vendor_products', 'product_id', 'vendor_id');
+    }
+
+    public function vendorProducts()
+    {
+        return $this->hasMany(VendorProduct::class, 'product_id');
+    }
 }
