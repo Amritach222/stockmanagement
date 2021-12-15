@@ -71,6 +71,11 @@ class CreateForeignKeys extends Migration
                 ->onUpdate('restrict');
         });
         Schema::table('products', function (Blueprint $table) {
+            $table->foreign('distribute_unit_id')->references('id')->on('units')
+                ->onDelete('cascade')
+                ->onUpdate('restrict');
+        });
+        Schema::table('products', function (Blueprint $table) {
             $table->foreign('tax_id')->references('id')->on('taxes')
                 ->onDelete('cascade')
                 ->onUpdate('restrict');
@@ -474,6 +479,9 @@ class CreateForeignKeys extends Migration
         });
         Schema::table('products', function (Blueprint $table) {
             $table->dropForeign('products_unit_id_foreign');
+        });
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign('products_distribute_unit_id_foreign');
         });
         Schema::table('products', function (Blueprint $table) {
             $table->dropForeign('products_tax_id_foreign');

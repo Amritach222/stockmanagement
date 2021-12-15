@@ -20,7 +20,9 @@
                 v-on:click="openImage(settings.link)"/>
         </CSidebarBrand>
 
-        <CRenderFunction flat :content-to-render="$options.nav"/>
+        <SidebarNavItem></SidebarNavItem>
+
+<!--        <CRenderFunction flat :content-to-render="navData"/>-->
         <CSidebarMinimizer
             class="d-md-down-none"
             @click.native="$store.commit('set', ['sidebarMinimize', !minimize])"
@@ -33,9 +35,13 @@ import nav from './_nav'
 import store from "../../store";
 import ApiServices from "../../services/ApiServices";
 import config from "../../config";
+import i18n from "../../i18n";
+import SidebarNavItem from "./SidebarNavItem";
+import permissions from "../../permissions";
 
 export default {
     name: 'Sidebar',
+    components:{SidebarNavItem},
     nav,
     computed: {
         show() {
@@ -55,25 +61,39 @@ export default {
             fiscal_year_id: '',
             time_zone: '',
         },
+        navData: [],
+        navKey: 0,
     }),
     async created() {
         this.getSettings();
+        this.loadNavData();
     },
     mounted() {
         this.$root.$on('sidebarComponent', () => {
             this.getSettings()
+        })
+        this.$root.$on('navComponent', () => {
+            this.loadNavData();
         })
     },
     methods: {
         openImage(data) {
             window.open(config.cdnURL + data, `_blank`);
         },
+        async loadNavData() {
+            // console.log(nav)
+            // console.log(i18n.t('vendors'))
+            this.$root.$emit('navData')
+                this.navData = nav.data;
+        },
         async getSettings() {
             let isLoggedIn = localStorage.getItem('isLoggedIn');
             if (isLoggedIn === 'true') {
-                let res = await ApiServices.settingShow(1);
-                if (res.success === true) {
-                    this.settings = res.data;
+                if(permissions.$can('settings')) {
+                    let res = await ApiServices.settingShow(1);
+                    if (res.success === true) {
+                        this.settings = res.data;
+                    }
                 }
             }
         },

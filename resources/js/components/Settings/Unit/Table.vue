@@ -66,8 +66,7 @@
                                                     :rules="rules"
                                                     v-on:keyup="clearValidation()"
                                                 ></v-text-field>
-                                                <p v-if="nameValidation" class="notify-validation">Unit name already
-                                                    exist.</p>
+                                                <p v-if="nameValidation" class="notify-validation">{{ $t('validation.unitName') }}</p>
                                             </v-col>
                                         </v-row>
                                         <v-row>
@@ -108,8 +107,7 @@
                                                     :rules="rules"
                                                     v-on:change="valueCheck(editedItem.type)"
                                                 ></v-select>
-                                                <p v-if="typeValidation" class="notify-validation">Please select a
-                                                    different type for this category unit.</p>
+                                                <p v-if="typeValidation" class="notify-validation">{{ $t('validation.unitType') }}</p>
                                             </v-col>
                                         </v-row>
                                         <v-row v-if="needsValue">
@@ -121,8 +119,7 @@
                                                     outlined
                                                     v-on:keyup="clearValidation()"
                                                 ></v-text-field>
-                                                <p v-if="ratioValidation" class="notify-validation">Please enter a
-                                                    different ratio for this unit type.</p>
+                                                <p v-if="ratioValidation" class="notify-validation">{{ $t('validation.unitRatio') }}</p>
                                             </v-col>
                                         </v-row>
                                     </v-container>

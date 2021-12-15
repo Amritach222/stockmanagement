@@ -14,6 +14,7 @@ class Vendor extends JsonResource
      */
     public function toArray($request)
     {
+        $category = new Category($this->category);
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -27,7 +28,8 @@ class Vendor extends JsonResource
             'city' => $this->city,
             'postal_code' => $this->postal_code,
             'category_id' => $this->category_id,
-            'is_active' => $this->is_active
+            'is_active' => $this->is_active,
+            'category' => $category,
         ];
     }
 }

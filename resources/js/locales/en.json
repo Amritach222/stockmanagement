@@ -164,6 +164,7 @@
     "history": "History",
     "time_span": "Time Span",
     "ratio": "Ratio",
+    "distribute": "Distribute",
 
     "validation": {
         "required": "This field is required!",
@@ -173,7 +174,10 @@
         "special": "Must have one special character [!@#$%:]",
         "sameNewPassword": "Must be same as new Password entered",
         "samePassword": "Must be same as Password entered",
-        "email": "Must be a valid email address"
+        "email": "Must be a valid email address",
+        "unitType": "Please select a different type for this category unit.",
+        "unitRatio": "Please enter different value for unit ratio.",
+        "unitName": "Unit name already exist."
     },
     "button": {
         "login": "LOGIN",
@@ -186,6 +190,7 @@
         "back": "Back",
         "confirm": "Confirm",
         "add_new_vendor": "Add New Vendor",
+        "add_new_vendor_product": "Add New Vendor Product",
         "add_new_category": "Add New Category",
         "add_new_product": "Add New Product",
         "add_new_product_attribute_group": "Add New Product Attribute Group",
@@ -219,7 +224,9 @@
         "add_category": "Add Category",
         "edit_category": "Edit Category",
         "add_vendor": "Add Vendor",
+        "add_vendor_product": "Add Vendor's Product",
         "edit_vendor": "Edit Vendor",
+        "edit_vendor_product": "Edit Vendor's Product",
         "add_product": "Add Product",
         "edit_product": "Edit Product",
         "add_product_attribute_group": "Add Product Attribute Group",
