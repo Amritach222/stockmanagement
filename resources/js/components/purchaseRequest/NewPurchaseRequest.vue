@@ -76,7 +76,7 @@
                                                                             <v-col>
                                                                                 <v-select
                                                                                     v-model="addQuoProduct.item_id"
-                                                                                    label="Item"
+                                                                                    label="Select Product"
                                                                                     :items="products"
                                                                                     item-text="name"
                                                                                     item-value="id"
@@ -88,7 +88,7 @@
                                                                                 <div v-if="hasVariants">
                                                                                     <v-select
                                                                                         v-model="addQuoProduct.item_variant_id"
-                                                                                        label="Item Variant"
+                                                                                        label="Product Variant"
                                                                                         :items="variants"
                                                                                         item-value="id"
                                                                                         item-text="name"
@@ -102,13 +102,14 @@
                                                                                     outlined
                                                                                 ></v-text-field>
                                                                                 <v-select
-                                                                                    v-model="addQuoProduct.unit_id"
+                                                                                    v-model="addQuoProduct.unit"
                                                                                     label="Unit"
                                                                                     :items="units"
                                                                                     item-text="name"
                                                                                     item-value="id"
                                                                                     required
                                                                                     outlined
+                                                                                    return-object
                                                                                     :rules="rules"
                                                                                 ></v-select>
                                                                             </v-col>
@@ -279,7 +280,7 @@ export default {
             {text: 'Product', value: 'item_name'},
             {text: 'Product Variant', value: 'item_variant'},
             {text: 'Quantity', value: 'quantity'},
-            {text: 'Unit', value: 'unit'},
+            {text: 'Unit', value: 'unit_name'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         quotations: [],
@@ -352,14 +353,15 @@ export default {
         },
 
         async getVariants(item) {
-            let res = await ApiServices.productVariantShow(item);
+            let res = await ApiServices.productShow(item);
+            console.log('we get here',res);
             if (res.success === true) {
                 if (res.data.product_variants.length > 0) {
                     this.hasVariants = true;
                 } else {
                     this.hasVariants = false;
                 }
-                this.variants = res.data.item_variants;
+                this.variants = res.data.product_variants;
             }
         },
 
@@ -399,10 +401,9 @@ export default {
         },
 
         async addProduct() {
+            console.log('product details', this.addQuoProduct);
             var varName = '---';
-            var price = '';
-            let res = await ApiServices.itemShow(this.addQuoProduct.item_id);
-            price = res.data.cost_price;
+            let res = await ApiServices.productShow(this.addQuoProduct.item_id);
             if (this.addQuoProduct.item_variant_id) {
                 let rtn = await ApiServices.productVariantShow(this.addQuoProduct.item_variant_id);
                 varName = rtn.data.name;
@@ -415,7 +416,8 @@ export default {
                     'item_variant': varName,
                     'item_variant_id': this.addQuoProduct.item_variant_id,
                     'quantity': this.addQuoProduct.quantity,
-                    'unit': this.unit.name,
+                    'unit_name': this.addQuoProduct.unit.name,
+                    'unit_id': this.addQuoProduct.unit.id,
                     'shipping_cost': this.addQuoProduct.shipping_cost,
                 })
             } else {
@@ -426,7 +428,8 @@ export default {
                     'item_variant_id': this.addQuoProduct.item_variant_id,
                     'item_variant': varName,
                     'quantity': this.addQuoProduct.quantity,
-                    'unit': this.unit.name,
+                    'unit_name': this.addQuoProduct.unit.name,
+                    'unit_id': this.addQuoProduct.unit.id,
                     'shipping_cost': this.addQuoProduct.shipping_cost,
                 });
             }
