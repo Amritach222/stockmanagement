@@ -157,7 +157,7 @@
             </v-list-group>
 
             <v-list-group
-                v-if="(($can('categories') || $can('products')) || (($can('attributes') || $can('attributeGroups')) || $can('items')))">
+                v-if="($can('categories') || $can('products') || $can('attributes') || $can('attributeGroups') || $can('items') || $can('units') || $can('unitCategories') || $can('taxes') || $can('brands'))">
                 <template v-slot:activator>
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-inbox-multiple</v-icon>
@@ -212,70 +212,6 @@
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
-            </v-list-group>
-
-            <v-list-group v-if="($can('purchases'))">
-                <template v-slot:activator>
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-account-cash</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title class="ml-2 item-color">{{ $t('purchases') }}</v-list-item-title>
-                </template>
-
-                <v-list-item class="ml-3" v-if="$can('purchases')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-shield-plus</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/new-purchase-request/'">
-                            {{ $t('new') + ' ' + $t('purchase') + ' ' + $t('request') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item class="ml-3">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-shield-refresh</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/purchase-request-history/'">
-                            {{ $t('purchase') + ' ' + $t('request') + ' ' + $t('history') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-            </v-list-group>
-
-            <v-list-group v-if="$can('quotations')">
-                <template v-slot:activator>
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-clipboard-text</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title class="item-color">{{ $t('quotations') }}</v-list-item-title>
-                </template>
-
-                <v-list-item class="ml-3" v-if="$can('quotations')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-alpha-q-circle</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/quotations/'">
-                            {{ $t('quotation') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-            </v-list-group>
-
-            <v-list-group
-            >
-                <template v-slot:activator>
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-cogs</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title class="item-color">{{ $t('settings') }}</v-list-item-title>
-                </template>
 
                 <v-list-group v-if="($can('brands') || $can('categories') || $can('unitCategories') || $can('units'))"
                               :value="true"
@@ -353,7 +289,73 @@
                     </v-list-item>
                 </v-list-group>
 
-                <v-list-group v-if="($can('brands') || $can('categories') || $can('unitCategories') || $can('units'))"
+
+            </v-list-group>
+
+            <v-list-group v-if="($can('purchases'))">
+                <template v-slot:activator>
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-account-cash</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title class="ml-2 item-color">{{ $t('purchases') }}</v-list-item-title>
+                </template>
+
+                <v-list-item class="ml-3" v-if="$can('purchases')">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-shield-plus</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/new-purchase-request/'">
+                            {{ $t('new') + ' ' + $t('purchase') + ' ' + $t('request') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="ml-3">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-shield-refresh</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/purchase-request-history/'">
+                            {{ $t('purchase') + ' ' + $t('request') + ' ' + $t('history') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
+
+            <v-list-group v-if="$can('quotations')">
+                <template v-slot:activator>
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-clipboard-text</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title class="item-color">{{ $t('quotations') }}</v-list-item-title>
+                </template>
+
+                <v-list-item class="ml-3" v-if="$can('quotations')">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-alpha-q-circle</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/quotations/'">
+                            {{ $t('quotation') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
+
+            <v-list-group
+            >
+                <template v-slot:activator>
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-cogs</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title class="item-color">{{ $t('settings') }}</v-list-item-title>
+                </template>
+
+                <v-list-group v-if="($can('departments') || $can('designations') || $can('signatures') || $can('signatureUseDepartments'))"
                               :value="true"
                               no-action
                               sub-group
@@ -427,7 +429,7 @@
 
                 </v-list-group>
 
-                <v-list-group v-if="($can('brands') || $can('categories') || $can('unitCategories') || $can('units'))"
+                <v-list-group v-if="($can('fiscalYears') || $can('logs') || $can('settings.edit') || $can('mailSettings.edit') || $can('smsSettings.edit'))"
                               :value="true"
                               no-action
                               sub-group
