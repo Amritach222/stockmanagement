@@ -165,18 +165,6 @@
                     <v-list-item-title class="ml-2 item-color">{{ $t('products') }}</v-list-item-title>
                 </template>
 
-                <v-list-item class="ml-3" v-if="$can('categories')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-shape</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/categories/'">
-                            {{ $t('category') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
                 <v-list-item class="ml-3" v-if="$can('attributeGroups')">
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-select-group</v-icon>
@@ -280,13 +268,12 @@
                 </v-list-item>
             </v-list-group>
 
-            <v-list-group
-            >
+            <v-list-group v-if="($can('brands') || $can('categories') || $can('unitCategories') || $can('units'))">
                 <template v-slot:activator>
                     <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-cogs</v-icon>
+                        <v-icon>mdi-cog</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title class="item-color">{{ $t('settings') }}</v-list-item-title>
+                    <v-list-item-title class="item-color">{{ $t('product') +' '+ $t('settings') }}</v-list-item-title>
                 </template>
 
                 <v-list-item class="ml-3" v-if="$can('brands')">
@@ -300,6 +287,64 @@
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
+
+                <v-list-item class="ml-3" v-if="$can('categories')">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-shape</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/categories/'">
+                            {{ $t('category') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="ml-3" v-if="$can('taxes')">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-sack-percent</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/taxes/'">
+                            {{ $t('tax') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="ml-3" v-if="$can('unitCategories')">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-scale</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/unitCategories/'">
+                            {{ $t('unit') + ' ' + $t('category') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="ml-3" v-if="$can('units')">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-scale-balance</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/units/'">
+                            {{ $t('unit') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
+
+            <v-list-group
+            >
+                <template v-slot:activator>
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-cogs</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title class="item-color">{{ $t('settings') }}</v-list-item-title>
+                </template>
 
                 <v-list-item class="ml-3" v-if="$can('departments')">
                     <v-list-item-icon class="mr-2">
@@ -369,42 +414,6 @@
                         <router-link
                             :to="'/signatureUseDepartments/'">
                             {{ $t('signature') + ' ' + $t('use') + ' ' + $t('department') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item class="ml-3" v-if="$can('taxes')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-sack-percent</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/taxes/'">
-                            {{ $t('tax') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item class="ml-3" v-if="$can('unitCategories')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-scale</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/unitCategories/'">
-                            {{ $t('unit') + ' ' + $t('category') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item class="ml-3" v-if="$can('units')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-scale-balance</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/units/'">
-                            {{ $t('unit') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
