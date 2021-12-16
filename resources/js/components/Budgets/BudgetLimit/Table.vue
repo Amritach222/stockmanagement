@@ -44,6 +44,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-if="$can('budgetLimits.create')"
                             >
                                 {{ $t('button.add_new_budget_limit') }}
                             </v-btn>
@@ -141,12 +142,14 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
+                    v-if="$can('budgetLimits.edit')"
                 >
                     mdi-pencil
                 </v-icon>
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('budgetLimits.delete')"
                 >
                     mdi-delete
                 </v-icon>

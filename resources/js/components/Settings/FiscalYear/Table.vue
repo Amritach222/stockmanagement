@@ -45,6 +45,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-if="$can('fiscalYears.create')"
                             >
                                 {{ $t('button.add_new_fiscal_year') }}
                             </v-btn>
@@ -138,12 +139,14 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
+                    v-if="$can('fiscalYears.edit')"
                 >
                     mdi-pencil
                 </v-icon>
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('fiscalYears.delete')"
                 >
                     mdi-delete
                 </v-icon>

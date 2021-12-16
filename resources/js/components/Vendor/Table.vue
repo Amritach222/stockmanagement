@@ -44,6 +44,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-if="$can('vendors.create')"
                             >
                                 {{ $t('button.add_new_vendor') }}
                             </v-btn>
@@ -251,7 +252,7 @@
             <template v-slot:item.actions="{ item }">
                 <router-link
                     :to="'/vendors/'+item.id"
-                    v-if="$can('vendors')"
+                    v-if="$can('vendors.show')"
                 >
                     <v-icon
                         small

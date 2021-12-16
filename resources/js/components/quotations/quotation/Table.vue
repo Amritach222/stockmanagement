@@ -46,6 +46,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                                 :to="'/quotations/create'"
+                                v-if="$can('quotations.create')"
                             >
                                 {{ $t('button.add_new_quotation') }}
                             </v-btn>
@@ -93,6 +94,7 @@
             <template v-slot:item.actions="{ item }">
                 <router-link
                     :to="'/quotations/edit/'+item.id"
+                    v-if="$can('quotations.edit')"
                 >
                     <v-icon
                         small
@@ -103,6 +105,7 @@
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('quotations.delete')"
                 >
                     mdi-delete
                 </v-icon>

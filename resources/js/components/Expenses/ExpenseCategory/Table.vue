@@ -44,6 +44,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-if="$can('expenseCategories.create')"
                             >
                                 {{ $t('button.add_new_expense_category') }}
                             </v-btn>
@@ -127,12 +128,14 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
+                    v-if="$can('expenseCategories.edit')"
                 >
                     mdi-pencil
                 </v-icon>
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('expenseCategories.delete')"
                 >
                     mdi-delete
                 </v-icon>

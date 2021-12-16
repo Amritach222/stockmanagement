@@ -45,6 +45,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-if="$can('departments.create')"
                             >
                                 {{ $t('button.add_new_department') }}
                             </v-btn>
@@ -129,12 +130,14 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
+                    v-if="$can('departments.edit')"
                 >
                     mdi-pencil
                 </v-icon>
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('departments.delete')"
                 >
                     mdi-delete
                 </v-icon>

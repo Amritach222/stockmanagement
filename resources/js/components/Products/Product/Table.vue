@@ -46,6 +46,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                                 :to="'/products/create'"
+                                v-if="$can('products.create')"
                             >
                                 {{ $t('button.add_new_product') }}
                             </v-btn>
@@ -84,6 +85,7 @@
             <template v-slot:item.actions="{ item }">
                 <router-link
                     :to="'/products/'+item.id"
+                    v-if="$can('products.show')"
                 >
                     <v-icon
                         small
@@ -93,6 +95,7 @@
                 </router-link>
                 <router-link
                     :to="'/products/edit/'+item.id"
+                    v-if="$can('products.edit')"
                 >
                     <v-icon
                         small
@@ -103,6 +106,7 @@
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('products.delete')"
                 >
                     mdi-delete
                 </v-icon>

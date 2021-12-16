@@ -46,6 +46,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                                 :to="'/budgetExtends/create'"
+                                v-if="$can('budgetExtends.create')"
                             >
                                 Add New Budget Extend
                             </v-btn>
@@ -84,6 +85,7 @@
             <template v-slot:item.actions="{ item }">
                 <router-link
                     :to="'/budgetExtends/edit/'+item.id"
+                    v-if="$can('budgetExtends.edit')"
                 >
                     <v-icon
                         small
@@ -94,6 +96,7 @@
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('budgetExtends.delete')"
                 >
                     mdi-delete
                 </v-icon>

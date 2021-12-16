@@ -44,6 +44,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-if="$can('bankAccounts.create')"
                             >
                                 {{ $t('button.add_new_bank_account') }}
                             </v-btn>
@@ -160,6 +161,7 @@
             <template v-slot:item.actions="{ item }">
                 <router-link
                     :to="'/bankAccounts/'+item.id"
+                    v-if="$can('bankAccounts.show')"
                 >
                     <v-icon
                         small
@@ -171,12 +173,14 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
+                    v-if="$can('bankAccounts.edit')"
                 >
                     mdi-pencil
                 </v-icon>
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('bankAccounts.delete')"
                 >
                     mdi-delete
                 </v-icon>

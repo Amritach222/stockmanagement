@@ -45,6 +45,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-if="$can('signatureUseDepartments.create')"
                             >
                                 {{ $t('button.add_new_signature_use_department') }}
                             </v-btn>
@@ -145,12 +146,14 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
+                    v-if="$can('signatureUseDepartments.edit')"
                 >
                     mdi-pencil
                 </v-icon>
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('signatureUseDepartments.delete')"
                 >
                     mdi-delete
                 </v-icon>

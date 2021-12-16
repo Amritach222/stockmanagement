@@ -45,6 +45,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                                 :to="'/expenses/create/'"
+                                v-if="$can('expenses.create')"
                             >
                                 {{ $t('button.add_new_expense') }}
                             </v-btn>
@@ -78,6 +79,7 @@
             <template v-slot:item.actions="{ item }">
                 <router-link
                     :to="'/expenses/'+item.id"
+                    v-if="$can('expenses.show')"
                 >
                     <v-icon
                         small
@@ -87,6 +89,7 @@
                 </router-link>
                 <router-link
                     :to="'/expenses/edit/'+item.id"
+                    v-if="$can('expenses.edit')"
                 >
                     <v-icon
                         small
@@ -97,6 +100,7 @@
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('expenses.delete')"
                 >
                     mdi-delete
                 </v-icon>
