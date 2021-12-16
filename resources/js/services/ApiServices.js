@@ -106,6 +106,10 @@ export default {
         return await apiCall(GET, `api/users/`)
     },
 
+    async logIndex() {
+        return await apiCall(GET, `api/logs/`)
+    },
+
     async productIndex() {
         return await apiCall(GET, `api/product/products`)
     },

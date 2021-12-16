@@ -161,6 +161,8 @@ import PurchaseRequestHistory from './components/purchaseRequest/PurchaseRequest
 
 import NotFound from './components/errorPage/NotFound'
 
+import LogIndex from './components/Settings/log/Index'
+
 Vue.use(Router)
 
 export default new Router({
@@ -231,6 +233,15 @@ export default new Router({
             path: '/reset-password',
             name: 'reset-password',
             component: ResetPassword,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/logs',
+            name: i18n.t('logs'),
+            component: LogIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

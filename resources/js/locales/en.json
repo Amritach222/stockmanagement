@@ -167,6 +167,11 @@
     "distribute": "Distribute",
     "alert": "Alert",
     "web": "Web",
+    "log": "Log",
+    "logs": "Logs",
+    "activity": "Activity",
+    "activities": "Activities",
+    "ip": "IP",
 
     "validation": {
         "required": "This field is required!",

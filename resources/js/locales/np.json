@@ -169,6 +169,11 @@
     "distribute": "वितरण",
     "alert": "सतर्कता",
     "web": "वेब",
+    "log": "लग",
+    "logs": "लगहरू",
+    "activity": "गतिविधि",
+    "activities": "गतिविधिहरू",
+    "ip": "आइपी",
 
     "validation": {
         "required": "यो क्षेत्र आवश्यक छ!",

@@ -448,6 +448,18 @@
                         </v-list-item-title>
                     </v-list-item>
 
+                    <v-list-item class="ml-5" v-if="$can('logs')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-calendar</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/logs/'">
+                                {{ $t('logs') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
+
                     <v-list-item class="ml-5" v-if="$can('mailTemplates')">
                         <v-list-item-icon class="mr-2">
                             <v-icon>mdi-email-newsletter</v-icon>
