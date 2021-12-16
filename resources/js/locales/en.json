@@ -166,6 +166,7 @@
     "ratio": "Ratio",
     "distribute": "Distribute",
     "alert": "Alert",
+    "web": "Web",
 
     "validation": {
         "required": "This field is required!",

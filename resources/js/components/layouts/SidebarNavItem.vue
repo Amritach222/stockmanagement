@@ -268,75 +268,6 @@
                 </v-list-item>
             </v-list-group>
 
-            <v-list-group v-if="($can('brands') || $can('categories') || $can('unitCategories') || $can('units'))">
-                <template v-slot:activator>
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-cog</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title class="item-color">{{ $t('product') +' '+ $t('settings') }}</v-list-item-title>
-                </template>
-
-                <v-list-item class="ml-3" v-if="$can('brands')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-alpha-b-circle</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/brands/'">
-                            {{ $t('brand') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item class="ml-3" v-if="$can('categories')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-shape</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/categories/'">
-                            {{ $t('category') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item class="ml-3" v-if="$can('taxes')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-sack-percent</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/taxes/'">
-                            {{ $t('tax') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item class="ml-3" v-if="$can('unitCategories')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-scale</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/unitCategories/'">
-                            {{ $t('unit') + ' ' + $t('category') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item class="ml-3" v-if="$can('units')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-scale-balance</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/units/'">
-                            {{ $t('unit') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
-            </v-list-group>
-
             <v-list-group
             >
                 <template v-slot:activator>
@@ -346,125 +277,226 @@
                     <v-list-item-title class="item-color">{{ $t('settings') }}</v-list-item-title>
                 </template>
 
-                <v-list-item class="ml-3" v-if="$can('departments')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-vector-square</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/departments/'">
-                            {{ $t('department') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
+                <v-list-group v-if="($can('brands') || $can('categories') || $can('unitCategories') || $can('units'))"
+                              :value="true"
+                              no-action
+                              sub-group
+                >
+                    <template v-slot:activator>
+                        <!--                        <v-list-item-icon class="mr-2">-->
+                        <!--                            <v-icon>mdi-cog</v-icon>-->
+                        <!--                        </v-list-item-icon>-->
+                        <v-list-item-title class="item-color">{{
+                                $t('product') + ' ' + $t('settings')
+                            }}
+                        </v-list-item-title>
+                    </template>
 
-                <v-list-item class="ml-3" v-if="$can('designations')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-account-network</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/designations/'">
-                            {{ $t('designation') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
+                    <v-list-item class="ml-5" v-if="$can('brands')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-alpha-b-circle</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/brands/'">
+                                {{ $t('brand') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
 
-                <v-list-item class="ml-3" v-if="$can('fiscalYears')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-calendar</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/fiscalYears/'">
-                            {{ $t('fiscal_year') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
+                    <v-list-item class="ml-5" v-if="$can('categories')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-shape</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/categories/'">
+                                {{ $t('category') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
 
-                <v-list-item class="ml-3" v-if="$can('mailTemplates')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-email-newsletter</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/mailTemplates/'">
-                            {{ $t('mail') + ' ' + $t('template') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
+                    <v-list-item class="ml-5" v-if="$can('taxes')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-sack-percent</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/taxes/'">
+                                {{ $t('tax') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
 
-                <v-list-item class="ml-3" v-if="$can('signatures')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-draw</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/signatures/'">
-                            {{ $t('signature') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
+                    <v-list-item class="ml-5" v-if="$can('unitCategories')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-scale</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/unitCategories/'">
+                                {{ $t('unit') + ' ' + $t('category') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
 
-                <v-list-item class="ml-3" v-if="$can('signatureUseDepartments')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-account-edit</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/signatureUseDepartments/'">
-                            {{ $t('signature') + ' ' + $t('use') + ' ' + $t('department') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
+                    <v-list-item class="ml-5" v-if="$can('units')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-scale-balance</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/units/'">
+                                {{ $t('unit') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
+                </v-list-group>
 
-                <v-list-item class="ml-3" v-if="$can('settings.edit')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-cog</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/settings/'">
-                            {{ $t('general_setting') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
+                <v-list-group v-if="($can('brands') || $can('categories') || $can('unitCategories') || $can('units'))"
+                              :value="true"
+                              no-action
+                              sub-group
+                >
+                    <template v-slot:activator>
+                        <v-list-item-title class="item-color">{{
+                                $t('user') + ' ' + $t('settings')
+                            }}
+                        </v-list-item-title>
+                    </template>
 
-                <v-list-item class="ml-3" v-if="$can('mailSettings.edit')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-message-cog</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/mailSettings/'">
-                            {{ $t('mail') + ' ' + $t('settings') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
+                    <v-list-item class="ml-5" v-if="$can('departments')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-vector-square</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/departments/'">
+                                {{ $t('department') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
 
-                <v-list-item class="ml-3" v-if="$can('smsSettings.edit')">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-cellphone-cog</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/smsSettings/'">
-                            {{ $t('sms') + ' ' + $t('settings') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
+                    <v-list-item class="ml-5" v-if="$can('designations')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-account-network</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/designations/'">
+                                {{ $t('designation') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
 
-                <v-list-item class="ml-3">
-                    <v-list-item-icon class="mr-2">
-                        <v-icon>mdi-account-cog</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                        <router-link
-                            :to="'/profile-setting/'">
-                            {{ $t('profile') + ' ' + $t('settings') }}
-                        </router-link>
-                    </v-list-item-title>
-                </v-list-item>
+                    <v-list-item class="ml-5" v-if="$can('signatures')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-draw</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/signatures/'">
+                                {{ $t('signature') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item class="ml-5" v-if="$can('signatureUseDepartments')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-account-edit</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/signatureUseDepartments/'">
+                                {{ $t('signature') + ' ' + $t('use') + ' ' + $t('department') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item class="ml-5">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-account-cog</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/profile-setting/'">
+                                {{ $t('profile') + ' ' + $t('settings') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
+
+                </v-list-group>
+
+                <v-list-group v-if="($can('brands') || $can('categories') || $can('unitCategories') || $can('units'))"
+                              :value="true"
+                              no-action
+                              sub-group
+                >
+                    <template v-slot:activator>
+                        <v-list-item-title class="item-color">{{ $t('web') + ' ' + $t('settings') }}</v-list-item-title>
+                    </template>
+
+                    <v-list-item class="ml-5" v-if="$can('fiscalYears')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-calendar</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/fiscalYears/'">
+                                {{ $t('fiscal_year') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item class="ml-5" v-if="$can('mailTemplates')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-email-newsletter</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/mailTemplates/'">
+                                {{ $t('mail') + ' ' + $t('template') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item class="ml-5" v-if="$can('settings.edit')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-cog</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/settings/'">
+                                {{ $t('general_setting') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item class="ml-5" v-if="$can('mailSettings.edit')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-message-cog</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/mailSettings/'">
+                                {{ $t('mail') + ' ' + $t('settings') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item class="ml-5" v-if="$can('smsSettings.edit')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-cellphone-cog</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/smsSettings/'">
+                                {{ $t('sms') + ' ' + $t('settings') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
+
+                </v-list-group>
             </v-list-group>
         </v-list>
     </CSidebarNav>
