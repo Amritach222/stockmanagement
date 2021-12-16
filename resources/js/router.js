@@ -159,6 +159,8 @@ import i18n from './i18n'
 import NewPurchaseRequest from './components/purchaseRequest/NewPurchaseRequest'
 import PurchaseRequestHistory from './components/purchaseRequest/PurchaseRequestHistory'
 
+import NotFound from './components/errorPage/NotFound'
+
 Vue.use(Router)
 
 export default new Router({
@@ -1262,6 +1264,11 @@ export default new Router({
                 next();
             }
         },
+        {
+            path: '*',
+            name: 'Not Found',
+            component: NotFound
+        }
     ]
 })
 
