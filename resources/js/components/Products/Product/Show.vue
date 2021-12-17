@@ -20,16 +20,7 @@
                                                     class="grey darken-4"
                                                 ></v-img>
                                                 <v-card-title class="title">
-                                                    {{ $t('image') }} - <div v-if="show.is_active === 1" class="ml-1">
-                                                    <CButton size="sm" color="success">
-                                                        {{ $t('active') }}
-                                                    </CButton>
-                                                </div>
-                                                    <div v-else class="ml-1">
-                                                        <CButton size="sm" color="danger">
-                                                            {{ $t('inactive') }}
-                                                        </CButton>
-                                                    </div>
+                                                    {{ $t('image') }}
                                                 </v-card-title>
                                             </v-card>
                                         </v-col>
@@ -81,6 +72,26 @@
                                             <CCol md="4">
                                                 <h6>{{ $t('distribute') + ' ' + $t('unit') }}: </h6>
                                                 <p v-if="show.distribute_unit_id">{{ show.distribute_unit.name }}</p>
+                                                <p v-else>---</p>
+                                            </CCol>
+                                        </CRow>
+                                        <CRow>
+                                            <CCol md="4">
+                                                <h6>{{ $t('status') }}: </h6>
+                                                <div v-if="show.is_active === 1" class="ml-1">
+                                                    <CButton size="sm" color="success">
+                                                        {{ $t('active') }}
+                                                    </CButton>
+                                                </div>
+                                                <div v-else class="ml-1">
+                                                    <CButton size="sm" color="danger">
+                                                        {{ $t('inactive') }}
+                                                    </CButton>
+                                                </div>
+                                            </CCol>
+                                            <CCol md="4">
+                                                <h6>{{ $t('type') }}: </h6>
+                                                <p v-if="show.type">{{ show.type }}</p>
                                                 <p v-else>---</p>
                                             </CCol>
                                         </CRow>

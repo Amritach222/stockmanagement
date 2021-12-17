@@ -119,11 +119,6 @@ import BudgetLimitCreate from './components/budgets/budgetLimit/Create'
 import BudgetLimitShow from './components/budgets/budgetLimit/Show'
 import BudgetLimitEdit from './components/budgets/budgetLimit/Edit'
 
-import BudgetExtendIndex from './components/budgets/budgetExtend/Index'
-import BudgetExtendCreate from './components/budgets/budgetExtend/Create'
-import BudgetExtendShow from './components/budgets/budgetExtend/Show'
-import BudgetExtendEdit from './components/budgets/budgetExtend/Edit'
-
 import FreezeBudgetIndex from './components/budgets/freezeBudget/Index'
 import FreezeBudgetCreate from './components/budgets/freezeBudget/Create'
 import FreezeBudgetShow from './components/budgets/freezeBudget/Show'
@@ -143,6 +138,11 @@ import QuotationIndex from './components/quotations/quotation/Index'
 import QuotationCreate from './components/quotations/quotation/Create'
 import QuotationEdit from './components/quotations/quotation/Edit'
 import QuotationShow from './components/quotations/quotation/Show'
+
+import UserIndex from './components/userManagement/user/Index'
+import UserCreate from './components/userManagement/user/Create'
+import UserEdit from './components/userManagement/user/Edit'
+import UserShow from './components/userManagement/user/Show'
 
 import ExpenseIndex from './components/expenses/Expense/Index'
 import ExpenseCreate from './components/expenses/Expense/Create'
@@ -1275,6 +1275,44 @@ export default new Router({
                 next();
             }
         },
+
+        {
+            path: '/users',
+            name: i18n.t('users'),
+            component: UserIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/users/create',
+            name: i18n.t('card_title.add_user'),
+            component: UserCreate,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/users/edit/:id',
+            name: i18n.t('card_title.edit_user'),
+            component: UserEdit,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/users/:id',
+            name: i18n.t('user'),
+            component: UserShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
         {
             path: '*',
             name: 'Not Found',

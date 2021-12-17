@@ -155,19 +155,13 @@ class BrandController extends Controller
         try {
             $data['success'] = true;
             $brand = Brand::findOrFail($id);
-            $fileHelper = new SamundraFileHelper();
-            if ($brand->image_id !== null) {
-                $file = File::where('id', $brand->image_id)->first();
-                if ($file !== null) {
-                    $fileHelper->deleteFile($file->path);
-                }
-            }
-            $brand->delete();
             $file = File::where('id',$brand->image_id)->first();
             if($file !== null){
                 $fileHelper = new SamundraFileHelper();
                 $fileHelper->deleteFile($file->path);
             }
+            $brand->delete();
+
             event(new ActivityLogEvent('Delete', 'Brand', $id));
             $data['message'] = "Deleted successfully.";
         } catch (\Exception $e) {

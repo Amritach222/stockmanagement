@@ -352,8 +352,20 @@
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-cogs</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title class="item-color">{{ $t('settings') }}</v-list-item-title>
+                    <v-list-item-title class="item-color">{{ $t('user') +' '+ $t('management') }}</v-list-item-title>
                 </template>
+
+                <v-list-item class="ml-5" v-if="$can('users')">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-account</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/users/'">
+                            {{ $t('user') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
 
                 <v-list-group v-if="($can('departments') || $can('designations') || $can('signatures') || $can('signatureUseDepartments'))"
                               :value="true"
@@ -428,6 +440,17 @@
                     </v-list-item>
 
                 </v-list-group>
+
+            </v-list-group>
+
+            <v-list-group
+            >
+                <template v-slot:activator>
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-cogs</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title class="item-color">{{ $t('settings') }}</v-list-item-title>
+                </template>
 
                 <v-list-group v-if="($can('fiscalYears') || $can('logs') || $can('settings.edit') || $can('mailSettings.edit') || $can('smsSettings.edit'))"
                               :value="true"

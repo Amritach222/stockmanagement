@@ -25,18 +25,33 @@ class UserRegistration extends FormRequest
      */
     public function rules()
     {
-        return [
-            'email' => 'required|email|indisposable|unique:users',
-            'username' => 'required|unique:users',
-            'first_name' => 'required|string|max:50',
-            'middle_name' => 'sometimes|max:50',
-            'last_name' => 'sometimes|string|max:50',
-            'confirm_password' => 'required|min:8|max:16|same:password',
-            'password' => ['required', new CheckPassword()],
-            'department_id' => 'sometimes|numeric',
-            'mobile_no' => 'required|min:10|max:10',
-            'address' => 'sometimes|string'
-        ];
+        if ($this->id) {
+            return [
+                'email' => 'email|indisposable|unique:users',
+                'username' => 'unique:users',
+                'first_name' => 'string|max:50',
+                'middle_name' => 'sometimes|max:50',
+                'last_name' => 'sometimes|string|max:50',
+                'department_id' => 'sometimes|numeric|exists:departments,id',
+                'designation_id' => 'sometimes|numeric|exists:designations,id',
+                'mobile_no' => 'min:10|max:10',
+                'address' => 'sometimes|string'
+            ];
+        } else {
+            return [
+                'email' => 'required|email|indisposable|unique:users',
+                'username' => 'required|unique:users',
+                'first_name' => 'required|string|max:50',
+                'middle_name' => 'sometimes|max:50',
+                'last_name' => 'sometimes|string|max:50',
+                'confirm_password' => 'required|min:8|max:16|same:password',
+                'password' => ['required', new CheckPassword()],
+                'department_id' => 'sometimes|numeric|exists:departments,id',
+                'designation_id' => 'sometimes|numeric|exists:designations,id',
+                'mobile_no' => 'required|min:10|max:10',
+                'address' => 'sometimes|string'
+            ];
+        }
     }
 
     public function messages()
