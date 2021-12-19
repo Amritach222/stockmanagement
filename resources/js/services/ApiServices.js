@@ -102,8 +102,23 @@ export default {
         return await apiCall(GET, `api/setting/all-setting-info`)
     },
 
+    async getUsers(role) {
+        return await apiCall(GET, `api/get-users/${role}`)
+    },
     async userIndex() {
         return await apiCall(GET, `api/users/`)
+    },
+    async userCreate(data) {
+        return await apiCall(POST, `api/users`, data)
+    },
+    async userShow(id) {
+        return await apiCall(GET, `api/users/${id}`)
+    },
+    async userEdit(id, data) {
+        return await apiCall(POST, `api/users/${id}`, data)
+    },
+    async userDelete(id) {
+        return await apiCall(DELETE, `api/users/${id}`)
     },
 
     async logIndex() {

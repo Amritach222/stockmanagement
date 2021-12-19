@@ -33,6 +33,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
 Route::group(['middleware' => 'auth:api'], function () {
 
     Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
+    Route::post('users/{id}', [\App\Http\Controllers\Api\UserController::class, 'update']);
+    Route::get('get-users/{role}', [\App\Http\Controllers\Api\UserController::class, 'getUsers']);
     Route::post('create-variants', [\App\Http\Controllers\Api\ProductController::class, 'createVariants']);
     Route::get('logs', [\App\Http\Controllers\Api\logController::class, 'index']);
     Route::get('get-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'getPermissions']);

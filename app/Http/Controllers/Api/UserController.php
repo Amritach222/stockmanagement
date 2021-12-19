@@ -162,4 +162,26 @@ class UserController extends Controller
         }
         return $data;
     }
+
+    public function getUsers($role){
+        $data['success']=true;
+        $data['message']='';
+        $data['data']=[];
+        try {
+            if($role == 'Admin') {
+                $data['data'] = AuthResource::collection(User::role('Admin')->get());
+            }elseif($role == 'Director'){
+                $data['data'] = AuthResource::collection(User::role(['Director','Finance Director'])->get());
+            }elseif($role == 'Store'){
+                $data['data'] = AuthResource::collection(User::role(['Store Manager','Store Keeper'])->get());
+            }elseif($role == 'Staff'){
+                $data['data'] = AuthResource::collection(User::role(['Staff'])->get());
+            }
+        }catch (\Exception $e){
+            $data['success']=false;
+            $data['message']='Error occurred';
+            $data['data']=$e;
+        }
+        return $data;
+    }
 }

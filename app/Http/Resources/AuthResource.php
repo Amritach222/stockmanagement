@@ -21,6 +21,7 @@ class AuthResource extends JsonResource
             $image = File::where('id', $this->image_id)->first();
             $link = $image->path;
         }
+
         return [
             'id' => $this->id,
             'email' => $this->email,
@@ -32,6 +33,8 @@ class AuthResource extends JsonResource
             'mobile_no' => $this->mobile_no,
             'address' => $this->address,
             'link' => $link,
+            'department'=>$this->department->name ?? null,
+            'designation'=>$this->designation->name ?? null,
         ];
     }
 
