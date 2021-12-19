@@ -32,6 +32,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
 
 Route::group(['middleware' => 'auth:api'], function () {
 
+    Route::apiResource('roles', \App\Http\Controllers\Api\RoleController::class);
     Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
     Route::post('users/{id}', [\App\Http\Controllers\Api\UserController::class, 'update']);
     Route::get('get-users/{role}', [\App\Http\Controllers\Api\UserController::class, 'getUsers']);

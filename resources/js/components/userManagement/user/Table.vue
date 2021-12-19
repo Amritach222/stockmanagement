@@ -34,6 +34,20 @@
                     >
                         {{ $t('staffs') }}
                     </v-tab>
+
+                    <v-tab
+                        class="primary--text"
+                    >
+                        <v-btn
+                            color="green"
+                            dark
+                            class="mb-2 add-btn"
+                            :to="'/users/create'"
+                            v-if="$can('users.create')"
+                        >
+                            {{ $t('button.add_new_user') }}
+                        </v-btn>
+                    </v-tab>
                 </v-tabs>
             </template>
         </v-toolbar>
@@ -72,24 +86,6 @@
                             ></v-text-field>
                         </v-col>
                     </v-row>
-                    <v-dialog
-                        v-model="dialog"
-                        max-width="600px"
-                    >
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                                color="green"
-                                dark
-                                class="mb-2"
-                                v-bind="attrs"
-                                v-on="on"
-                                :to="'/users/create'"
-                                v-if="$can('users.create')"
-                            >
-                                {{ $t('button.add_new_user') }}
-                            </v-btn>
-                        </template>
-                    </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
                             <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
@@ -182,24 +178,6 @@
                             ></v-text-field>
                         </v-col>
                     </v-row>
-                    <v-dialog
-                        v-model="dialog"
-                        max-width="600px"
-                    >
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                                color="green"
-                                dark
-                                class="mb-2"
-                                v-bind="attrs"
-                                v-on="on"
-                                :to="'/users/create'"
-                                v-if="$can('users.create')"
-                            >
-                                {{ $t('button.add_new_user') }}
-                            </v-btn>
-                        </template>
-                    </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
                             <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
@@ -292,24 +270,6 @@
                             ></v-text-field>
                         </v-col>
                     </v-row>
-                    <v-dialog
-                        v-model="dialog"
-                        max-width="600px"
-                    >
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                                color="green"
-                                dark
-                                class="mb-2"
-                                v-bind="attrs"
-                                v-on="on"
-                                :to="'/users/create'"
-                                v-if="$can('users.create')"
-                            >
-                                {{ $t('button.add_new_user') }}
-                            </v-btn>
-                        </template>
-                    </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
                             <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
@@ -402,24 +362,6 @@
                             ></v-text-field>
                         </v-col>
                     </v-row>
-                    <v-dialog
-                        v-model="dialog"
-                        max-width="600px"
-                    >
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                                color="green"
-                                dark
-                                class="mb-2"
-                                v-bind="attrs"
-                                v-on="on"
-                                :to="'/users/create'"
-                                v-if="$can('users.create')"
-                            >
-                                {{ $t('button.add_new_user') }}
-                            </v-btn>
-                        </template>
-                    </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
                             <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
@@ -596,5 +538,7 @@ export default {
 
 
 <style scoped>
-
+.add-btn{
+    color: #fff !important;
+}
 </style>

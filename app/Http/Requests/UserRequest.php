@@ -27,9 +27,9 @@ class UserRequest extends FormRequest
     {
         if ($this->id) {
             return [
-                'email' => 'email|indisposable|unique:users',
-                'username' => 'unique:users',
-                'first_name' => 'string|max:50',
+                'email' => 'email|indisposable|unique:users',$this->id,
+                'username' => 'unique:users',$this->id,
+                'name' => 'string|max:50',
                 'department_id' => 'sometimes|numeric|exists:departments,id',
                 'designation_id' => 'sometimes|numeric|exists:designations,id',
                 'mobile_no' => 'min:10|max:10',

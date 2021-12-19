@@ -172,6 +172,8 @@
     "activity": "Activity",
     "activities": "Activities",
     "ip": "IP",
+    "role": "Role",
+    "roles": "Roles",
 
     "validation": {
         "required": "This field is required!",

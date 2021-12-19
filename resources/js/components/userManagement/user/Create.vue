@@ -110,12 +110,12 @@
                                                     </CCol>
                                                 </CRow>
                                             </CCol>
-                                            <CCol md="3">
+                                            <CCol md="4">
                                                 <v-row>
                                                     <v-col>
                                                         <v-card width="200" style="margin-left:8%"
                                                         >
-                                                            <img :src="baseURL+'images/placeholder.jpg'"
+                                                            <img :src="baseURL+'images/account-placeholder.png'"
                                                                  style=" width:100%;   height: 120px; object-fit: cover"
                                                             />
                                                             <v-card-title class="title">
@@ -126,7 +126,7 @@
                                                             v-model="image"
                                                             :label="$t('image')"
                                                             filled
-                                                            class="mt-2"
+                                                            class="mt-3"
                                                             outlined
                                                             prepend-icon="mdi-camera"
                                                             accept="image/png,image/jpeg,image/jpg"
@@ -136,7 +136,7 @@
                                             </CCol>
                                         </CRow>
                                         <CRow>
-                                            <CCol md="6">
+                                            <CCol md="4">
                                                 <v-select
                                                     v-model="department_id"
                                                     :items="departments"
@@ -152,7 +152,7 @@
                                                     solo
                                                 />
                                             </CCol>
-                                            <CCol md="6">
+                                            <CCol md="4">
                                                 <v-select
                                                     v-model="designation_id"
                                                     :items="designations"
@@ -168,6 +168,24 @@
                                                     solo
                                                 />
                                             </CCol>
+                                            <CCol md="4">
+                                                <v-select
+                                                    v-model="role_name"
+                                                    :items="roles"
+                                                    item-value="name"
+                                                    item-text="name"
+                                                    description="Please select role."
+                                                    prepend-icon="mdi-account-check"
+                                                    :label="$t('role')"
+                                                    placeholder="Select a role"
+                                                    required
+                                                    @keyup="clearError('role_name')"
+                                                    :rules="rules.role_name"
+                                                    solo
+                                                />
+                                            </CCol>
+                                            </CRow>
+                                        <CRow>
                                             <CCol md="6">
                                                 <v-text-field
                                                     v-model="address"
@@ -232,6 +250,7 @@ export default {
         baseURL: config.baseURL,
         designations: [],
         departments: [],
+        roles: [],
         show1: false,
         show2: false,
         createProgress: false,
@@ -245,6 +264,7 @@ export default {
         address: '',
         password: '',
         confirm_password: '',
+        role_name: '',
         image: [],
         search: '',
         progressL: false,
@@ -300,6 +320,7 @@ export default {
     async created() {
         this.loadDepartments();
         this.loadDesignations();
+        this.loadRoles();
     },
     methods: {
         openImage(data) {
@@ -315,6 +336,12 @@ export default {
             let res = await ApiServices.designationIndex();
             if (res.success === true) {
                 this.designations = res.data;
+            }
+        },
+        async loadRoles() {
+            let res = await ApiServices.roleIndex();
+            if (res.success === true) {
+                this.roles = res.data;
             }
         },
 

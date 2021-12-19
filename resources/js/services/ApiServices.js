@@ -102,6 +102,10 @@ export default {
         return await apiCall(GET, `api/setting/all-setting-info`)
     },
 
+    async roleIndex() {
+        return await apiCall(GET, `api/roles`)
+    },
+
     async getUsers(role) {
         return await apiCall(GET, `api/get-users/${role}`)
     },

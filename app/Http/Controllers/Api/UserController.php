@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\AuthResource;
 use App\Http\Requests\UserRegistration;
 use App\Models\File;
@@ -38,7 +39,7 @@ class UserController extends Controller
 
     }
 
-    public function store(UserRegistration $request)
+    public function store(UserRequest $request)
     {
         $data['success'] = true;
         $data['message'] = '';
@@ -92,7 +93,7 @@ class UserController extends Controller
 
     }
 
-    public function update($id, UserRegistration $request)
+    public function update($id, UserRequest $request)
     {
         $data['success'] = true;
         $data['message'] = '';
