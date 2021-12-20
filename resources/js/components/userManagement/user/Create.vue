@@ -43,8 +43,10 @@
                                                             required
                                                             @keyup="clearError('username')"
                                                             :rules="rules.username"
+                                                            v-on:keyup="checkValidation('username')"
                                                             solo
                                                         />
+                                                        <p v-if="usernameValidation" class="notify-validation">{{ $t('validation.username') }}</p>
                                                     </CCol>
                                                     <CCol md="6">
                                                         <v-text-field
@@ -56,8 +58,10 @@
                                                             required
                                                             @keyup="clearError('email')"
                                                             :rules="rules.email"
+                                                            v-on:keyup="checkValidation('email')"
                                                             solo
                                                         />
+                                                        <p v-if="emailValidation" class="notify-validation">{{ $t('validation.uniqueEmail') }}</p>
                                                     </CCol>
 
                                                     <CCol md="6">
@@ -254,6 +258,8 @@ export default {
         show1: false,
         show2: false,
         createProgress: false,
+        emailValidation: false,
+        usernameValidation: false,
         name: '',
         department_id: '',
         designation_id: '',
@@ -321,10 +327,17 @@ export default {
         this.loadDepartments();
         this.loadDesignations();
         this.loadRoles();
+        this.loadUsers();
     },
     methods: {
         openImage(data) {
             window.open(config.cdnURL + data, `_blank`);
+        },
+        async loadUsers(){
+            let rtn = await ApiServices.userIndex();
+            if (rtn.success === true) {
+                this.users = rtn.data;
+            }
         },
         async loadDepartments() {
             let res = await ApiServices.departmentIndex();
@@ -369,6 +382,32 @@ export default {
             }
             if (name === 'confirm_password') {
                 this.error.confirm_password = '';
+            }
+        },
+
+        async checkValidation(type) {
+            let email = 0;
+            let username = 0;
+            if (type === 'username') {
+                for (var i = 0; i < this.users.length; i++) {
+                    if (this.username === this.users[i].username) {
+                        username = 1;
+                    }
+                }
+            } else {
+                for (var j = 0; j < this.users.length; j++) {
+                    if (this.email === this.users[j].email) {
+                        email = 1;
+                    }
+                }
+            }
+            if ((username === 0) && (email === 0)) {
+                this.emailValidation = false;
+                this.usernameValidation = false;
+            } else if (username === 1) {
+                this.usernameValidation = true;
+            } else if (email === 1) {
+                this.emailValidation = true;
             }
         },
 
@@ -432,3 +471,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+.notify-validation {
+    color: #f65050;
+}
+</style>

@@ -152,6 +152,7 @@ class RolesSeeder extends Seeder
             'username' => 'superAdmin',
             'email' => 'superadmin@rkdholdings.com',
             'password' => bcrypt('Rkd@holdings123'),
+            'is_active'=>1
         ]);
         $user->save();
         $user->assignRole('Super Admin');
@@ -161,6 +162,7 @@ class RolesSeeder extends Seeder
             'username' => 'admin',
             'email' => 'admin@rkdholdings.com',
             'password' => bcrypt('Admin@123'),
+            'is_active'=>1
         ]);
         $user->save();
         $user->assignRole('Admin');
@@ -170,6 +172,7 @@ class RolesSeeder extends Seeder
             'username' => 'storeKeeper',
             'email' => 'store.keeper@rkdholdings.com',
             'password' => bcrypt('storeK@123'),
+            'is_active'=>1
         ]);
         $user->save();
         $user->assignRole('Store Keeper');
@@ -179,6 +182,7 @@ class RolesSeeder extends Seeder
             'username' => 'storeManager',
             'email' => 'store.manager@rkdholdings.com',
             'password' => bcrypt('storeM@123'),
+            'is_active'=>1
         ]);
         $user->save();
         $user->assignRole('Store Manager');
@@ -188,6 +192,7 @@ class RolesSeeder extends Seeder
             'username' => 'director',
             'email' => 'director@rkdholdings.com',
             'password' => bcrypt('Director@123'),
+            'is_active'=>1
         ]);
         $user->save();
         $user->assignRole('Director');
@@ -197,6 +202,7 @@ class RolesSeeder extends Seeder
             'username' => 'financeDirector',
             'email' => 'finance.director@rkdholdings.com',
             'password' => bcrypt('financeD@123'),
+            'is_active'=>1
         ]);
         $user->save();
         $user->assignRole('Finance Director');
@@ -206,6 +212,7 @@ class RolesSeeder extends Seeder
             'username' => 'staff',
             'email' => 'staff@rkdholdings.com',
             'password' => bcrypt('Staff@123'),
+            'is_active'=>1
         ]);
         $user->save();
         $user->assignRole('Staff');

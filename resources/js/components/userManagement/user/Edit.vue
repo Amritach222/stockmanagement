@@ -41,10 +41,11 @@
                                                             :label="$t('username')"
                                                             placeholder="Enter username..."
                                                             required
-                                                            @keyup="clearError('username')"
+                                                            v-on:keyup="checkValidation('username')"
                                                             :rules="rules.username"
                                                             solo
                                                         />
+                                                        <p v-if="usernameValidation" class="notify-validation">{{ $t('validation.username') }}</p>
                                                     </CCol>
                                                     <CCol md="6">
                                                         <v-text-field
@@ -54,21 +55,23 @@
                                                             :label="$t('email')"
                                                             placeholder="Enter email..."
                                                             required
-                                                            @keyup="clearError('email')"
                                                             :rules="rules.email"
+                                                            v-on:keyup="checkValidation('email')"
                                                             solo
                                                         />
+                                                        <p v-if="emailValidation" class="notify-validation">{{ $t('validation.uniqueEmail') }}</p>
                                                     </CCol>
 
                                                     <CCol md="6">
                                                         <v-text-field
                                                             v-model="editedItem.mobile_no"
+                                                            type="number"
                                                             description="Please enter mobile number."
                                                             prepend-icon="mdi-cellphone"
                                                             :label="$t('mobile')"
                                                             placeholder="Enter mobile number..."
                                                             required
-                                                            @keyup="clearError('moble_no')"
+                                                            @keyup="clearError('mobile_no')"
                                                             :rules="rules.mobile_no"
                                                             solo
                                                         />
@@ -222,6 +225,7 @@ export default {
         designations: [],
         departments: [],
         roles: [],
+        users: [],
         status: [
             {name: 'Active', value: '1'},
             {name: 'Inactive', value: '0'},
@@ -229,6 +233,8 @@ export default {
         show1: false,
         show2: false,
         createProgress: false,
+        emailValidation: false,
+        usernameValidation: false,
         editedItem: {
             name: '',
             department_id: '',
@@ -309,6 +315,11 @@ export default {
             if (res.success === true) {
                 this.editedItem = res.data;
             }
+            let rtn = await ApiServices.userIndex();
+            if (rtn.success === true) {
+                this.users = rtn.data;
+            }
+
         },
         async loadDepartments() {
             let res = await ApiServices.departmentIndex();
@@ -353,6 +364,32 @@ export default {
             }
             if (name === 'confirm_password') {
                 this.error.confirm_password = '';
+            }
+        },
+
+        async checkValidation(type) {
+            let email = 0;
+            let username = 0;
+            if (type === 'username') {
+                for (var i = 0; i < this.users.length; i++) {
+                    if ((this.editedItem.username === this.users[i].username) && (this.editedItem.id !== this.users[i].id)) {
+                        username = 1;
+                    }
+                }
+            } else {
+                for (var j = 0; j < this.users.length; j++) {
+                    if ((this.editedItem.email === this.users[j].email) && (this.editedItem.id !== this.users[j].id)) {
+                        email = 1;
+                    }
+                }
+            }
+            if ((username === 0) && (email === 0)) {
+                this.emailValidation = false;
+                this.usernameValidation = false;
+            } else if (username === 1) {
+                this.usernameValidation = true;
+            } else if (email === 1) {
+                this.emailValidation = true;
             }
         },
 

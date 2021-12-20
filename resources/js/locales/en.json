@@ -186,7 +186,9 @@
         "email": "Must be a valid email address",
         "unitType": "Please select a different type for this category unit.",
         "unitRatio": "Please enter different value for unit ratio.",
-        "unitName": "Unit name already exist."
+        "unitName": "Unit name already exist.",
+        "username": "Username already in use.",
+        "uniqueEmail": "Email already in use."
     },
     "button": {
         "login": "LOGIN",
