@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
+use App\Events\PasswordResetEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\AuthResource;
 use App\Http\Requests\UserRegistration;
@@ -95,6 +97,7 @@ class UserController extends Controller
 
     public function update($id, UserRequest $request)
     {
+        $hasdata = 0;
         $data['success'] = true;
         $data['message'] = '';
         $data['data'] = [];
@@ -108,11 +111,11 @@ class UserController extends Controller
                 if ($file['success'] !== true) {
                     return response(['success' => false, 'message' => 'Data could not be saved at the moment', "data" => null], 400);
                 }
-                if($user->profile_picture_id === null){
+                if ($user->profile_picture_id === null) {
                     $newFile = new File();
                 } else {
-                    $newFile = File::where('id',$user->profile_picture_id)->first();
-                    if($newFile === null){
+                    $newFile = File::where('id', $user->profile_picture_id)->first();
+                    if ($newFile === null) {
                         $newFile = new File();
                     } else {
                         $hasdata = 1;
@@ -125,7 +128,7 @@ class UserController extends Controller
                 $newFile->name = $file['data']['filename'];
                 $newFile->type = $file['data']['mime_type'];
                 $newFile->path = $file['data']['link'];
-                if($hasdata === 1){
+                if ($hasdata === 1) {
                     $newFile->update();
                 } else {
                     $newFile->save();
@@ -150,8 +153,8 @@ class UserController extends Controller
         try {
             $data['success'] = true;
             $user = User::findOrFail($id);
-            $file = File::where('id',$user->profile_picture_id)->first();
-            if($file !== null){
+            $file = File::where('id', $user->profile_picture_id)->first();
+            if ($file !== null) {
                 $fileHelper = new SamundraFileHelper();
                 $fileHelper->deleteFile($file->path);
             }
@@ -164,24 +167,25 @@ class UserController extends Controller
         return $data;
     }
 
-    public function getUsers($role){
-        $data['success']=true;
-        $data['message']='';
-        $data['data']=[];
+    public function getUsers($role)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
         try {
-            if($role == 'Admin') {
+            if ($role == 'Admin') {
                 $data['data'] = AuthResource::collection(User::role('Admin')->get());
-            }elseif($role == 'Director'){
-                $data['data'] = AuthResource::collection(User::role(['Director','Finance Director'])->get());
-            }elseif($role == 'Store'){
-                $data['data'] = AuthResource::collection(User::role(['Store Manager','Store Keeper'])->get());
-            }elseif($role == 'Staff'){
+            } elseif ($role == 'Director') {
+                $data['data'] = AuthResource::collection(User::role(['Director', 'Finance Director'])->get());
+            } elseif ($role == 'Store') {
+                $data['data'] = AuthResource::collection(User::role(['Store Manager', 'Store Keeper'])->get());
+            } elseif ($role == 'Staff') {
                 $data['data'] = AuthResource::collection(User::role(['Staff'])->get());
             }
-        }catch (\Exception $e){
-            $data['success']=false;
-            $data['message']='Error occurred';
-            $data['data']=$e;
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred';
+            $data['data'] = $e;
         }
         return $data;
     }

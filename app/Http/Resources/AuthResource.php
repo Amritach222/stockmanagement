@@ -17,11 +17,13 @@ class AuthResource extends JsonResource
     public function toArray($request)
     {
         $link = null;
-        if ($this->image_id !== null) {
-            $image = File::where('id', $this->image_id)->first();
+        if ($this->profile_picture_id !== null) {
+            $image = File::where('id', $this->profile_picture_id)->first();
             $link = $image->path;
         }
-
+        foreach ($this->roles as $role) {
+            $userRole = $role->name;
+        }
         return [
             'id' => $this->id,
             'email' => $this->email,
@@ -33,6 +35,7 @@ class AuthResource extends JsonResource
             'mobile_no' => $this->mobile_no,
             'address' => $this->address,
             'link' => $link,
+            'role_name' => $userRole,
             'department'=>$this->department->name ?? null,
             'designation'=>$this->designation->name ?? null,
         ];

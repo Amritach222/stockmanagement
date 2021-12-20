@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>{{ $t('card_title.add_user') }}</strong>
+                                <strong>{{ $t('card_title.edit_user') }}</strong>
                                 <v-progress-circular
                                     v-if="createProgress"
                                     indeterminate
@@ -117,11 +117,11 @@
                                                         >
                                                             <img :src=cdnURL+editedItem.link
                                                                  v-if="editedItem.link"
-                                                                 style="width: 50px; height: 50px; object-fit: cover;"
+                                                                 style="width:100%;   height: 120px; object-fit: cover;"
                                                                  v-on:click="openImage(editedItem.link)"/>
                                                             <img :src="baseURL+'images/account-placeholder.png'"
                                                                  v-else
-                                                                 style=" width:100%;   height: 120px; object-fit: cover"
+                                                                 style="width:100%;   height: 120px; object-fit: cover"
                                                             />
                                                             <v-card-title class="title">
                                                                 {{ $t('image') }}
@@ -425,15 +425,11 @@ export default {
             }
 
             if (this.editedItem.is_active !== null && this.editedItem.is_active !== '') {
-                if (this.editedItem.is_active === 'Active') {
-                    data.append('is_active', 1);
-                } else {
-                    data.append('is_active', 0);
-                }
+                data.append('is_active', this.editedItem.is_active);
             }
 
             if ('image' in this.editedItem) {
-                if (typeof this.image.name == 'string') {
+                if (typeof this.editedItem.image.name == 'string') {
                     data.append('image', this.editedItem.image);
                 }
             }

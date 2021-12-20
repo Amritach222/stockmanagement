@@ -41,6 +41,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('get-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'getPermissions']);
     Route::post('assign-role/{id}', [\App\Http\Controllers\Api\PermissionController::class, 'assignRole']);
 
+    Route::post('admin/user/password-reset', [\App\Http\Controllers\Api\ResetPasswordController::class, 'resetPassword']);
+
     Route::group(['prefix' => '/setting'], function () {
         Route::apiResource('brands', \App\Http\Controllers\Api\BrandController::class);
         Route::post('brands/{id}', [\App\Http\Controllers\Api\BrandController::class, 'update']);

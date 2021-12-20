@@ -50,6 +50,9 @@ export default {
     async resetForgotPassword(data) {
         return await apiCall(POST, `api/forgot-password-set`, data)
     },
+    async passwordReset(data) {
+        return await apiCall(POST, `api/admin/user/password-reset`, data)
+    },
     async verifyCode(data) {
         return await apiCall(GET, `api/forgot-password/${data}`)
     },

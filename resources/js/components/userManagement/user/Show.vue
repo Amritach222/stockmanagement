@@ -166,10 +166,9 @@ export default {
             if (item.city !== null) return JSON.parse(item.city).name;
         },
         async loadItems() {
-            let res = await ApiServices.productShow(this.$route.params.id);
+            let res = await ApiServices.userShow(this.$route.params.id);
             if (res.success === true) {
                 this.show = res.data;
-                this.variants = res.data.product_variants;
             }
             let rtn = await ApiServices.vendorIndex();
             if (rtn.success === true) {
