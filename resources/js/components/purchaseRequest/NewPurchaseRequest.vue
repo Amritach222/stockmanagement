@@ -22,7 +22,7 @@
                                         </v-card-title>
                                         <v-data-table
                                             :headers="headers"
-                                            :items="quoProducts"
+                                            :items="prProducts"
                                             sort-by="item_name"
                                             :loading=tableLoad
                                             loading-text="Loading... Please wait..."
@@ -75,7 +75,7 @@
                                                                         <v-row>
                                                                             <v-col>
                                                                                 <v-select
-                                                                                    v-model="addQuoProduct.item_id"
+                                                                                    v-model="addPurchaseRequestProduct.product_id"
                                                                                     label="Select Product"
                                                                                     :items="products"
                                                                                     item-text="name"
@@ -83,11 +83,11 @@
                                                                                     required
                                                                                     outlined
                                                                                     :rules="rules"
-                                                                                    v-on:change="getVariants(addQuoProduct.item_id)"
+                                                                                    v-on:change="getVariants(addPurchaseRequestProduct.product_id)"
                                                                                 ></v-select>
                                                                                 <div v-if="hasVariants">
                                                                                     <v-select
-                                                                                        v-model="addQuoProduct.item_variant_id"
+                                                                                        v-model="addPurchaseRequestProduct.product_variant_id"
                                                                                         label="Product Variant"
                                                                                         :items="variants"
                                                                                         item-value="id"
@@ -96,13 +96,13 @@
                                                                                     ></v-select>
                                                                                 </div>
                                                                                 <v-text-field
-                                                                                    v-model="addQuoProduct.quantity"
+                                                                                    v-model="addPurchaseRequestProduct.quantity"
                                                                                     label="Quantity"
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
                                                                                 <v-select
-                                                                                    v-model="addQuoProduct.unit"
+                                                                                    v-model="addPurchaseRequestProduct.unit"
                                                                                     label="Unit"
                                                                                     :items="units"
                                                                                     item-text="name"
@@ -277,8 +277,8 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: 'Product', value: 'item_name'},
-            {text: 'Product Variant', value: 'item_variant'},
+            {text: 'Product', value: 'product_name'},
+            {text: 'Product Variant', value: 'product_variant'},
             {text: 'Quantity', value: 'quantity'},
             {text: 'Unit', value: 'unit_name'},
             {text: 'Actions', value: 'actions', sortable: false},
@@ -293,21 +293,21 @@ export default {
         departments: [],
         productCount: 0,
         editedIndex: -1,
-        quoProducts: [],
+        prProducts: [],
         products: [],
         units: [],
         variants: [],
         menu1: false,
         dateFormatted: '',
-        addQuoProduct: {
-            item_id: '',
-            item_variant_id: '',
+        addPurchaseRequestProduct: {
+            product_id: '',
+            product_variant_id: '',
             quantity: '',
             unit_id: '',
         },
         productQuo: {
-            item_id: '',
-            item_variant_id: '',
+            product_id: '',
+            product_variant_id: '',
             quantity: '',
             unit_id: '',
         },
@@ -366,19 +366,20 @@ export default {
         },
 
         editItem(item) {
-            this.editedIndex = this.quoProducts.indexOf(item)
-            this.addQuoProduct = Object.assign({}, item)
+            console.log('hey item', item);
+            this.editedIndex = this.prProducts.indexOf(item)
+            this.addPurchaseRequestProduct = Object.assign({}, item)
             this.dialog = true
         },
 
         deleteItem(item) {
-            this.editedIndex = this.quoProducts.indexOf(item)
-            this.addQuoProduct = Object.assign({}, item)
+            this.editedIndex = this.prProducts.indexOf(item)
+            this.addPurchaseRequestProduct = Object.assign({}, item)
             this.dialogDelete = true
         },
 
         async deleteItemConfirm() {
-            this.quoProducts.splice(this.editedIndex, 1)
+            this.prProducts.splice(this.editedIndex, 1)
             this.closeDelete()
         },
 
@@ -386,7 +387,7 @@ export default {
             this.progressL = false;
             this.dialog = false;
             this.$nextTick(() => {
-                this.addQuoProduct = Object.assign({}, this.defaultItem)
+                this.addPurchaseRequestProduct = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             });
             this.loadItems();
@@ -395,46 +396,41 @@ export default {
         closeDelete() {
             this.dialogDelete = false
             this.$nextTick(() => {
-                this.addQuoProduct = Object.assign({}, this.defaultItem)
+                this.addPurchaseRequestProduct = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             })
         },
 
         async addProduct() {
-            console.log('product details', this.addQuoProduct);
-            var varName = '---';
-            let res = await ApiServices.productShow(this.addQuoProduct.item_id);
-            if (this.addQuoProduct.item_variant_id) {
-                let rtn = await ApiServices.productVariantShow(this.addQuoProduct.item_variant_id);
+            let varName = '---';
+            let res = await ApiServices.productShow(this.addPurchaseRequestProduct.product_id);
+            if (this.addPurchaseRequestProduct.product_variant_id) {
+                let rtn = await ApiServices.productVariantShow(this.addPurchaseRequestProduct.product_variant_id);
                 varName = rtn.data.name;
             }
             if (this.editedIndex > -1) {
-                Object.assign(this.quoProducts[this.editedIndex], {
-                    'item_id': this.addQuoProduct.item_id,
-                    'item_name': res.data.name,
-                    'product_id': res.data.product_id,
-                    'item_variant': varName,
-                    'item_variant_id': this.addQuoProduct.item_variant_id,
-                    'quantity': this.addQuoProduct.quantity,
-                    'unit_name': this.addQuoProduct.unit.name,
-                    'unit_id': this.addQuoProduct.unit.id,
-                    'shipping_cost': this.addQuoProduct.shipping_cost,
+                Object.assign(this.prProducts[this.editedIndex], {
+                    'product_id': this.addPurchaseRequestProduct.product_id,
+                    'product_name': res.data.name,
+                    'product_variant': varName,
+                    'product_variant_id': this.addPurchaseRequestProduct.product_variant_id,
+                    'quantity': this.addPurchaseRequestProduct.quantity,
+                    'unit_name': this.addPurchaseRequestProduct.unit.name,
+                    'unit_id': this.addPurchaseRequestProduct.unit.id,
                 })
             } else {
-                this.quoProducts.push({
-                    'item_id': this.addQuoProduct.item_id,
-                    'item_name': res.data.name,
-                    'product_id': res.data.product_id,
-                    'item_variant_id': this.addQuoProduct.item_variant_id,
-                    'item_variant': varName,
-                    'quantity': this.addQuoProduct.quantity,
-                    'unit_name': this.addQuoProduct.unit.name,
-                    'unit_id': this.addQuoProduct.unit.id,
-                    'shipping_cost': this.addQuoProduct.shipping_cost,
+                this.prProducts.push({
+                    'product_id': this.addPurchaseRequestProduct.product_id,
+                    'product_name': res.data.name,
+                    'product_variant_id': this.addPurchaseRequestProduct.product_variant_id,
+                    'product_variant': varName,
+                    'quantity': this.addPurchaseRequestProduct.quantity,
+                    'unit_name': this.addPurchaseRequestProduct.unit.name,
+                    'unit_id': this.addPurchaseRequestProduct.unit.id,
                 });
             }
             this.$refs.form.reset();
-            this.close()
+            this.close();
         },
 
         async create() {
@@ -455,7 +451,7 @@ export default {
             let res = await ApiServices.addPurchaseRequest(data);
             this.createProgress = false;
             if (res.success === true) {
-                if (this.quoProducts.length > 0) {
+                if (this.prProducts.length > 0) {
                     await this.createProduct(res.data.id);
                 } else {
                     route.replace('/purchase/purchase-request-history/');
@@ -465,14 +461,13 @@ export default {
         },
 
         async createProduct(id) {
-            for (var i = 0; i < this.quoProducts.length; i++) {
+            for (var i = 0; i < this.prProducts.length; i++) {
                 let productData = new FormData();
-                productData.append('item_id', parseInt(this.quoProducts[i].item_id));
-                productData.append('quantity', parseInt(this.quoProducts[i].quantity));
-                productData.append('product_id', parseInt(this.quoProducts[i].product_id));
+                productData.append('quantity', parseInt(this.prProducts[i].quantity));
+                productData.append('product_id', parseInt(this.prProducts[i].product_id));
                 productData.append('purchase_id', parseInt(id));
-                if (this.quoProducts[i].item_variant_id !== '') {
-                    productData.append('item_variant_id', parseInt(this.quoProducts[i].item_variant_id));
+                if (this.prProducts[i].product_variant_id !== '') {
+                    productData.append('product_variant_id', parseInt(this.prProducts[i].product_variant_id));
                 }
                 let res = await ApiServices.addPurchaseProductRequest(productData);
             }
