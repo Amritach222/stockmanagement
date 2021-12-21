@@ -10,18 +10,18 @@
                             </CCardHeader>
                             <CCardBody>
                                 <CRow>
-                                    <CCol md="3" v-if="show.image_id">
+                                    <CCol md="3" v-if="show.profile_picture_id">
                                         <v-col v-if="typeof(show.link) === 'string'">
                                             <v-card width="200"
                                                     v-on:click="openImage(show.link)">
                                                 <v-img
                                                     :src="cdnURL+show.link"
-                                                    height="125"
+                                                    height="175"
                                                     class="grey darken-4"
                                                 ></v-img>
-                                                <v-card-title class="title">
-                                                    {{ $t('image') }}
-                                                </v-card-title>
+<!--                                                <v-card-title class="title">-->
+<!--                                                    {{ $t('image') }}-->
+<!--                                                </v-card-title>-->
                                             </v-card>
                                         </v-col>
                                     </CCol>
@@ -32,50 +32,41 @@
                                                 <p>{{ show.name }}</p>
                                             </CCol>
                                             <CCol md="4">
-                                                <h6>{{ $t('code') }}: </h6>
-                                                <p>{{ show.code }}</p>
+                                                <h6>{{ $t('username') }}: </h6>
+                                                <p>{{ show.username }}</p>
                                             </CCol>
                                             <CCol md="4">
-                                                <h6>{{ $t('brand') }}: </h6>
-                                                <p v-if="show.brand_id">{{ show.brand.name }}</p>
-                                                <p v-else>---</p>
-                                            </CCol>
-                                        </CRow>
-                                        <CRow>
-                                            <CCol md="4">
-                                                <h6>{{ $t('category') }}: </h6>
-                                                <p v-if="show.category_id">{{ show.category.name }}</p>
-                                                <p v-else>---</p>
+                                                <h6>{{ $t('email') }}: </h6>
+                                                <p>{{ show.email }}</p>
                                             </CCol>
                                             <CCol md="4">
-                                                <h6>{{ $t('cost_price') }}: </h6>
-                                                <p v-if="show.cost_price">Rs. {{ show.cost_price }}</p>
-                                                <p v-else>---</p>
+                                                <h6>{{ $t('mobile') }}: </h6>
+                                                <p>{{ show.mobile_no }}</p>
                                             </CCol>
                                             <CCol md="4">
-                                                <h6>{{ $t('stock') }}: </h6>
-                                                <p v-if="show.stock">{{ show.stock }}</p>
-                                                <p v-else>---</p>
+                                                <h6>{{ $t('address') }}: </h6>
+                                                <p>{{ show.address }}</p>
                                             </CCol>
-                                        </CRow>
-                                        <CRow>
                                             <CCol md="4">
-                                                <h6>{{ $t('alert') + ' ' + $t('stock') }}: </h6>
-                                                <p v-if="show.alert_stock">{{ show.alert_stock }}</p>
+                                                <h6>{{ $t('department') }}: </h6>
+                                                <p v-if="show.department_id">{{ show.department }}</p>
                                                 <p v-else>---</p>
                                             </CCol>
                                             <CCol md="4">
-                                                <h6>{{ $t('unit') }}: </h6>
-                                                <p v-if="show.unit_id">{{ show.unit.name }}</p>
+                                                <h6>{{ $t('designation') }}: </h6>
+                                                <p v-if="show.designation_id">{{ show.designation }}</p>
                                                 <p v-else>---</p>
                                             </CCol>
                                             <CCol md="4">
-                                                <h6>{{ $t('distribute') + ' ' + $t('unit') }}: </h6>
-                                                <p v-if="show.distribute_unit_id">{{ show.distribute_unit.name }}</p>
+                                                <h6>{{ $t('role') }}: </h6>
+                                                <p v-if="show.role_name">{{ show.role_name }}</p>
                                                 <p v-else>---</p>
                                             </CCol>
-                                        </CRow>
-                                        <CRow>
+<!--                                            <CCol md="4">-->
+<!--                                                <h6>{{ $t('stock') }}: </h6>-->
+<!--                                                <p v-if="show.stock">{{ show.stock }}</p>-->
+<!--                                                <p v-else>-&#45;&#45;</p>-->
+<!--                                            </CCol>-->
                                             <CCol md="4">
                                                 <h6>{{ $t('status') }}: </h6>
                                                 <div v-if="show.is_active === 1" class="ml-1">
@@ -89,27 +80,26 @@
                                                     </CButton>
                                                 </div>
                                             </CCol>
-                                            <CCol md="4">
-                                                <h6>{{ $t('type') }}: </h6>
-                                                <p v-if="show.type">{{ show.type }}</p>
-                                                <p v-else>---</p>
-                                            </CCol>
+<!--                                            <CCol md="4">-->
+<!--                                                <h6>{{ $t('type') }}: </h6>-->
+<!--                                                <p v-if="show.type">{{ show.type }}</p>-->
+<!--                                                <p v-else>-&#45;&#45;</p>-->
+<!--                                            </CCol>-->
                                         </CRow>
-                                    </CCol>
-                                    <CCol md="3">
-                                        <h6>{{ $t('details') }}: </h6>
-                                        <p v-if="show.details">{{ show.details }}</p>
-                                        <p v-else>-----</p>
                                     </CCol>
                                 </CRow>
 
                                 <CForm>
                                     <CCardFooter>
-                                        <CButton size="sm" color="primary" :to="'/products/edit/'+show.id">
+                                        <CButton size="sm" color="primary" :to="'/users/edit/'+show.id">
                                             <CIcon name="cil-check-circle"/>
                                             {{ $t('button.edit') }}
                                         </CButton>
-                                        <CButton size="sm" color="danger" :to="'/products'">
+                                        <CButton size="sm" color="warning" :to="'/users/edit/'+show.id">
+                                            <CIcon name="cil-check-circle"/>
+                                            {{ $t('button.permissions') }}
+                                        </CButton>
+                                        <CButton size="sm" color="danger" :to="'/users'">
                                             <CIcon name="cil-ban"/>
                                             {{ $t('button.back') }}
                                         </CButton>
@@ -143,12 +133,18 @@ export default {
         show: {
             id: null,
             name: '',
-            brand_id: '',
-            category_id: '',
-            code: '',
-            details: '',
+            department_id: '',
+            designation_id: '',
+            username: '',
             is_active: '',
-            image_id: '',
+            email: '',
+            mobile_no: '',
+            address: '',
+            password: '',
+            confirm_password: '',
+            role_name: '',
+            link: '',
+            profile_picture_id:'',
         },
         variants: [],
         allVendors: [],
@@ -170,28 +166,28 @@ export default {
             if (res.success === true) {
                 this.show = res.data;
             }
-            let rtn = await ApiServices.vendorIndex();
-            if (rtn.success === true) {
-                this.tableLoad = false;
-                this.allVendors = rtn.data;
-
-                let ids = await this.loadVendorProductIds();
-            }
+            // let rtn = await ApiServices.vendorIndex();
+            // if (rtn.success === true) {
+            //     this.tableLoad = false;
+            //     this.allVendors = rtn.data;
+            //
+            //     let ids = await this.loadVendorProductIds();
+            // }
         },
-        async loadVendorProductIds() {
-            let res = await ApiServices.vendorProductIds('vendor', this.$route.params.id);
-            if (res.success === true) {
-                this.tableLoad = false;
-                this.vendor_ids = res.data;
-                for (let i = 0; i < this.allVendors.length; i++) {
-                    for (let j = 0; j < this.vendor_ids.length; j++) {
-                        if (this.allVendors[i].id === this.vendor_ids[j]) {
-                            this.vendors.push(this.allVendors[i]);
-                        }
-                    }
-                }
-            }
-        },
+        // async loadVendorProductIds() {
+        //     let res = await ApiServices.vendorProductIds('vendor', this.$route.params.id);
+        //     if (res.success === true) {
+        //         this.tableLoad = false;
+        //         this.vendor_ids = res.data;
+        //         for (let i = 0; i < this.allVendors.length; i++) {
+        //             for (let j = 0; j < this.vendor_ids.length; j++) {
+        //                 if (this.allVendors[i].id === this.vendor_ids[j]) {
+        //                     this.vendors.push(this.allVendors[i]);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // },
     }
 }
 </script>

@@ -117,21 +117,21 @@
                                                         >
                                                             <img :src=cdnURL+editedItem.link
                                                                  v-if="editedItem.link"
-                                                                 style="width:100%;   height: 120px; object-fit: cover;"
+                                                                 style="width:100%;   height: 175px; object-fit: cover;"
                                                                  v-on:click="openImage(editedItem.link)"/>
                                                             <img :src="baseURL+'images/account-placeholder.png'"
                                                                  v-else
-                                                                 style="width:100%;   height: 120px; object-fit: cover"
+                                                                 style="width:100%;   height: 175px; object-fit: cover"
                                                             />
-                                                            <v-card-title class="title">
-                                                                {{ $t('image') }}
-                                                            </v-card-title>
+<!--                                                            <v-card-title class="title">-->
+<!--                                                                {{ $t('image') }}-->
+<!--                                                            </v-card-title>-->
                                                         </v-card>
                                                         <v-file-input
                                                             v-model="editedItem.image"
                                                             :label="$t('image')"
                                                             filled
-                                                            class="mt-3"
+                                                            class="mt-4"
                                                             outlined
                                                             prepend-icon="mdi-camera"
                                                             accept="image/png,image/jpeg,image/jpg"

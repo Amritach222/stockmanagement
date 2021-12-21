@@ -35,10 +35,11 @@ class AuthResource extends JsonResource
             'is_active' => $this->is_active,
             'mobile_no' => $this->mobile_no,
             'address' => $this->address,
+            'profile_picture_id' => $this->profile_picture_id,
             'link' => $link,
             'role_name' => $userRole,
-            'department'=>$this->department->name ?? null,
-            'designation'=>$this->designation->name ?? null,
+            'department' => $this->department->name ?? null,
+            'designation' => $this->designation->name ?? null,
         ];
     }
 
