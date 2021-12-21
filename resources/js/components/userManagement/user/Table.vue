@@ -377,45 +377,75 @@
 
         <v-dialog v-model="dialogPassword" max-width="500px" height="300px">
             <v-card>
-                <v-card-title>
-                    <span class="headline">Change password</span>
-                </v-card-title>
+                <v-form ref="form">
+                    <v-card-title>
+                        <span class="headline">{{ $t('change_password') }}</span>
+                        <v-progress-circular
+                            v-if="progressL"
+                            indeterminate
+                            color="white"
+                            size="30"
+                        ></v-progress-circular>
+                    </v-card-title>
 
-                <v-card-text>
-                    <v-container>
-                        <v-row>
-                            <v-col>
-                                <v-text-field
-                                    v-model="editedItem.password"
-                                    type="password"
-                                    description="Please enter password."
-                                    :label="$t('password')"
-                                    placeholder="**********"
-                                    prepend-icon="mdi-lock"
-                                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                                    :type="show1 ? 'text' : 'password'"
-                                    @click:append="show1 = !show1"
-                                    :error-messages="error.password"
-                                    required
-                                    @keyup="clearError('password')"
-                                    :rules="rules.password"
-                                    solo
-                                />
-                            </v-col>
-                        </v-row>
-                    </v-container>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="closePassword">{{
-                            $t('button.cancel')
-                        }}
-                    </v-btn>
-                    <v-btn color="blue darken-1" text @click="passwordChangeConfirm">
-                        {{ $t('button.confirm') }}
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                </v-card-actions>
+                    <v-card-text>
+                        <v-container>
+                            <v-row style="padding: 3px">
+                                <v-col md="9">
+                                    <!--                                    <v-text-field-->
+                                    <!--                                        v-model="editedItem.password"-->
+                                    <!--                                        type="password"-->
+                                    <!--                                        description="Please enter password."-->
+                                    <!--                                        :label="$t('password')"-->
+                                    <!--                                        placeholder="**********"-->
+                                    <!--                                        prepend-icon="mdi-lock"-->
+                                    <!--                                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"-->
+                                    <!--                                        :type="show1 ? 'text' : 'password'"-->
+                                    <!--                                        @click:append="show1 = !show1"-->
+                                    <!--                                        :error-messages="error.password"-->
+                                    <!--                                        required-->
+                                    <!--                                        @keyup="clearError('password')"-->
+                                    <!--                                        :rules="rules.password"-->
+                                    <!--                                        solo-->
+                                    <!--                                    />-->
+                                    <v-text-field
+                                        v-model="passwords"
+                                        type="password"
+                                        description="Please enter password."
+                                        :label="$t('password')"
+                                        placeholder="**********"
+                                        prepend-icon="mdi-lock"
+                                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                                        :type="show1 ? 'text' : 'password'"
+                                        @click:append="show1 = !show1"
+                                        :error-messages="error.password"
+                                        required
+                                        @keyup="clearError('password')"
+                                        :rules="rules.password"
+                                        solo
+                                    />
+                                </v-col>
+                                <v-col md="2" class="mr-1 mt-1">
+                                    <CButton type="submit" size="lg" color="primary" @click="autoGenerate">
+                                        <!--                                    <CIcon name="cil-check-circle"/>-->
+                                        {{ $t('button.auto') }}
+                                    </CButton>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="closePassword">{{
+                                $t('button.cancel')
+                            }}
+                        </v-btn>
+                        <v-btn color="blue darken-1" text @click="passwordChangeConfirm">
+                            {{ $t('button.confirm') }}
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-form>
             </v-card>
         </v-dialog>
     </v-card>
@@ -437,6 +467,7 @@ export default {
         search1: '',
         search2: '',
         tabs: null,
+        passwords: '',
         show1: false,
         validated: false,
         progressL: false,
@@ -573,6 +604,7 @@ export default {
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
+                this.passwords = '';
             })
         },
 
@@ -582,10 +614,19 @@ export default {
             }
         },
 
+        async autoGenerate() {
+            let res = await ApiServices.autoGeneratePassword();
+            if (res.success === true) {
+                this.editedItem.password = res.data;
+                this.passwords = this.editedItem.password;
+            }
+        },
+
         async passwordChangeConfirm() {
+            this.progressL = true;
             const data = new FormData();
             if (this.editedItem.password !== null && this.editedItem.password !== '') {
-                data.append('password', this.editedItem.password);
+                data.append('password', this.passwords);
             }
 
             if (this.editedItem.id !== null && this.editedItem.id !== '') {
@@ -594,7 +635,9 @@ export default {
 
             let res = await ApiServices.passwordReset(data);
             if (res.success === true) {
-                this.dialogPassword=false;
+                this.progressL = false;
+                this.dialogPassword = false;
+                this.passwords = '';
             }
         }
     },

@@ -174,6 +174,7 @@
     "ip": "IP",
     "role": "Role",
     "roles": "Roles",
+    "change_password": "Change Password",
 
     "validation": {
         "required": "This field is required!",
@@ -200,6 +201,7 @@
         "edit": "Edit",
         "back": "Back",
         "confirm": "Confirm",
+        "auto": "Auto",
         "add_new_vendor": "Add New Vendor",
         "add_new_vendor_product": "Add New Vendor Product",
         "add_new_category": "Add New Category",

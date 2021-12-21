@@ -53,6 +53,9 @@ export default {
     async passwordReset(data) {
         return await apiCall(POST, `api/admin/user/password-reset`, data)
     },
+    async autoGeneratePassword(data) {
+        return await apiCall(GET, `api/admin/user/auto-generate-password`, data)
+    },
     async verifyCode(data) {
         return await apiCall(GET, `api/forgot-password/${data}`)
     },
