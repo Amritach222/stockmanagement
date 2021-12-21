@@ -16,6 +16,7 @@ class AuthResource extends JsonResource
      */
     public function toArray($request)
     {
+        $userRole = null;
         $link = null;
         if ($this->profile_picture_id !== null) {
             $image = File::where('id', $this->profile_picture_id)->first();

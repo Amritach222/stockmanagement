@@ -46,7 +46,8 @@
                                                             v-on:keyup="checkValidation('username')"
                                                             solo
                                                         />
-                                                        <p v-if="usernameValidation" class="notify-validation">{{ $t('validation.username') }}</p>
+                                                        <p v-if="usernameValidation" class="notify-validation">
+                                                            {{ $t('validation.username') }}</p>
                                                     </CCol>
                                                     <CCol md="6">
                                                         <v-text-field
@@ -61,7 +62,8 @@
                                                             v-on:keyup="checkValidation('email')"
                                                             solo
                                                         />
-                                                        <p v-if="emailValidation" class="notify-validation">{{ $t('validation.uniqueEmail') }}</p>
+                                                        <p v-if="emailValidation" class="notify-validation">
+                                                            {{ $t('validation.uniqueEmail') }}</p>
                                                     </CCol>
 
                                                     <CCol md="6">
@@ -188,7 +190,7 @@
                                                     solo
                                                 />
                                             </CCol>
-                                            </CRow>
+                                        </CRow>
                                         <CRow>
                                             <CCol md="6">
                                                 <v-text-field
@@ -249,34 +251,18 @@ export default {
     props: {
         source: String,
     },
-    data: () => ({
-        cdnURL: config.cdnURL,
-        baseURL: config.baseURL,
-        designations: [],
-        departments: [],
-        roles: [],
-        show1: false,
-        show2: false,
-        createProgress: false,
-        emailValidation: false,
-        usernameValidation: false,
-        name: '',
-        department_id: '',
-        designation_id: '',
-        username: '',
-        is_active: '',
-        email: '',
-        mobile_no: '',
-        address: '',
-        password: '',
-        confirm_password: '',
-        role_name: '',
-        image: [],
-        search: '',
-        progressL: false,
-        productCount: 0,
-        validated: false,
-        error: {
+    data () {
+        return {
+            cdnURL: config.cdnURL,
+            baseURL: config.baseURL,
+            designations: [],
+            departments: [],
+            roles: [],
+            show1: false,
+            show2: false,
+            createProgress: false,
+            emailValidation: false,
+            usernameValidation: false,
             name: '',
             department_id: '',
             designation_id: '',
@@ -287,41 +273,63 @@ export default {
             address: '',
             password: '',
             confirm_password: '',
-        },
-        rules: {
-            name: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],
-            username: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],
-            email: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-                val => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(val) || i18n.t('validation.email'),
-            ],
-            mobile_no: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],
-            address: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],
-            password: [
-                v => !!v || i18n.t('validation.required'),
-                v => (v && v.length >= 8) || i18n.t('validation.morethan'),
-                v => /(?=.*[A-Z])/.test(v) || i18n.t('validation.uppercase'),
-                v => /(?=.*\d)/.test(v) || i18n.t('validation.numeric'),
-                v => /([!@$%:])/.test(v) || i18n.t('validation.special')
-            ],
-            confirm_password: [
-                v => !!v || i18n.t('validation.required'),
-                v => (v && v.length >= 8) || i18n.t('validation.morethan'),
-                v => (v === this.password) || i18n.t('validation.samePassword'),
-                v => /(?=.*[A-Z])/.test(v) || i18n.t('validation.uppercase'),
-                v => /(?=.*\d)/.test(v) || i18n.t('validation.numeric'),
-                v => /([!@$%:])/.test(v) || i18n.t('validation.special')
-            ],
-        },
-    }),
+            role_name: '',
+            image: [],
+            search: '',
+            progressL: false,
+            productCount: 0,
+            validated: false,
+            error: {
+                name: '',
+                department_id: '',
+                designation_id: '',
+                username: '',
+                is_active: '',
+                email: '',
+                mobile_no: '',
+                address: '',
+                password: '',
+                confirm_password: '',
+            },
+            rules: {
+                name: [
+                    val => (val || '').length > 0 || i18n.t('validation.required'),
+                ],
+                username: [
+                    val => (val || '').length > 0 || i18n.t('validation.required'),
+                ],
+                email: [
+                    val => (val || '').length > 0 || i18n.t('validation.required'),
+                    val => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(val) || i18n.t('validation.email'),
+                ],
+                mobile_no: [
+                    val => (val || '').length > 0 || i18n.t('validation.required'),
+                ],
+                address: [
+                    val => (val || '').length > 0 || i18n.t('validation.required'),
+                ],
+                password: [
+                    v => !!v || i18n.t('validation.required'),
+                    v => (v && v.length >= 8) || i18n.t('validation.morethan'),
+                    v => /(?=.*[A-Z])/.test(v) || i18n.t('validation.uppercase'),
+                    v => /(?=.*\d)/.test(v) || i18n.t('validation.numeric'),
+                    v => /([!@$%:])/.test(v) || i18n.t('validation.special')
+                ],
+                confirm_password: [
+                    v => !!v || i18n.t('validation.required'),
+                    v => (v && v.length >= 8) || i18n.t('validation.morethan'),
+                    v => v === this.password || i18n.t('validation.samePassword'),
+                    v => /(?=.*[A-Z])/.test(v) || i18n.t('validation.uppercase'),
+                    v => /(?=.*\d)/.test(v) || i18n.t('validation.numeric'),
+                    v => /([!@$%:])/.test(v) || i18n.t('validation.special')
+                ],
+            },
+        };
+    },
+
+    mounted() {
+        this.password = '';
+    },
 
     async created() {
         this.loadDepartments();
@@ -333,7 +341,7 @@ export default {
         openImage(data) {
             window.open(config.cdnURL + data, `_blank`);
         },
-        async loadUsers(){
+        async loadUsers() {
             let rtn = await ApiServices.userIndex();
             if (rtn.success === true) {
                 this.users = rtn.data;
@@ -343,6 +351,7 @@ export default {
             let res = await ApiServices.departmentIndex();
             if (res.success === true) {
                 this.departments = res.data;
+                this.password = '';
             }
         },
         async loadDesignations() {
@@ -448,6 +457,10 @@ export default {
 
             if (this.designation_id !== null && this.designation_id !== '') {
                 data.append('designation_id', this.designation_id);
+            }
+
+            if (this.role_name !== null && this.role_name !== '') {
+                data.append('role_name', this.role_name);
             }
 
             if (this.is_active !== null && this.is_active !== '') {

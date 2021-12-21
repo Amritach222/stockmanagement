@@ -66,7 +66,7 @@ class UserController extends Controller
             }
             $user = new User($values);
             $user->save();
-            $user->assignRole($request->role);
+            $user->assignRole($request->role_name);
             event(new ActivityLogEvent('Add', 'User', $user->id));
             $data['message'] = "User added successfully.";
             $data['data'] = new AuthResource($user);
