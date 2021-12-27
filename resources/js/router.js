@@ -143,6 +143,7 @@ import UserIndex from './components/userManagement/user/Index'
 import UserCreate from './components/userManagement/user/Create'
 import UserEdit from './components/userManagement/user/Edit'
 import UserShow from './components/userManagement/user/Show'
+import UserPermission from './components/userManagement/user/Permissions'
 
 import ExpenseIndex from './components/expenses/Expense/Index'
 import ExpenseCreate from './components/expenses/Expense/Create'
@@ -1307,6 +1308,15 @@ export default new Router({
             path: '/users/:id',
             name: i18n.t('user'),
             component: UserShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/users/permission/:username',
+            name: i18n.t('user') + ' ' + i18n.t('permission'),
+            component: UserPermission,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

@@ -38,7 +38,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('get-users/{role}', [\App\Http\Controllers\Api\UserController::class, 'getUsers']);
     Route::post('create-variants', [\App\Http\Controllers\Api\ProductController::class, 'createVariants']);
     Route::get('logs', [\App\Http\Controllers\Api\logController::class, 'index']);
-    Route::get('get-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'getPermissions']);
+    Route::get('get-permissions/{username}', [\App\Http\Controllers\Api\PermissionController::class, 'getPermissions']);
+    Route::get('get-all-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'getAllPermissions']);
+    Route::post('update-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'updatePermissions']);
     Route::post('assign-role/{id}', [\App\Http\Controllers\Api\PermissionController::class, 'assignRole']);
 
     Route::post('admin/user/password-reset', [\App\Http\Controllers\Api\ResetPasswordController::class, 'resetPassword']);

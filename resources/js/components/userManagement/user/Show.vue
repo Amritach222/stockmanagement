@@ -95,7 +95,7 @@
                                             <CIcon name="cil-check-circle"/>
                                             {{ $t('button.edit') }}
                                         </CButton>
-                                        <CButton size="sm" color="warning" :to="'/users/edit/'+show.id">
+                                        <CButton size="sm" color="warning" :to="'/users/permission/'+show.username">
                                             <CIcon name="cil-check-circle"/>
                                             {{ $t('button.permissions') }}
                                         </CButton>

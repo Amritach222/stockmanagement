@@ -175,6 +175,8 @@
     "role": "Role",
     "roles": "Roles",
     "change_password": "Change Password",
+    "permission": "Permission",
+    "permissions": "Permissions",
 
     "validation": {
         "required": "This field is required!",
@@ -281,6 +283,7 @@
         "edit_brand": "Edit Brand",
         "add_user": "Add User",
         "edit_user": "Edit User",
+        "edit_user_permission": "Edit User Permission",
         "add_unit": "Add Unit",
         "add_unit_category": "Add Unit Category",
         "edit_unit": "Edit Unit",

@@ -78,8 +78,14 @@ export default {
     async getUserProfilePic() {
         return await apiCall(GET, `api/user/profile-picture`)
     },
-    async getUserPermissions() {
-        return await apiCall(GET, `api/get-permissions`)
+    async getUserPermissions(username) {
+        return await apiCall(GET, `api/get-permissions/${username}`)
+    },
+    async getAllPermissions() {
+        return await apiCall(GET, `api/get-all-permissions`)
+    },
+    async permissionUpdate() {
+        return await apiCall(POST, `api/update-permissions`)
     },
     async logout() {
         return await apiCall(GET, `api/user/logout`)

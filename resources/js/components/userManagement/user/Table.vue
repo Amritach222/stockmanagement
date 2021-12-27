@@ -392,22 +392,6 @@
                         <v-container>
                             <v-row style="padding: 3px">
                                 <v-col md="9">
-                                    <!--                                    <v-text-field-->
-                                    <!--                                        v-model="editedItem.password"-->
-                                    <!--                                        type="password"-->
-                                    <!--                                        description="Please enter password."-->
-                                    <!--                                        :label="$t('password')"-->
-                                    <!--                                        placeholder="**********"-->
-                                    <!--                                        prepend-icon="mdi-lock"-->
-                                    <!--                                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"-->
-                                    <!--                                        :type="show1 ? 'text' : 'password'"-->
-                                    <!--                                        @click:append="show1 = !show1"-->
-                                    <!--                                        :error-messages="error.password"-->
-                                    <!--                                        required-->
-                                    <!--                                        @keyup="clearError('password')"-->
-                                    <!--                                        :rules="rules.password"-->
-                                    <!--                                        solo-->
-                                    <!--                                    />-->
                                     <v-text-field
                                         v-model="passwords"
                                         type="password"
