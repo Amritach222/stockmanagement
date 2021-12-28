@@ -79,13 +79,19 @@ export default {
         return await apiCall(GET, `api/user/profile-picture`)
     },
     async getUserPermissions(username) {
-        return await apiCall(GET, `api/get-permissions/${username}`)
+        return await apiCall(GET, `api/get-user-permissions/${username}`)
+    },
+    async getRolePermissions(name) {
+        return await apiCall(GET, `api/get-role-permissions/${name}`)
     },
     async getAllPermissions() {
         return await apiCall(GET, `api/get-all-permissions`)
     },
-    async permissionUpdate(data) {
-        return await apiCall(POST, `api/update-permissions`,data)
+    async permissionUserUpdate(data) {
+        return await apiCall(POST, `api/update-user-permissions`, data)
+    },
+    async permissionRoleUpdate(data) {
+        return await apiCall(POST, `api/update-role-permissions`, data)
     },
     async logout() {
         return await apiCall(GET, `api/user/logout`)

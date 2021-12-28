@@ -14,7 +14,7 @@ class RoleController extends Controller
         $data['message'] = '';
         $data['data'] = [];
         try {
-            $data['data'] = Role::where('name','!=','Super Admin')->where('name','!=','Admin')->get();
+            $data['data'] = Role::where('name', '!=', 'Super Admin')->where('name', '!=', 'Admin')->where('guard_name', 'api')->get();
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred';

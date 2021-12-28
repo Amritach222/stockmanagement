@@ -139,6 +139,9 @@ import QuotationCreate from './components/quotations/quotation/Create'
 import QuotationEdit from './components/quotations/quotation/Edit'
 import QuotationShow from './components/quotations/quotation/Show'
 
+import RoleIndex from './components/Settings/role/Index'
+import RolePermission from './components/Settings/role/Permissions'
+
 import UserIndex from './components/userManagement/user/Index'
 import UserCreate from './components/userManagement/user/Create'
 import UserEdit from './components/userManagement/user/Edit'
@@ -1271,6 +1274,25 @@ export default new Router({
             path: '/quotations/:id',
             name: i18n.t('quotation'),
             component: QuotationShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/roles',
+            name: i18n.t('roles'),
+            component: RoleIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/roles/permission/:name',
+            name: i18n.t('role') + ' ' + i18n.t('permissions'),
+            component: RolePermission,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

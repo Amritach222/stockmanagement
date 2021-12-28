@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>{{ $t('card_title.edit_user_permission') }}</strong>
+                                <strong>{{ $t('card_title.edit_role_permission') }}</strong>
                                 <v-progress-circular
                                     v-if="createProgress"
                                     indeterminate
@@ -50,7 +50,7 @@
                                                     <td>
                                                         <div v-if="permissions.indexOf(item.value) !== -1">
                                                             <v-checkbox
-                                                                :input-value="userPermissions.indexOf(item.value) !== -1"
+                                                                :input-value="rolePermissions.indexOf(item.value) !== -1"
                                                                 type="checkbox"
                                                                 autocomplete=""
                                                                 v-on:click="updatePermission(item.value)"
@@ -61,7 +61,7 @@
                                                     <td>
                                                         <div v-if="permissions.indexOf(item.value + '.create') !== -1">
                                                             <v-checkbox
-                                                                :input-value="userPermissions.indexOf(item.value + '.create') !== -1"
+                                                                :input-value="rolePermissions.indexOf(item.value + '.create') !== -1"
                                                                 type="checkbox"
                                                                 autocomplete=""
                                                                 v-on:click="updatePermission(item.value+'.create')"
@@ -72,7 +72,7 @@
                                                     <td>
                                                         <div v-if="permissions.indexOf(item.value + '.edit') !== -1">
                                                             <v-checkbox
-                                                                :input-value="userPermissions.indexOf(item.value+'.edit') !== -1"
+                                                                :input-value="rolePermissions.indexOf(item.value+'.edit') !== -1"
                                                                 type="checkbox"
                                                                 autocomplete=""
                                                                 solo
@@ -83,7 +83,7 @@
                                                     <td>
                                                         <div v-if="permissions.indexOf(item.value + '.show') !== -1">
                                                             <v-checkbox
-                                                                :input-value="userPermissions.indexOf(item.value+'.show') !== -1"
+                                                                :input-value="rolePermissions.indexOf(item.value+'.show') !== -1"
                                                                 type="checkbox"
                                                                 autocomplete=""
                                                                 v-on:click="updatePermission(item.value+'.show')"
@@ -94,7 +94,7 @@
                                                     <td>
                                                         <div v-if="permissions.indexOf(item.value + '.delete') !== -1">
                                                             <v-checkbox
-                                                                :input-value="userPermissions.indexOf(item.value+'.delete') !== -1"
+                                                                :input-value="rolePermissions.indexOf(item.value+'.delete') !== -1"
                                                                 type="checkbox"
                                                                 autocomplete=""
                                                                 v-on:click="updatePermission(item.value+'.delete')"
@@ -145,8 +145,8 @@ export default {
         cdnURL: config.cdnURL,
         baseURL: config.baseURL,
         permissions: [],
-        userPermissions: [],
-        user: {
+        rolePermissions: [],
+        role: {
             id: null,
         },
         items: [
@@ -208,10 +208,10 @@ export default {
             window.open(config.cdnURL + data, `_blank`);
         },
         async loadItems() {
-            let res = await ApiServices.getUserPermissions(this.$route.params.username);
+            let res = await ApiServices.getRolePermissions(this.$route.params.name);
             if (res.success === true) {
-                this.user = res.data;
-                this.userPermissions = res.data.permissions;
+                this.role = res.data;
+                this.rolePermissions = res.data.permissions;
             }
         },
         async loadPermissions() {
@@ -222,24 +222,24 @@ export default {
         },
 
         async updatePermission(permissionName) {
-            var index = this.userPermissions.indexOf(permissionName);
+            var index = this.rolePermissions.indexOf(permissionName);
             if (index >= 0) {
-                this.userPermissions.splice(index, 1)
+                this.rolePermissions.splice(index, 1)
             } else {
-                this.userPermissions.push(permissionName)
+                this.rolePermissions.push(permissionName)
             }
         },
 
         async edit() {
             this.createProgress = true;
             const data = new FormData();
-            data.append('permissions', JSON.stringify(this.userPermissions));
-            data.append('id', this.user.id);
+            data.append('permissions', JSON.stringify(this.rolePermissions));
+            data.append('id', this.role.id);
 
-            let res = await ApiServices.permissionUserUpdate(data);
+            let res = await ApiServices.permissionRoleUpdate(data);
             this.createProgress = false;
             if (res.success === true) {
-                route.replace('/users/');
+                route.replace('/roles/');
             }
         },
     }

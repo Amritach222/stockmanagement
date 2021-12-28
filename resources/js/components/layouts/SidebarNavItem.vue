@@ -497,6 +497,18 @@
                         </v-list-item-title>
                     </v-list-item>
 
+                    <v-list-item class="ml-5" v-if="$can('roles')">
+                        <v-list-item-icon class="mr-2">
+                            <v-icon>mdi-alpha-r-circle</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>
+                            <router-link
+                                :to="'/roles/'">
+                                {{ $t('roles') }}
+                            </router-link>
+                        </v-list-item-title>
+                    </v-list-item>
+
                     <v-list-item class="ml-5" v-if="$can('settings.edit')">
                         <v-list-item-icon class="mr-2">
                             <v-icon>mdi-cog</v-icon>
