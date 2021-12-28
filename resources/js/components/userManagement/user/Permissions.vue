@@ -48,49 +48,59 @@
                                                 >
                                                     <td>{{ item.name }}</td>
                                                     <td>
-                                                        <v-checkbox
-                                                            :input-value="permissions.indexOf(item.value) !== -1"
-                                                            type="checkbox"
-                                                            autocomplete=""
-                                                            v-on:click="updatePermission(item.value)"
-                                                            solo
-                                                        />
+                                                        <div v-if="permissions.indexOf(item.value) !== -1">
+                                                            <v-checkbox
+                                                                :input-value="userPermissions.indexOf(item.value) !== -1"
+                                                                type="checkbox"
+                                                                autocomplete=""
+                                                                v-on:click="updatePermission(item.value)"
+                                                                solo
+                                                            />
+                                                        </div>
                                                     </td>
                                                     <td>
-                                                        <v-checkbox
-                                                            :input-value="permissions.indexOf(item.value+'.create') !== -1"
-                                                            type="checkbox"
-                                                            autocomplete=""
-                                                            v-on:click="updatePermission(item.value+'.create')"
-                                                            solo
-                                                        />
+                                                        <div v-if="permissions.indexOf(item.value + '.create') !== -1">
+                                                            <v-checkbox
+                                                                :input-value="userPermissions.indexOf(item.value + '.create') !== -1"
+                                                                type="checkbox"
+                                                                autocomplete=""
+                                                                v-on:click="updatePermission(item.value+'.create')"
+                                                                solo
+                                                            />
+                                                        </div>
                                                     </td>
                                                     <td>
-                                                        <v-checkbox
-                                                            :input-value="permissions.indexOf(item.value+'.edit') !== -1"
-                                                            type="checkbox"
-                                                            autocomplete=""
-                                                            solo
-                                                            v-on:click="updatePermission(item.value+'.edit')"
-                                                        />
+                                                        <div v-if="permissions.indexOf(item.value + '.edit') !== -1">
+                                                            <v-checkbox
+                                                                :input-value="userPermissions.indexOf(item.value+'.edit') !== -1"
+                                                                type="checkbox"
+                                                                autocomplete=""
+                                                                solo
+                                                                v-on:click="updatePermission(item.value+'.edit')"
+                                                            />
+                                                        </div>
                                                     </td>
                                                     <td>
-                                                        <v-checkbox
-                                                            :input-value="permissions.indexOf(item.value+'.show') !== -1"
-                                                            type="checkbox"
-                                                            autocomplete=""
-                                                            v-on:click="updatePermission(item.value+'.show')"
-                                                            solo
-                                                        />
+                                                        <div v-if="permissions.indexOf(item.value + '.show') !== -1">
+                                                            <v-checkbox
+                                                                :input-value="userPermissions.indexOf(item.value+'.show') !== -1"
+                                                                type="checkbox"
+                                                                autocomplete=""
+                                                                v-on:click="updatePermission(item.value+'.show')"
+                                                                solo
+                                                            />
+                                                        </div>
                                                     </td>
                                                     <td>
-                                                        <v-checkbox
-                                                            :input-value="permissions.indexOf(item.value+'.delete') !== -1"
-                                                            type="checkbox"
-                                                            autocomplete=""
-                                                            v-on:click="updatePermission(item.value+'.delete')"
-                                                            solo
-                                                        />
+                                                        <div v-if="permissions.indexOf(item.value + '.delete') !== -1">
+                                                            <v-checkbox
+                                                                :input-value="userPermissions.indexOf(item.value+'.delete') !== -1"
+                                                                type="checkbox"
+                                                                autocomplete=""
+                                                                v-on:click="updatePermission(item.value+'.delete')"
+                                                                solo
+                                                            />
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -135,8 +145,9 @@ export default {
         cdnURL: config.cdnURL,
         baseURL: config.baseURL,
         permissions: [],
-        user:{
-            id:null,
+        userPermissions: [],
+        user: {
+            id: null,
         },
         items: [
             {name: 'Attribute', value: 'attributes'},
@@ -190,6 +201,7 @@ export default {
 
     async created() {
         this.loadItems();
+        this.loadPermissions();
     },
     methods: {
         openImage(data) {
@@ -198,24 +210,30 @@ export default {
         async loadItems() {
             let res = await ApiServices.getUserPermissions(this.$route.params.username);
             if (res.success === true) {
-                this.editedItem = res.data;
-                this.permissions = res.data.permissions;
+                this.user = res.data;
+                this.userPermissions = res.data.permissions;
+            }
+        },
+        async loadPermissions() {
+            let res = await ApiServices.getAllPermissions();
+            if (res.success === true) {
+                this.permissions = res.data;
             }
         },
 
         async updatePermission(permissionName) {
-            var index = this.permissions.indexOf(permissionName);
-            if (index !== -1) {
-                this.permissions.splice(index, 1)
+            var index = this.userPermissions.indexOf(permissionName);
+            if (index >= 0) {
+                this.userPermissions.splice(index, 1)
             } else {
-                this.permissions.push(permissionName)
+                this.userPermissions.push(permissionName)
             }
         },
 
         async edit() {
             this.createProgress = true;
             const data = new FormData();
-            data.append('permissions', JSON.stringify(this.permissions));
+            data.append('permissions', JSON.stringify(this.userPermissions));
             data.append('id', this.user.id);
 
             let res = await ApiServices.permissionUpdate(data);

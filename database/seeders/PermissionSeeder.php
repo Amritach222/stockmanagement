@@ -25,9 +25,6 @@ class PermissionSeeder extends Seeder
             $this->createAutoAllPermissions('bankAccounts', $guard);
             $this->createAutoAllPermissions('bankAccountTransactions', $guard);
             $this->createAutoAllPermissions('transfers', $guard);
-            $this->createAutoAllPermissions('files', $guard);
-            $this->createAutoAllPermissions('images', $guard);
-            $this->createAutoAllPermissions('profilePictures', $guard);
             $this->createAutoAllPermissions('attributeGroups', $guard);
             $this->createAutoAllPermissions('attributes', $guard);
             $this->createAutoAllPermissions('products', $guard);
@@ -43,7 +40,6 @@ class PermissionSeeder extends Seeder
             $this->createAutoAllPermissions('consumes', $guard);
             $this->createAutoAllPermissions('unusedProducts', $guard);
             $this->createAutoAllPermissions('resetPasswordRequests', $guard);
-            $this->createAutoAllPermissions('activities', $guard);
             $this->createAutoAllPermissions('logs', $guard);
             $this->createAutoAllPermissions('brands', $guard);
             $this->createAutoAllPermissions('categories', $guard);

@@ -18,11 +18,13 @@ class PermissionController extends Controller
         $data['data'] = [];
         try {
             $user = User::where('username', $username)->firstOrFail();
-            foreach (Permission::all() as $permission) {
+            $permissions=[];
+            foreach (Permission::where('guard_name','api')->get() as $permission) {
                 if ($user->can($permission->name)) {
-                    $user->permissions[] = $permission->name;
+                    $permissions[] = $permission->name;
                 }
             }
+            $user->permissions=array_unique($permissions);
             $data['data'] = new AuthUserResource($user);
         } catch (\Exception $e) {
             $data['success'] = false;
@@ -84,6 +86,7 @@ class PermissionController extends Controller
                     $permissions[] = $permission->name;
                 }
             }
+            $permissions=array_unique($permissions);
             foreach ($permissions as $permission) {
                 if (!in_array($permission, $requestPermissions)) {
                     $user->revokePermissionTo([$permission]);

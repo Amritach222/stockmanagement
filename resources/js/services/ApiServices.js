@@ -84,8 +84,8 @@ export default {
     async getAllPermissions() {
         return await apiCall(GET, `api/get-all-permissions`)
     },
-    async permissionUpdate() {
-        return await apiCall(POST, `api/update-permissions`)
+    async permissionUpdate(data) {
+        return await apiCall(POST, `api/update-permissions`,data)
     },
     async logout() {
         return await apiCall(GET, `api/user/logout`)
