@@ -366,10 +366,9 @@ export default {
         },
 
         editItem(item) {
-            console.log('hey item', item);
-            this.editedIndex = this.prProducts.indexOf(item)
+            this.editedIndex = this.prProducts.indexOf(item);
             this.addPurchaseRequestProduct = Object.assign({}, item)
-            this.dialog = true
+            this.dialog = true;
         },
 
         deleteItem(item) {
@@ -408,6 +407,7 @@ export default {
                 let rtn = await ApiServices.productVariantShow(this.addPurchaseRequestProduct.product_variant_id);
                 varName = rtn.data.name;
             }
+
             if (this.editedIndex > -1) {
                 Object.assign(this.prProducts[this.editedIndex], {
                     'product_id': this.addPurchaseRequestProduct.product_id,
@@ -431,6 +431,7 @@ export default {
             }
             this.$refs.form.reset();
             this.close();
+            this.hasVariants = false;
         },
 
         async create() {
@@ -466,6 +467,7 @@ export default {
                 productData.append('quantity', parseInt(this.prProducts[i].quantity));
                 productData.append('product_id', parseInt(this.prProducts[i].product_id));
                 productData.append('purchase_id', parseInt(id));
+                productData.append('unit_id', parseInt(this.prProducts[i].unit_id));
                 if (this.prProducts[i].product_variant_id !== '') {
                     productData.append('product_variant_id', parseInt(this.prProducts[i].product_variant_id));
                 }

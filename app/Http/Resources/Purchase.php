@@ -29,7 +29,7 @@ class Purchase extends JsonResource
         if(!empty($this->purchaseProducts->toArray())){
             $item_short = '';
             forEach($this->purchaseProducts->toArray() as $data){
-                $item = \App\Models\Item::where('id',$data['item_id'])->first();
+                $item = \App\Models\Product::where('id',$data['product_id'])->first();
                 $item_short = $item_short.$item->name."(".$data['quantity'].") ";
             }
         }
