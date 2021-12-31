@@ -63,7 +63,7 @@
                                         </CButton>
                                         <CButton size="sm" color="danger" :to="'/budgetExtends/'">
                                             <CIcon name="cil-ban"/>
-                                            Cancel
+                                            Reset
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

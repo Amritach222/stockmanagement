@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('bank') +' '+ $t('account') +' '+ $t('transactions') }}
+            Bank Account Transaction
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -26,7 +26,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                :label="$t('search')"
+                                label="Search"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -46,7 +46,7 @@
                                 v-on="on"
                                 v-if="$can('bankAccountTransactions.create')"
                             >
-                                {{ $t('button.add_new_bank_account_transaction') }}
+                                Add New Bank Account Transaction
                             </v-btn>
                         </template>
                         <v-card>
@@ -61,7 +61,7 @@
                                             <v-col>
                                                 <v-select
                                                     v-model="editedItem.account_id"
-                                                    :label="$t('bank') +' '+ $t('account')"
+                                                    label="Bank Account"
                                                     :items="bankAccounts"
                                                     :item-text="bankAccount => bankAccount.bank_name +' - '+ bankAccount.account_name"
                                                     item-value="id"
@@ -76,7 +76,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.transaction_amount"
-                                                    :label="$t('transaction') +' '+ $t('amount')"
+                                                    label="Transaction Amount"
                                                     required
                                                     outlined
                                                     type="number"
@@ -86,12 +86,11 @@
                                         </v-row>
                                         <v-row>
                                             <v-col>
-                                                <v-select
+                                                <v-text-field
                                                     v-model="editedItem.transaction_type"
-                                                    :label="$t('transaction') +' '+ $t('type')"
-                                                    :items="['CR','DR']"
+                                                    label="Transaction Type"
                                                     outlined
-                                                ></v-select>
+                                                ></v-text-field>
                                             </v-col>
                                         </v-row>
 
@@ -110,14 +109,14 @@
                                         text
                                         @click="close"
                                     >
-                                        {{ $t('button.cancel') }}
+                                        Cancel
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        {{ $t('button.submit') }}
+                                        Save
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>
@@ -125,11 +124,11 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -152,10 +151,6 @@
                 >
                     mdi-delete
                 </v-icon>
-            </template>
-            <template v-slot:item.account_id="{ item }">
-                <p v-if="item.account_id" class="mt-3">{{ item.bank_name }}</p>
-                <p v-else>----</p>
             </template>
             <template v-slot:no-data>
                 <div>No Data</div>
@@ -182,11 +177,11 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
-            {text: i18n.t('account'), value: 'account_id'},
-            {text: i18n.t('amount'), value: 'transaction_amount'},
-            {text: i18n.t('type'), value: 'transaction_type'},
-            // {text: 'Actions', value: 'actions', sortable: false},
+            {text: 'Id', align: 'start', sortable: false, value: 'id'},
+            {text: 'Account', value: 'account_id'},
+            {text: 'Amount', value: 'transaction_amount'},
+            {text: 'Type', value: 'transaction_type'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         bankAccountTransactions: [],
         bankAccounts: [],
@@ -216,7 +211,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? i18n.t('card_title.add_bank_account_transaction') : i18n.t('card_title.edit_bank_account_transaction')
+            return this.editedIndex === -1 ? 'Add Bank Account Transaction' : 'Edit Bank Account Transaction'
         },
     },
 

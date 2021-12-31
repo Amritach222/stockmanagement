@@ -22,8 +22,8 @@
                                         </v-card-title>
                                         <v-data-table
                                             :headers="headers"
-                                            :items="quoProducts"
-                                            sort-by="product_name"
+                                            :items="prProducts"
+                                            sort-by="item_name"
                                             :loading=tableLoad
                                             loading-text="Loading... Please wait..."
                                             :search="search"
@@ -75,20 +75,20 @@
                                                                         <v-row>
                                                                             <v-col>
                                                                                 <v-select
-                                                                                    v-model="addQuoProduct.product_id"
-                                                                                    :label="$t('product')"
+                                                                                    v-model="addPurchaseRequestProduct.product_id"
+                                                                                    label="Select Product"
                                                                                     :items="products"
                                                                                     item-text="name"
                                                                                     item-value="id"
                                                                                     required
                                                                                     outlined
                                                                                     :rules="rules"
-                                                                                    v-on:change="getVariants(addQuoProduct.product_id)"
+                                                                                    v-on:change="getVariants(addPurchaseRequestProduct.product_id)"
                                                                                 ></v-select>
                                                                                 <div v-if="hasVariants">
                                                                                     <v-select
-                                                                                        v-model="addQuoProduct.product_variant_id"
-                                                                                        :label="$t('product') +' '+ ('variant')"
+                                                                                        v-model="addPurchaseRequestProduct.product_variant_id"
+                                                                                        label="Product Variant"
                                                                                         :items="variants"
                                                                                         item-value="id"
                                                                                         item-text="name"
@@ -96,11 +96,22 @@
                                                                                     ></v-select>
                                                                                 </div>
                                                                                 <v-text-field
-                                                                                    v-model="addQuoProduct.quantity"
+                                                                                    v-model="addPurchaseRequestProduct.quantity"
                                                                                     label="Quantity"
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
+                                                                                <v-select
+                                                                                    v-model="addPurchaseRequestProduct.unit"
+                                                                                    label="Unit"
+                                                                                    :items="units"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    required
+                                                                                    outlined
+                                                                                    return-object
+                                                                                    :rules="rules"
+                                                                                ></v-select>
                                                                             </v-col>
                                                                         </v-row>
                                                                     </v-container>
@@ -250,7 +261,6 @@
 import route from "../../router";
 import ApiServices from "../../services/ApiServices";
 import config from "../../config";
-import i18n from "../../i18n";
 
 export default {
     name: "NewPurchaseRequest",
@@ -267,12 +277,11 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('product'), value: 'product_name'},
-            {text: i18n.t('product_variant'), value: 'product_variant'},
-            {text: i18n.t('quantity'), value: 'quantity'},
-            {text: i18n.t('price'), value: 'price'},
-            {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: 'Product', value: 'product_name'},
+            {text: 'Product Variant', value: 'product_variant'},
+            {text: 'Quantity', value: 'quantity'},
+            {text: 'Unit', value: 'unit_name'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         quotations: [],
         tableLoad: true,
@@ -284,20 +293,23 @@ export default {
         departments: [],
         productCount: 0,
         editedIndex: -1,
-        quoProducts: [],
+        prProducts: [],
         products: [],
+        units: [],
         variants: [],
         menu1: false,
         dateFormatted: '',
-        addQuoProduct: {
+        addPurchaseRequestProduct: {
             product_id: '',
             product_variant_id: '',
             quantity: '',
+            unit_id: '',
         },
         productQuo: {
             product_id: '',
             product_variant_id: '',
             quantity: '',
+            unit_id: '',
         },
         error: {
             department_id: '',
@@ -315,7 +327,8 @@ export default {
     },
     async created() {
         this.loadDepartments();
-        this.loadProducts();
+        this.loadItems();
+        this.loadUnits();
     },
     methods: {
         async loadDepartments() {
@@ -325,16 +338,23 @@ export default {
             }
         },
 
-        async loadProducts() {
+        async loadItems() {
             let res = await ApiServices.productIndex();
             if (res.success === true) {
                 this.products = res.data;
+            }
+        },
+        async loadUnits() {
+            let res = await ApiServices.unitIndex();
+            if (res.success === true) {
+                this.units = res.data;
             }
             this.tableLoad = false;
         },
 
         async getVariants(item) {
             let res = await ApiServices.productShow(item);
+            console.log('we get here',res);
             if (res.success === true) {
                 if (res.data.product_variants.length > 0) {
                     this.hasVariants = true;
@@ -346,19 +366,20 @@ export default {
         },
 
         editItem(item) {
-            this.editedIndex = this.quoProducts.indexOf(item)
-            this.addQuoProduct = Object.assign({}, item)
+            console.log('hey item', item);
+            this.editedIndex = this.prProducts.indexOf(item)
+            this.addPurchaseRequestProduct = Object.assign({}, item)
             this.dialog = true
         },
 
         deleteItem(item) {
-            this.editedIndex = this.quoProducts.indexOf(item)
-            this.addQuoProduct = Object.assign({}, item)
+            this.editedIndex = this.prProducts.indexOf(item)
+            this.addPurchaseRequestProduct = Object.assign({}, item)
             this.dialogDelete = true
         },
 
         async deleteItemConfirm() {
-            this.quoProducts.splice(this.editedIndex, 1)
+            this.prProducts.splice(this.editedIndex, 1)
             this.closeDelete()
         },
 
@@ -366,7 +387,7 @@ export default {
             this.progressL = false;
             this.dialog = false;
             this.$nextTick(() => {
-                this.addQuoProduct = Object.assign({}, this.defaultItem)
+                this.addPurchaseRequestProduct = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             });
             this.loadItems();
@@ -375,44 +396,41 @@ export default {
         closeDelete() {
             this.dialogDelete = false
             this.$nextTick(() => {
-                this.addQuoProduct = Object.assign({}, this.defaultItem)
+                this.addPurchaseRequestProduct = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             })
         },
 
         async addProduct() {
-            var varName = '---';
-            var price = '';
-            let res = await ApiServices.productShow(this.addQuoProduct.product_id);
-            price = res.data.cost_price;
-            if (this.addQuoProduct.product_variant_id) {
-                let rtn = await ApiServices.productVariantShow(this.addQuoProduct.product_variant_id);
+            let varName = '---';
+            let res = await ApiServices.productShow(this.addPurchaseRequestProduct.product_id);
+            if (this.addPurchaseRequestProduct.product_variant_id) {
+                let rtn = await ApiServices.productVariantShow(this.addPurchaseRequestProduct.product_variant_id);
                 varName = rtn.data.name;
-                price = rtn.data.price;
             }
             if (this.editedIndex > -1) {
-                Object.assign(this.quoProducts[this.editedIndex], {
-                    'product_id': this.addQuoProduct.product_id,
+                Object.assign(this.prProducts[this.editedIndex], {
+                    'product_id': this.addPurchaseRequestProduct.product_id,
                     'product_name': res.data.name,
                     'product_variant': varName,
-                    'product_variant_id': this.addQuoProduct.product_variant_id,
-                    'price': price,
-                    'quantity': this.addQuoProduct.quantity,
-                    'shipping_cost': this.addQuoProduct.shipping_cost,
+                    'product_variant_id': this.addPurchaseRequestProduct.product_variant_id,
+                    'quantity': this.addPurchaseRequestProduct.quantity,
+                    'unit_name': this.addPurchaseRequestProduct.unit.name,
+                    'unit_id': this.addPurchaseRequestProduct.unit.id,
                 })
             } else {
-                this.quoProducts.push({
-                    'product_id': this.addQuoProduct.product_id,
+                this.prProducts.push({
+                    'product_id': this.addPurchaseRequestProduct.product_id,
                     'product_name': res.data.name,
-                    'product_variant_id': this.addQuoProduct.product_variant_id,
+                    'product_variant_id': this.addPurchaseRequestProduct.product_variant_id,
                     'product_variant': varName,
-                    'price': price,
-                    'quantity': this.addQuoProduct.quantity,
-                    'shipping_cost': this.addQuoProduct.shipping_cost,
+                    'quantity': this.addPurchaseRequestProduct.quantity,
+                    'unit_name': this.addPurchaseRequestProduct.unit.name,
+                    'unit_id': this.addPurchaseRequestProduct.unit.id,
                 });
             }
             this.$refs.form.reset();
-            this.close()
+            this.close();
         },
 
         async create() {
@@ -433,23 +451,23 @@ export default {
             let res = await ApiServices.addPurchaseRequest(data);
             this.createProgress = false;
             if (res.success === true) {
-                if (this.quoProducts.length > 0) {
+                if (this.prProducts.length > 0) {
                     await this.createProduct(res.data.id);
                 } else {
-                    route.replace('/purchase-request-history/');
+                    route.replace('/purchase/purchase-request-history/');
                 }
-                route.replace('/purchase-request-history');
+                route.replace('/purchase/purchase-request-history');
             }
         },
 
         async createProduct(id) {
-            for (var i = 0; i < this.quoProducts.length; i++) {
+            for (var i = 0; i < this.prProducts.length; i++) {
                 let productData = new FormData();
-                productData.append('product_id', parseInt(this.quoProducts[i].product_id));
-                productData.append('quantity', parseInt(this.quoProducts[i].quantity));
+                productData.append('quantity', parseInt(this.prProducts[i].quantity));
+                productData.append('product_id', parseInt(this.prProducts[i].product_id));
                 productData.append('purchase_id', parseInt(id));
-                if (this.quoProducts[i].product_variant_id !== '') {
-                    productData.append('product_variant_id', parseInt(this.quoProducts[i].product_variant_id));
+                if (this.prProducts[i].product_variant_id !== '') {
+                    productData.append('product_variant_id', parseInt(this.prProducts[i].product_variant_id));
                 }
                 let res = await ApiServices.addPurchaseProductRequest(productData);
             }

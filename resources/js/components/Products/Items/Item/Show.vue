@@ -42,6 +42,10 @@
                                         <p>{{ show.cost_price }}</p>
                                         <h6 v-if="show.unit">{{ $t('unit') }}: </h6>
                                         <p v-if="show.unit">{{ show.unit.name }}</p>
+                                        <h6 v-if="show.tax">{{ $t('tax') }}: </h6>
+                                        <p v-if="show.tax">{{ show.tax.name }}</p>
+                                        <h6>{{ $t('tax_method') }}: </h6>
+                                        <p>{{ show.tax_method }}</p>
                                     </CCol>
                                 </CRow>
 

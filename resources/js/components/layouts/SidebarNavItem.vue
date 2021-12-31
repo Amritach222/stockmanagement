@@ -306,8 +306,8 @@
                     </v-list-item-icon>
                     <v-list-item-title>
                         <router-link
-                            :to="'/new-purchase-request/'">
-                            {{ $t('new') + ' ' + $t('purchase') + ' ' + $t('request') }}
+                            :to="'/purchase/new-purchase-request/'">
+                            {{ $t('new') +' '+ $t('purchase') +' '+ $t('request') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
@@ -318,8 +318,8 @@
                     </v-list-item-icon>
                     <v-list-item-title>
                         <router-link
-                            :to="'/purchase-request-history/'">
-                            {{ $t('purchase') + ' ' + $t('request') + ' ' + $t('history') }}
+                            :to="'/purchase/purchase-request-history/'">
+                            {{ $t('purchase') +' '+ $t('request') +' '+ $t('history') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>

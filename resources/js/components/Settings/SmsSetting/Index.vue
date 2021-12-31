@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>{{ $t('card_title.edit_sms_setting') }}</strong>
+                                <strong>Edit</strong> Sms Setting
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate
@@ -24,7 +24,7 @@
                                             description="Please enter sms gateway."
                                             prepend-inner-icon="mdi-door-open"
                                             autocomplete=""
-                                            :label="$t('gateway')"
+                                            label="Gateway"
                                             placeholder="Enter gateway..."
                                             required
                                             @keyup="clearError('gateway')"
@@ -39,7 +39,7 @@
                                             description="Please enter sms api key."
                                             prepend-inner-icon="mdi-key-variant"
                                             autocomplete=""
-                                            :label="$t('api_key')"
+                                            label="Api Key"
                                             placeholder="Enter api key..."
                                             required
                                             @keyup="clearError('api_key')"
@@ -51,7 +51,7 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
-                                            {{ $t('button.submit') }}
+                                            Submit
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>

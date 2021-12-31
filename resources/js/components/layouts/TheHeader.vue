@@ -16,7 +16,7 @@
         <CHeaderNav class="d-md-down-none mr-auto">
             <CHeaderNavItem class="px-3">
                 <CHeaderNavLink to="/dashboard">
-                    {{ $t('dashboard') }}
+                    Dashboard
                 </CHeaderNavLink>
             </CHeaderNavItem>
         </CHeaderNav>

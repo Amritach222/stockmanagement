@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>{{ $t('card_title.add_expense') }}</strong>
+                                <strong>Add</strong> Expense
                                 <v-progress-circular
                                     v-if="createProgress"
                                     indeterminate
@@ -19,7 +19,7 @@
                                     <v-form>
                                         <v-select
                                             v-model="department_id"
-                                            :label="$t('department')"
+                                            label="Department"
                                             :items="departments"
                                             item-value="id"
                                             item-text="name"
@@ -30,7 +30,7 @@
                                         ></v-select>
                                         <v-select
                                             v-model="user_id"
-                                            :label="$t('user')"
+                                            label="User"
                                             :items="users"
                                             item-value="id"
                                             item-text="name"
@@ -41,7 +41,7 @@
                                         ></v-select>
                                         <v-select
                                             v-model="expense_category_id"
-                                            :label="$t('expense') +' '+ $t('category')"
+                                            label="Expense Category"
                                             :items="expenseCategories"
                                             item-value="id"
                                             item-text="name"
@@ -52,7 +52,7 @@
                                         ></v-select>
                                         <v-text-field
                                             v-model="amount"
-                                            :label="$t('amount')"
+                                            label="Amount"
                                             type="number"
                                             prepend-icon="mdi-currency-usd"
                                             required
@@ -61,42 +61,39 @@
                                         ></v-text-field>
                                         <v-select
                                             v-model="transaction_type"
-                                            :label="$t('transaction') +' '+ $t('type')"
+                                            label="Transaction Type"
                                             id="transaction_type"
                                             :items="['Cash', 'Cheque', 'OnlineTransaction']"
                                             prepend-icon="mdi-swap-horizontal"
-                                            v-on:change="transaction"
                                             solo
                                         ></v-select>
-                                        <div v-if="bank_account">
-                                            <v-select
-                                                v-model="bank_account_id"
-                                                :label="$t('bank') +' '+ $t('account')"
-                                                :items="bankAccounts"
-                                                :item-text="bankAccount => bankAccount.bank_name + ' - ' + bankAccount.account_name"
-                                                item-value="id"
-                                                prepend-icon="mdi-bank"
-                                                solo
-                                            ></v-select>
-                                        </div>
-                                        <div v-if="cheque">
-                                            <v-text-field
-                                                v-model="cheque_no"
-                                                :label="$t('cheque') +' '+ $t('number')"
-                                                type="number"
-                                                prepend-icon="mdi-checkbook"
-                                                solo
-                                            ></v-text-field>
-                                        </div>
+                                        <v-select
+                                            v-model="bank_account_id"
+                                            label="Bank Account"
+                                            :items="bankAccounts"
+                                            :item-text="bankAccount => bankAccount.bank_name + ' - ' + bankAccount.account_name"
+                                            item-value="id"
+                                            class="hide"
+                                            prepend-icon="mdi-bank"
+                                            solo
+                                        ></v-select>
+                                        <v-text-field
+                                            v-model="cheque_no"
+                                            label="Cheque No."
+                                            type="number"
+                                            class="hide"
+                                            prepend-icon="mdi-checkbook"
+                                            solo
+                                        ></v-text-field>
                                         <v-text-field
                                             v-model="note"
-                                            :label="$t('note')"
+                                            label="Note"
                                             prepend-icon="mdi-pen"
                                             solo
                                         ></v-text-field>
                                         <v-file-input
                                             v-model="file"
-                                            :label="$t('file')"
+                                            label="File"
                                             filled
                                             outlined
                                             prepend-icon="mdi-camera"
@@ -106,11 +103,11 @@
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="create">
                                             <CIcon name="cil-check-circle"/>
-                                            {{ $t('button.submit') }}
+                                            Submit
                                         </CButton>
                                         <CButton type="reset" size="sm" color="danger" :to="'/expenses/'">
                                             <CIcon name="cil-ban"/>
-                                            {{ $t('button.cancel') }}
+                                            Cancel
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -146,14 +143,12 @@ export default {
         expense_category_id: '',
         note: '',
         file: [],
+        validated: false,
         departments: [],
         users: [],
         bankAccounts: [],
         expenseCategories: [],
-        validated: false,
         createProgress: false,
-        bank_account: false,
-        cheque: false,
         error: {
             user_id: '',
             department_id: '',
@@ -201,17 +196,6 @@ export default {
             let res = await ApiServices.expenseCategoryIndex();
             if (res.success === true) {
                 this.expenseCategories = res.data;
-            }
-        },
-
-        async transaction() {
-            this.bank_account = false;
-            this.cheque = false;
-            if(this.transaction_type === 'OnlineTransaction'){
-                this.bank_account = true;
-            }else if(this.transaction_type === 'Cheque'){
-                this.bank_account = true;
-                this.cheque = true;
             }
         },
 
@@ -263,7 +247,6 @@ export default {
         },
     }
 }
-
 </script>
 <style scoped>
 .hide {

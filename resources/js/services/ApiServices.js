@@ -253,25 +253,6 @@ export default {
         return await apiCall(DELETE, `api/product/item/items/${id}`)
     },
 
-    async itemUserIndex() {
-        return await apiCall(GET, `api/product/item/itemUsers`)
-    },
-    async itemUserCreate(data) {
-        return await apiCall(POST, `api/product/item/itemUsers`, data)
-    },
-    async itemUserShow(id) {
-        return await apiCall(GET, `api/product/item/itemUsers/${id}`)
-    },
-    async itemUserEdit(id, data) {
-        return await apiCall(POST, `api/product/item/itemUnits/${id}`, data)
-    },
-    async itemUserDelete(id) {
-        return await apiCall(DELETE, `api/product/item/itemUsers/${id}`)
-    },
-    async itemUsers(id) {
-        return await apiCall(GET, `api/product/item/getItemUsers/${id}`)
-    },
-
     async productAttributeGroupIndex() {
         return await apiCall(GET, `api/product/productAttributeGroups`)
     },
@@ -682,5 +663,8 @@ export default {
     },
     async getUserPurchaseProductRequestHistory() {
         return await apiCall(GET, `api/purchase/user-history`)
+    },
+    async deleteUserPurchaseRequest(id) {
+        return await apiCall(DELETE, `api/purchase/purchases/${id}`)
     },
 }

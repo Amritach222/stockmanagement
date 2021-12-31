@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('bank') +' '+ $t('accounts') }}
+            Bank Account
             <v-spacer></v-spacer>
         </v-card-title>
         <v-data-table
@@ -26,7 +26,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="mdi-magnify"
-                                :label="$t('search')"
+                                label="Search"
                                 solo
                                 hide-details
                                 max-width="100px"
@@ -46,7 +46,7 @@
                                 v-on="on"
                                 v-if="$can('bankAccounts.create')"
                             >
-                                {{ $t('button.add_new_bank_account') }}
+                                Add New Bank Account
                             </v-btn>
                         </template>
                         <v-card>
@@ -61,7 +61,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.bank_name"
-                                                    :label="$t('bank') +' '+ $t('name')"
+                                                    label="Bank Name"
                                                     required
                                                     outlined
                                                     :rules="rules.bank_name"
@@ -71,7 +71,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.branch"
-                                                    :label="$t('bank') +' '+ $t('branch')"
+                                                    label="Bank Branch"
                                                     outlined
                                                 ></v-text-field>
                                             </v-col>
@@ -80,7 +80,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.account_no"
-                                                    :label="$t('account') +' '+ $t('number')"
+                                                    label="Account No."
                                                     required
                                                     outlined
                                                     :rules="rules.account_no"
@@ -89,7 +89,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.account_name"
-                                                    :label="$t('account') +' '+ $t('name')"
+                                                    label="Account Name."
                                                     required
                                                     outlined
                                                     :rules="rules.account_name"
@@ -100,7 +100,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.total_balance"
-                                                    :label="$t('total_balance')"
+                                                    label="Total Balance"
                                                     required
                                                     outlined
                                                     type="number"
@@ -109,7 +109,7 @@
                                             <v-col>
                                                 <v-text-field
                                                     v-model="editedItem.current_balance"
-                                                    :label="$t('current_balance')"
+                                                    label="Current Balance"
                                                     outlined
                                                     required
                                                     :rules="rules.current_balance"
@@ -132,14 +132,14 @@
                                         text
                                         @click="close"
                                     >
-                                        {{ $t('button.cancel') }}
+                                        Cancel
                                     </v-btn>
                                     <v-btn
                                         color="blue darken-1"
                                         text
                                         @click="save"
                                     >
-                                        {{ $t('button.submit') }}
+                                        Save
                                     </v-btn>
                                 </v-card-actions>
                             </v-form>
@@ -147,11 +147,11 @@
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
-                            <v-card-title class="text-h6">{{ $t('message.delete') }}</v-card-title>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -159,6 +159,7 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
+<<<<<<< HEAD
                 <router-link
                     :to="'/bankAccounts/'+item.id"
                     v-if="$can('bankAccounts.show')"
@@ -169,6 +170,8 @@
                         mdi-eye
                     </v-icon>
                 </router-link>
+=======
+>>>>>>> origin/dev-sam
                 <v-icon
                     small
                     class="mr-2"
@@ -210,14 +213,14 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: false, value: 'id'},
-            {text: i18n.t('bank') +' '+ i18n.t('name'), value: 'bank_name'},
-            {text: i18n.t('branch'), value: 'branch'},
-            {text: i18n.t('account') +' '+ i18n.t('number'), value: 'account_no'},
-            {text: i18n.t('name'), value: 'account_name'},
-            {text: i18n.t('total'), value: 'total_balance'},
-            {text: i18n.t('current'), value: 'current_balance'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: 'Id', align: 'start', sortable: false, value: 'id'},
+            {text: 'Bank Name', value: 'bank_name'},
+            {text: 'Branch', value: 'branch'},
+            {text: 'Account No', value: 'account_no'},
+            {text: 'Name', value: 'account_name'},
+            {text: 'Total', value: 'total_balance'},
+            {text: 'Current', value: 'current_balance'},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         bankAccounts: [],
         editedIndex: -1,
@@ -260,7 +263,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? i18n.t('card_title.add_bank_account') : i18n.t('card_title.edit_bank_account')
+            return this.editedIndex === -1 ? 'Add Bank Account' : 'Edit Bank Account'
         },
     },
 

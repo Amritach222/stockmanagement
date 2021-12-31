@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>{{ $t('card_title.edit_mail_setting') }}</strong>
+                                <strong>Edit</strong> Mail Setting
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate

@@ -1,37 +1,48 @@
 <template>
-<div class="detail-table">
-    <table class="table table-hover">
+    <table class="table table-striped">
         <tbody>
         <tr>
-            <td>Cell</td>
-            <td>Cell</td>
-            <td>Cell</td>
+            <td>
+                <button><b>#{{ item.reference_no }}</b></button>
+            </td>
+            <td>{{ item.note }}</td>
+            <td>Approved By: {{ item.approved_by }}</td>
         </tr>
         <tr>
-            <td>Cell</td>
-            <td>Cell</td>
-            <td>Cell</td>
+            <td>Line Items: {{ item.total_item }}</td>
+            <td>Due Date: {{ item.due_date }}</td>
+            <td>Status: {{ item.status }}</td>
         </tr>
         <tr>
-            <td>Cell</td>
-            <td>Cell</td>
-            <td>Cell</td>
+            <td>File link:
+                <button v-if="item.file_link !== 'Not Found'" v-on:click="openImage(item.file_link)">
+                    Click to Open
+                </button>
+                <button v-else>No file</button>
+            </td>
+            <td>Department: {{ item.department_name }}</td>
+            <td>Delivery Status: {{ item.delivery_status }}</td>
         </tr>
         </tbody>
     </table>
-</div>
 </template>
 
 <script>
+import config from "../../config";
+
 export default {
     name: "PurchaseTableDetail",
     props: ['item'],
+    data: () => ({
+        cdnURL: config.cdnURL,
+    }),
+    methods: {
+        openImage(data) {
+            window.open(this.cdnURL + data, `_blank`);
+        },
+    }
 }
 </script>
 
 <style scoped>
-.detail-table{
-    margin-left: 1em;
-    width: 75vw;
-}
 </style>

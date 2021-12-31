@@ -2,6 +2,7 @@
 export default {
     methods: {
         $can(permissionName) {
+
             let permissions = localStorage.getItem('permissions')
             let permissionStatus = permissions.indexOf(permissionName) !== -1;
             return permissionStatus;

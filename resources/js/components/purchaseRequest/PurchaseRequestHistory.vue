@@ -42,7 +42,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
-                                :to="'/new-purchase-request'"
+                                :to="'/purchase/new-purchase-request'"
                             >
                                 Add New Purchase Request
                             </v-btn>
@@ -155,8 +155,10 @@
                     mdi-delete
                 </v-icon>
             </template>
-            <template #expanded-item="{headers,item}">
-               <PurchaseTableDetail :item="item"></PurchaseTableDetail>
+            <template v-slot:expanded-item="{ headers, item }">
+                <td :colspan="headers.length">
+                    <PurchaseTableDetail :item="item"></PurchaseTableDetail>
+                </td>
             </template>
             <template v-slot:no-data>
                 <div>No Data</div>
@@ -169,6 +171,8 @@
 import config from "../../config";
 import ApiServices from "../../services/ApiServices";
 import PurchaseTableDetail from "./PurchaseTableDetail";
+import store from "../../store";
+import route from "../../router";
 
 export default {
     name: "PurchaseRequestHistory",
@@ -182,7 +186,9 @@ export default {
         dialogDelete: false,
         headers: [
             {text: 'Reference No', align: 'start', sortable: false, value: 'reference_no'},
-            {text: 'Total Items', value: 'total_item'},
+            {text: 'Items', value: 'purchase_products_shortcode'},
+            {text: 'Item Count', value: 'total_item'},
+            {text: 'Department', value: 'department_name'},
             {text: 'Status', value: 'status'},
             {text: 'Due Date', value: 'due_date'},
             {text: 'Actions', value: 'actions', sortable: false},
@@ -236,19 +242,32 @@ export default {
             }
         },
         editItem(item) {
-            this.editedIndex = this.purchaseHistory.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            this.dialog = true
+            if(item.status === "Pending"){
+                this.editedIndex = this.purchaseHistory.indexOf(item)
+                this.editedItem = Object.assign({}, item)
+                store.state.purchase.editItem = item;
+                route.replace('/purchase/edit-purchase-request');
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = 'Cannot perform this action, Status Changed !!';
+                store.state.home.snackbarColor = 'red';
+            }
         },
 
         deleteItem(item) {
-            this.editedIndex = this.purchaseHistory.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            this.dialogDelete = true
+            if(item.status === "Pending") {
+                this.editedIndex = this.purchaseHistory.indexOf(item)
+                this.editedItem = Object.assign({}, item)
+                this.dialogDelete = true
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = 'Cannot perform this action, Status Changed !!';
+                store.state.home.snackbarColor = 'red';
+            }
         },
 
         async deleteItemConfirm() {
-            let res = await ApiServices.brandDelete(this.editedItem.id);
+            let res = await ApiServices.deleteUserPurchaseRequest(this.editedItem.id);
             if (res.success === true) {
                 this.purchaseHistory.splice(this.editedIndex, 1)
             }
