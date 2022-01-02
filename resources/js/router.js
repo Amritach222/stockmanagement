@@ -160,6 +160,7 @@ import NewPurchaseRequest from './components/purchaseRequest/NewPurchaseRequest'
 import PurchaseRequestHistory from './components/purchaseRequest/PurchaseRequestHistory'
 import EditPurchaseRequest from './components/purchaseRequest/EditPurchaseRequest'
 import PurchaseRequestProducts from './components/purchaseRequest/PurchaseRequestProducts'
+import PurchaseRequestAdmin from './components/purchaseRequest/PurchaseRequestProductsDetailsAdmin'
 
 Vue.use(Router)
 
@@ -267,6 +268,15 @@ export default new Router({
             path: '/purchase/view-purchase-request-product',
             name: 'Purchase Request Products',
             component: PurchaseRequestProducts,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchase/admin-purchase-request-product',
+            name: 'Purchase Requests',
+            component: PurchaseRequestAdmin,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
