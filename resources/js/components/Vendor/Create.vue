@@ -1,5 +1,5 @@
 <template>
-    <div class="c-app flex-row align-items-center">
+    <div class="flex-row align-items-center">
         <CContainer>
             <CRow class="justify-content-center">
                 <CCol sm="12">
@@ -17,208 +17,303 @@
                             <CCardBody>
                                 <CForm>
                                     <v-form>
-                                        <v-text-field
-                                            v-model="name"
-                                            type="text"
-                                            name="name"
-                                            description="Please enter vendor name."
-                                            autocomplete=""
-                                            label="Name"
-                                            prepend-inner-icon="mdi-account"
-                                            placeholder="Enter vendor name..."
-                                            required
-                                            @keyup="clearError('name')"
-                                            @keyup.enter="create"
-                                            :rules="rules.name"
-                                            solo
-                                        >
-                                        </v-text-field>
-                                        <v-text-field
-                                            v-model="company_name"
-                                            type="text"
-                                            name="company_name"
-                                            description="Please enter company name."
-                                            prepend-inner-icon="mdi-alpha-c-circle"
-                                            autocomplete=""
-                                            label="Company Name"
-                                            placeholder="Enter company name..."
-                                            required
-                                            @keyup="clearError('company_name')"
-                                            @keyup.enter="create"
-                                            :rules="rules.company_name"
-                                            solo
-                                        ></v-text-field>
-                                        <v-text-field
-                                            v-model="vat_no"
-                                            type="number"
-                                            name="vat_no"
-                                            description="Please enter VAT number."
-                                            prepend-inner-icon="mdi-alpha-v-circle"
-                                            autocomplete=""
-                                            label="VAT No."
-                                            placeholder="Enter VAT number..."
-                                            required
-                                            @keyup="clearError('vat_no')"
-                                            @keyup.enter="create"
-                                            :rules="rules.vat_no"
-                                            solo
-                                        ></v-text-field>
-                                        <v-text-field
-                                            v-model="email"
-                                            type="email"
-                                            name="email"
-                                            description="Please enter email."
-                                            prepend-inner-icon="@"
-                                            autocomplete=""
-                                            label="Email"
-                                            placeholder="Enter email..."
-                                            required
-                                            @keyup="clearError('email')"
-                                            @keyup.enter="create"
-                                            :rules="rules.email"
-                                            solo
-                                        ></v-text-field>
-                                        <v-text-field
-                                            v-model="address"
-                                            type="text"
-                                            name="address"
-                                            description="Please enter address."
-                                            prepend-inner-icon="mdi-bookmark-minus"
-                                            autocomplete=""
-                                            label="Address"
-                                            placeholder="Enter address..."
-                                            @keyup="clearError('address')"
-                                            @keyup.enter="create"
-                                            solo
-                                        ></v-text-field>
-                                        <v-text-field
-                                            v-model="landline"
-                                            type="number"
-                                            name="landline"
-                                            description="Please enter landline number."
-                                            prepend-inner-icon="mdi-phone-classic"
-                                            autocomplete=""
-                                            label="Landline No."
-                                            placeholder="Enter landline number..."
-                                            @keyup="clearError('landline')"
-                                            @keyup.enter="create"
-                                            :rules="rules.landline"
-                                            solo
-                                        ></v-text-field>
-                                        <v-text-field
-                                            v-model="mobile"
-                                            type="number"
-                                            name="mobile"
-                                            description="Please enter mobile number."
-                                            prepend-inner-icon="mdi-cellphone"
-                                            autocomplete=""
-                                            label="Mobile No."
-                                            placeholder="Enter mobile number..."
-                                            required
-                                            @keyup="clearError('mobile')"
-                                            @keyup.enter="create"
-                                            :rules="rules.mobile"
-                                            solo
-                                        ></v-text-field>
-                                        <v-select
-                                            v-model="country"
-                                            name="country"
-                                            description="Please select a country."
-                                            prepend-inner-icon="mdi-web"
-                                            autocomplete=""
-                                            label="Country"
-                                            placeholder="Select country..."
-                                            required
-                                            @keyup="clearError('country')"
-                                            @keyup.enter="create"
-                                            :rules="rules.country"
-                                            solo
-                                        ></v-select>
-                                        <v-select
-                                            v-model="state"
-                                            name="state"
-                                            description="Please select a state."
-                                            prepend-inner-icon="mdi-billboard"
-                                            autocomplete=""
-                                            label="State"
-                                            placeholder="Select state..."
-                                            required
-                                            @keyup="clearError('state')"
-                                            @keyup.enter="create"
-                                            :rules="rules.state"
-                                            solo
-                                        ></v-select>
-                                        <v-select
-                                            v-model="city"
-                                            name="city"
-                                            description="Please select a city."
-                                            prepend-inner-icon="mdi-city"
-                                            autocomplete=""
-                                            label="City"
-                                            placeholder="Select city..."
-                                            required
-                                            @keyup="clearError('city')"
-                                            @keyup.enter="create"
-                                            :rules="rules.city"
-                                            solo
-                                        ></v-select>
-                                        <v-text-field
-                                            v-model="postal_code"
-                                            type="text"
-                                            name="postal_code"
-                                            prepend-inner-icon="mdi-code-not-equal"
-                                            description="Please enter postal code."
-                                            autocomplete=""
-                                            label="Postal Code"
-                                            placeholder="Select postal code..."
-                                            @keyup="clearError('postal_code')"
-                                            @keyup.enter="create"
-                                            solo
-                                        ></v-text-field>
-                                        <v-file-input
-                                            v-model="image"
-                                            type="file"
-                                            name="image"
-                                            description="Please upload a image."
-                                            prepend-inner-icon="mdi-image"
-                                            autocomplete=""
-                                            label="Image"
-                                            @keyup="clearError('image')"
-                                            @keyup.enter="create"
-                                            solo
-                                        ></v-file-input>
-                                        <v-select
-                                            v-model="category_id"
-                                            name="category_id"
-                                            description="Please select category."
-                                            prepend-inner-icon="mdi-shape"
-                                            autocomplete=""
-                                            label="Category"
-                                            placeholder="Select category..."
-                                            @keyup="clearError('category_id')"
-                                            @keyup.enter="create"
-                                            solo
-                                        ></v-select>
-                                        <v-checkbox
-                                            v-model="is_active"
-                                            name="is_active"
-                                            description="Please check the box if vendor is active."
-                                            autocomplete=""
-                                            label="Active"
-                                            value="1"
-                                            @keyup="clearError('is_active')"
-                                            @keyup.enter="create"
-                                            solo
-                                        ></v-checkbox>
+                                        <v-row>
+                                            <v-col md="9">
+                                                <v-row>
+                                                    <v-col md="4">
+                                                        <v-text-field
+                                                            v-model="name"
+                                                            description="Please enter name."
+                                                            autocomplete=""
+                                                            label="Name"
+                                                            prepend-inner-icon="mdi-account"
+                                                            placeholder="Enter name..."
+                                                            required
+                                                            @keyup="clearError('name')"
+                                                            :rules="rules.name"
+                                                            solo
+                                                        >
+                                                        </v-text-field>
+                                                    </v-col>
+                                                    <v-col md="4">
+                                                        <v-text-field
+                                                            v-model="username"
+                                                            description="Please enter username."
+                                                            autocomplete=""
+                                                            label="Username"
+                                                            prepend-inner-icon="mdi-account"
+                                                            placeholder="Enter username..."
+                                                            required
+                                                            @keyup="clearError('username')"
+                                                            :rules="rules.username"
+                                                            v-on:keyup="checkValidation('username')"
+                                                            solo
+                                                        >
+                                                        </v-text-field>
+                                                        <p v-if="usernameValidation" class="notify-validation">
+                                                            {{ $t('validation.username') }}</p>
+                                                    </v-col>
+                                                    <v-col md="4">
+                                                        <v-text-field
+                                                            v-model="company_name"
+                                                            description="Please enter company name."
+                                                            prepend-inner-icon="mdi-alpha-c-circle"
+                                                            autocomplete=""
+                                                            label="Company Name"
+                                                            placeholder="Enter company name..."
+                                                            required
+                                                            @keyup="clearError('company_name')"
+                                                            :rules="rules.company_name"
+                                                            solo
+                                                        ></v-text-field>
+                                                    </v-col>
+                                                    <v-col md="4">
+                                                        <v-text-field
+                                                            v-model="email"
+                                                            type="email"
+                                                            description="Please enter email."
+                                                            prepend-inner-icon="@"
+                                                            autocomplete=""
+                                                            label="Email"
+                                                            placeholder="Enter email..."
+                                                            required
+                                                            @keyup="clearError('email')"
+                                                            :rules="rules.email"
+                                                            v-on:keyup="checkValidation('email')"
+                                                            solo
+                                                        ></v-text-field>
+                                                        <p v-if="emailValidation" class="notify-validation">
+                                                            {{ $t('validation.uniqueEmail') }}</p>
+                                                    </v-col>
+                                                    <v-col md="4">
+                                                        <v-text-field
+                                                            v-model="landline"
+                                                            type="number"
+                                                            description="Please enter landline number."
+                                                            prepend-inner-icon="mdi-phone-classic"
+                                                            autocomplete=""
+                                                            label="Landline No."
+                                                            placeholder="Enter landline number..."
+                                                            @keyup="clearError('landline')"
+                                                            :rules="rules.landline"
+                                                            solo
+                                                        ></v-text-field>
+                                                    </v-col>
+                                                    <v-col md="4">
+                                                        <v-text-field
+                                                            v-model="mobile"
+                                                            type="number"
+                                                            description="Please enter mobile number."
+                                                            prepend-inner-icon="mdi-cellphone"
+                                                            autocomplete=""
+                                                            label="Mobile No."
+                                                            placeholder="Enter mobile number..."
+                                                            required
+                                                            @keyup="clearError('mobile')"
+                                                            :rules="rules.mobile"
+                                                            solo
+                                                        ></v-text-field>
+                                                    </v-col>
+                                                    <v-col md="4">
+                                                        <v-text-field
+                                                            v-model="vat_no"
+                                                            type="number"
+                                                            description="Please enter VAT number."
+                                                            prepend-inner-icon="mdi-alpha-v-circle"
+                                                            autocomplete=""
+                                                            label="VAT No."
+                                                            placeholder="Enter VAT number..."
+                                                            required
+                                                            @keyup="clearError('vat_no')"
+                                                            :rules="rules.vat_no"
+                                                            solo
+                                                        ></v-text-field>
+                                                    </v-col>
+                                                    <v-col md="4">
+                                                        <v-select
+                                                            v-model="category_id"
+                                                            description="Please select category."
+                                                            prepend-inner-icon="mdi-shape"
+                                                            autocomplete=""
+                                                            label="Category"
+                                                            placeholder="Select category..."
+                                                            @keyup="clearError('category_id')"
+                                                            solo
+                                                        ></v-select>
+                                                    </v-col>
+                                                    <v-col md="4">
+                                                        <v-text-field
+                                                            v-model="postal_code"
+                                                            type="text"
+                                                            prepend-inner-icon="mdi-code-not-equal"
+                                                            description="Please enter postal code."
+                                                            autocomplete=""
+                                                            label="Postal Code"
+                                                            placeholder="Select postal code..."
+                                                            @keyup="clearError('postal_code')"
+                                                            solo
+                                                        ></v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-col>
+                                            <v-col md="3">
+                                                <v-row>
+                                                    <v-col>
+                                                        <v-card width="200" style="margin-left:8%"
+                                                        >
+                                                            <img :src="baseURL+'images/account-placeholder.png'"
+                                                                 style="width:100%;   height: 120px; object-fit: cover"
+                                                            />
+                                                            <v-card-title class="title">
+                                                                {{ $t('logo') }}
+                                                            </v-card-title>
+                                                        </v-card>
+                                                        <v-file-input
+                                                            v-model="image"
+                                                            :label="$t('image')"
+                                                            filled
+                                                            class="mt-3"
+                                                            outlined
+                                                            prepend-icon="mdi-camera"
+                                                            accept="image/png,image/jpeg,image/jpg"
+                                                        ></v-file-input>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col md="3">
+                                                <v-text-field
+                                                    v-model="address"
+                                                    type="text"
+                                                    description="Please enter address."
+                                                    prepend-inner-icon="mdi-bookmark-minus"
+                                                    autocomplete=""
+                                                    label="Address"
+                                                    placeholder="Enter address..."
+                                                    @keyup="clearError('address')"
+                                                    solo
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col md="3">
+                                                <v-select
+                                                    v-model="country"
+                                                    :items="countries"
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    description="Please select a country."
+                                                    prepend-inner-icon="mdi-web"
+                                                    autocomplete=""
+                                                    label="Country"
+                                                    placeholder="Select country..."
+                                                    required
+                                                    @keyup="clearError('country')"
+                                                    :rules="rules.country"
+                                                    v-on:change=getStates(country)
+                                                    return-object
+                                                    solo
+                                                ></v-select>
+                                            </v-col>
+                                            <v-col md="3">
+                                                <v-select
+                                                    v-model="state"
+                                                    :items="states"
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    description="Please select a state."
+                                                    prepend-inner-icon="mdi-billboard"
+                                                    autocomplete=""
+                                                    label="State"
+                                                    placeholder="Select state..."
+                                                    required
+                                                    @keyup="clearError('state')"
+                                                    v-on:change=getCities(state)
+                                                    return-object
+                                                    :rules="rules.state"
+                                                    solo
+                                                ></v-select>
+                                            </v-col>
+                                            <v-col md="3">
+                                                <v-select
+                                                    v-model="city"
+                                                    :items="cities"
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    description="Please select a city."
+                                                    prepend-inner-icon="mdi-city"
+                                                    autocomplete=""
+                                                    label="City"
+                                                    placeholder="Select city..."
+                                                    required
+                                                    @keyup="clearError('city')"
+                                                    return-object
+                                                    :rules="rules.city"
+                                                    solo
+                                                ></v-select>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col md="4">
+                                                <v-text-field
+                                                    v-model="password"
+                                                    type="password"
+                                                    description="Please enter password."
+                                                    :label="$t('password')"
+                                                    placeholder="**********"
+                                                    prepend-inner-icon="mdi-lock"
+                                                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                                                    :type="show1 ? 'text' : 'password'"
+                                                    @click:append="show1 = !show1"
+                                                    :error-messages="error.password"
+                                                    required
+                                                    @keyup="clearError('password')"
+                                                    :rules="rules.password"
+                                                    solo
+                                                />
+                                            </v-col>
+                                            <v-col md="4">
+                                                <v-text-field
+                                                    v-model="confirm_password"
+                                                    description="Please enter confirm password."
+                                                    prepend-inner-icon="mdi-lock"
+                                                    :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                                                    :type="show2 ? 'text' : 'password'"
+                                                    @click:append="show2 = !show2"
+                                                    :error-messages="error.confirm_password"
+                                                    :label="$t('confirmPassword')"
+                                                    placeholder="**********"
+                                                    required
+                                                    @keyup="clearError('confirm_password')"
+                                                    :rules="rules.confirm_password"
+                                                    solo
+                                                />
+                                            </v-col>
+                                            <v-col md="4">
+                                                <v-select
+                                                    v-model="is_active"
+                                                    description="Please select a status."
+                                                    prepend-inner-icon="mdi-account-question"
+                                                    :items="status"
+                                                    item-value="value"
+                                                    item-text="name"
+                                                    autocomplete=""
+                                                    label="Status"
+                                                    placeholder="Select status..."
+                                                    required
+                                                    @keyup="clearError('state')"
+                                                    solo
+                                                ></v-select>
+                                            </v-col>
+                                        </v-row>
                                     </v-form>
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="create">
                                             <CIcon name="cil-check-circle"/>
-                                            Submit
+                                            {{ $t('button.submit') }}
                                         </CButton>
-                                        <CButton type="reset" size="sm" color="danger">
+                                        <CButton size="sm" color="danger" :to="'/vendors'">
                                             <CIcon name="cil-ban"/>
-                                            Reset
+                                            {{ $t('button.cancel') }}
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -235,6 +330,11 @@
 import store from "../../store";
 import route from "../../router";
 import i18n from "../../i18n";
+import config from "../../config";
+import ApiServices from "../../services/ApiServices";
+import countryList from "../../services/lib/country.json";
+import stateList from "../../services/lib/state.json";
+import cityList from "../../services/lib/city.json";
 
 export default {
     name: "VendorCreate",
@@ -242,26 +342,14 @@ export default {
     props: {
         source: String,
     },
-    data: () => ({
-        name: '',
-        company_name: '',
-        image: '',
-        vat_no: '',
-        email: '',
-        address: '',
-        landline: '',
-        mobile: '',
-        country: '',
-        city: '',
-        state: '',
-        postal_code: '',
-        is_active: '',
-        category_id: '',
-        createProgress: false,
-        error: {
+    data() {
+        return {
+            baseURL: config.baseURL,
+            users: [],
             name: '',
+            username: '',
             company_name: '',
-            image: '',
+            image: [],
             vat_no: '',
             email: '',
             address: '',
@@ -273,45 +361,107 @@ export default {
             postal_code: '',
             is_active: '',
             category_id: '',
-        },
-        rules: {
-            name: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
+            password: '',
+            confirm_password: '',
+            show1: false,
+            show2: false,
+            countries: [],
+            states: [],
+            cities: [],
+            emailValidation: false,
+            usernameValidation: false,
+            status: [
+                {name: 'Active', value: 1},
+                {name: 'Inactive', value: 0}
             ],
-            company_name: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],
-            email: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-                val => !val || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(val) || i18n.t('validation.email')
-            ],
-            vat_no: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],
-            mobile: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-                val => (val || '').length < 14 || 'Number of length exceeded.',
-                val => Number.isInteger(Number(val)) || "The value must be number",
-            ],
-            country: [
-                val => val > 0 || i18n.t('validation.required'),
-            ],
-            city: [
-                val => val > 0 || i18n.t('validation.required'),
-            ],
-            state: [
-                val => val > 0 || i18n.t('validation.required'),
-            ],
-            landline: [
-                val => (val || '').length < 10 || 'Number of length exceeded.',
-                val => Number.isInteger(Number(val)) || "The value must be number",
-            ],
-        },
-    }),
+            createProgress: false,
+            error: {
+                name: '',
+                company_name: '',
+                image: '',
+                vat_no: '',
+                email: '',
+                address: '',
+                landline: '',
+                mobile: '',
+                country: '',
+                city: '',
+                state: '',
+                postal_code: '',
+                is_active: '',
+                category_id: '',
+            },
+            rules: {
+                name: [
+                    val => (val || '').length > 0 || i18n.t('validation.required'),
+                ],
+                username: [
+                    val => (val || '').length > 0 || i18n.t('validation.required'),
+                ],
+                company_name: [
+                    val => (val || '').length > 0 || i18n.t('validation.required'),
+                ],
+                email: [
+                    val => (val || '').length > 0 || i18n.t('validation.required'),
+                    val => !val || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(val) || i18n.t('validation.email')
+                ],
+                vat_no: [
+                    val => (val || '').length > 0 || i18n.t('validation.required'),
+                ],
+                mobile: [
+                    val => (val || '').length > 0 || i18n.t('validation.required'),
+                    val => (val || '').length < 14 || 'Number of length exceeded.',
+                    val => Number.isInteger(Number(val)) || "The value must be number",
+                ],
+                landline: [
+                    val => (val || '').length < 10 || 'Number of length exceeded.',
+                    val => Number.isInteger(Number(val)) || "The value must be number",
+                ],
+                password: [
+                    v => !!v || i18n.t('validation.required'),
+                    v => (v && v.length >= 8) || i18n.t('validation.morethan'),
+                    v => /(?=.*[A-Z])/.test(v) || i18n.t('validation.uppercase'),
+                    v => /(?=.*\d)/.test(v) || i18n.t('validation.numeric'),
+                    v => /([!@$%:])/.test(v) || i18n.t('validation.special')
+                ],
+                confirm_password: [
+                    v => !!v || i18n.t('validation.required'),
+                    v => (v && v.length >= 8) || i18n.t('validation.morethan'),
+                    v => v === this.password || i18n.t('validation.samePassword'),
+                    v => /(?=.*[A-Z])/.test(v) || i18n.t('validation.uppercase'),
+                    v => /(?=.*\d)/.test(v) || i18n.t('validation.numeric'),
+                    v => /([!@$%:])/.test(v) || i18n.t('validation.special')
+                ],
+            },
+        };
+    },
+    async created() {
+        this.loadUsers();
+        this.countries = countryList;
+    },
     methods: {
+        async loadUsers() {
+            let rtn = await ApiServices.userIndex();
+            if (rtn.success === true) {
+                this.users = rtn.data;
+            }
+        },
+        async getStates(country) {
+            this.states = stateList.filter(function (value, index) {
+                return value.country_id === country.id;
+            })
+        },
+        async getCities(state) {
+            this.cities = cityList.filter(function (value, index) {
+                return value.state_id === state.id
+            })
+        },
         clearError(name) {
             if (name === 'name') {
                 this.error.name = '';
+            }
+            if (name === 'username') {
+                this.error.username = '';
             }
             if (name === 'vat_no') {
                 this.error.vat_no = '';
@@ -350,28 +500,113 @@ export default {
                 this.error.is_active = '';
             }
         },
+
+        async checkValidation(type) {
+            let email = 0;
+            let username = 0;
+            if (type === 'username') {
+                for (var i = 0; i < this.users.length; i++) {
+                    if (this.username === this.users[i].username) {
+                        username = 1;
+                    }
+                }
+            } else {
+                for (var j = 0; j < this.users.length; j++) {
+                    if (this.email === this.users[j].email) {
+                        email = 1;
+                    }
+                }
+            }
+            if ((username === 0) && (email === 0)) {
+                this.emailValidation = false;
+                this.usernameValidation = false;
+            } else if (username === 1) {
+                this.usernameValidation = true;
+            } else if (email === 1) {
+                this.emailValidation = true;
+            }
+        },
+
         async create() {
             this.createProgress = true;
-            store.state.settings.name = this.name;
-            store.state.settings.company_name = this.company_name;
-            store.state.settings.vat_no = this.vat_no;
-            store.state.settings.email = this.email;
-            store.state.settings.landline = this.landline;
-            store.state.settings.mobile = this.mobile;
-            store.state.settings.address = this.address;
-            store.state.settings.image = this.image;
-            store.state.settings.country = this.country;
-            store.state.settings.city = this.city;
-            store.state.settings.state = this.state;
-            store.state.settings.postal_code = this.postal_code;
-            store.state.settings.is_active = this.is_active;
-            store.state.settings.category_id = this.category_id;
-            let res = await store.dispatch('vendors/vendorCreate');
+            const data = new FormData();
+            if (this.name !== null && this.name !== '') {
+                data.append('name', this.name);
+            }
+
+            if (this.username !== null && this.username !== '') {
+                data.append('username', this.username);
+            }
+
+            if (this.email !== null && this.email !== '') {
+                data.append('email', this.email);
+            }
+
+            if (this.mobile !== null && this.mobile !== '') {
+                data.append('mobile', this.mobile);
+            }
+
+            if (this.password !== null && this.password !== '') {
+                data.append('password', this.password);
+            }
+
+            if (this.confirm_password !== null && this.confirm_password !== '') {
+                data.append('confirm_password', this.confirm_password);
+            }
+
+            if (this.address !== null && this.address !== '') {
+                data.append('address', this.address);
+            }
+
+            if (this.company_name !== null && this.company_name !== '') {
+                data.append('company_name', this.company_name);
+            }
+
+            if (this.vat_no !== null && this.vat_no !== '') {
+                data.append('vat_no', this.vat_no);
+            }
+
+            if (this.landline !== null && this.landline !== '') {
+                data.append('landline', this.landline);
+            }
+
+            if (this.country !== null && this.country !== '') {
+                data.append('country', JSON.stringify(this.country));
+            }
+
+            if (this.state !== null && this.state !== '') {
+                data.append('state', JSON.stringify(this.state));
+            }
+
+            if (this.city !== null && this.city !== '') {
+                data.append('city', JSON.stringify(this.city));
+            }
+
+            if (this.postal_code !== null && this.postal_code !== '') {
+                data.append('postal_code', this.postal_code);
+            }
+
+            if (this.category_id !== null && this.category_id !== '') {
+                data.append('category_id', this.category_id);
+            }
+
+            if (this.is_active !== null && this.is_active !== '') {
+                data.append('is_active', this.is_active);
+            }
+            if (typeof this.image.name == 'string') {
+                data.append('image', this.image);
+            }
+            let res = await ApiServices.vendorCreate(data);
             this.createProgress = false;
-            if (res === true) {
-                route.replace('/index');
+            if (res.success === true) {
+                // route.replace('/vendors/');
             }
         },
     }
 }
 </script>
+<style scoped>
+.notify-validation {
+    color: #f65050;
+}
+</style>

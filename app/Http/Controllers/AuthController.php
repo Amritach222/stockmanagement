@@ -82,7 +82,6 @@ class AuthController extends Controller
                 return response(['success' => false, "message" => trans('auth.failedVendor'), "data" => []], 400);
             }
         } else {
-
             return response(['success' => false, "message" => trans('auth.failed'), "data" => []], 400);
         }
     }

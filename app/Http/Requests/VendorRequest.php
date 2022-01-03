@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\CheckPassword;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 
@@ -26,22 +27,31 @@ class VendorRequest extends FormRequest
     {
         if ($this->id) {
             return [
-                'name' => 'string',
                 'company_name' => 'string',
                 'vat_no' => 'int',
                 'landline' => 'int',
-                'mobile' => 'int',
-                'category_id' => 'int|exists:categories,id'
+                'category_id' => 'int|exists:categories,id',
+                'email' => 'email|indisposable',
+                'username' => 'string',
+                'name' => 'string|max:50',
+                'department_id' => 'sometimes|numeric|exists:departments,id',
+                'designation_id' => 'sometimes|numeric|exists:designations,id',
+                'mobile' => 'min:10|max:10',
+                'address' => 'sometimes|string'
             ];
         } else {
             return [
-                'name' => 'required|string',
                 'company_name' => 'required|string',
                 'vat_no' => 'required|int',
-                'email' => 'required',
                 'landline' => 'int',
-                'mobile' => 'required|int',
-                'category_id' => 'int|exists:categories,id'
+                'category_id' => 'int|exists:categories,id',
+                'email' => 'required|email|indisposable|unique:users',
+                'username' => 'required|unique:users',
+                'name' => 'required|string|max:50',
+                'confirm_password' => 'required|min:8|max:16|same:password',
+                'password' => ['required', new CheckPassword()],
+                'mobile' => 'required|min:10|max:10',
+                'address' => 'sometimes|string'
             ];
         }
     }

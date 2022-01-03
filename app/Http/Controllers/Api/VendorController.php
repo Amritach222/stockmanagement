@@ -6,6 +6,7 @@ use App\Events\ActivityLogEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VendorRequest;
 use App\Http\Resources\Vendor as VendorResource;
+use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 
@@ -42,7 +43,12 @@ class VendorController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
+            $request->merge(['mobile_no' => $request->mobile]);
             $values = $request->all();
+            $user = new User($values);
+            $user->save();
+            $values['user_id'] = $user->id;
+            $user->assignRole('Vendor');
             $vendor = new Vendor($values);
             $vendor->save();
             event(new ActivityLogEvent('Add', 'Vendor', $vendor->id));
