@@ -19,10 +19,12 @@ export default {
         time_zone: null,
         date_format: null,
         mail_host: null,
+        mail_mailer: null,
         mail_port: null,
         mail_address: null,
         mail_from_name: null,
         password: null,
+        username: null,
         encryption: null,
         gateway: null,
         api_key: null,
@@ -477,10 +479,12 @@ export default {
 
         async mailSettingEdit({state, rootState}) {
             const data = new FormData();
+            data.append('mail_mailer', state.mail_mailer);
             data.append('mail_host', state.mail_host);
             data.append('mail_port', state.mail_port);
             data.append('mail_address', state.mail_address);
             data.append('mail_from_name', state.mail_from_name);
+            data.append('username', state.username);
             data.append('password', state.password);
             data.append('encryption', state.encryption);
             let res = await ApiServices.mailSettingEdit(state.id, data);

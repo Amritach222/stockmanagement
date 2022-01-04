@@ -143,12 +143,6 @@
                             <div class="text-center">
                                 <v-menu offset-y>
                                     <template v-slot:activator="{ on, attrs }">
-                                        <!--                            <v-btn-->
-                                        <!--                                color="primary"-->
-                                        <!--                                dark-->
-                                        <!--                                class="btn btn-sm"-->
-                                        <!--                                -->
-                                        <!--                            >-->
                                         <v-icon
                                             small
                                             v-bind="attrs"
@@ -156,7 +150,6 @@
                                         >
                                             mdi-chevron-double-down
                                         </v-icon>
-                                        <!--                            </v-btn>-->
                                     </template>
                                     <v-list>
                                         <v-list-item
@@ -240,6 +233,7 @@
                         />
                     </template>
                     <template v-slot:item.actions="{ item }">
+                        <CRow>
                         <router-link
                             :to="'/users/'+item.id"
                             v-if="$can('users.show')"
@@ -267,6 +261,29 @@
                         >
                             mdi-delete
                         </v-icon>
+                        <div class="text-center">
+                            <v-menu offset-y>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-icon
+                                        small
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    >
+                                        mdi-chevron-double-down
+                                    </v-icon>
+                                </template>
+                                <v-list>
+                                    <v-list-item
+                                    >
+                                        <v-list-item-title
+                                            @click="changePassword(item)"
+                                            class="password-btn">Change Password
+                                        </v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                        </div>
+                        </CRow>
                     </template>
                     <template v-slot:no-data>
                         <div>No Data</div>
@@ -340,6 +357,7 @@
                         <p v-if="item.designation_id">{{ item.designation }}</p>
                     </template>
                     <template v-slot:item.actions="{ item }">
+                        <CRow>
                         <router-link
                             :to="'/users/'+item.id"
                             v-if="$can('users.show')"
@@ -367,6 +385,29 @@
                         >
                             mdi-delete
                         </v-icon>
+                        <div class="text-center">
+                            <v-menu offset-y>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-icon
+                                        small
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    >
+                                        mdi-chevron-double-down
+                                    </v-icon>
+                                </template>
+                                <v-list>
+                                    <v-list-item
+                                    >
+                                        <v-list-item-title
+                                            @click="changePassword(item)"
+                                            class="password-btn">Change Password
+                                        </v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                        </div>
+                        </CRow>
                     </template>
                     <template v-slot:no-data>
                         <div>No Data</div>

@@ -42,6 +42,7 @@ class Vendor extends JsonResource
             'postal_code' => $this->postal_code,
             'category_id' => $this->category_id,
             'is_active' => $this->is_active,
+            'user_id' => $this->user_id,
             'link' => $link,
             'category' => $category,
         ];
