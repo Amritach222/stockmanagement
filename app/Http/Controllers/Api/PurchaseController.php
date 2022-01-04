@@ -16,6 +16,7 @@ class PurchaseController extends Controller
     public function __construct()
     {
         parent::generateAllMiddlewareByPermission('purchases');
+       $this->middleware(['role'=>'Admin'])->only('adminPurchaseLists');
     }
 
     public function index()
@@ -39,6 +40,17 @@ class PurchaseController extends Controller
         $data['data'] = [];
         $user = auth()->user();
         $purchases = Purchase::where('user_id',$user->id)->get();
+        $data['data'] = PurchaseResource::collection($purchases);
+        return $data;
+    }
+
+    public function adminPurchaseLists()
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        $user = auth()->user();
+        $purchases = Purchase::all();
         $data['data'] = PurchaseResource::collection($purchases);
         return $data;
     }

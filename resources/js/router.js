@@ -274,8 +274,8 @@ export default new Router({
             }
         },
         {
-            path: '/purchase/admin-purchase-request-product',
-            name: 'Purchase Requests',
+            path: '/purchase/admin-purchase-request-approval',
+            name: 'Purchase Requests Approval',
             component: PurchaseRequestAdmin,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
