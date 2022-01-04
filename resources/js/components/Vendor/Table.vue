@@ -258,14 +258,17 @@
                         mdi-eye
                     </v-icon>
                 </router-link>
+                <router-link
+                    :to="'/vendors/edit/'+item.id"
+                    v-if="$can('vendors.edit')"
+                >
                 <v-icon
                     small
                     class="mr-2"
-                    @click="editItem(item)"
-                    v-if="$can('vendors.edit')"
                 >
                     mdi-pencil
                 </v-icon>
+                </router-link>
                 <v-icon
                     small
                     @click="deleteItem(item)"
@@ -295,9 +298,6 @@
 <script>
 import store from "../../store";
 import ApiServices from "../../services/ApiServices";
-import countryList from "../../services/lib/country.json";
-import stateList from "../../services/lib/state.json";
-import cityList from "../../services/lib/city.json";
 import i18n from "../../i18n";
 
 
@@ -325,94 +325,16 @@ export default {
             ],
         categories: [],
         vendors: [],
-        editedIndex: -1,
-        editedItem: {
-            id: null,
-            name: '',
-            company_name: '',
-            vat_no: '',
-            email: '',
-            landline: '',
-            mobile: '',
-            country: '',
-            state: '',
-            city: '',
-            postal_code: '',
-            category_id: '',
-            is_active: '',
-        },
-        defaultItem: {
-            id: null,
-            name: '',
-            company_name: '',
-            vat_no: '',
-            email: '',
-            landline: '',
-            mobile: '',
-            country: '',
-            state: '',
-            city: '',
-            postal_code: '',
-            category_id: '',
-            is_active: '',
-        },
-        rules: {
-            name: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],company_name: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],vat_no: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-            ],email: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-                val => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(val) || i18n.t('validation.email'),
-            ],landline: [
-                val => /(\d{0,3})(\d{0,3})(\d{0,4})/.test(val) || i18n.t('validation.phone'),
-            ],mobile: [
-                val => (val || '').length > 0 || i18n.t('validation.required'),
-                val => /(\d{0,3})(\d{0,3})(\d{0,4})/.test(val) || i18n.t('validation.phone'),
-            ],
-        },
         tableLoad: true,
-        country:[],
-        state:[],
-        city:[],
     }),
-
-    computed: {
-        formTitle() {
-            return this.editedIndex === -1 ? 'Add Vendor' : 'Edit Vendor'
-        },
-    },
-
-    watch: {
-        dialog(val) {
-            val || this.close()
-        },
-        dialogDelete(val) {
-            val || this.closeDelete()
-        },
-    },
 
     async created() {
         this.loadItems();
-        this.loadCategories();
-        this.country = countryList;
     },
 
     methods: {
         getCityName(item){
             if(item.city !== null) return JSON.parse(item.city).name;
-        },
-        async getStates(country){
-            this.state = stateList.filter(function(value, index) {
-                return value.country_id === country.id;
-            })
-        },
-        async getCities(state){
-            this.city = cityList.filter(function(value, index) {
-                return value.state_id === state.id
-            })
         },
         async loadItems() {
             let res = await ApiServices.vendorIndex();
@@ -420,24 +342,6 @@ export default {
                 this.tableLoad = false;
                 this.vendors = res.data;
             }
-        },
-        async loadCategories() {
-            let res = await ApiServices.categoryIndex();
-            if (res.success === true) {
-                this.tableLoad = false;
-                this.categories = res.data;
-            }
-        },
-        editItem(item) {
-            this.editedIndex = this.vendors.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            this.editedItem.country = JSON.parse(this.editedItem.country);
-            this.editedItem.state = JSON.parse(this.editedItem.state);
-            this.editedItem.city = JSON.parse(this.editedItem.city);
-            console.log('edit but', this.editedItem);
-            this.getStates(this.editedItem.country);
-            this.getCities(this.editedItem.state);
-            this.dialog = true
         },
 
         deleteItem(item) {
@@ -454,16 +358,6 @@ export default {
             this.closeDelete()
         },
 
-        close() {
-            this.progressL = false;
-            this.dialog = false;
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
-                this.editedIndex = -1
-            });
-            this.loadItems();
-        },
-
         closeDelete() {
             this.dialogDelete = false
             this.$nextTick(() => {
@@ -471,87 +365,6 @@ export default {
                 this.editedIndex = -1
             })
         },
-
-        async save() {
-            if (this.editedIndex > -1) {
-                //edit goes here
-                this.progressL = true;
-                const data = new FormData();
-                data.append('name', this.editedItem.name);
-                data.append('company_name', this.editedItem.company_name);
-                data.append('vat_no', this.editedItem.vat_no);
-                data.append('email', this.editedItem.email);
-                data.append('landline', this.editedItem.landline);
-                data.append('mobile', this.editedItem.mobile);
-                data.append('country', JSON.stringify(this.editedItem.country));
-                data.append('state', JSON.stringify(this.editedItem.state));
-                data.append('city', JSON.stringify(this.editedItem.city));
-                data.append('postal_code', this.editedItem.postal_code);
-                data.append('category_id', this.editedItem.category_id);
-                data.append('is_active', this.editedItem.is_active);
-                let res = await ApiServices.vendorEdit(this.editedItem.id, data);
-                if (res.success === true) {
-                    Object.assign(this.vendors[this.editedIndex], this.editedItem)
-                    this.$refs.form.reset();
-                    this.close();
-                }
-            } else {
-                //add new
-                this.validateData();
-                if (this.validated) {
-                    this.progressL = true;
-                    const data = new FormData();
-                    data.append('name', this.editedItem.name);
-                    data.append('company_name', this.editedItem.company_name);
-                    data.append('vat_no', this.editedItem.vat_no);
-                    data.append('email', this.editedItem.email);
-                    data.append('landline', this.editedItem.landline);
-                    data.append('mobile', this.editedItem.mobile);
-                    data.append('country', JSON.stringify(this.editedItem.country));
-                    data.append('state', JSON.stringify(this.editedItem.state));
-                    data.append('city', JSON.stringify(this.editedItem.city));
-                    data.append('postal_code', this.editedItem.postal_code);
-                    data.append('category_id', this.editedItem.category_id);
-                    data.append('is_active', this.editedItem.is_active);
-                    let res = await ApiServices.vendorCreate(data);
-                    if (res.success === true) {
-                        this.vendors.push(this.editedItem);
-                        this.$refs.form.reset();
-                        this.close()
-                    }
-                }
-            }
-        },
-        validateData() {
-            this.$refs.form.validate();
-            if (this.editedItem.name === null) {
-                this.validated = false
-            }if (this.editedItem.company_name === null) {
-                this.validated = false
-            }if (this.editedItem.vat_no === null) {
-                this.validated = false
-            }if (this.editedItem.email === null) {
-                this.validated = false
-            }if (this.editedItem.landline === null) {
-                this.validated = false
-            }if (this.editedItem.mobile === null) {
-                this.validated = false
-            }if (this.editedItem.country === null) {
-                this.validated = false
-            }if (this.editedItem.state === null) {
-                this.validated = false
-            }if (this.editedItem.city === null) {
-                this.validated = false
-            }if (this.editedItem.postal_code === null) {
-                this.validated = false
-            }if (this.editedItem.category_id === null) {
-                this.validated = false
-            }if (this.editedItem.is_active === null) {
-                this.validated = false
-            } else {
-                this.validated = true
-            }
-        }
     },
 }
 </script>

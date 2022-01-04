@@ -132,6 +132,9 @@
                                                     <v-col md="4">
                                                         <v-select
                                                             v-model="category_id"
+                                                            :items="categories"
+                                                            item-value="id"
+                                                            item-text="name"
                                                             description="Please select category."
                                                             prepend-inner-icon="mdi-shape"
                                                             autocomplete=""
@@ -345,7 +348,9 @@ export default {
     data() {
         return {
             baseURL: config.baseURL,
+            validated: false,
             users: [],
+            categories: [],
             name: '',
             username: '',
             company_name: '',
@@ -437,6 +442,7 @@ export default {
     },
     async created() {
         this.loadUsers();
+        this.loadCategories();
         this.countries = countryList;
     },
     methods: {
@@ -444,6 +450,13 @@ export default {
             let rtn = await ApiServices.userIndex();
             if (rtn.success === true) {
                 this.users = rtn.data;
+            }
+        },
+        async loadCategories() {
+            let res = await ApiServices.categoryIndex();
+            if (res.success === true) {
+                this.tableLoad = false;
+                this.categories = res.data;
             }
         },
         async getStates(country) {
@@ -529,79 +542,112 @@ export default {
 
         async create() {
             this.createProgress = true;
-            const data = new FormData();
-            if (this.name !== null && this.name !== '') {
-                data.append('name', this.name);
-            }
+            this.validateData();
+            if (this.validated) {
+                const data = new FormData();
+                if (this.name !== null && this.name !== '') {
+                    data.append('name', this.name);
+                }
 
-            if (this.username !== null && this.username !== '') {
-                data.append('username', this.username);
-            }
+                if (this.username !== null && this.username !== '') {
+                    data.append('username', this.username);
+                }
 
-            if (this.email !== null && this.email !== '') {
-                data.append('email', this.email);
-            }
+                if (this.email !== null && this.email !== '') {
+                    data.append('email', this.email);
+                }
 
-            if (this.mobile !== null && this.mobile !== '') {
-                data.append('mobile', this.mobile);
-            }
+                if (this.mobile !== null && this.mobile !== '') {
+                    data.append('mobile', this.mobile);
+                }
 
-            if (this.password !== null && this.password !== '') {
-                data.append('password', this.password);
-            }
+                if (this.password !== null && this.password !== '') {
+                    data.append('password', this.password);
+                }
 
-            if (this.confirm_password !== null && this.confirm_password !== '') {
-                data.append('confirm_password', this.confirm_password);
-            }
+                if (this.confirm_password !== null && this.confirm_password !== '') {
+                    data.append('confirm_password', this.confirm_password);
+                }
 
-            if (this.address !== null && this.address !== '') {
-                data.append('address', this.address);
-            }
+                if (this.address !== null && this.address !== '') {
+                    data.append('address', this.address);
+                }
 
-            if (this.company_name !== null && this.company_name !== '') {
-                data.append('company_name', this.company_name);
-            }
+                if (this.company_name !== null && this.company_name !== '') {
+                    data.append('company_name', this.company_name);
+                }
 
-            if (this.vat_no !== null && this.vat_no !== '') {
-                data.append('vat_no', this.vat_no);
-            }
+                if (this.vat_no !== null && this.vat_no !== '') {
+                    data.append('vat_no', this.vat_no);
+                }
 
-            if (this.landline !== null && this.landline !== '') {
-                data.append('landline', this.landline);
-            }
+                if (this.landline !== null && this.landline !== '') {
+                    data.append('landline', parseInt(this.landline));
+                }
 
-            if (this.country !== null && this.country !== '') {
-                data.append('country', JSON.stringify(this.country));
-            }
+                if (this.country !== null && this.country !== '') {
+                    data.append('country', JSON.stringify(this.country));
+                }
 
-            if (this.state !== null && this.state !== '') {
-                data.append('state', JSON.stringify(this.state));
-            }
+                if (this.state !== null && this.state !== '') {
+                    data.append('state', JSON.stringify(this.state));
+                }
 
-            if (this.city !== null && this.city !== '') {
-                data.append('city', JSON.stringify(this.city));
-            }
+                if (this.city !== null && this.city !== '') {
+                    data.append('city', JSON.stringify(this.city));
+                }
 
-            if (this.postal_code !== null && this.postal_code !== '') {
-                data.append('postal_code', this.postal_code);
-            }
+                if (this.postal_code !== null && this.postal_code !== '') {
+                    data.append('postal_code', this.postal_code);
+                }
 
-            if (this.category_id !== null && this.category_id !== '') {
-                data.append('category_id', this.category_id);
-            }
+                if (this.category_id !== null && this.category_id !== '') {
+                    data.append('category_id', this.category_id);
+                }
 
-            if (this.is_active !== null && this.is_active !== '') {
-                data.append('is_active', this.is_active);
-            }
-            if (typeof this.image.name == 'string') {
-                data.append('image', this.image);
-            }
-            let res = await ApiServices.vendorCreate(data);
-            this.createProgress = false;
-            if (res.success === true) {
-                // route.replace('/vendors/');
+                if (this.is_active !== null && this.is_active !== '') {
+                    data.append('is_active', this.is_active);
+                }
+                if (typeof this.image.name == 'string') {
+                    data.append('image', this.image);
+                }
+                let res = await ApiServices.vendorCreate(data);
+                this.createProgress = false;
+                if (res.success === true) {
+                    route.replace('/vendors/');
+                }
             }
         },
+        validateData() {
+            this.$refs.form.validate();
+            if (this.editedItem.name === null) {
+                this.validated = false
+            }if (this.editedItem.company_name === null) {
+                this.validated = false
+            }if (this.editedItem.vat_no === null) {
+                this.validated = false
+            }if (this.editedItem.email === null) {
+                this.validated = false
+            }if (this.editedItem.landline === null) {
+                this.validated = false
+            }if (this.editedItem.mobile === null) {
+                this.validated = false
+            }if (this.editedItem.country === null) {
+                this.validated = false
+            }if (this.editedItem.state === null) {
+                this.validated = false
+            }if (this.editedItem.city === null) {
+                this.validated = false
+            }if (this.editedItem.postal_code === null) {
+                this.validated = false
+            }if (this.editedItem.category_id === null) {
+                this.validated = false
+            }if (this.editedItem.is_active === null) {
+                this.validated = false
+            } else {
+                this.validated = true
+            }
+        }
     }
 }
 </script>
