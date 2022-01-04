@@ -590,7 +590,7 @@ export default {
             let res = await ApiServices.vendorEdit(this.editedItem.id, data);
             this.createProgress = false;
             if (res.success === true) {
-                // route.replace('/vendors/');
+                route.replace('/vendors/');
             }
         },
     }

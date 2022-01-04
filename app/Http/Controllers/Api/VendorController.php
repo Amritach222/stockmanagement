@@ -106,6 +106,7 @@ class VendorController extends Controller
         try {
             $data['success'] = true;
             $vendor = Vendor::findOrFail($id);
+            $user=null;
             if ($vendor->user_id !== null) {
                 $user = User::findOrFail($vendor->user_id);
             }
