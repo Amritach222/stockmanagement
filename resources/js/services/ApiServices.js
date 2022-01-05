@@ -81,6 +81,9 @@ export default {
     async getUserPermissions(username) {
         return await apiCall(GET, `api/get-user-permissions/${username}`)
     },
+    async getVendorPermissions(username) {
+        return await apiCall(GET, `api/get-vendor-permissions/${username}`)
+    },
     async getRolePermissions(name) {
         return await apiCall(GET, `api/get-role-permissions/${name}`)
     },
@@ -89,6 +92,9 @@ export default {
     },
     async permissionUserUpdate(data) {
         return await apiCall(POST, `api/update-user-permissions`, data)
+    },
+    async permissionVendorUpdate(data) {
+        return await apiCall(POST, `api/update-vendor-permissions`, data)
     },
     async permissionRoleUpdate(data) {
         return await apiCall(POST, `api/update-role-permissions`, data)

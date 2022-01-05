@@ -46,8 +46,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('logs', [\App\Http\Controllers\Api\logController::class, 'index']);
     Route::get('get-role-permissions/{name}', [\App\Http\Controllers\Api\PermissionController::class, 'getRolePermissions']);
     Route::get('get-user-permissions/{username}', [\App\Http\Controllers\Api\PermissionController::class, 'getUserPermissions']);
+    Route::get('get-vendor-permissions/{username}', [\App\Http\Controllers\Api\PermissionController::class, 'getVendorPermissions']);
     Route::get('get-all-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'getAllPermissions']);
     Route::post('update-user-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'updateUserPermissions']);
+    Route::post('update-vendor-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'updateVendorPermissions']);
     Route::post('update-role-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'updateRolePermissions']);
     Route::post('assign-role/{id}', [\App\Http\Controllers\Api\PermissionController::class, 'assignRole']);
 

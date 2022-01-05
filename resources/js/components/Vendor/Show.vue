@@ -17,8 +17,8 @@
                                         <p>{{ show.name }}</p>
                                     </CCol>
                                     <CCol md="3">
-                                        <h6>{{ $t('company_name') }}: </h6>
-                                        <p>{{ show.company_name }}</p>
+                                        <h6>{{ $t('username') }}: </h6>
+                                        <p>{{ show.username }}</p>
                                     </CCol>
                                     <CCol md="3">
                                         <h6>{{ $t('vat_no') }}: </h6>
@@ -167,6 +167,14 @@
                                 <hr>
                                 <CForm>
                                     <CCardFooter>
+                                        <CButton size="sm" color="primary" :to="'/vendors/edit/'+show.id">
+                                            <CIcon name="cil-check-circle"/>
+                                            {{ $t('button.edit') }}
+                                        </CButton>
+                                        <CButton size="sm" color="warning" :to="'/vendors/permission/'+show.username">
+                                            <CIcon name="cil-check-circle"/>
+                                            {{ $t('button.permissions') }}
+                                        </CButton>
                                         <CButton size="sm" color="danger" :to="'/vendors'">
                                             <CIcon name="cil-ban"/>
                                             {{ $t('button.back') }}

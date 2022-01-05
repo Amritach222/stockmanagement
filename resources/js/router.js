@@ -100,6 +100,7 @@ import VendorIndex from './components/vendor/Index'
 import VendorCreate from './components/vendor/Create'
 import VendorShow from './components/vendor/Show'
 import VendorEdit from './components/vendor/Edit'
+import VendorPermission from './components/vendor/Permissions'
 
 import VendorProductShow from './components/vendor/vendorProduct/ShowProduct'
 import VendorProductAdd from './components/vendor/vendorProduct/AddProduct'
@@ -971,6 +972,15 @@ export default new Router({
             path: '/vendorProducts/:id',
             name: i18n.t('vendor') +' '+ i18n.t('product'),
             component: VendorProductShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendors/permission/:username',
+            name: i18n.t('vendor') + ' ' + i18n.t('permission'),
+            component: VendorPermission,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

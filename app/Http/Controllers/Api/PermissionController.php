@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AuthUserResource;
 use App\Http\Resources\RoleResource;
 use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
@@ -14,6 +15,32 @@ use Spatie\Permission\Models\Role;
 class PermissionController extends Controller
 {
     public function getUserPermissions($username)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $user = User::where('username', $username)->firstOrFail();
+            if ($user->isVendor()) {
+                return response(['success' => false, "message" => 'No permission for this user.'], 403);
+            }
+            $permissions = [];
+            foreach (Permission::where('guard_name', 'api')->get() as $permission) {
+                if ($user->can($permission->name)) {
+                    $permissions[] = $permission->name;
+                }
+            }
+            $user->permissions = array_unique($permissions);
+            $data['data'] = new AuthUserResource($user);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = "An error occurred.";
+            $data['data'] = $e;
+        }
+        return $data;
+    }
+
+    public function getVendorPermissions($username)
     {
         $data['success'] = true;
         $data['message'] = '';
@@ -97,6 +124,42 @@ class PermissionController extends Controller
     }
 
     public function updateUserPermissions(Request $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $requestPermissions = json_decode($request->permissions);
+            $user = User::findOrFail($request->id);
+            if ($user->isVendor()) {
+                return response(['success' => false, "message" => 'No permission for this user'], 403);
+            }
+            $permissions = [];
+            foreach (Permission::all() as $permission) {
+                if ($user->can($permission->name)) {
+                    $permissions[] = $permission->name;
+                }
+            }
+            $permissions = array_unique($permissions);
+            foreach ($permissions as $permission) {
+                if (!in_array($permission, $requestPermissions)) {
+                    $user->revokePermissionTo([$permission]);
+                }
+            }
+            for ($i = 0; $i < count($requestPermissions); $i++) {
+                if (!in_array($requestPermissions[$i], $permissions)) {
+                    $user->givePermissionTo([$requestPermissions[$i]]);
+                }
+            }
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
+        }
+        return $data;
+    }
+
+    public function updateVendorPermissions(Request $request)
     {
         $data['success'] = true;
         $data['message'] = '';
