@@ -7,7 +7,7 @@
                 <v-btn
                     class="btn-danger m-1 btn-back"
                     text
-                    :to="'/vendors'"
+                    :to="'/vendor/my-products'"
                 >
                     {{ $t('button.cancel') }}
                 </v-btn>
@@ -101,7 +101,7 @@ import route from "../../../router";
 
 
 export default {
-    name: "VendorProductAdd",
+    name: "AddMyProducts",
     data: () => ({
         search: '',
         cdnURL: config.cdnURL,
@@ -111,6 +111,9 @@ export default {
         dialog: false,
         dialogDelete: false,
         singleSelect: false,
+        user:{
+            id:null,
+        },
         selected: [],
         headers: [
             {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
@@ -137,7 +140,7 @@ export default {
             window.open(config.cdnURL + data, `_blank`);
         },
         async loadItems() {
-            let res = await ApiServices.productIndex();
+            let res = await ApiServices.allProductsVendor();
             if (res.success === true) {
                 this.tableLoad = false;
                 this.products = res.data;
@@ -145,7 +148,8 @@ export default {
             }
         },
         async loadVendorProductIds() {
-            let res = await ApiServices.vendorProductIds('product', this.$route.params.id);
+            this.user = JSON.parse(localStorage.getItem('userData'));
+            let res = await ApiServices.vendorProductIds('product', this.user.id);
             if (res.success === true) {
                 this.tableLoad = false;
                 this.product_ids = res.data;
@@ -166,11 +170,11 @@ export default {
                     this.product_ids.push(this.selected[i].id);
                 }
                 const data = new FormData();
-                data.append('id', this.$route.params.id);
+                data.append('id', this.user.id);
                 data.append('product_ids', JSON.stringify(this.product_ids));
                 let res = await ApiServices.vendorProductCreate(data);
                 if (res.success === true) {
-                    route.replace('/vendors')
+                    route.replace('/vendor/my-products')
                 }
             }
         },

@@ -5,26 +5,16 @@
             <v-spacer></v-spacer>
             <v-card-actions>
                 <v-btn
-                    class="btn-danger m-1 btn-back"
+                    class="btn-primary m-1 btn-back"
                     text
-                    :to="'/vendors'"
+                    :to="'/vendor/add-product-list'"
                 >
-                    {{ $t('button.cancel') }}
-                </v-btn>
-                <v-btn
-                    class="btn-primary btn-submit"
-                    text
-                    @click="save"
-                >
-                    {{ $t('button.submit') }}
+                    {{ $t('button.edit_product_list') }}
                 </v-btn>
             </v-card-actions>
         </v-card-title>
         <v-data-table
-            v-model="selected"
-            :single-select="singleSelect"
             item-key="name"
-            show-select
             class="elevation-1"
             :headers="headers"
             :items="products"
@@ -38,18 +28,13 @@
                     flat
                 >
                     <v-row>
-                        <v-col
-                            cols="12"
-                            sm="2"
-                            md="3"
-                            lg="4"
-                        >
-                            <v-switch
-                                v-model="singleSelect"
-                                label="Single select"
-                                class="pa-3"
-                            ></v-switch>
-                        </v-col>
+<!--                        <v-col-->
+<!--                            cols="12"-->
+<!--                            sm="2"-->
+<!--                            md="3"-->
+<!--                            lg="4"-->
+<!--                        >-->
+<!--                        </v-col>-->
                         <v-col
                             cols="12"
                             sm="4"
@@ -101,7 +86,7 @@ import route from "../../../router";
 
 
 export default {
-    name: "VendorProductAdd",
+    name: "VendorMyProducts",
     data: () => ({
         search: '',
         cdnURL: config.cdnURL,
@@ -111,7 +96,9 @@ export default {
         dialog: false,
         dialogDelete: false,
         singleSelect: false,
-        selected: [],
+        user:{
+          id:null,
+        },
         headers: [
             {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
             {text: i18n.t('name'), value: 'name'},
@@ -124,7 +111,6 @@ export default {
             {text: 'Inactive', value: 0},
         ],
         products: [],
-        product_ids: [],
         tableLoad: true,
     }),
 
@@ -137,41 +123,10 @@ export default {
             window.open(config.cdnURL + data, `_blank`);
         },
         async loadItems() {
-            let res = await ApiServices.productIndex();
+            let res = await ApiServices.vendorProductList();
             if (res.success === true) {
                 this.tableLoad = false;
                 this.products = res.data;
-                let ids = await this.loadVendorProductIds();
-            }
-        },
-        async loadVendorProductIds() {
-            let res = await ApiServices.vendorProductIds('product', this.$route.params.id);
-            if (res.success === true) {
-                this.tableLoad = false;
-                this.product_ids = res.data;
-                for (let i = 0; i < this.product_ids.length; i++) {
-                    for (let j = 0; j < this.products.length; j++) {
-                        if (this.products[j].id === this.product_ids[i]) {
-                            this.selected.push(this.products[j]);
-                        }
-                    }
-                }
-            }
-        },
-
-        async save() {
-            this.product_ids = [];
-            if (this.selected.length >= 0) {
-                for (let i = 0; i < this.selected.length; i++) {
-                    this.product_ids.push(this.selected[i].id);
-                }
-                const data = new FormData();
-                data.append('id', this.$route.params.id);
-                data.append('product_ids', JSON.stringify(this.product_ids));
-                let res = await ApiServices.vendorProductCreate(data);
-                if (res.success === true) {
-                    route.replace('/vendors')
-                }
             }
         },
     },

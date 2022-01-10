@@ -177,6 +177,7 @@
     "change_password": "Change Password",
     "permission": "Permission",
     "permissions": "Permissions",
+    "my": "My",
 
     "validation": {
         "required": "This field is required!",
@@ -233,7 +234,8 @@
         "add_new_designation": "Add New Designation",
         "add_new_fiscal_year": "Add New Fiscal Year",
         "add_new_signature": "Add New Signature",
-        "add_new_signature_use_department": "Add New Signature Use Department"
+        "add_new_signature_use_department": "Add New Signature Use Department",
+        "edit_product_list": "Edit Product List"
     },
     "message": {
         "delete": "Are you sure you want to delete this item?"

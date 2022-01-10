@@ -42,6 +42,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function vendor()
+    {
+        return $this->hasOne(Vendor::class, 'user_id');
+    }
+
     public function logs()
     {
         return $this->hasMany(Log::class, 'user_id');
@@ -137,7 +142,8 @@ class User extends Authenticatable
         return $this->belongsTo(Designation::class, 'designation_id');
     }
 
-    public function isSuperAdmin(){
+    public function isSuperAdmin()
+    {
         return $this->hasRole('Super Admin');
     }
 

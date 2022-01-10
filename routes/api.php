@@ -35,7 +35,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
 Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => '/vendor'], function () {
-        Route::get('products', [\App\Http\Controllers\Api\VendorPortalController::class,'productList']);
+        Route::get('product-list', [\App\Http\Controllers\Api\VendorPortalController::class,'productList']);
+        Route::get('all-products', [\App\Http\Controllers\Api\VendorPortalController::class,'allProducts']);
     });
 
     Route::apiResource('roles', \App\Http\Controllers\Api\RoleController::class);

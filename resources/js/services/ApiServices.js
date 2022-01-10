@@ -475,6 +475,12 @@ export default {
     async vendorProductDelete(id) {
         return await apiCall(DELETE, `api/vendorProducts/${id}`)
     },
+    async allProductsVendor() {
+        return await apiCall(GET, `api/vendor/all-products`)
+    },
+    async vendorProductList() {
+        return await apiCall(GET, `api/vendor/product-list`)
+    },
 
     async budgetIndex() {
         return await apiCall(GET, `api/budget/budgets`)

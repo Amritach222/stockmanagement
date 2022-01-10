@@ -1,5 +1,5 @@
 <template>
-    <CRow>
+    <CRow v-if="!$is('Vendor')">
         <CCol sm="6" lg="3">
             <CWidgetDropdown color="primary" :header=JSON.stringify(settData.product_count) text="Total Number of Products">
                 <template #default>

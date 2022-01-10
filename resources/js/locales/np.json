@@ -179,6 +179,7 @@
     "change_password": "पासवर्ड परिवर्तन गर्नुहोस्",
     "permission": "अनुमति",
     "permissions": "अनुमतिहरू",
+    "my": "मेरो",
 
     "validation": {
         "required": "यो क्षेत्र आवश्यक छ!",
@@ -235,7 +236,8 @@
         "add_new_designation": "नयाँ पद थप्नुहोस्",
         "add_new_fiscal_year": "नयाँ आर्थिक वर्ष थप्नुहोस्",
         "add_new_signature": "नयाँ हस्ताक्षर थप्नुहोस्",
-        "add_new_signature_use_department": "नयाँ हस्ताक्षर प्रयोग विभाग थप्नुहोस्"
+        "add_new_signature_use_department": "नयाँ हस्ताक्षर प्रयोग विभाग थप्नुहोस्",
+        "edit_product_list": "प्रडक्ट सूची सम्पादन गर्नुहोस्"
     },
     "message": {
         "delete": "के तपाइँ यो वस्तु मेटाउन निश्चित हुनुहुन्छ?"
