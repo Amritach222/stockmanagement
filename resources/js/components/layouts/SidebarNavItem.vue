@@ -427,19 +427,19 @@
                         </v-list-item-title>
                     </v-list-item>
 
-                    <v-list-item class="ml-5">
-                        <v-list-item-icon class="mr-2">
-                            <v-icon>mdi-account-cog</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>
-                            <router-link
-                                :to="'/profile-setting/'">
-                                {{ $t('profile') + ' ' + $t('settings') }}
-                            </router-link>
-                        </v-list-item-title>
-                    </v-list-item>
-
                 </v-list-group>
+
+                <v-list-item class="ml-3">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-account-cog</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/profile-setting/'">
+                            {{ $t('profile') + ' ' + $t('settings') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
 
             </v-list-group>
 
