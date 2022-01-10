@@ -15,7 +15,7 @@ class SettingController extends Controller
 {
     public function __construct()
     {
-        parent::generateAllMiddlewareByPermission('settings');
+        $this->middleware('permission:' . 'settings.edit')->only('edit', 'update');
     }
 
     public function index()

@@ -444,6 +444,7 @@
             </v-list-group>
 
             <v-list-group
+                v-if="($can('fiscalYears') || $can('logs') || $can('settings.edit') || $can('mailSettings.edit') || $can('smsSettings.edit'))"
             >
                 <template v-slot:activator>
                     <v-list-item-icon class="mr-2">
