@@ -124,7 +124,7 @@
                 window.open(config.cdnURL + data, `_blank`);
             },
             async loadDepartments() {
-                let res = await ApiServices.departmentIndex();
+                let res = await ApiServices.departmentList();
                 if (res.success === true) {
                     this.departments = res.data;
                 }
