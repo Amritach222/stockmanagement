@@ -5,6 +5,7 @@
 import axios from 'axios'
 import store from '../store'
 import config from '../config'
+import route from "../router";
 
 const apiUrl = config.baseURL
 
@@ -12,10 +13,10 @@ export default () => {
     //bearer auth token here
     let token = store.state.auth.token;
     let lang = store.state.home.lang;
-    if(token === null){
+    if (token === null) {
         token = localStorage.getItem('access_token');
     }
-    if(lang === null){
+    if (lang === null) {
         lang = 'en';
     }
     const Api = axios.create({
@@ -43,7 +44,7 @@ export default () => {
                 console.log('user unauthorized');
             }
             if (error.response.status === 403) {
-                console.log('user unauthorized');
+                route.replace('/unauthorized');
             }
         } else if (error.request) {
             console.log({message: 'Network Error'});

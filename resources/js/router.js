@@ -171,6 +171,8 @@ import PurchaseRequestProducts from './components/purchaseRequest/PurchaseReques
 
 import NotFound from './components/errorPage/NotFound'
 
+import Unauthorized from './components/errorPage/Unauthorized'
+
 import LogIndex from './components/Settings/log/Index'
 
 Vue.use(Router)
@@ -1400,6 +1402,12 @@ export default new Router({
             path: '*',
             name: 'Not Found',
             component: NotFound
+        },
+
+        {
+            path: '/unauthorized',
+            name: i18n.t('unauthorized'),
+            component: Unauthorized
         }
     ]
 })

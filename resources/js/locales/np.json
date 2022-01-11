@@ -180,6 +180,7 @@
     "permission": "अनुमति",
     "permissions": "अनुमतिहरू",
     "my": "मेरो",
+    "unauthorized": "अनाधिकृत",
 
     "validation": {
         "required": "यो क्षेत्र आवश्यक छ!",

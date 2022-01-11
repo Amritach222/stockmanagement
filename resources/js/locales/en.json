@@ -178,6 +178,7 @@
     "permission": "Permission",
     "permissions": "Permissions",
     "my": "My",
+    "unauthorized": "Unauthorized",
 
     "validation": {
         "required": "This field is required!",
