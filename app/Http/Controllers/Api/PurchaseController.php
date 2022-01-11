@@ -4,10 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PurchaseProductRequest;
 use App\Http\Requests\PurchaseRequest;
 use App\Http\Resources\Purchase as PurchaseResource;
+use App\Http\Resources\PurchaseProduct as PurchaseProductResource;
 use App\Models\File;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\Purchase;
+use App\Models\PurchaseProduct;
 use Illuminate\Http\Request;
 use Samundra\File\SamundraFileHelper;
 
@@ -16,7 +21,7 @@ class PurchaseController extends Controller
     public function __construct()
     {
         parent::generateAllMiddlewareByPermission('purchases');
-       $this->middleware(['role'=>'Admin'])->only('adminPurchaseLists');
+        $this->middleware(['role:' . 'Admin|Store Manager'])->only(['adminPurchaseLists','changeStatusOfPurchaseListsProducts']);
     }
 
     public function index()
@@ -39,7 +44,7 @@ class PurchaseController extends Controller
         $data['message'] = '';
         $data['data'] = [];
         $user = auth()->user();
-        $purchases = Purchase::where('user_id',$user->id)->get();
+        $purchases = Purchase::where('user_id', $user->id)->get();
         $data['data'] = PurchaseResource::collection($purchases);
         return $data;
     }
@@ -52,6 +57,25 @@ class PurchaseController extends Controller
         $user = auth()->user();
         $purchases = Purchase::all();
         $data['data'] = PurchaseResource::collection($purchases);
+        return $data;
+    }
+
+    public function changeStatusOfPurchaseListsProducts($id, PurchaseProductRequest $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['success'] = true;
+            $purchaseProduct = PurchaseProduct::findOrFail($id);
+            $values = $request->all();
+            $purchaseProduct->update($values);
+            event(new ActivityLogEvent('Edit', 'Purchase Product', $purchaseProduct->id));
+            $data['message'] = "Updated successfully.";
+            $data['data'] = new PurchaseProductResource($purchaseProduct);
+        } catch (\Exception $e) {
+            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
         return $data;
     }
 
@@ -84,7 +108,7 @@ class PurchaseController extends Controller
                 $newFile->save();
                 $values['file_id'] = $newFile->id;
             }
-            $values['reference_no'] = 'REF-'.$this->random_id(8);
+            $values['reference_no'] = 'REF-' . $this->random_id(8);
             $purchase = new Purchase($values);
             $purchase->save();
             event(new ActivityLogEvent('Add', 'Purchase', $purchase->id));
@@ -96,8 +120,9 @@ class PurchaseController extends Controller
         return $data;
     }
 
-    function random_id($digit) {
-        $rand = rand(10,1000000);
+    function random_id($digit)
+    {
+        $rand = rand(10, 1000000);
         return substr(bin2hex($rand), 0, $digit);
     }
 
