@@ -44,11 +44,8 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
-<<<<<<< HEAD
                                 :to="'/budgetRequests/create'"
                                 v-if="$can('budgetRequests.create')"
-=======
->>>>>>> origin/dev-sam
                             >
                                 Add New Budget Request
                             </v-btn>
@@ -128,7 +125,6 @@
                 <p v-if="item.department_id">{{ item.department_name }}</p>
             </template>
             <template v-slot:item.actions="{ item }">
-<<<<<<< HEAD
                 <router-link
                     :to="'/budgetRequests/'+item.id"
                     v-if="$can('budgetRequests.show')"
@@ -149,15 +145,6 @@
                         mdi-pencil
                     </v-icon>
                 </router-link>
-=======
-                <v-icon
-                    small
-                    class="mr-2"
-                    @click="editItem(item)"
-                >
-                    mdi-pencil
-                </v-icon>
->>>>>>> origin/dev-sam
                 <v-icon
                     small
                     @click="deleteItem(item)"

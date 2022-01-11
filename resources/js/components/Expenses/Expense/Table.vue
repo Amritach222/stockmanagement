@@ -78,7 +78,6 @@
             </template>
             <template v-slot:item.actions="{ item }">
                 <router-link
-<<<<<<< HEAD
                     :to="'/expenses/'+item.id"
                     v-if="$can('expenses.show')"
                 >
@@ -89,8 +88,6 @@
                     </v-icon>
                 </router-link>
                 <router-link
-=======
->>>>>>> origin/dev-sam
                     :to="'/expenses/edit/'+item.id"
                     v-if="$can('expenses.edit')"
                 >

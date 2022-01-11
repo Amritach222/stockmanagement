@@ -159,7 +159,6 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-<<<<<<< HEAD
                 <router-link
                     :to="'/bankAccounts/'+item.id"
                     v-if="$can('bankAccounts.show')"
@@ -170,8 +169,6 @@
                         mdi-eye
                     </v-icon>
                 </router-link>
-=======
->>>>>>> origin/dev-sam
                 <v-icon
                     small
                     class="mr-2"
