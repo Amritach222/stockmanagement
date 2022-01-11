@@ -166,6 +166,20 @@
     "time_span": "Time Span",
     "ratio": "Ratio",
     "distribute": "Distribute",
+    "alert": "Alert",
+    "web": "Web",
+    "log": "Log",
+    "logs": "Logs",
+    "activity": "Activity",
+    "activities": "Activities",
+    "ip": "IP",
+    "role": "Role",
+    "roles": "Roles",
+    "change_password": "Change Password",
+    "permission": "Permission",
+    "permissions": "Permissions",
+    "my": "My",
+    "unauthorized": "Unauthorized",
 
     "validation": {
         "required": "This field is required!",
@@ -178,7 +192,9 @@
         "email": "Must be a valid email address",
         "unitType": "Please select a different type for this category unit.",
         "unitRatio": "Please enter different value for unit ratio.",
-        "unitName": "Unit name already exist."
+        "unitName": "Unit name already exist.",
+        "username": "Username already in use.",
+        "uniqueEmail": "Email already in use."
     },
     "button": {
         "login": "LOGIN",
@@ -190,6 +206,9 @@
         "edit": "Edit",
         "back": "Back",
         "confirm": "Confirm",
+        "auto": "Auto",
+        "permission": "Permission",
+        "permissions": "Permissions",
         "add_new_vendor": "Add New Vendor",
         "add_new_vendor_product": "Add New Vendor Product",
         "add_new_category": "Add New Category",
@@ -209,6 +228,7 @@
         "add_new_expense_category": "Add New Expense Category",
         "add_new_quotation": "Add New Quotation",
         "add_new_brand": "Add New Brand",
+        "add_new_user": "Add New User",
         "add_new_unit": "Add New Unit",
         "add_new_unit_category": "Add New Unit Category",
         "add_new_tax": "Add New Tax",
@@ -216,7 +236,8 @@
         "add_new_designation": "Add New Designation",
         "add_new_fiscal_year": "Add New Fiscal Year",
         "add_new_signature": "Add New Signature",
-        "add_new_signature_use_department": "Add New Signature Use Department"
+        "add_new_signature_use_department": "Add New Signature Use Department",
+        "edit_product_list": "Edit Product List"
     },
     "message": {
         "delete": "Are you sure you want to delete this item?"
@@ -264,6 +285,9 @@
         "edit_quotation_product": "Edit Quotation Product",
         "add_brand": "Add Brand",
         "edit_brand": "Edit Brand",
+        "add_user": "Add User",
+        "edit_user": "Edit User",
+        "edit_user_permission": "Edit User Permission",
         "add_unit": "Add Unit",
         "add_unit_category": "Add Unit Category",
         "edit_unit": "Edit Unit",

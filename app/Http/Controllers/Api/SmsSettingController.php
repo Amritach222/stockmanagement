@@ -22,7 +22,7 @@ class SmsSettingController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $data['data'] = SmsSettingResource::collection(SmsSetting::all());
+            $data['data'] = new SmsSettingResource(SmsSetting::findOrFail(1));
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }

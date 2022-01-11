@@ -44,6 +44,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-if="$can('taxes.create')"
                             >
                                 Add New Tax
                             </v-btn>
@@ -124,12 +125,14 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
+                    v-if="$can('taxes.edit')"
                 >
                     mdi-pencil
                 </v-icon>
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('taxes.delete')"
                 >
                     mdi-delete
                 </v-icon>

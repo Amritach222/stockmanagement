@@ -50,6 +50,12 @@ export default {
     async resetForgotPassword(data) {
         return await apiCall(POST, `api/forgot-password-set`, data)
     },
+    async passwordReset(data) {
+        return await apiCall(POST, `api/admin/user/password-reset`, data)
+    },
+    async autoGeneratePassword(data) {
+        return await apiCall(GET, `api/admin/user/auto-generate-password`, data)
+    },
     async verifyCode(data) {
         return await apiCall(GET, `api/forgot-password/${data}`)
     },
@@ -72,8 +78,26 @@ export default {
     async getUserProfilePic() {
         return await apiCall(GET, `api/user/profile-picture`)
     },
-    async getUserPermissions() {
-        return await apiCall(GET, `api/get-permissions`)
+    async getUserPermissions(username) {
+        return await apiCall(GET, `api/get-user-permissions/${username}`)
+    },
+    async getVendorPermissions(username) {
+        return await apiCall(GET, `api/get-vendor-permissions/${username}`)
+    },
+    async getRolePermissions(name) {
+        return await apiCall(GET, `api/get-role-permissions/${name}`)
+    },
+    async getAllPermissions() {
+        return await apiCall(GET, `api/get-all-permissions`)
+    },
+    async permissionUserUpdate(data) {
+        return await apiCall(POST, `api/update-user-permissions`, data)
+    },
+    async permissionVendorUpdate(data) {
+        return await apiCall(POST, `api/update-vendor-permissions`, data)
+    },
+    async permissionRoleUpdate(data) {
+        return await apiCall(POST, `api/update-role-permissions`, data)
     },
     async logout() {
         return await apiCall(GET, `api/user/logout`)
@@ -102,8 +126,31 @@ export default {
         return await apiCall(GET, `api/setting/all-setting-info`)
     },
 
+    async roleIndex() {
+        return await apiCall(GET, `api/roles`)
+    },
+
+    async getUsers(role) {
+        return await apiCall(GET, `api/get-users/${role}`)
+    },
     async userIndex() {
         return await apiCall(GET, `api/users/`)
+    },
+    async userCreate(data) {
+        return await apiCall(POST, `api/users`, data)
+    },
+    async userShow(id) {
+        return await apiCall(GET, `api/users/${id}`)
+    },
+    async userEdit(id, data) {
+        return await apiCall(POST, `api/users/${id}`, data)
+    },
+    async userDelete(id) {
+        return await apiCall(DELETE, `api/users/${id}`)
+    },
+
+    async logIndex() {
+        return await apiCall(GET, `api/logs/`)
     },
 
     async productIndex() {
@@ -277,6 +324,9 @@ export default {
     },
 
 
+    async settingIndex() {
+        return await apiCall(GET, `api/setting/settings`)
+    },
     async settingShow(id) {
         return await apiCall(GET, `api/setting/settings/${id}`)
     },
@@ -284,6 +334,9 @@ export default {
         return await apiCall(POST, `api/setting/settings/${id}`, data)
     },
 
+    async smsSettingIndex() {
+        return await apiCall(GET, `api/setting/smsSettings`)
+    },
     async smsSettingShow(id) {
         return await apiCall(GET, `api/setting/smsSettings/${id}`)
     },
@@ -291,6 +344,9 @@ export default {
         return await apiCall(POST, `api/setting/smsSettings/${id}`, data)
     },
 
+    async mailSettingIndex() {
+        return await apiCall(GET, `api/setting/mailSettings`)
+    },
     async mailSettingShow(id) {
         return await apiCall(GET, `api/setting/mailSettings/${id}`)
     },
@@ -418,6 +474,12 @@ export default {
     },
     async vendorProductDelete(id) {
         return await apiCall(DELETE, `api/vendorProducts/${id}`)
+    },
+    async allProductsVendor() {
+        return await apiCall(GET, `api/vendor/all-products`)
+    },
+    async vendorProductList() {
+        return await apiCall(GET, `api/vendor/product-list`)
     },
 
     async budgetIndex() {

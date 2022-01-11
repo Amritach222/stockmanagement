@@ -6,8 +6,11 @@ use App\Events\ActivityLogEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VendorRequest;
 use App\Http\Resources\Vendor as VendorResource;
+use App\Models\File;
+use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Samundra\File\SamundraFileHelper;
 
 class VendorController extends Controller
 {
@@ -42,7 +45,28 @@ class VendorController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
+            $request->merge(['mobile_no' => $request->mobile]);
             $values = $request->all();
+            if ($request->hasFile('image')) {
+                $fileHelper = new SamundraFileHelper();
+                $file = $fileHelper->saveFile($request->image, 'vendor');
+                if ($file['success'] !== true) {
+                    return response(['success' => false, 'message' => 'Data could not be saved at the moment', "data" => null], 400);
+                }
+                $newFile = new File();
+                $newFile->extension = $file['data']['extension'];
+                $newFile->original_name = $file['data']['original_filename'];
+                $newFile->name = $file['data']['filename'];
+                $newFile->type = $file['data']['mime_type'];
+                $newFile->path = $file['data']['link'];
+                $newFile->save();
+                $values['image_id'] = $newFile->id;
+                $values['profile_picture_id'] = $newFile->id;
+            }
+            $user = new User($values);
+            $user->save();
+            $values['user_id'] = $user->id;
+            $user->assignRole('Vendor');
             $vendor = new Vendor($values);
             $vendor->save();
             event(new ActivityLogEvent('Add', 'Vendor', $vendor->id));
@@ -75,13 +99,57 @@ class VendorController extends Controller
 
     public function update($id, VendorRequest $request)
     {
+        $hasdata = 0;
         $data['success'] = true;
         $data['message'] = '';
         $data['data'] = [];
         try {
             $data['success'] = true;
             $vendor = Vendor::findOrFail($id);
+            $user=null;
+            if ($vendor->user_id !== null) {
+                $user = User::findOrFail($vendor->user_id);
+            }
+            $request->merge(['mobile_no' => $request->mobile]);
             $values = $request->all();
+            if ($request->hasFile('image')) {
+                $fileHelper = new SamundraFileHelper();
+                $file = $fileHelper->saveFile($request->image, 'vendor');
+                if ($file['success'] !== true) {
+                    return response(['success' => false, 'message' => 'Data could not be saved at the moment', "data" => null], 400);
+                }
+                if ($vendor->image_id === null) {
+                    $newFile = new File();
+                } else {
+                    $newFile = File::where('id', $vendor->image_id)->first();
+                    if ($newFile === null) {
+                        $newFile = new File();
+                    } else {
+                        $hasdata = 1;
+                        $fileHelper->deleteFile($newFile->path);
+                    }
+                }
+
+                $newFile->extension = $file['data']['extension'];
+                $newFile->original_name = $file['data']['original_filename'];
+                $newFile->name = $file['data']['filename'];
+                $newFile->type = $file['data']['mime_type'];
+                $newFile->path = $file['data']['link'];
+                if ($hasdata === 1) {
+                    $newFile->update();
+                } else {
+                    $newFile->save();
+                }
+                $values['image_id'] = $newFile->id;
+                $values['profile_picture_id'] = $newFile->id;
+            }
+            if ($user === null) {
+                $user = new User($values);
+                $user->save();
+                $values['user_id'] = $user->id;
+            } else {
+                $user->update($values);
+            }
             $vendor->update($values);
             event(new ActivityLogEvent('Edit', 'Vendor', $vendor->id));
             $data['message'] = "Updated successfully.";

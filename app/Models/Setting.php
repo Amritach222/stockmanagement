@@ -21,6 +21,12 @@ class Setting extends Model
         return $this->belongsTo(File::class, 'logo_id');
     }
 
+    public static function companyName()
+    {
+        $setting = Setting::findOrFail(1);
+        return $setting->title;
+    }
+
     public static function imageUrl()
     {
         $setting = Setting::findOrFail(1);

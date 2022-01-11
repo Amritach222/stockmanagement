@@ -44,6 +44,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-if="$can('unitCategories.create')"
                             >
                                 {{ $t('button.add_new_unit_category') }}
                             </v-btn>
@@ -119,12 +120,14 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
+                    v-if="$can('unitCategories.edit')"
                 >
                     mdi-pencil
                 </v-icon>
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('unitCategories.delete')"
                 >
                     mdi-delete
                 </v-icon>

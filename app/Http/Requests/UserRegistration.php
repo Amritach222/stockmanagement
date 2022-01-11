@@ -33,7 +33,8 @@ class UserRegistration extends FormRequest
             'last_name' => 'sometimes|string|max:50',
             'confirm_password' => 'required|min:8|max:16|same:password',
             'password' => ['required', new CheckPassword()],
-            'department_id' => 'sometimes|numeric',
+            'department_id' => 'sometimes|numeric|exists:departments,id',
+            'designation_id' => 'sometimes|numeric|exists:designations,id',
             'mobile_no' => 'required|min:10|max:10',
             'address' => 'sometimes|string'
         ];

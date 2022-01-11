@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Vendor;
 use App\Models\VendorProduct;
 use Illuminate\Http\Request;
@@ -21,10 +22,15 @@ class VendorProductController extends Controller
         $data['message'] = '';
         $data['data'] = [];
         try {
-            if($type == 'product') {
-                $vendor = Vendor::findOrFail($id);
+            if ($type == 'product') {
+                if (auth()->user()->isVendor()) {
+                    $user = User::findOrFail($id);
+                    $vendor = $user->vendor;
+                } else {
+                    $vendor = Vendor::findOrFail($id);
+                }
                 $data['data'] = VendorProduct::where('vendor_id', $vendor->id)->pluck('product_id');
-            }else{
+            } else {
                 $product = Product::findOrFail($id);
                 $data['data'] = VendorProduct::where('product_id', $product->id)->pluck('vendor_id');
             }
@@ -58,23 +64,28 @@ class VendorProductController extends Controller
         $data['message'] = '';
         $data['data'] = [];
         try {
-            $vendor = Vendor::findOrFail($request->vendor_id);
+            if (auth()->user()->isVendor()) {
+                $user = User::findOrFail($request->id);
+                $vendor = $user->vendor;
+            } else {
+                $vendor = Vendor::findOrFail($request->id);
+            }
             $requestProductIds = json_decode($request->product_ids);
-            $product_ids = VendorProduct::where('vendor_id',$vendor->id)->pluck('product_id');
-            $values['vendor_id']=$vendor->id;
-                foreach ($requestProductIds as $id) {
-                    if (!$product_ids->contains($id)) {
-                        $values['product_id']=$id;
-                        $vendorProduct = new VendorProduct($values);
-                        $vendorProduct->save();
-                    }
+            $product_ids = VendorProduct::where('vendor_id', $vendor->id)->pluck('product_id');
+            $values['vendor_id'] = $vendor->id;
+            foreach ($requestProductIds as $id) {
+                if (!$product_ids->contains($id)) {
+                    $values['product_id'] = $id;
+                    $vendorProduct = new VendorProduct($values);
+                    $vendorProduct->save();
                 }
-                foreach ($product_ids as $pid){
-                    if (!in_array($pid, $requestProductIds)) {
-                        $vP = VendorProduct::where('vendor_id',$vendor->id)->where('product_id',$pid)->first();
-                        $vP->delete();
-                    }
+            }
+            foreach ($product_ids as $pid) {
+                if (!in_array($pid, $requestProductIds)) {
+                    $vP = VendorProduct::where('vendor_id', $vendor->id)->where('product_id', $pid)->first();
+                    $vP->delete();
                 }
+            }
 
             $data['data'] = $vendor->vendorProducts;
         } catch (\Exception $e) {

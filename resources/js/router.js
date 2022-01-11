@@ -100,6 +100,9 @@ import VendorIndex from './components/vendor/Index'
 import VendorCreate from './components/vendor/Create'
 import VendorShow from './components/vendor/Show'
 import VendorEdit from './components/vendor/Edit'
+import VendorPermission from './components/vendor/Permissions'
+import VendorMyProducts from './components/vendor/vendorProduct/MyProducts'
+import VendorAddProductList from './components/vendor/vendorProduct/AddMyProducts'
 
 import VendorProductShow from './components/vendor/vendorProduct/ShowProduct'
 import VendorProductAdd from './components/vendor/vendorProduct/AddProduct'
@@ -118,11 +121,6 @@ import BudgetLimitIndex from './components/budgets/budgetLimit/Index'
 import BudgetLimitCreate from './components/budgets/budgetLimit/Create'
 import BudgetLimitShow from './components/budgets/budgetLimit/Show'
 import BudgetLimitEdit from './components/budgets/budgetLimit/Edit'
-
-import BudgetExtendIndex from './components/budgets/budgetExtend/Index'
-import BudgetExtendCreate from './components/budgets/budgetExtend/Create'
-import BudgetExtendShow from './components/budgets/budgetExtend/Show'
-import BudgetExtendEdit from './components/budgets/budgetExtend/Edit'
 
 import FreezeBudgetIndex from './components/budgets/freezeBudget/Index'
 import FreezeBudgetCreate from './components/budgets/freezeBudget/Create'
@@ -143,6 +141,16 @@ import QuotationIndex from './components/quotations/quotation/Index'
 import QuotationCreate from './components/quotations/quotation/Create'
 import QuotationEdit from './components/quotations/quotation/Edit'
 import QuotationShow from './components/quotations/quotation/Show'
+
+import RoleIndex from './components/Settings/role/Index'
+import RolePermission from './components/Settings/role/Permissions'
+
+import UserIndex from './components/userManagement/user/Index'
+import UserCreate from './components/userManagement/user/Create'
+import UserEdit from './components/userManagement/user/Edit'
+import UserShow from './components/userManagement/user/Show'
+import UserPermission from './components/userManagement/user/Permissions'
+
 import ExpenseIndex from './components/expenses/Expense/Index'
 
 import ExpenseCreate from './components/expenses/Expense/Create'
@@ -161,6 +169,12 @@ import PurchaseRequestHistory from './components/purchaseRequest/PurchaseRequest
 import EditPurchaseRequest from './components/purchaseRequest/EditPurchaseRequest'
 import PurchaseRequestProducts from './components/purchaseRequest/PurchaseRequestProducts'
 import PurchaseRequestAdmin from './components/purchaseRequest/PurchaseRequestProductsDetailsAdmin'
+
+import NotFound from './components/errorPage/NotFound'
+
+import Unauthorized from './components/errorPage/Unauthorized'
+
+import LogIndex from './components/Settings/log/Index'
 
 Vue.use(Router)
 
@@ -238,8 +252,17 @@ export default new Router({
             }
         },
         {
+            path: '/logs',
+            name: i18n.t('logs'),
+            component: LogIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
             path: '/purchase/new-purchase-request',
-            name: i18n.t('new') +' '+ i18n.t('purchase') +' '+ i18n.t('request'),
+            name: i18n.t('new') + ' ' + i18n.t('purchase') + ' ' + i18n.t('request'),
             component: NewPurchaseRequest,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -248,7 +271,7 @@ export default new Router({
         },
         {
             path: '/purchase/purchase-request-history',
-            name: i18n.t('purchase') +' '+ i18n.t('request') +' '+ i18n.t('history'),
+            name: i18n.t('purchase') + ' ' + i18n.t('request') + ' ' + i18n.t('history'),
             component: PurchaseRequestHistory,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -284,7 +307,7 @@ export default new Router({
         },
         {
             path: '/products',
-            name: i18n.t('products'),
+            name: i18n.t('product') + ' / ' + i18n.t('products'),
             component: ProductIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -293,7 +316,7 @@ export default new Router({
         },
         {
             path: '/products/create',
-            name: i18n.t('card_title.add_product'),
+            name: i18n.t('product') + ' / ' + i18n.t('card_title.add_product'),
             component: ProductCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -302,7 +325,7 @@ export default new Router({
         },
         {
             path: '/products/edit/:id',
-            name: i18n.t('card_title.edit_product'),
+            name: i18n.t('product') + ' / ' + i18n.t('card_title.edit_product'),
             component: ProductEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -349,7 +372,7 @@ export default new Router({
         },
         {
             path: '/categories',
-            name: i18n.t('categories'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('categories'),
             component: CategoryIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -358,7 +381,7 @@ export default new Router({
         },
         {
             path: '/categories/create',
-            name: i18n.t('card_title.add_category'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.add_category'),
             component: CategoryCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -367,7 +390,7 @@ export default new Router({
         },
         {
             path: '/categories/edit/:id',
-            name: i18n.t('card_title.edit_category'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.edit_category'),
             component: CategoryEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -376,7 +399,7 @@ export default new Router({
         },
         {
             path: '/categories/:id',
-            name: i18n.t('category'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('category'),
             component: CategoryShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -385,7 +408,7 @@ export default new Router({
         },
         {
             path: '/brands',
-            name: i18n.t('brands'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('brands'),
             component: BrandIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -394,7 +417,7 @@ export default new Router({
         },
         {
             path: '/brands/create',
-            name: i18n.t('card_title.add_brand'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.add_brand'),
             component: BrandCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -403,7 +426,7 @@ export default new Router({
         },
         {
             path: '/brands/edit/:id',
-            name: i18n.t('card_title.edit_brand'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.edit_brand'),
             component: BrandEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -412,7 +435,7 @@ export default new Router({
         },
         {
             path: '/brands/:id',
-            name: i18n.t('brand'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('brand'),
             component: BrandShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -421,7 +444,7 @@ export default new Router({
         },
         {
             path: '/units',
-            name: i18n.t('units'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('units'),
             component: UnitIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -430,7 +453,7 @@ export default new Router({
         },
         {
             path: '/units/create',
-            name: i18n.t('card_title.add_unit'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.add_unit'),
             component: UnitCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -439,7 +462,7 @@ export default new Router({
         },
         {
             path: '/units/edit/:id',
-            name: i18n.t('card_title.edit_unit'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.edit_unit'),
             component: UnitEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -448,7 +471,7 @@ export default new Router({
         },
         {
             path: '/units/:id',
-            name: i18n.t('unit'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('unit'),
             component: UnitShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -457,7 +480,7 @@ export default new Router({
         },
         {
             path: '/unitCategories',
-            name: i18n.t('unit') + ' ' + i18n.t('categories'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('unit') + ' ' + i18n.t('categories'),
             component: UnitCategoryIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -466,7 +489,7 @@ export default new Router({
         },
         {
             path: '/productAttributeGroups',
-            name: i18n.t('product_attribute_groups'),
+            name: i18n.t('product') + ' / ' + i18n.t('product_attribute_groups'),
             component: ProductAttributeGroupIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -475,7 +498,7 @@ export default new Router({
         },
         {
             path: '/productAttributeGroups/create',
-            name: i18n.t('card_title.add_product_attribute_group'),
+            name: i18n.t('product') + ' / ' + i18n.t('card_title.add_product_attribute_group'),
             component: ProductAttributeGroupCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -484,7 +507,7 @@ export default new Router({
         },
         {
             path: '/productAttributeGroups/edit/:id',
-            name: i18n.t('card_title.edit_product_attribute_group'),
+            name: i18n.t('product') + ' / ' + i18n.t('card_title.edit_product_attribute_group'),
             component: ProductAttributeGroupEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -493,7 +516,7 @@ export default new Router({
         },
         {
             path: '/productAttributeGroups/:id',
-            name: i18n.t('product_attribute_group'),
+            name: i18n.t('product') + ' / ' + i18n.t('product_attribute_group'),
             component: ProductAttributeGroupShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -502,7 +525,7 @@ export default new Router({
         },
         {
             path: '/productAttributes',
-            name: i18n.t('product_attributes'),
+            name: i18n.t('product') + ' / ' + i18n.t('product_attributes'),
             component: ProductAttributeIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -511,7 +534,7 @@ export default new Router({
         },
         {
             path: '/productAttributes/create',
-            name: i18n.t('card_title.add_product_attribute'),
+            name: i18n.t('product') + ' / ' + i18n.t('card_title.add_product_attribute'),
             component: ProductAttributeCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -520,7 +543,7 @@ export default new Router({
         },
         {
             path: '/productAttributes/edit/:id',
-            name: i18n.t('card_title.edit_product_attribute'),
+            name: i18n.t('product') + ' / ' + i18n.t('card_title.edit_product_attribute'),
             component: ProductAttributeEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -529,7 +552,7 @@ export default new Router({
         },
         {
             path: '/productAttributes/:id',
-            name: i18n.t('product_attribute'),
+            name: i18n.t('product') + ' / ' + i18n.t('product_attribute'),
             component: ProductAttributeShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -538,7 +561,7 @@ export default new Router({
         },
         {
             path: '/items',
-            name: i18n.t('items'),
+            name: i18n.t('product') + ' / ' + i18n.t('items'),
             component: ItemIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -547,7 +570,7 @@ export default new Router({
         },
         {
             path: '/items/create',
-            name: i18n.t('card_title.add_item'),
+            name: i18n.t('product') + ' / ' + i18n.t('card_title.add_item'),
             component: ItemCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -556,7 +579,7 @@ export default new Router({
         },
         {
             path: '/items/edit/:id',
-            name: i18n.t('card_title.edit_item'),
+            name: i18n.t('product') + ' / ' + i18n.t('card_title.edit_item'),
             component: ItemEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -565,7 +588,7 @@ export default new Router({
         },
         {
             path: '/items/:id',
-            name: i18n.t('item'),
+            name: i18n.t('product') + ' / ' + i18n.t('item'),
             component: ItemShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -574,7 +597,7 @@ export default new Router({
         },
         {
             path: '/productVariants',
-            name: i18n.t('product_variants'),
+            name: i18n.t('product') + ' / ' + i18n.t('product_variants'),
             component: ProductVariantIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -583,7 +606,7 @@ export default new Router({
         },
         {
             path: '/productVariants/create',
-            name: i18n.t('card_title.add_product_variant'),
+            name: i18n.t('product') + ' / ' + i18n.t('card_title.add_product_variant'),
             component: ProductVariantCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -592,7 +615,7 @@ export default new Router({
         },
         {
             path: '/productVariants/edit/:id',
-            name: i18n.t('card_title.edit_product_variant'),
+            name: i18n.t('product') + ' / ' + i18n.t('card_title.edit_product_variant'),
             component: ProductVariantEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -601,7 +624,7 @@ export default new Router({
         },
         {
             path: '/productVariants/:id',
-            name: i18n.t('product_variant'),
+            name: i18n.t('product') + ' / ' + i18n.t('product_variant'),
             component: ProductVariantShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -611,7 +634,7 @@ export default new Router({
 
         {
             path: '/settings',
-            name: i18n.t('settings'),
+            name: i18n.t('settings') + ' / ' + i18n.t('general_settings'),
             component: SettingIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -629,7 +652,7 @@ export default new Router({
         },
         {
             path: '/mailSettings/',
-            name: i18n.t('card_title.edit_mail_setting'),
+            name: i18n.t('settings') + ' / ' + i18n.t('card_title.edit_mail_setting'),
             component: MailSettingIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -638,7 +661,7 @@ export default new Router({
         },
         {
             path: '/mailSettings/:id',
-            name: 'mailSettings-show',
+            name: i18n.t('settings') + ' / ' + 'mailSettings-show',
             component: MailSettingShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -647,7 +670,7 @@ export default new Router({
         },
         {
             path: '/smsSettings',
-            name: i18n.t('card_title.edit_sms_setting'),
+            name: i18n.t('settings') + ' / ' + i18n.t('card_title.edit_sms_setting'),
             component: SmsSettingIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -665,7 +688,7 @@ export default new Router({
         },
         {
             path: '/taxes',
-            name: i18n.t('taxes'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('taxes'),
             component: TaxIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -674,7 +697,7 @@ export default new Router({
         },
         {
             path: '/taxes/create',
-            name: i18n.t('card_title.add_tax'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.add_tax'),
             component: TaxCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -683,7 +706,7 @@ export default new Router({
         },
         {
             path: '/taxes/edit/:id',
-            name: i18n.t('card_title.edit_tax'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.edit_tax'),
             component: TaxEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -692,7 +715,7 @@ export default new Router({
         },
         {
             path: '/taxes/:id',
-            name: i18n.t('tax'),
+            name: i18n.t('product') + ' / ' + i18n.t('product') + ' ' + i18n.t('settings') + ' / ' + i18n.t('tax'),
             component: TaxShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -702,7 +725,7 @@ export default new Router({
 
         {
             path: '/departments',
-            name: i18n.t('departments'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('departments'),
             component: DepartmentIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -711,7 +734,7 @@ export default new Router({
         },
         {
             path: '/departments/create',
-            name: i18n.t('card_title.add_department'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.add_department'),
             component: DepartmentCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -720,7 +743,7 @@ export default new Router({
         },
         {
             path: '/departments/edit/:id',
-            name: i18n.t('card_title.edit_department'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.edit_department'),
             component: DepartmentEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -729,7 +752,7 @@ export default new Router({
         },
         {
             path: '/departments/:id',
-            name: i18n.t('department'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('department'),
             component: DepartmentShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -739,7 +762,7 @@ export default new Router({
 
         {
             path: '/designations',
-            name: i18n.t('designations'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('designations'),
             component: DesignationIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -748,7 +771,7 @@ export default new Router({
         },
         {
             path: '/designations/create',
-            name: i18n.t('card_title.add_designation'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.add_designation'),
             component: DesignationCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -757,7 +780,7 @@ export default new Router({
         },
         {
             path: '/designations/edit/:id',
-            name: i18n.t('card_title.edit_designation'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.edit_designation'),
             component: DesignationEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -766,7 +789,7 @@ export default new Router({
         },
         {
             path: '/designations/:id',
-            name: i18n.t('designation'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('designation'),
             component: DesignationShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -776,7 +799,7 @@ export default new Router({
 
         {
             path: '/fiscalYears',
-            name: i18n.t('fiscal_years'),
+            name: i18n.t('settings') + ' / ' + i18n.t('web') + ' ' + i18n.t('settings') + ' / ' + i18n.t('fiscal_years'),
             component: FiscalYearIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -785,7 +808,7 @@ export default new Router({
         },
         {
             path: '/fiscalYears/create',
-            name: i18n.t('card_title.add_fiscal_year'),
+            name: i18n.t('settings') + ' / ' + i18n.t('web') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.add_fiscal_year'),
             component: FiscalYearCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -794,7 +817,7 @@ export default new Router({
         },
         {
             path: '/fiscalYears/edit/:id',
-            name: i18n.t('card_title.edit_fiscal_year'),
+            name: i18n.t('settings') + ' / ' + i18n.t('web') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.edit_fiscal_year'),
             component: FiscalYearEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -803,7 +826,7 @@ export default new Router({
         },
         {
             path: '/fiscalYears/:id',
-            name: i18n.t('fiscal_year'),
+            name: i18n.t('settings') + ' / ' + i18n.t('web') + ' ' + i18n.t('settings') + ' / ' + i18n.t('fiscal_year'),
             component: FiscalYearShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -813,7 +836,7 @@ export default new Router({
 
         {
             path: '/mailTemplates',
-            name: i18n.t('mail') +' '+ i18n.t('templates'),
+            name: i18n.t('settings') + ' / ' + i18n.t('web') + ' ' + i18n.t('settings') + ' / ' + i18n.t('mail') + ' ' + i18n.t('templates'),
             component: MailTemplateIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -822,7 +845,7 @@ export default new Router({
         },
         {
             path: '/mailTemplates/edit/:id',
-            name: i18n.t('card_title.edit_mail_template'),
+            name: i18n.t('settings') + ' / ' + i18n.t('web') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.edit_mail_template'),
             component: MailTemplateEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -841,7 +864,7 @@ export default new Router({
 
         {
             path: '/signatures',
-            name: i18n.t('signatures'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('signatures'),
             component: SignatureIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -850,7 +873,7 @@ export default new Router({
         },
         {
             path: '/signatures/create',
-            name: i18n.t('card_title.add_signature'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.add_signature'),
             component: SignatureCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -859,7 +882,7 @@ export default new Router({
         },
         {
             path: '/signatures/edit/:id',
-            name: i18n.t('card_title.edit_signature'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.edit_signature'),
             component: SignatureEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -868,7 +891,7 @@ export default new Router({
         },
         {
             path: '/signatures/:id',
-            name: i18n.t('signature'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('signature'),
             component: SignatureShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -878,7 +901,7 @@ export default new Router({
 
         {
             path: '/signatureUseDepartments',
-            name: i18n.t('signature') +' '+ i18n.t('use') +' '+ i18n.t('departments'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('signature') + ' ' + i18n.t('use') + ' ' + i18n.t('departments'),
             component: SignatureUseDepartmentIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -887,7 +910,7 @@ export default new Router({
         },
         {
             path: '/signatureUseDepartments/create',
-            name: i18n.t('card_title.add_signature_use_department'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.add_signature_use_department'),
             component: SignatureUseDepartmentCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -896,7 +919,7 @@ export default new Router({
         },
         {
             path: '/signatureUseDepartments/edit/:id',
-            name: i18n.t('card_title.edit_signature_use_department'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('card_title.edit_signature_use_department'),
             component: SignatureUseDepartmentEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -905,7 +928,7 @@ export default new Router({
         },
         {
             path: '/signatureUseDepartments/:id',
-            name: i18n.t('signature') +' '+ i18n.t('use') +' '+ i18n.t('department'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('signature') + ' ' + i18n.t('use') + ' ' + i18n.t('department'),
             component: SignatureUseDepartmentShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -961,8 +984,35 @@ export default new Router({
         },
         {
             path: '/vendorProducts/:id',
-            name: i18n.t('vendor') +' '+ i18n.t('product'),
+            name: i18n.t('vendor') + ' ' + i18n.t('product'),
             component: VendorProductShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendors/permission/:username',
+            name: i18n.t('vendor') + ' ' + i18n.t('permission'),
+            component: VendorPermission,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/my-products',
+            name: i18n.t('my') + ' ' + i18n.t('products'),
+            component: VendorMyProducts,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/add-product-list',
+            name: i18n.t('card_title.edit_vendor_product'),
+            component: VendorAddProductList,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
@@ -1008,7 +1058,7 @@ export default new Router({
 
         {
             path: '/budgetLimits',
-            name: i18n.t('budget_limit'),
+            name: i18n.t('budget') + ' / ' + i18n.t('budget_limit'),
             component: BudgetLimitIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1017,7 +1067,7 @@ export default new Router({
         },
         {
             path: '/budgetLimits/create',
-            name: i18n.t('card_title.add_budget_limit'),
+            name: i18n.t('budget') + ' / ' + i18n.t('card_title.add_budget_limit'),
             component: BudgetLimitCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1026,7 +1076,7 @@ export default new Router({
         },
         {
             path: '/budgetLimits/edit/:id',
-            name: i18n.t('card_title.edit_budget_limit'),
+            name: i18n.t('budget') + ' / ' + i18n.t('card_title.edit_budget_limit'),
             component: BudgetLimitEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1035,7 +1085,7 @@ export default new Router({
         },
         {
             path: '/budgetLimits/:id',
-            name: i18n.t('budget_limit'),
+            name: i18n.t('budget') + ' / ' + i18n.t('budget_limit'),
             component: BudgetLimitShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1044,45 +1094,8 @@ export default new Router({
         },
 
         {
-            path: '/budgetExtends',
-            name: 'Budget Extend',
-            component: BudgetExtendIndex,
-            beforeEnter: async (to, from, next) => {
-                await logMe(to, from);
-                next();
-            }
-        },
-        {
-            path: '/budgetExtends/create',
-            name: 'budgetExtends-create',
-            component: BudgetExtendCreate,
-            beforeEnter: async (to, from, next) => {
-                await logMe(to, from);
-                next();
-            }
-        },
-        {
-            path: '/budgetExtends/edit/:id',
-            name: 'budgetExtends-edit',
-            component: BudgetExtendEdit,
-            beforeEnter: async (to, from, next) => {
-                await logMe(to, from);
-                next();
-            }
-        },
-        {
-            path: '/budgetExtends/:id',
-            name: 'budgetExtends-show',
-            component: BudgetExtendShow,
-            beforeEnter: async (to, from, next) => {
-                await logMe(to, from);
-                next();
-            }
-        },
-
-        {
             path: '/budgetRequests',
-            name: i18n.t('budget_request'),
+            name: i18n.t('budget') + ' / ' + i18n.t('budget_request'),
             component: BudgetRequestIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1091,7 +1104,7 @@ export default new Router({
         },
         {
             path: '/budgetRequests/create',
-            name: i18n.t('card_title.add_budget_request'),
+            name: i18n.t('budget') + ' / ' + i18n.t('card_title.add_budget_request'),
             component: BudgetRequestCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1100,7 +1113,7 @@ export default new Router({
         },
         {
             path: '/budgetRequests/edit/:id',
-            name: i18n.t('card_title.edit_budget_request'),
+            name: i18n.t('budget') + ' / ' + i18n.t('card_title.edit_budget_request'),
             component: BudgetRequestEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1109,7 +1122,7 @@ export default new Router({
         },
         {
             path: '/budgetRequests/:id',
-            name: i18n.t('budget_request'),
+            name: i18n.t('budget') + ' / ' + i18n.t('budget_request'),
             component: BudgetRequestShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1119,7 +1132,7 @@ export default new Router({
 
         {
             path: '/freezeBudgets',
-            name: i18n.t('freeze_budgets'),
+            name: i18n.t('budget') + ' / ' + i18n.t('freeze_budgets'),
             component: FreezeBudgetIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1128,7 +1141,7 @@ export default new Router({
         },
         {
             path: '/freezeBudgets/create',
-            name: i18n.t('card_title.add_freeze_budget'),
+            name: i18n.t('budget') + ' / ' + i18n.t('card_title.add_freeze_budget'),
             component: FreezeBudgetCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1137,7 +1150,7 @@ export default new Router({
         },
         {
             path: '/freezeBudgets/edit/:id',
-            name: i18n.t('card_title.edit_freeze_budget'),
+            name: i18n.t('budget') + ' / ' + i18n.t('card_title.edit_freeze_budget'),
             component: FreezeBudgetEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1146,7 +1159,7 @@ export default new Router({
         },
         {
             path: '/freezeBudgets/:id',
-            name: i18n.t('freeze_budget'),
+            name: i18n.t('budget') + ' / ' + i18n.t('freeze_budget'),
             component: FreezeBudgetShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1156,7 +1169,7 @@ export default new Router({
 
         {
             path: '/bankAccounts',
-            name: i18n.t('bank') +' '+ i18n.t('accounts'),
+            name: i18n.t('bank') + ' ' + i18n.t('accounts'),
             component: BankAccountIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1183,7 +1196,7 @@ export default new Router({
         },
         {
             path: '/bankAccounts/:id',
-            name: i18n.t('bank') +' '+ i18n.t('account'),
+            name: i18n.t('bank') + ' ' + i18n.t('account'),
             component: BankAccountShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1193,7 +1206,7 @@ export default new Router({
 
         {
             path: '/bankAccountTransactions',
-            name: i18n.t('bank') +' '+ i18n.t('account') +' '+ i18n.t('transactions'),
+            name: i18n.t('bank') + ' ' + i18n.t('Account') + ' / ' + i18n.t('bank') + ' ' + i18n.t('account') + ' ' + i18n.t('transactions'),
             component: BankAccountTransactionIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1202,7 +1215,7 @@ export default new Router({
         },
         {
             path: '/bankAccountTransactions/create',
-            name: i18n.t('card_title.add_bank_account_transaction'),
+            name: i18n.t('bank') + ' ' + i18n.t('Account') + ' / ' + i18n.t('card_title.add_bank_account_transaction'),
             component: BankAccountTransactionCreate,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1220,7 +1233,7 @@ export default new Router({
         },
         {
             path: '/bankAccountTransactions/:id',
-            name: i18n.t('bank') +' '+ i18n.t('account') +' '+ i18n.t('transaction'),
+            name: i18n.t('bank') + ' ' + i18n.t('Account') + ' / ' + i18n.t('bank') + ' ' + i18n.t('account') + ' ' + i18n.t('transaction'),
             component: BankAccountTransactionShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1267,7 +1280,7 @@ export default new Router({
 
         {
             path: '/expenseCategories',
-            name: i18n.t('expense') +' '+ i18n.t('categories'),
+            name: i18n.t('expense') + ' / ' + i18n.t('expense') + ' ' + i18n.t('categories'),
             component: ExpenseCategoryIndex,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1276,7 +1289,7 @@ export default new Router({
         },
         {
             path: '/expenseCategories/:id',
-            name: i18n.t('expense') +' '+ i18n.t('category'),
+            name: i18n.t('expense') + ' / ' + i18n.t('expense') + ' ' + i18n.t('category'),
             component: ExpenseCategoryShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1285,7 +1298,7 @@ export default new Router({
         },
         {
             path: '/profile-setting/',
-            name: i18n.t('profile') +' '+ i18n.t('settings'),
+            name: i18n.t('settings') + ' / ' + i18n.t('user') + ' ' + i18n.t('settings') + ' / ' + i18n.t('profile') + ' ' + i18n.t('settings'),
             component: ProfileSetting,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1329,6 +1342,83 @@ export default new Router({
                 next();
             }
         },
+
+        {
+            path: '/roles',
+            name: i18n.t('roles'),
+            component: RoleIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/roles/permission/:name',
+            name: i18n.t('role') + ' ' + i18n.t('permissions'),
+            component: RolePermission,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/users',
+            name: i18n.t('users'),
+            component: UserIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/users/create',
+            name: i18n.t('card_title.add_user'),
+            component: UserCreate,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/users/edit/:id',
+            name: i18n.t('card_title.edit_user'),
+            component: UserEdit,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/users/:id',
+            name: i18n.t('user'),
+            component: UserShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/users/permission/:username',
+            name: i18n.t('user') + ' ' + i18n.t('permission'),
+            component: UserPermission,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '*',
+            name: 'Not Found',
+            component: NotFound
+        },
+
+        {
+            path: '/unauthorized',
+            name: i18n.t('unauthorized'),
+            component: Unauthorized
+        }
     ]
 })
 

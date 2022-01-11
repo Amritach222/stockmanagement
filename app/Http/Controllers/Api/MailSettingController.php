@@ -22,7 +22,7 @@ class MailSettingController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $data['data'] = MailSettingResource::collection(MailSetting::all());
+            $data['data'] = new MailSettingResource(MailSetting::findOrFail(1));
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }

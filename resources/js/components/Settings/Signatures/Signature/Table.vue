@@ -45,6 +45,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-if="$can('signatures.create')"
                             >
                                 Add New Signature
                             </v-btn>
@@ -180,12 +181,14 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
+                    v-if="$can('signatures.edit')"
                 >
                     mdi-pencil
                 </v-icon>
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('signatures.delete')"
                 >
                     mdi-delete
                 </v-icon>

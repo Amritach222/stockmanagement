@@ -45,6 +45,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-if="$can('designation.create')"
                             >
                                 Add New Designation
                             </v-btn>
@@ -126,12 +127,14 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
+                    v-if="$can('designation.edit')"
                 >
                     mdi-pencil
                 </v-icon>
                 <v-icon
                     small
                     @click="deleteItem(item)"
+                    v-if="$can('designation.delete')"
                 >
                     mdi-delete
                 </v-icon>

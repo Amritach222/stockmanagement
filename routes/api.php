@@ -34,11 +34,28 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
 
 Route::group(['middleware' => 'auth:api'], function () {
 
+    Route::group(['prefix' => '/vendor'], function () {
+        Route::get('product-list', [\App\Http\Controllers\Api\VendorPortalController::class,'productList']);
+        Route::get('all-products', [\App\Http\Controllers\Api\VendorPortalController::class,'allProducts']);
+    });
+
+    Route::apiResource('roles', \App\Http\Controllers\Api\RoleController::class);
     Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
+    Route::post('users/{id}', [\App\Http\Controllers\Api\UserController::class, 'update']);
+    Route::get('get-users/{role}', [\App\Http\Controllers\Api\UserController::class, 'getUsers']);
     Route::post('create-variants', [\App\Http\Controllers\Api\ProductController::class, 'createVariants']);
     Route::get('logs', [\App\Http\Controllers\Api\logController::class, 'index']);
-    Route::get('get-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'getPermissions']);
+    Route::get('get-role-permissions/{name}', [\App\Http\Controllers\Api\PermissionController::class, 'getRolePermissions']);
+    Route::get('get-user-permissions/{username}', [\App\Http\Controllers\Api\PermissionController::class, 'getUserPermissions']);
+    Route::get('get-vendor-permissions/{username}', [\App\Http\Controllers\Api\PermissionController::class, 'getVendorPermissions']);
+    Route::get('get-all-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'getAllPermissions']);
+    Route::post('update-user-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'updateUserPermissions']);
+    Route::post('update-vendor-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'updateVendorPermissions']);
+    Route::post('update-role-permissions', [\App\Http\Controllers\Api\PermissionController::class, 'updateRolePermissions']);
     Route::post('assign-role/{id}', [\App\Http\Controllers\Api\PermissionController::class, 'assignRole']);
+
+    Route::post('admin/user/password-reset', [\App\Http\Controllers\Api\ResetPasswordController::class, 'resetPassword']);
+    Route::get('admin/user/auto-generate-password', [\App\Http\Controllers\Api\ResetPasswordController::class, 'autoGeneratePassword']);
 
     Route::group(['prefix' => '/setting'], function () {
         Route::apiResource('brands', \App\Http\Controllers\Api\BrandController::class);

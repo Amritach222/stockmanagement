@@ -18,7 +18,7 @@ class LogResource extends JsonResource
             'id' => $this->id,
             'activity_name' => $this->activity_name,
             'ip' => $this->ip,
-            'dateTime' => $this->created_at,
+            'date_time' => $this->created_at,
         ];
     }
 }

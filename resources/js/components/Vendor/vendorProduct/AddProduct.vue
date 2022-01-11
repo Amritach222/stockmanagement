@@ -160,14 +160,13 @@ export default {
         },
 
         async save() {
-            console.log(this.selected)
             this.product_ids = [];
             if (this.selected.length >= 0) {
                 for (let i = 0; i < this.selected.length; i++) {
                     this.product_ids.push(this.selected[i].id);
                 }
                 const data = new FormData();
-                data.append('vendor_id', this.$route.params.id);
+                data.append('id', this.$route.params.id);
                 data.append('product_ids', JSON.stringify(this.product_ids));
                 let res = await ApiServices.vendorProductCreate(data);
                 if (res.success === true) {

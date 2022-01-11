@@ -185,17 +185,6 @@ class ModelSeeder extends Seeder
         ]);
         $item->save();
 
-        $item = new Vendor([
-            'name' => 'Joshep Ruth',
-            'company_name' => 'JH Company',
-            'vat_no' => '1234567890',
-            'email' => 'joshep@gmail.com',
-            'landline' => '061516277',
-            'mobile' => '9800000000',
-            'category_id' => $itemC->id
-        ]);
-        $item->save();
-
         $item = new BankAccount([
             'bank_name' => 'Nepal SBI Bank Ltd.',
             'account_no' => '102293009490',

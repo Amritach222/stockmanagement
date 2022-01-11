@@ -118,6 +118,7 @@
                     small
                     class="mr-2"
                     @click="editItem(item)"
+                    v-if="$can('mailTemplates.editd')"
                 >
                     mdi-pencil
                 </v-icon>

@@ -42,6 +42,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function vendor()
+    {
+        return $this->hasOne(Vendor::class, 'user_id');
+    }
+
     public function logs()
     {
         return $this->hasMany(Log::class, 'user_id');
@@ -125,5 +130,65 @@ class User extends Authenticatable
     public function items()
     {
         return $this->hasMany(ItemUser::class, 'user_id');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    public function designation()
+    {
+        return $this->belongsTo(Designation::class, 'designation_id');
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->hasRole('Super Admin');
+    }
+
+    public function isAdmin()
+    {
+        return $this->hasRole('Admin',);
+    }
+
+    public function isVendor()
+    {
+        return $this->hasRole('Vendor',);
+    }
+
+    public function isDirector()
+    {
+        return $this->hasRole('Director',);
+    }
+
+    public function isFinanceDirector()
+    {
+        return $this->hasRole('Finance Director',);
+    }
+
+    public function isStaff()
+    {
+        return $this->hasRole('Staff',);
+    }
+
+    public function isStoreManager()
+    {
+        return $this->hasRole('Store Manager',);
+    }
+
+    public function isStoreKeeper()
+    {
+        return $this->hasRole('Store Keeper',);
+    }
+
+    public function isFinanceStaff()
+    {
+        return $this->hasRole('Finance Staff',);
+    }
+
+    public function isDepartmentHead()
+    {
+        return $this->hasRole('Department Head',);
     }
 }
