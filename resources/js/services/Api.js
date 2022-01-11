@@ -5,6 +5,7 @@
 import axios from 'axios'
 import store from '../store'
 import config from '../config'
+import router from "../router";
 
 const apiUrl = config.baseURL
 
@@ -41,6 +42,9 @@ export default () => {
         if (error.response) {
             if (error.response.status === 401) {
                 console.log('user unauthorized');
+            }
+            if (error.response.status === 403) {
+                router.replace('/home');
             }
         } else if (error.request) {
             console.log({message: 'Network Error'});

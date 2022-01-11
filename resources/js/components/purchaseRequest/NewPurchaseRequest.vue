@@ -234,7 +234,7 @@
                                             filled
                                             outlined
                                             prepend-icon="mdi-camera"
-                                            accept="*/application"
+                                            accept="image/png, image/jpeg, image/bmp, application/pdf, application/msword"
                                         ></v-file-input>
                                     </v-form>
                                     <CCardFooter>
@@ -242,7 +242,7 @@
                                             <CIcon name="cil-check-circle"/>
                                             Submit
                                         </CButton>
-                                        <CButton size="sm" color="danger" :to="'/quotations/'">
+                                        <CButton size="sm" color="danger" :to="'/purchase/purchase-request-history/'">
                                             <CIcon name="cil-ban"/>
                                             Cancel
                                         </CButton>
@@ -367,7 +367,11 @@ export default {
 
         editItem(item) {
             this.editedIndex = this.prProducts.indexOf(item);
-            this.addPurchaseRequestProduct = Object.assign({}, item)
+            let result = this.units.filter(obj => {
+                return obj.id === item.unit_id;
+            })
+            this.addPurchaseRequestProduct = Object.assign({}, item);
+            this.addPurchaseRequestProduct.unit = result[0];
             this.dialog = true;
         },
 
@@ -452,12 +456,16 @@ export default {
             let res = await ApiServices.addPurchaseRequest(data);
             this.createProgress = false;
             if (res.success === true) {
+                let dat = false;
                 if (this.prProducts.length > 0) {
-                    await this.createProduct(res.data.id);
+                    dat = await this.createProduct(res.data.id);
+                    console.log("result from the purchase request" ,dat);
                 } else {
                     route.replace('/purchase/purchase-request-history/');
                 }
-                route.replace('/purchase/purchase-request-history');
+                if(dat){
+                    route.replace('/purchase/purchase-request-history');
+                }
             }
         },
 
@@ -472,6 +480,11 @@ export default {
                     productData.append('product_variant_id', parseInt(this.prProducts[i].product_variant_id));
                 }
                 let res = await ApiServices.addPurchaseProductRequest(productData);
+            }
+            if(i < this.prProducts.length){
+                return true;
+            } else {
+                return false;
             }
         },
     }
