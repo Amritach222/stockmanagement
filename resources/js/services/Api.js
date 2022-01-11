@@ -42,6 +42,9 @@ export default () => {
             if (error.response.status === 401) {
                 console.log('user unauthorized');
             }
+            if (error.response.status === 403) {
+                console.log('user unauthorized');
+            }
         } else if (error.request) {
             console.log({message: 'Network Error'});
         } else {
