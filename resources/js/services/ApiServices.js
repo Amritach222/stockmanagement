@@ -662,6 +662,100 @@ export default {
         return await apiCall(POST, `api/create-variants`, data)
     },
 
+    async brandList() {
+        return await apiCall(GET, `api/list/brands`)
+    },
+    async bankAccountList() {
+        return await apiCall(GET, `api/list/bank-accounts`)
+    },
+    async bankAccountTransactionList() {
+        return await apiCall(GET, `api/list/bank-account-transactions`)
+    },
+    async budgetList() {
+        return await apiCall(GET, `api/list/budgets`)
+    },
+    async budgetLimitList() {
+        return await apiCall(GET, `api/list/budget-limits`)
+    },
+    async budgetRequestList() {
+        return await apiCall(GET, `api/list/budget-requests`)
+    },
+    async budgetRequestCategoryList() {
+        return await apiCall(GET, `api/list/budget-request-categories`)
+    },
+    async budgetDispatchList() {
+        return await apiCall(GET, `api/list/budget-dispatches`)
+    },
+    async categoryList() {
+        return await apiCall(GET, `api/list/categories`)
+    },
+    async departmentList() {
+        return await apiCall(GET, `api/list/departments`)
+    },
+    async designationList() {
+        return await apiCall(GET, `api/list/designations`)
+    },
+    async expenseList() {
+        return await apiCall(GET, `api/list/expenses`)
+    },
+    async expenseCategoryList() {
+        return await apiCall(GET, `api/list/expense-categories`)
+    },
+    async fiscalYearList() {
+        return await apiCall(GET, `api/list/fiscal-years`)
+    },
+    async itemList() {
+        return await apiCall(GET, `api/list/items`)
+    },
+    async itemUserList() {
+        return await apiCall(GET, `api/list/item-users`)
+    },
+    async productList() {
+        return await apiCall(GET, `api/list/products`)
+    },
+    async productAttributeList() {
+        return await apiCall(GET, `api/list/product-attributes`)
+    },
+    async productAttributeGroupList() {
+        return await apiCall(GET, `api/list/product-attribute-groups`)
+    },
+    async productVariantList() {
+        return await apiCall(GET, `api/list/product-variants`)
+    },
+    async purchaseList() {
+        return await apiCall(GET, `api/list/purchases`)
+    },
+    async purchaseProductList() {
+        return await apiCall(GET, `api/list/purchase-products`)
+    },
+    async quotationList() {
+        return await apiCall(GET, `api/list/quotations`)
+    },
+    async quotationProductList() {
+        return await apiCall(GET, `api/list/quotation-products`)
+    },
+    async signatureList() {
+        return await apiCall(GET, `api/list/signatures`)
+    },
+    async signatureUseDepartmentList() {
+        return await apiCall(GET, `api/list/signature-use-departments`)
+    },
+    async taxList() {
+        return await apiCall(GET, `api/list/taxes`)
+    },
+    async unitList() {
+        return await apiCall(GET, `api/list/units`)
+    },
+    async unitCategoryList() {
+        return await apiCall(GET, `api/list/unit-categories`)
+    },
+    async userList() {
+        return await apiCall(GET, `api/list/users`)
+    },
+    async vendorList() {
+        return await apiCall(GET, `api/list/vendors`)
+    },
+
     async addPurchaseRequest(data) {
         const config = {
             headers: {

@@ -39,6 +39,40 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('all-products', [\App\Http\Controllers\Api\VendorPortalController::class,'allProducts']);
     });
 
+    Route::group(['prefix' => '/list'], function () {
+        Route::get('brands', [\App\Http\Controllers\Api\ListController::class,'brandList']);
+        Route::get('bank-accounts', [\App\Http\Controllers\Api\ListController::class,'bankAccountList']);
+        Route::get('bank-account-transactions', [\App\Http\Controllers\Api\ListController::class,'bankAccountTransactionList']);
+        Route::get('budgets', [\App\Http\Controllers\Api\ListController::class,'budgetList']);
+        Route::get('budget-limits', [\App\Http\Controllers\Api\ListController::class,'budgetLimitList']);
+        Route::get('budget-requests', [\App\Http\Controllers\Api\ListController::class,'budgetRequestCategoryList']);
+        Route::get('budget-request-categories', [\App\Http\Controllers\Api\ListController::class,'budgetRequestList']);
+        Route::get('budget-dispatches', [\App\Http\Controllers\Api\ListController::class,'budgetDispatchList']);
+        Route::get('categories', [\App\Http\Controllers\Api\ListController::class,'categoryList']);
+        Route::get('departments', [\App\Http\Controllers\Api\ListController::class,'departmentList']);
+        Route::get('designations', [\App\Http\Controllers\Api\ListController::class,'designationList']);
+        Route::get('expenses', [\App\Http\Controllers\Api\ListController::class,'expenseList']);
+        Route::get('expense-categories', [\App\Http\Controllers\Api\ListController::class,'expenseCategoryList']);
+        Route::get('fiscal-years', [\App\Http\Controllers\Api\ListController::class,'fiscalYearList']);
+        Route::get('items', [\App\Http\Controllers\Api\ListController::class,'itemList']);
+        Route::get('item-users', [\App\Http\Controllers\Api\ListController::class,'itemUserList']);
+        Route::get('products', [\App\Http\Controllers\Api\ListController::class,'productList']);
+        Route::get('product-attributes', [\App\Http\Controllers\Api\ListController::class,'productAttributeList']);
+        Route::get('product-attribute-groups', [\App\Http\Controllers\Api\ListController::class,'productAttributeGroupList']);
+        Route::get('product-variants', [\App\Http\Controllers\Api\ListController::class,'productVariantList']);
+        Route::get('purchases', [\App\Http\Controllers\Api\ListController::class,'purchaseList']);
+        Route::get('purchase-products', [\App\Http\Controllers\Api\ListController::class,'purchaseProductList']);
+        Route::get('quotations', [\App\Http\Controllers\Api\ListController::class,'quotationList']);
+        Route::get('quotation-products', [\App\Http\Controllers\Api\ListController::class,'quotationProductList']);
+        Route::get('signatures', [\App\Http\Controllers\Api\ListController::class,'signatureList']);
+        Route::get('signature-use-departments', [\App\Http\Controllers\Api\ListController::class,'signatureUseDepartmentList']);
+        Route::get('taxes', [\App\Http\Controllers\Api\ListController::class,'taxList']);
+        Route::get('units', [\App\Http\Controllers\Api\ListController::class,'unitList']);
+        Route::get('unit-categories', [\App\Http\Controllers\Api\ListController::class,'unitCategoryList']);
+        Route::get('users', [\App\Http\Controllers\Api\ListController::class,'userList']);
+        Route::get('vendors', [\App\Http\Controllers\Api\ListController::class,'vendorList']);
+    });
+
     Route::apiResource('roles', \App\Http\Controllers\Api\RoleController::class);
     Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
     Route::post('users/{id}', [\App\Http\Controllers\Api\UserController::class, 'update']);
