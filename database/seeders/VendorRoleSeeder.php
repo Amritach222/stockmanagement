@@ -35,7 +35,7 @@ class VendorRoleSeeder extends Seeder
             'username' => 'vendor',
             'email' => 'vendor@rkdholdings.com',
             'password' => bcrypt('Vendor@123'),
-            'is_active'=>1
+            'is_active' => 1
         ]);
         $user->save();
 
@@ -46,7 +46,8 @@ class VendorRoleSeeder extends Seeder
             'email' => 'joshep@gmail.com',
             'landline' => '061516277',
             'mobile' => '9800000000',
-//            'category_id' => $itemC->id
+            'category_id' => 1,
+            'user_id' => $user->id
         ]);
         $item->save();
         $user->assignRole('Vendor');

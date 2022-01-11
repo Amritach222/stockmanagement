@@ -136,6 +136,7 @@ class RolesSeeder extends Seeder
                 'guard_name' => $guard
             ]);
             $this->giveAutoAllPermissions($storeManager, 'products');
+            $this->giveAutoAllPermissions($storeManager, 'quotations');
             $this->giveAutoAllPermissions($storeManager, 'consumes');
             $storeManager->givePermissionTo('quotations.show');
             $storeManager->givePermissionTo('settings');
