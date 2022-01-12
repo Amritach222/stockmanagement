@@ -50,7 +50,7 @@
                                     </v-form>
 
                                     <hr>
-                                    <v-card>
+<!--                                    <v-card>-->
                                         <v-card-title>
                                             {{ $t('products') }}
                                             <v-spacer></v-spacer>
@@ -211,7 +211,7 @@
                                                 <div>No Data</div>
                                             </template>
                                         </v-data-table>
-                                    </v-card>
+<!--                                    </v-card>-->
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="create">
                                             <CIcon name="cil-check-circle"/>

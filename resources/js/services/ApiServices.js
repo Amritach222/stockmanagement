@@ -658,6 +658,22 @@ export default {
         return await apiCall(DELETE, `api/quotation/quotationProducts/${id}`)
     },
 
+    async vendorQuotationIndex() {
+        return await apiCall(GET, `api/quotation/vendorQuotations`)
+    },
+    async vendorQuotationCreate(data) {
+        return await apiCall(POST, `api/quotation/vendorQuotations`, data)
+    },
+    async vendorQuotationShow(id) {
+        return await apiCall(GET, `api/quotation/vendorQuotations/${id}`)
+    },
+    async vendorQuotationEdit(id, data) {
+        return await apiCall(POST, `api/quotation/vendorQuotations/${id}`, data)
+    },
+    async vendorQuotationDelete(id) {
+        return await apiCall(DELETE, `api/quotation/vendorQuotations/${id}`)
+    },
+
     async createVariant(data) {
         return await apiCall(POST, `api/create-variants`, data)
     },
