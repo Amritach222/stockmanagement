@@ -51,7 +51,7 @@ class QuotationProductController extends Controller
             if ($request->product_variant_id != null) {
                 $variant = ProductVariant::findOrFail($request->product_variant_id);
             }
-            $price = $variant->price ? $product->cost_price + $variant->price : $product->cost_price;
+            $price = $variant != null ? $product->cost_price + $variant->price : $product->cost_price;
             $values['price'] = $price;
             $values['tax_id'] = $product->tax_id;
             $quotationProduct = new QuotationProduct($values);

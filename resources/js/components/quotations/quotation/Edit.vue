@@ -436,7 +436,7 @@
                         this.progressL = true;
                         const data = new FormData();
                         data.append('product_id', this.addQuoProduct.product_id);
-                        if (this.addQuoProduct.product_variant_id !== null) {
+                        if (this.addQuoProduct.product_variant_id !== null && this.addQuoProduct.product_variant_id !== '') {
                             data.append('product_variant_id', this.addQuoProduct.product_variant_id);
                         }
                         data.append('quantity', this.addQuoProduct.quantity);
@@ -452,7 +452,7 @@
                         this.progressL = true;
                         const data = new FormData();
                         data.append('product_id', this.addQuoProduct.product_id);
-                        if (this.addQuoProduct.product_variant_id !== null) {
+                        if (this.addQuoProduct.product_variant_id !== null && this.addQuoProduct.product_variant_id !== '') {
                             data.append('product_variant_id', this.addQuoProduct.product_variant_id);
                         }
                         data.append('quantity', this.addQuoProduct.quantity);
