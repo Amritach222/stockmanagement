@@ -460,32 +460,39 @@ export default {
                 if (this.prProducts.length > 0) {
                     dat = await this.createProduct(res.data.id);
                     console.log("result from the purchase request" ,dat);
-                } else {
-                    route.replace('/purchase/purchase-request-history/');
+                    if(dat){
+                        route.replace('/purchase/purchase-request-history/');
+                    } else {
+                        // send error message here
+
+                    }
                 }
-                if(dat){
-                    route.replace('/purchase/purchase-request-history');
-                }
+            } else {
+                // send error message here
             }
         },
 
+        async deletePurchaseRequestAndProducts(){
+
+        },
+
         async createProduct(id) {
+            let returnValue = true;
             for (var i = 0; i < this.prProducts.length; i++) {
                 let productData = new FormData();
                 productData.append('quantity', parseInt(this.prProducts[i].quantity));
                 productData.append('product_id', parseInt(this.prProducts[i].product_id));
                 productData.append('purchase_id', parseInt(id));
                 productData.append('unit_id', parseInt(this.prProducts[i].unit_id));
-                if (this.prProducts[i].product_variant_id !== '') {
+                if (this.prProducts[i].product_variant_id !=='' && this.prProducts[i].product_variant_id !== undefined) {
                     productData.append('product_variant_id', parseInt(this.prProducts[i].product_variant_id));
                 }
                 let res = await ApiServices.addPurchaseProductRequest(productData);
+                if(res.success === false){
+                    returnValue = false;
+                }
             }
-            if(i < this.prProducts.length){
-                return true;
-            } else {
-                return false;
-            }
+            return returnValue;
         },
     }
 }
