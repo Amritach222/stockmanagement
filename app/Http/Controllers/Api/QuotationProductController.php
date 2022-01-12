@@ -46,6 +46,7 @@ class QuotationProductController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
+            $variant = null;
             $product = Product::findOrFail($request->product_id);
             if ($request->product_variant_id != null) {
                 $variant = ProductVariant::findOrFail($request->product_variant_id);
