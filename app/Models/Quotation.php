@@ -40,4 +40,9 @@ class Quotation extends Model
     {
         return $this->hasMany(QuotationProduct::class, 'quotation_id');
     }
+
+    public function vendorQuotations()
+    {
+        return $this->hasMany(VendorQuotation::class, 'quotation_id');
+    }
 }

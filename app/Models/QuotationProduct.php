@@ -51,4 +51,9 @@ class QuotationProduct extends Model
         }
         $this->save();
     }
+
+    public function vendorQuotations()
+    {
+        return $this->hasMany(VendorQuotation::class, 'quotation_product_id');
+    }
 }
