@@ -23,7 +23,7 @@ class CreateVendorQuotationsTable extends Migration
             $table->foreign('vendor_id')->references('id')->on('vendors');
             $table->integer('price')->nullable();
             $table->integer('quantity')->nullable();
-            $table->enum('status', ['Pending', 'Reviewed', 'Approved', 'Rejected', 'Cancel'])->default('Pending')->nullable();
+            $table->enum('status', ['Pending', 'On Progress', 'Accepted', 'Approved', 'Rejected', 'Cancel'])->default('Pending')->nullable();
             $table->timestamps();
         });
     }

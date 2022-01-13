@@ -14,6 +14,7 @@ class AddDatesToQuotations extends Migration
     public function up()
     {
         Schema::table('quotations', function (Blueprint $table) {
+            $table->string('requested_name')->nullable();
             $table->date('due_date')->nullable();
             $table->date('desired_delivery_date')->nullable();
         });
@@ -27,6 +28,7 @@ class AddDatesToQuotations extends Migration
     public function down()
     {
         Schema::table('quotations', function (Blueprint $table) {
+            $table->dropColumn('requested_name');
             $table->dropColumn('due_date');
             $table->dropColumn('desired_delivery_date');
         });
