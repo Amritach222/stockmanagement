@@ -9,7 +9,7 @@ class Quotation extends Model
 
     protected $table = 'quotations';
     public $timestamps = true;
-    protected $fillable = array('reference_no', 'user_id', 'department_id', 'file_id', 'status', 'note', 'reviewed_by', 'approved_by');
+    protected $fillable = array('reference_no', 'user_id', 'department_id', 'file_id', 'status', 'note', 'reviewed_by', 'approved_by', 'due_date', 'desired_delivery_date');
 
     public function user()
     {

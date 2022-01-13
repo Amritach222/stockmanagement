@@ -256,7 +256,6 @@ export default {
             {text: i18n.t('product'), value: 'product_name'},
             {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant'},
             {text: i18n.t('quantity'), value: 'quantity'},
-            {text: i18n.t('price'), value: 'price'},
             {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
@@ -364,13 +363,10 @@ export default {
 
         async addProduct() {
             var varName = '---';
-            var price = '';
             let res = await ApiServices.productShow(this.addQuoProduct.product_id);
-            price = res.data.cost_price;
             if (this.addQuoProduct.product_variant_id) {
                 let rtn = await ApiServices.productVariantShow(this.addQuoProduct.product_variant_id);
                 varName = rtn.data.name;
-                price = rtn.data.price + price;
             }
             if (this.editedIndex > -1) {
                 Object.assign(this.quoProducts[this.editedIndex], {
@@ -378,7 +374,6 @@ export default {
                     'product_name': res.data.name,
                     'product_variant': varName,
                     'product_variant_id': this.addQuoProduct.product_variant_id,
-                    'price': price,
                     'quantity': this.addQuoProduct.quantity,
                     'shipping_cost': this.addQuoProduct.shipping_cost,
                 })
@@ -388,7 +383,6 @@ export default {
                     'product_name': res.data.name,
                     'product_variant_id': this.addQuoProduct.product_variant_id,
                     'product_variant': varName,
-                    'price': price,
                     'quantity': this.addQuoProduct.quantity,
                     'shipping_cost': this.addQuoProduct.shipping_cost,
                 });
