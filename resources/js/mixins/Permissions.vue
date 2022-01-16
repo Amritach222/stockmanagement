@@ -2,14 +2,18 @@
 export default {
     methods: {
         $can(permissionName) {
-            let permissions = localStorage.getItem('permissions')
-            let permissionStatus = permissions.indexOf(permissionName) !== -1;
-            return permissionStatus;
+            let permissions = localStorage.getItem('permissions');
+            if(permissions === null){
+                return false;
+            }
+            return permissions.indexOf(permissionName) !== -1;
         },
         $is(roleName) {
             let roles = localStorage.getItem('roles');
-            let roleStatus = roles.indexOf(roleName) !== -1;
-            return roleStatus;
+            if(roles === null){
+                return false;
+            }
+            return roles.indexOf(roleName) !== -1;
         },
         $isAny(rolesName) {
             let roles = localStorage.getItem('roles');

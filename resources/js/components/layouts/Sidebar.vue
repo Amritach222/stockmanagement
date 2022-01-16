@@ -32,10 +32,8 @@
 
 <script>
 import nav from './_nav'
-import store from "../../store";
 import ApiServices from "../../services/ApiServices";
 import config from "../../config";
-import i18n from "../../i18n";
 import SidebarNavItem from "./SidebarNavItem";
 import permissions from "../../permissions";
 
