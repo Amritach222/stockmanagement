@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
+use App\Events\VendorAssignQuoEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VendorQuotationRequest;
 use App\Http\Resources\VendorQuotation as VendorQuotationResource;
+use App\Models\User;
+use App\Models\Vendor;
 use App\Models\VendorQuotation;
 use Illuminate\Http\Request;
 
@@ -55,6 +58,9 @@ class VendorQuotationController extends Controller
             $values = $request->all();
             $vendorQuotation = new VendorQuotation($values);
             $vendorQuotation->save();
+            $vendor = Vendor::findOrfail($vendorQuotation->vendor_id);
+            $user = User::findOrFail($vendor->user_id);
+            event(new VendorAssignQuoEvent($user, $vendorQuotation));
             $data['data'] = new VendorQuotationResource($vendorQuotation);
             event(new ActivityLogEvent('Add', 'Vendor Quotation', $data['data']->id));
             $data['message'] = "Vendor Quotation added successfully.";
