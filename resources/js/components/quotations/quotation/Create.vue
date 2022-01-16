@@ -504,6 +504,7 @@ export default {
         quoVendors: [],
         products: [],
         selectVendors: [],
+        selectedVendors: [],
         variants: [],
         singleSelect: false,
         selected: [],
@@ -593,23 +594,28 @@ export default {
         async deleteItemConfirm() {
             this.deleteProduct = this.quoProducts[this.editedIndex];
             this.quoProducts.splice(this.editedIndex, 1)
+            let ven = await this.loadProductVendors();
             let res = await this.deleteProductVendor();
             this.closeDelete()
         },
 
         async deleteProductVendor() {
-            let res = await ApiServices.vendorProductIds('vendor', this.deleteProduct.product_id);
-            if (res.success === true) {
-                this.vendor_ids = res.data;
-                for (let j = 0; j < this.quoVendors.length; j++) {
-                    for (let k = 0; k < this.vendor_ids.length; k++) {
-                        if (this.quoVendors[j].id === this.vendor_ids[k]) {
-                            this.quoVendors.splice(j, 1)
+            let vendors = [];
+            console.log('after', vendors)
+            for (let j = 0; j < this.quoVendors.length; j++) {
+                for (let k = 0; k < this.selectVendors.length; k++) {
+                    if (this.quoVendors[j].id === this.selectVendors[k].id) {
+                        if (!(vendors.indexOf(this.quoVendors[j]) >= 0)) {
+                            vendors.push(this.quoVendors[j]);
                         }
                     }
                 }
             }
-            let vnd = await this.loadProductVendors();
+            this.quoVendors = vendors;
+        },
+
+        async setSelectedVendors() {
+            this.selectedVendors = Object.assign({}, this.quoVendors);
         },
 
         close() {
