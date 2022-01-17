@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Events\ActivityLogEvent;
 use App\Events\PasswordResetEvent;
+use App\Events\VendorAssignQuoEvent;
 use App\Listeners\ActivityLogListener;
 use App\Listeners\PasswordResetListener;
+use App\Listeners\VendorAssignQuoListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,6 +29,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         PasswordResetEvent::class => [
             PasswordResetListener::class,
+        ],
+        VendorAssignQuoEvent::class => [
+            VendorAssignQuoListener::class,
         ],
     ];
 

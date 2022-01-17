@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Quotation;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\VendorQuotation;
@@ -19,10 +20,10 @@ class VendorAssignQuoNotification extends Notification
      *
      * @return void
      */
-    public function __construct(User $user, VendorQuotation $vendorQuotation)
+    public function __construct(User $user, Quotation $quotation)
     {
         $this->user = $user;
-        $this->vendorQuotation = $vendorQuotation;
+        $this->quotation = $quotation;
     }
 
     /**
@@ -49,7 +50,7 @@ class VendorAssignQuoNotification extends Notification
             ->subject('You have a new product request.')
             ->greeting('Hello ' . $this->user->name)
             ->line('You have been assign with a new product request. Please click the link below to check the request list. Thank You.')
-            ->action('Click here', url('/quotations/edit/' . $this->vendorQuotation->quotation_id))
+            ->action('Click here', url('/quotations/edit/' . $this->quotation->id))
             ->line('Thank you for choosing ' . Setting::companyName() . "!");
     }
 

@@ -106,6 +106,7 @@ import VendorAddProductList from './components/vendor/vendorProduct/AddMyProduct
 
 import VendorProductShow from './components/vendor/vendorProduct/ShowProduct'
 import VendorProductAdd from './components/vendor/vendorProduct/AddProduct'
+import VendorProductRequests from './components/vendor/vendorProduct/ProductRequests'
 
 import BudgetIndex from './components/budgets/budget/Index'
 import BudgetCreate from './components/budgets/budget/Create'
@@ -1003,6 +1004,15 @@ export default new Router({
             path: '/vendor/add-product-list',
             name: i18n.t('card_title.edit_vendor_product'),
             component: VendorAddProductList,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/new-product-request',
+            name: i18n.t('product') + ' ' + i18n.t('request'),
+            component: VendorProductRequests,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

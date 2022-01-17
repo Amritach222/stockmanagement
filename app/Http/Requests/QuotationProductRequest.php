@@ -31,7 +31,6 @@ class QuotationProductRequest extends FormRequest
                 'product_variant_id' => 'int|exists:product_variants,id',
                 'quantity' => 'int',
                 'tax_id' => 'int|exists:taxes,id',
-                'shipping_cost' => 'int',
             ];
         } else {
             return [
@@ -40,7 +39,6 @@ class QuotationProductRequest extends FormRequest
                 'product_variant_id' => 'int|exists:product_variants,id',
                 'quantity' => 'int',
                 'tax_id' => 'int|exists:taxes,id',
-                'shipping_cost' => 'int',
             ];
         }
     }

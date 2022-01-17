@@ -595,24 +595,24 @@ export default {
             this.deleteProduct = this.quoProducts[this.editedIndex];
             this.quoProducts.splice(this.editedIndex, 1)
             let ven = await this.loadProductVendors();
-            let res = await this.deleteProductVendor();
+            // let res = await this.deleteProductVendor();
             this.closeDelete()
         },
 
-        async deleteProductVendor() {
-            let vendors = [];
-            console.log('after', vendors)
-            for (let j = 0; j < this.quoVendors.length; j++) {
-                for (let k = 0; k < this.selectVendors.length; k++) {
-                    if (this.quoVendors[j].id === this.selectVendors[k].id) {
-                        if (!(vendors.indexOf(this.quoVendors[j]) >= 0)) {
-                            vendors.push(this.quoVendors[j]);
-                        }
-                    }
-                }
-            }
-            this.quoVendors = vendors;
-        },
+        // async deleteProductVendor() {
+        //     let vendors = [];
+        //     console.log('after', vendors)
+        //     for (let j = 0; j < this.quoVendors.length; j++) {
+        //         for (let k = 0; k < this.selectVendors.length; k++) {
+        //             if (this.quoVendors[j].id === this.selectVendors[k].id) {
+        //                 if (!(vendors.indexOf(this.quoVendors[j]) >= 0)) {
+        //                     vendors.push(this.quoVendors[j]);
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     this.quoVendors = vendors;
+        // },
 
         async setSelectedVendors() {
             this.selectedVendors = Object.assign({}, this.quoVendors);
@@ -724,6 +724,7 @@ export default {
                 if (res.success === true) {
                     if (this.quoProducts.length > 0) {
                         await this.createProduct(res.data.id);
+                        await this.createProductVendor(res.data.id);
                     } else {
                         route.replace('/quotations/');
                     }
@@ -737,13 +738,26 @@ export default {
                 productData.append('product_id', parseInt(this.quoProducts[i].product_id));
                 productData.append('quantity', parseInt(this.quoProducts[i].quantity));
                 productData.append('quotation_id', parseInt(id));
-                productData.append('shipping_cost', parseInt(this.quoProducts[i].shipping_cost));
+                // if(this.quoProducts[i].shipping_cost !== null && this.quoProducts[i].shipping_cost !== '') {
+                //     productData.append('shipping_cost', parseInt(this.quoProducts[i].shipping_cost));
+                // }
                 if (this.quoProducts[i].product_variant_id !== '') {
                     productData.append('product_variant_id', parseInt(this.quoProducts[i].product_variant_id));
                 }
                 let res = await ApiServices.quotationProductCreate(productData);
             }
-            route.replace('/quotations/');
+            // route.replace('/quotations/');
+        },
+
+        async createProductVendor(id){
+            let data = new FormData();
+            data.append('quotation_id', parseInt(id));
+            data.append('products', JSON.stringify(this.quoProducts));
+            data.append('vendors', JSON.stringify(this.quoVendors));
+            let res = await ApiServices.vendorQuotationCreate(data);
+            if(res.success === true){
+                route.replace()
+            }
         },
 
         validate() {

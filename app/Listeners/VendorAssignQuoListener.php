@@ -28,7 +28,7 @@ class VendorAssignQuoListener
     public function handle($event)
     {
         $user = $event->user;
-        $vendorQuotation = $event->vendorQuotation;
-        Notification::send($user, new VendorAssignQuoNotification($user, $vendorQuotation));
+        $quotation = $event->quotation;
+        Notification::send($user, new VendorAssignQuoNotification($user, $quotation));
     }
 }

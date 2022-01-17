@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Quotation;
 use App\Models\User;
 use App\Models\VendorQuotation;
 use Illuminate\Broadcasting\Channel;
@@ -21,10 +22,10 @@ class VendorAssignQuoEvent
      *
      * @return void
      */
-    public function __construct(User $user, VendorQuotation $vendorQuotation)
+    public function __construct(User $user, Quotation $quotation)
     {
         $this->user = $user;
-        $this->vendorQuotation = $vendorQuotation;
+        $this->quotation = $quotation;
     }
 
     /**
