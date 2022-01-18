@@ -23,6 +23,9 @@ class Quotation extends JsonResource
             $link = $image->path;
         }
         $quotationProducts = QuotationProduct::collection($this->quotationProducts);
+        $vendorQuotations = \App\Models\VendorQuotation::where('quotation_id', $this->id)->get();
+        $vendor_ids = \App\Models\VendorQuotation::where('quotation_id', $this->id)->pluck('vendor_id');
+        $vendors = \App\Models\Vendor::whereIn('id', $vendor_ids)->get();
         return [
             'id' => $this->id,
             'reference_no' => $this->reference_no,
@@ -30,6 +33,9 @@ class Quotation extends JsonResource
             'department_id' => $this->department_id,
             'file_id' => $this->file_id,
             'note' => $this->note,
+            'due_date' => $this->due_date,
+            'desired_delivery_date' => $this->desired_delivery_date,
+            'requested_name' => $this->requested_name,
             'status' => $this->status,
             'reviewed_by' => $this->reviewed_by,
             'approved_by' => $this->approved_by,
@@ -37,6 +43,8 @@ class Quotation extends JsonResource
             'quotation_products' => $quotationProducts,
             'department' => $department,
             'user' => $user,
+            'vendors' => $vendors,
+            'vendor_quotations' => $vendorQuotations
         ];
     }
 }

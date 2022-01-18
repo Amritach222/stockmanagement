@@ -89,7 +89,7 @@
                                     </v-form>
 
                                     <hr>
-                                    <!--                                    <v-card>-->
+                                                                        <v-card flat>
                                     <v-card-title>
                                         {{ $t('products') }}
                                         <v-spacer></v-spacer>
@@ -250,7 +250,7 @@
                                             <div>No Data</div>
                                         </template>
                                     </v-data-table>
-                                    <!--                                    </v-card>-->
+                                                                        </v-card>
 
                                     <hr>
                                     <v-card flat v-if="vendorCard">
@@ -685,7 +685,7 @@ export default {
                     'product_variant': varName,
                     'product_variant_id': this.addQuoProduct.product_variant_id,
                     'quantity': this.addQuoProduct.quantity,
-                    'shipping_cost': this.addQuoProduct.shipping_cost,
+                    // 'shipping_cost': this.addQuoProduct.shipping_cost,
                 })
             } else {
                 this.quoProducts.push({
@@ -694,7 +694,7 @@ export default {
                     'product_variant_id': this.addQuoProduct.product_variant_id,
                     'product_variant': varName,
                     'quantity': this.addQuoProduct.quantity,
-                    'shipping_cost': this.addQuoProduct.shipping_cost,
+                    // 'shipping_cost': this.addQuoProduct.shipping_cost,
                 });
             }
             if (this.quoProducts.length > 0) {
@@ -738,7 +738,7 @@ export default {
                 productData.append('product_id', parseInt(this.quoProducts[i].product_id));
                 productData.append('quantity', parseInt(this.quoProducts[i].quantity));
                 productData.append('quotation_id', parseInt(id));
-                // if(this.quoProducts[i].shipping_cost !== null && this.quoProducts[i].shipping_cost !== '') {
+                // if(this.quoProducts[i].shipping_cost !== null && this.quoProducts[i].shipping_cost !== '' && typeof(parseInt(this.quoProducts[i].shipping_cost) === 'integer')) {
                 //     productData.append('shipping_cost', parseInt(this.quoProducts[i].shipping_cost));
                 // }
                 if (this.quoProducts[i].product_variant_id !== '') {

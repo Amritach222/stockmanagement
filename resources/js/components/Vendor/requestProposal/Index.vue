@@ -1,23 +1,23 @@
 <template>
     <v-card>
         <v-card-title>
-            {{ $t('products') }}
+            {{ $t('request') + ' ' + $t('products') }}
             <v-spacer></v-spacer>
-            <v-card-actions>
-                <v-btn
-                    class="btn-primary m-1 btn-back"
-                    text
-                    :to="'/vendor/add-product-list'"
-                >
-                    {{ $t('button.edit_product_list') }}
-                </v-btn>
-            </v-card-actions>
+            <!--            <v-card-actions>-->
+            <!--                <v-btn-->
+            <!--                    class="btn-primary m-1 btn-back"-->
+            <!--                    text-->
+            <!--                    :to="'/vendor/add-product-list'"-->
+            <!--                >-->
+            <!--                    {{ $t('button.edit_product_list') }}-->
+            <!--                </v-btn>-->
+            <!--            </v-card-actions>-->
         </v-card-title>
         <v-data-table
             item-key="name"
             class="elevation-1"
             :headers="headers"
-            :items="products"
+            :items="requestProposals"
             sort-by="id"
             :loading="tableLoad"
             loading-text="Loading... Please wait..."
@@ -70,6 +70,29 @@
             <template v-slot:item.category="{ item }">
                 {{ item.category.name }}
             </template>
+            <template v-slot:item.actions="{ item }">
+                <CRow>
+                    <router-link
+                        :to="'/vendor/product-request/'+item.id"
+                    >
+                        <v-icon
+                            small
+                        >
+                            mdi-eye
+                        </v-icon>
+                    </router-link>
+                    <router-link
+                        :to="'/vendor/product-request/edit/'+item.id"
+                    >
+                        <v-icon
+                            small
+                            class="mr-2"
+                        >
+                            mdi-pencil
+                        </v-icon>
+                    </router-link>
+                </CRow>
+            </template>
             <template v-slot:no-data>
                 <div>No Data</div>
             </template>
@@ -96,21 +119,22 @@ export default {
         dialog: false,
         dialogDelete: false,
         singleSelect: false,
-        user:{
-            id:null,
+        user: {
+            id: null,
         },
         headers: [
             {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
-            {text: i18n.t('name'), value: 'name'},
-            {text: i18n.t('image'), value: 'link', sortable: false},
-            {text: i18n.t('brand'), value: 'brand', sortable: false},
-            {text: i18n.t('category'), value: 'category', sortable: false},
+            {text: i18n.t('reference'), value: 'reference_no'},
+            {text: i18n.t('due_date'), value: 'due_date'},
+            {text: i18n.t('desired_delivery_date'), value: 'desired_delivery_date'},
+            {text: i18n.t('status'), value: 'status'},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         activePassive: [
             {text: 'Active', value: 1},
             {text: 'Inactive', value: 0},
         ],
-        products: [],
+        requestProposals: [],
         tableLoad: true,
     }),
 
@@ -123,10 +147,10 @@ export default {
             window.open(config.cdnURL + data, `_blank`);
         },
         async loadItems() {
-            let res = await ApiServices.vendorProductList();
+            let res = await ApiServices.vendorQuotationList();
             if (res.success === true) {
                 this.tableLoad = false;
-                this.products = res.data;
+                this.requestProposals = res.data;
             }
         },
     },

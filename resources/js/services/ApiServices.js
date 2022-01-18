@@ -481,6 +481,9 @@ export default {
     async vendorProductList() {
         return await apiCall(GET, `api/vendor/product-list`)
     },
+    async vendorQuotationList() {
+        return await apiCall(GET, `api/vendor/quotation-list`)
+    },
 
     async budgetIndex() {
         return await apiCall(GET, `api/budget/budgets`)

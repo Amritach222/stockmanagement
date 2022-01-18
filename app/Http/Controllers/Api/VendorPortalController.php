@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Http\Resources\Product as ProductResource;
+use App\Models\Quotation;
 use App\Models\User;
 use App\Models\VendorProduct;
+use App\Models\VendorQuotation;
 use Illuminate\Http\Request;
 
 class VendorPortalController extends Controller
@@ -44,6 +46,23 @@ class VendorPortalController extends Controller
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
+        }
+        return $data;
+    }
+
+    public function quotationList()
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $user = User::findOrFail(auth()->user()->id);
+            $vendor = $user->vendor;
+            $quotation_ids = VendorQuotation::where('vendor_id', $vendor->id)->pluck('quotation_id');
+            $data['data'] = Quotation::whereIn('id', $quotation_ids)->get();
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = "Error occurred.";
         }
         return $data;
     }

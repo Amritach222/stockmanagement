@@ -106,7 +106,8 @@ import VendorAddProductList from './components/vendor/vendorProduct/AddMyProduct
 
 import VendorProductShow from './components/vendor/vendorProduct/ShowProduct'
 import VendorProductAdd from './components/vendor/vendorProduct/AddProduct'
-import VendorProductRequests from './components/vendor/vendorProduct/ProductRequests'
+import VendorProductRequests from './components/Vendor/requestProposal'
+import VendorProductRequest from './components/Vendor/requestProposal/Show'
 
 import BudgetIndex from './components/budgets/budget/Index'
 import BudgetCreate from './components/budgets/budget/Create'
@@ -1011,8 +1012,17 @@ export default new Router({
         },
         {
             path: '/vendor/new-product-request',
-            name: i18n.t('product') + ' ' + i18n.t('request'),
+            name: i18n.t('product') + ' ' + i18n.t('requests'),
             component: VendorProductRequests,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/product-request/:id',
+            name: i18n.t('product') + ' ' + i18n.t('request'),
+            component: VendorProductRequest,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
