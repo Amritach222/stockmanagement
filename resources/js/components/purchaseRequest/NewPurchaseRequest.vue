@@ -261,6 +261,7 @@
 import route from "../../router";
 import ApiServices from "../../services/ApiServices";
 import config from "../../config";
+import store from "../../store";
 
 export default {
     name: "NewPurchaseRequest",
@@ -462,9 +463,13 @@ export default {
                     console.log("result from the purchase request" ,dat);
                     if(dat){
                         route.replace('/purchase/purchase-request-history/');
+                        store.state.home.snackbar = true;
+                        store.state.home.snackbarText = this.$i18n.t('successToSave');
+                        store.state.home.snackbarColor = 'green';
                     } else {
-                        // send error message here
-
+                        store.state.home.snackbar = true;
+                        store.state.home.snackbarText = this.$i18n.t('failedToSaveProduct');
+                        store.state.home.snackbarColor = 'red';
                     }
                 }
             } else {

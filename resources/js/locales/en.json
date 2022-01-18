@@ -166,6 +166,8 @@
     "time_span": "Time Span",
     "ratio": "Ratio",
     "distribute": "Distribute",
+    "failedToSaveProduct": "Failed to add product",
+    "successToSave": "Added Successfully",
 
     "validation": {
         "required": "This field is required!",
