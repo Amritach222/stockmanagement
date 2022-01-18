@@ -477,10 +477,6 @@ export default {
             }
         },
 
-        async deletePurchaseRequestAndProducts(){
-
-        },
-
         async createProduct(id) {
             let returnValue = true;
             for (var i = 0; i < this.prProducts.length; i++) {

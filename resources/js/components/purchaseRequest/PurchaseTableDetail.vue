@@ -26,7 +26,7 @@
             </tr>
             </tbody>
         </table>
-        <PurchaseRequestProductsDetails :products="item"></PurchaseRequestProductsDetails>
+        <PurchaseRequestProductsDetails :details="item.purchase_products"></PurchaseRequestProductsDetails>
     </div>
 </template>
 
