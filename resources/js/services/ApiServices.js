@@ -484,6 +484,12 @@ export default {
     async vendorQuotationList() {
         return await apiCall(GET, `api/vendor/quotation-list`)
     },
+    async vendorQuotation(id) {
+        return await apiCall(GET, `api/vendor/quotation/${id}`)
+    },
+    async vendorQuotationUpdate(id, data) {
+        return await apiCall(POST, `api/vendor/quotation/update/${id}`, data)
+    },
 
     async budgetIndex() {
         return await apiCall(GET, `api/budget/budgets`)

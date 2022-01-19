@@ -45,4 +45,29 @@ class Quotation extends Model
     {
         return $this->hasMany(VendorQuotation::class, 'quotation_id');
     }
+
+    public function getStatus($vendor_id)
+    {
+        $vendorQuotations = VendorQuotation::where('quotation_id', $this->id)->where('vendor_id', $vendor_id)->get();
+        $accepted_count = 0;
+        $rejected_count = 0;
+        foreach ($vendorQuotations as $vendorQuotation) {
+            if ($vendorQuotation->status == 'Accepted') {
+                $accepted_count = $accepted_count + 1;
+            } elseif ($vendorQuotation->status == 'Rejected') {
+                $rejected_count = $rejected_count + 1;
+            } elseif ($vendorQuotation->status == 'Pending') {
+                return "Pending";
+            } elseif ($vendorQuotation->status == 'On Progress') {
+                return "On Progress";
+            }
+        }
+        if (($accepted_count > 0) && ($accepted_count == count($vendorQuotations))) {
+            return "Accepted";
+        } elseif (($accepted_count > 0) && ($accepted_count < count($vendorQuotations))) {
+            return "Partially Accepted";
+        } elseif (($rejected_count > 0) && ($rejected_count == count($vendorQuotations))) {
+            return "Rejected";
+        }
+    }
 }

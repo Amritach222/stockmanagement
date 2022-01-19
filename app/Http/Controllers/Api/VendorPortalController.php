@@ -66,4 +66,19 @@ class VendorPortalController extends Controller
         }
         return $data;
     }
+
+    public function quotationShow($id)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $quotation = Quotation::findOrFail($id);
+            $data['data'] = new \App\Http\Resources\Quotation($quotation);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = "Error occurred.";
+        }
+        return $data;
+    }
 }

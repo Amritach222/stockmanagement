@@ -52,8 +52,8 @@ class QuotationProduct extends Model
         $this->save();
     }
 
-    public function vendorQuotations()
+    public function vendorQuotationProducts()
     {
-        return $this->hasMany(VendorQuotation::class, 'quotation_product_id');
+        return $this->hasMany(VendorQuotationProduct::class, 'quotation_product_id');
     }
 }

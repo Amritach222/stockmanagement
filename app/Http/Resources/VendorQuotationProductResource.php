@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\File;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class VendorQuotation extends JsonResource
+class VendorQuotationProductResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,20 +14,15 @@ class VendorQuotation extends JsonResource
      */
     public function toArray($request)
     {
-        $link = null;
-        if ($this->image_id !== null) {
-            $image = File::where('id', $this->image_id)->first();
-            $link = $image->path;
-        }
         return [
-            'quotation_id' => $this->quotation_id,
-            'vendor_id' => $this->vendor_id,
-            'total_item' => $this->total_item,
-            'total_price' => $this->total_price,
+            'vendor_quotation_id' => $this->vendor_quotation_id,
+            'quotation_product_id' => $this->quotation_product_id,
+            'quantity' => $this->quantity,
+            'price' => $this->price,
             'discount_type' => $this->discount_type,
             'discount' => $this->discount,
+            'tax_id' => $this->tax_id,
             'status' => $this->status,
-            'link' => $link,
         ];
     }
 }

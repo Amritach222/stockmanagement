@@ -179,6 +179,9 @@
     "permissions": "Permissions",
     "my": "My",
     "unauthorized": "Unauthorized",
+    "due": "Due",
+    "desired": "Desired",
+    "delivery": "Delivery",
 
     "validation": {
         "required": "This field is required!",

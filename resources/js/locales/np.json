@@ -181,6 +181,9 @@
     "permissions": "अनुमतिहरू",
     "my": "मेरो",
     "unauthorized": "अनाधिकृत",
+    "due": "नियत",
+    "desired": "चाहिएको",
+    "delivery": "डेलिभरी",
 
     "validation": {
         "required": "यो क्षेत्र आवश्यक छ!",

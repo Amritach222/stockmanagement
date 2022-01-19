@@ -15,18 +15,17 @@ class CreateVendorQuotationsTable extends Migration
     {
         Schema::create('vendor_quotations', function (Blueprint $table) {
             $table->id();
+            $table->text('comment')->nullable();
             $table->integer('quotation_id')->unsigned()->nullable();
             $table->foreign('quotation_id')->references('id')->on('quotations');
-            $table->integer('quotation_product_id')->unsigned()->nullable();
-            $table->foreign('quotation_product_id')->references('id')->on('quotation_products');
             $table->integer('vendor_id')->unsigned()->nullable();
             $table->foreign('vendor_id')->references('id')->on('vendors');
-            $table->integer('quantity')->nullable();
-            $table->integer('price')->nullable();
-            $table->enum('discount_type', ['Percent', 'Amount'])->default('Pending')->nullable();
+            $table->integer('total_item')->nullable();
+            $table->integer('total_price')->nullable();
+            $table->enum('discount_type', ['Percent', 'Amount'])->default('Percent')->nullable();
             $table->integer('discount')->nullable();
-            $table->integer('tax_id')->unsigned()->nullable();
-            $table->foreign('tax_id')->references('id')->on('taxes');
+            $table->integer('file_id')->unsigned()->nullable();
+            $table->foreign('file_id')->references('id')->on('files');
             $table->enum('status', ['Pending', 'On Progress', 'Accepted', 'Approved', 'Rejected', 'Cancel'])->default('Pending')->nullable();
             $table->timestamps();
         });

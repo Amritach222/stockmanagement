@@ -36,6 +36,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => '/vendor'], function () {
         Route::get('quotation-list', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationList']);
+        Route::get('quotation/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationShow']);
+        Route::post('quotation/update/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationUpdate']);
         Route::get('product-list', [\App\Http\Controllers\Api\VendorPortalController::class, 'productList']);
         Route::get('all-products', [\App\Http\Controllers\Api\VendorPortalController::class, 'allProducts']);
     });
