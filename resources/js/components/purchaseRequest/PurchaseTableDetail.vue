@@ -26,7 +26,7 @@
             </tr>
             </tbody>
         </table>
-        <PurchaseRequestProductsDetails :details="item.purchase_products"></PurchaseRequestProductsDetails>
+        <PurchaseRequestProductsDetails :details="item.purchase_products" :triggerSelectProduct="triggerSelectProduct"></PurchaseRequestProductsDetails>
     </div>
 </template>
 
@@ -37,10 +37,16 @@ import PurchaseRequestProductsDetails from "./PurchaseRequestProductsDetails";
 export default {
     name: "PurchaseTableDetail",
     components: {PurchaseRequestProductsDetails},
-    props: ['item'],
+    props: ['item','triggerSelect'],
     data: () => ({
         cdnURL: config.cdnURL,
+        triggerSelectProduct: false
     }),
+    watch: {
+        triggerSelect: function(newVal, oldVal) {
+            this.triggerSelectProduct = !this.triggerSelectProduct;
+        }
+    },
     methods: {
         openImage(data) {
             window.open(this.cdnURL + data, `_blank`);

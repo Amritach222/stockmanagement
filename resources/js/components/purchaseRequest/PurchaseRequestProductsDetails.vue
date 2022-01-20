@@ -1,125 +1,123 @@
 <template>
     <v-data-table
+        v-model="selected"
         :headers="headers"
         :items="prProducts"
         sort-by="item_name"
         :loading=tableLoad
+        show-select
+        :hide-default-footer="true"
         loading-text="Loading... Please wait..."
     >
         <template v-slot:top>
-            <v-toolbar
-                flat
+            <v-dialog
+                v-model="dialog"
+                max-width="600px"
             >
-
-                <v-dialog
-                    v-model="dialog"
-                    max-width="600px"
-                >
-                    <v-card>
-                        <v-form ref="form">
-                            <v-card-title>
-                                <span class="headline">{{ formTitle }}</span>
-                            </v-card-title>
-
-                            <v-card-text>
-                                <v-container>
-                                    <v-row>
-                                        <v-col>
-                                            <v-select
-                                                v-model="addPurchaseRequestProduct.product_id"
-                                                label="Select Product"
-                                                :items="products"
-                                                item-text="name"
-                                                item-value="id"
-                                                required
-                                                outlined
-                                                :rules="rules"
-                                                v-on:change="getVariants(addPurchaseRequestProduct.product_id)"
-                                            ></v-select>
-                                            <div v-if="hasVariants">
-                                                <v-select
-                                                    v-model="addPurchaseRequestProduct.product_variant_id"
-                                                    label="Product Variant"
-                                                    :items="variants"
-                                                    item-value="id"
-                                                    item-text="name"
-                                                    outlined
-                                                ></v-select>
-                                            </div>
-                                            <v-text-field
-                                                v-model="addPurchaseRequestProduct.quantity"
-                                                label="Quantity"
-                                                type="number"
-                                                outlined
-                                            ></v-text-field>
-                                            <v-select
-                                                v-model="addPurchaseRequestProduct.unit"
-                                                label="Unit"
-                                                :items="units"
-                                                item-text="name"
-                                                item-value="id"
-                                                required
-                                                outlined
-                                                return-object
-                                                :rules="rules"
-                                            ></v-select>
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
-                            </v-card-text>
-
-                            <v-card-actions>
-                                <v-progress-linear
-                                    v-if="progressL"
-                                    indeterminate
-                                    color="green"
-                                ></v-progress-linear>
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                    color="blue darken-1"
-                                    text
-                                    @click="close"
-                                >
-                                    Cancel
-                                </v-btn>
-                                <v-btn
-                                    color="blue darken-1"
-                                    text
-                                    @click="addProduct"
-                                >
-                                    Save
-                                </v-btn>
-                            </v-card-actions>
-                        </v-form>
-                    </v-card>
-                </v-dialog>
-                <v-dialog v-model="dialogDelete" max-width="500px">
-                    <v-card>
-                        <v-card-title class="text-h6">Are you sure you want to
-                            delete this item?
+                <v-card>
+                    <v-form ref="form">
+                        <v-card-title>
+                            <span class="headline">{{ formTitle }}</span>
                         </v-card-title>
+
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col>
+                                        <v-select
+                                            v-model="addPurchaseRequestProduct.product_id"
+                                            label="Select Product"
+                                            :items="products"
+                                            item-text="name"
+                                            item-value="id"
+                                            required
+                                            outlined
+                                            :rules="rules"
+                                            v-on:change="getVariants(addPurchaseRequestProduct.product_id)"
+                                        ></v-select>
+                                        <div v-if="hasVariants">
+                                            <v-select
+                                                v-model="addPurchaseRequestProduct.product_variant_id"
+                                                label="Product Variant"
+                                                :items="variants"
+                                                item-value="id"
+                                                item-text="name"
+                                                outlined
+                                            ></v-select>
+                                        </div>
+                                        <v-text-field
+                                            v-model="addPurchaseRequestProduct.quantity"
+                                            label="Quantity"
+                                            type="number"
+                                            outlined
+                                        ></v-text-field>
+                                        <v-select
+                                            v-model="addPurchaseRequestProduct.unit"
+                                            label="Unit"
+                                            :items="units"
+                                            item-text="name"
+                                            item-value="id"
+                                            required
+                                            outlined
+                                            return-object
+                                            :rules="rules"
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+
                         <v-card-actions>
+                            <v-progress-linear
+                                v-if="progressL"
+                                indeterminate
+                                color="green"
+                            ></v-progress-linear>
                             <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="closeDelete">
+                            <v-btn
+                                color="blue darken-1"
+                                text
+                                @click="close"
+                            >
                                 Cancel
                             </v-btn>
-                            <v-btn color="blue darken-1" text
-                                   @click="deleteItemConfirm">OK
+                            <v-btn
+                                color="blue darken-1"
+                                text
+                                @click="addProduct"
+                            >
+                                Save
                             </v-btn>
-                            <v-spacer></v-spacer>
                         </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </v-toolbar>
+                    </v-form>
+                </v-card>
+            </v-dialog>
+            <v-dialog v-model="dialogDelete" max-width="500px">
+                <v-card>
+                    <v-card-title class="text-h6">Are you sure you want to
+                        delete this item?
+                    </v-card-title>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="closeDelete">
+                            Cancel
+                        </v-btn>
+                        <v-btn color="blue darken-1" text
+                               @click="deleteItemConfirm">OK
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </template>
         <template v-slot:item.product_id="{ item }">
-            {{getProductName(item.product_id)}}
+            {{ getProductName(item.product_id) }}
         </template>
         <template v-slot:item.product_variant_id="{ item }">
-            {{getVariantName(item.product_variant_id)}}
+            {{ getVariantName(item.product_variant_id) }}
         </template>
         <template v-slot:item.unit_id="{ item }">
-            {{getUnitName(item.unit_id)}}
+            {{ getUnitName(item.unit_id) }}
         </template>
         <template v-slot:item.actions="{ item }">
             <v-icon
@@ -154,13 +152,23 @@ export default {
     props: {
         source: String,
         details: [],
+        triggerSelectProduct: Boolean
     },
+
+    watch: {
+        triggerSelectProduct: async function(newVal, oldVal) {
+            let res = await store.dispatch('purchase/addSelectedProducts', this.selected);
+            console.log("selected rows hahha", res);
+        }
+    },
+
     data: () => ({
         cdnURL: config.cdnURL,
         admin: false,
         createProgress: false,
         search: '',
         progressL: false,
+        selected: [],
         dialog: false,
         dialogDelete: false,
         headers: [
@@ -219,34 +227,34 @@ export default {
         this.prProducts = this.details;
     },
     methods: {
-        getProductName(item){
-            if(item === null || item === undefined){
+        getProductName(item) {
+            if (item === null || item === undefined) {
                 return "------"
             }
             let result = this.products.filter(obj => {
                 return obj.id === item;
             });
-            if(result[0] === null || result[0] === undefined){
+            if (result[0] === null || result[0] === undefined) {
                 return "------"
             }
             return result[0].name;
         },
 
-        getUnitName(item){
-            if(item === null || item === undefined){
+        getUnitName(item) {
+            if (item === null || item === undefined) {
                 return "------"
             }
             let result = this.units.filter(obj => {
                 return obj.id === item;
             })
-            if(result[0] === null || result[0] === undefined){
+            if (result[0] === null || result[0] === undefined) {
                 return "------"
             }
             return result[0].name;
         },
 
-        getVariantName(item){
-            if(item === null || item === undefined){
+        getVariantName(item) {
+            if (item === null || item === undefined) {
                 return "------"
             }
         },
