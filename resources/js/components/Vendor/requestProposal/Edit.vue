@@ -33,6 +33,27 @@
                                         </v-row>
                                         <h6>{{ $t('note') }}</h6>
                                         <p>{{ quotationItem.note }}</p>
+                                        <hr>
+                                        <v-row>
+                                            <v-col md="4">
+                                                <v-file-input
+                                                    v-model="editedItem.file"
+                                                    :label="$t('file')"
+                                                    filled
+                                                    outlined
+                                                    prepend-icon="mdi-camera"
+                                                    accept="*/application"
+                                                />
+                                            </v-col>
+                                            <v-col md="4">
+                                                <v-select
+                                                    v-model="editedItem.status"
+                                                    :label="$t('status')"
+                                                    :items="['Pending','On Progress','Accepted','Approved','Rejected','Cancelled']"
+                                                    outlined
+                                                />
+                                            </v-col>
+                                        </v-row>
                                     </v-form>
 
                                     <hr>
@@ -74,17 +95,17 @@
                                                         v-model="dialog"
                                                         max-width="600px"
                                                     >
-                                                        <template v-slot:activator="{ on, attrs }">
-                                                            <v-btn
-                                                                color="green"
-                                                                dark
-                                                                class="mb-2"
-                                                                v-bind="attrs"
-                                                                v-on="on"
-                                                            >
-                                                                {{ $t('button.add_new_product') }}
-                                                            </v-btn>
-                                                        </template>
+<!--                                                        <template v-slot:activator="{ on, attrs }">-->
+<!--                                                            <v-btn-->
+<!--                                                                color="green"-->
+<!--                                                                dark-->
+<!--                                                                class="mb-2"-->
+<!--                                                                v-bind="attrs"-->
+<!--                                                                v-on="on"-->
+<!--                                                            >-->
+<!--                                                                {{ $t('button.add_new_product') }}-->
+<!--                                                            </v-btn>-->
+<!--                                                        </template>-->
                                                         <v-card>
                                                             <v-form ref="form">
                                                                 <v-card-title>
@@ -180,16 +201,16 @@
                                                 </v-toolbar>
                                             </template>
                                             <template v-slot:item.product_id="{ item }">
-                                                <p v-if="item.product_id" class="mt-3">{{ item.product.name }}</p>
+                                                <p v-if="item.quotation_product.product_id" class="mt-3">{{ item.quotation_product.product.name }}</p>
                                             </template>
                                             <template v-slot:item.product_variant_id="{ item }">
-                                                <p v-if="item.product_variant_id" class="mt-3">{{
-                                                        item.product_variant.name
+                                                <p v-if="item.quotation_product.product_variant_id" class="mt-3">{{
+                                                        item.quotation_product.product_variant.name
                                                     }}</p>
                                                 <p v-else class="mt-3">---</p>
                                             </template>
                                             <template v-slot:item.tax_id="{ item }">
-                                                <p v-if="item.tax_id" class="mt-3">{{ item.tax.value }}%</p>
+                                                <p v-if="item.tax_id" class="mt-3">{{ item.tax_id }}%</p>
                                                 <p v-else class="mt-3">0</p>
                                             </template>
                                             <template v-slot:item.actions="{ item }">
@@ -261,6 +282,7 @@ export default {
             {text: i18n.t('product'), value: 'product_id'},
             {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant_id'},
             {text: i18n.t('quantity'), value: 'quantity'},
+            {text: i18n.t('price'), value: 'price'},
             {text: i18n.t('tax'), value: 'tax_id'},
             {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
@@ -297,6 +319,16 @@ export default {
             desired_delivery_date: '',
             requested_name: '',
         },
+        editedItem: {
+            id: null,
+            comment: '',
+            file: '',
+            discount_type: '',
+            discount: '',
+            status: '',
+            total_item: '',
+            total_price: '',
+        },
         rules: [
             value => !!value || 'Required.',
         ]
@@ -327,11 +359,11 @@ export default {
             let res = await ApiServices.vendorQuotation(this.$route.params.id);
             if (res.success === true) {
                 this.quotationItem = res.data;
-                this.quoProducts = res.data.quotation_products;
+                this.editedItem = res.data.vendor_quotation;
+                this.quoProducts = res.data.vendor_quotation_products;
                 if (this.quoProducts.length > 0) {
                     this.vendorCard = true;
                 }
-                this.quoVendors = res.data.vendors;
             }
         },
         async loadUserName() {

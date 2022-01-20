@@ -14,6 +14,7 @@ class VendorQuotationProductResource extends JsonResource
      */
     public function toArray($request)
     {
+        $quotationProduct = new QuotationProduct($this->quotationProduct);
         return [
             'vendor_quotation_id' => $this->vendor_quotation_id,
             'quotation_product_id' => $this->quotation_product_id,
@@ -23,6 +24,7 @@ class VendorQuotationProductResource extends JsonResource
             'discount' => $this->discount,
             'tax_id' => $this->tax_id,
             'status' => $this->status,
+            'quotation_product' => $quotationProduct,
         ];
     }
 }

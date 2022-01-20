@@ -59,7 +59,7 @@ class VendorPortalController extends Controller
             $user = User::findOrFail(auth()->user()->id);
             $vendor = $user->vendor;
             $quotation_ids = VendorQuotation::where('vendor_id', $vendor->id)->pluck('quotation_id');
-            $data['data'] = Quotation::whereIn('id', $quotation_ids)->get();
+            $data['data'] = \App\Http\Resources\Vendor\Quotation::collection(Quotation::whereIn('id', $quotation_ids)->get());
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = "Error occurred.";
@@ -74,7 +74,7 @@ class VendorPortalController extends Controller
         $data['data'] = [];
         try {
             $quotation = Quotation::findOrFail($id);
-            $data['data'] = new \App\Http\Resources\Quotation($quotation);
+            $data['data'] = new \App\Http\Resources\Vendor\Quotation($quotation);
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = "Error occurred.";

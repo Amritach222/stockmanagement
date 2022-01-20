@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\Vendor;
 use App\Models\VendorProduct;
 use App\Models\VendorQuotation;
+use App\Models\VendorQuotationProduct;
 use Illuminate\Http\Request;
 
 class VendorQuotationController extends Controller
@@ -62,28 +63,33 @@ class VendorQuotationController extends Controller
             $values = $request->all();
             $reqProducts = json_decode($request->products);
             $reqVendors = json_decode($request->vendors);
-            $vendors = [];
+            $vendorQuotations = [];
+            $quotation = Quotation::findOrFail($request->quotation_id);
             foreach ($reqVendors as $reqVendor) {
-                $vendors[] = Vendor::findOrFail($reqVendor->id);
+                $vendor = Vendor::findOrFail($reqVendor->id);
+                $vendorQuotation = new VendorQuotation([
+                    'vendor_id' => $vendor->id,
+                    'quotation_id' => $quotation->id,
+                ]);
+                $vendorQuotation->save();
+                $vendorQuotations[] = $vendorQuotation;
             }
             $relatedVendors = [];
             foreach ($reqProducts as $reqProduct) {
                 $product = Product::findOrFail($reqProduct->product_id);
                 $vendor_ids = VendorProduct::where('product_id', $product->id)->pluck('vendor_id');
-                $quotation = Quotation::findOrFail($request->quotation_id);
                 $quotationProduct = QuotationProduct::where('product_id', $product->id)->where('quotation_id', $quotation->id)->firstOrFail();
-                foreach ($vendors as $vendor) {
+                foreach ($vendorQuotations as $vendor) {
                     foreach ($vendor_ids as $vendor_id) {
-                        if ($vendor->id == $vendor_id) {
-                            $vendorQuotation = new VendorQuotation([
-                                'vendor_id' => $vendor->id,
-                                'quotation_id' => $request->quotation_id,
+                        if ($vendor->vendor_id == $vendor_id) {
+                            $vendorQuotationProduct = new VendorQuotationProduct([
+                                'vendor_quotation_id' => $vendor->id,
                                 'quotation_product_id' => $quotationProduct->id,
                                 'quantity' => $quotationProduct->quantity
                             ]);
-                            $vendorQuotation->save();
+                            $vendorQuotationProduct->save();
                             $relatedVendors[] = $vendor;
-                            event(new ActivityLogEvent('Add', 'Vendor Quotation', $vendorQuotation->id));
+                            event(new ActivityLogEvent('Add', 'Vendor Quotation', $vendorQuotationProduct->id));
                         }
                     }
                 }
@@ -100,6 +106,7 @@ class VendorQuotationController extends Controller
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
         }
         return $data;
     }
