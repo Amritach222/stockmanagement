@@ -18,7 +18,7 @@ class Quotation extends JsonResource
     {
         $user = User::findOrFail(auth()->user()->id);
         $vendor = $user->vendor;
-        $vendorQuotation = \App\Models\VendorQuotation::where('quotation_id', $this->id)->where('vendor_id', $vendor->id)->firstOrFail();
+        $vendorQuotation = new VendorQuotation(\App\Models\VendorQuotation::where('quotation_id', $this->id)->where('vendor_id', $vendor->id)->firstOrFail());
         $quotation_product_ids = \App\Models\VendorQuotationProduct::where('vendor_quotation_id', $vendorQuotation->id)->pluck('quotation_product_id');
         $quotationProducts = QuotationProduct::collection(\App\Models\QuotationProduct::whereIn('id', $quotation_product_ids)->get());
 //        $vendorQuotations = \App\Models\VendorQuotation::where('quotation_id', $this->id)->where('vendor_id', $vendor->id)->get();
@@ -31,6 +31,7 @@ class Quotation extends JsonResource
             'requested_name' => $this->requested_name,
             'status' => $this->status,
             'quotation_products' => $quotationProducts,
+            'vendor_quotation' => $vendorQuotation,
 //            'vendor_quotations' => $vendorQuotations
         ];
     }

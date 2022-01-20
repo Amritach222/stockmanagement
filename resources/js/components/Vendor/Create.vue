@@ -16,7 +16,7 @@
                             </CCardHeader>
                             <CCardBody>
                                 <CForm>
-                                    <v-form>
+                                    <v-form ref="form">
                                         <v-row>
                                             <v-col md="9">
                                                 <v-row>
@@ -608,8 +608,10 @@ export default {
                 if (this.is_active !== null && this.is_active !== '') {
                     data.append('is_active', this.is_active);
                 }
-                if (typeof this.image.name == 'string') {
-                    data.append('image', this.image);
+                if (this.image !== []) {
+                    if (typeof this.image.name == 'string') {
+                        data.append('image', this.image);
+                    }
                 }
                 let res = await ApiServices.vendorCreate(data);
                 this.createProgress = false;
@@ -620,29 +622,40 @@ export default {
         },
         validateData() {
             this.$refs.form.validate();
-            if (this.editedItem.name === null) {
+            if (this.name === null) {
                 this.validated = false
-            }if (this.editedItem.company_name === null) {
+            }
+            if (this.company_name === null) {
                 this.validated = false
-            }if (this.editedItem.vat_no === null) {
+            }
+            if (this.vat_no === null) {
                 this.validated = false
-            }if (this.editedItem.email === null) {
+            }
+            if (this.email === null) {
                 this.validated = false
-            }if (this.editedItem.landline === null) {
+            }
+            if (this.landline === null) {
                 this.validated = false
-            }if (this.editedItem.mobile === null) {
+            }
+            if (this.mobile === null) {
                 this.validated = false
-            }if (this.editedItem.country === null) {
+            }
+            if (this.country === null) {
                 this.validated = false
-            }if (this.editedItem.state === null) {
+            }
+            if (this.state === null) {
                 this.validated = false
-            }if (this.editedItem.city === null) {
+            }
+            if (this.city === null) {
                 this.validated = false
-            }if (this.editedItem.postal_code === null) {
+            }
+            if (this.postal_code === null) {
                 this.validated = false
-            }if (this.editedItem.category_id === null) {
+            }
+            if (this.category_id === null) {
                 this.validated = false
-            }if (this.editedItem.is_active === null) {
+            }
+            if (this.is_active === null) {
                 this.validated = false
             } else {
                 this.validated = true

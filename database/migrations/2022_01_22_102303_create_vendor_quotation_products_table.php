@@ -16,7 +16,6 @@ class CreateVendorQuotationProductsTable extends Migration
         Schema::create('vendor_quotation_products', function (Blueprint $table) {
             $table->id();
             $table->integer('vendor_quotation_id')->unsigned()->nullable();
-//            $table->foreign('vendor_quotation_id')->references('id')->on('vendor_quotations');
             $table->integer('quotation_product_id')->unsigned()->nullable();
             $table->foreign('quotation_product_id')->references('id')->on('quotation_products');
             $table->integer('quantity')->nullable();
