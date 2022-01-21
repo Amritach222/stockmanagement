@@ -21,6 +21,7 @@ class VendorQuotation extends JsonResource
             $link = $image->path;
         }
         return [
+            'id' => $this->id,
             'quotation_id' => $this->quotation_id,
             'vendor_id' => $this->vendor_id,
             'total_item' => $this->total_item,

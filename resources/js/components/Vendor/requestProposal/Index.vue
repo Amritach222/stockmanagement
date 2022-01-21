@@ -53,22 +53,8 @@
                     </v-row>
                 </v-toolbar>
             </template>
-            <template v-slot:item.link="{ item }">
-                <img :src=cdnURL+item.link
-                     v-if="item.link"
-                     style="width: 50px; height: 50px; object-fit: cover;"
-                     v-on:click="openImage(item.link)"/>
-
-                <img :src="baseURL+'images/placeholder.jpg'"
-                     v-else
-                     style="width: 50px; height: 50px; object-fit: cover"
-                />
-            </template>
-            <template v-slot:item.brand="{ item }">
-                {{ item.brand.name }}
-            </template>
-            <template v-slot:item.category="{ item }">
-                {{ item.category.name }}
+            <template v-slot:item.status="{ item }">
+                {{ item.vendor_quotation.status }}
             </template>
             <template v-slot:item.actions="{ item }">
                 <CRow>
