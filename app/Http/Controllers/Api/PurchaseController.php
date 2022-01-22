@@ -21,7 +21,7 @@ class PurchaseController extends Controller
     public function __construct()
     {
         parent::generateAllMiddlewareByPermission('purchases');
-        $this->middleware(['role:' . 'Admin|Store Manager'])->only(['adminPurchaseLists','changeStatusOfPurchaseListsProducts']);
+        $this->middleware(['role:' . 'Admin|Store Manager'])->only(['adminPurchaseLists','changeStatusOfPurchaseListsProducts','departmentHeadPurchaseLists']);
     }
 
     public function index()
@@ -58,6 +58,22 @@ class PurchaseController extends Controller
         $purchases = Purchase::all();
         $data['data'] = PurchaseResource::collection($purchases);
         return $data;
+    }
+
+    public function departmentHeadPurchaseLists()
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        $user = auth()->user();
+        if($user->department_id === null){
+            return response(['success' => false, "message" => 'Department id not found', "data" => []], 422);
+        } else {
+            $purchases = Purchase::where('department_id',$user->department_id)->get();
+            $data['data'] = PurchaseResource::collection($purchases);
+            return $data;
+        }
+
     }
 
     public function changeStatusOfPurchaseListsProducts($id, PurchaseProductRequest $request)
