@@ -76,6 +76,7 @@ class RolesSeeder extends Seeder
                 'guard_name' => $guard
             ]);
             $this->giveAutoAllPermissions($departmentHead, 'consumes');
+            $this->giveAutoAllPermissions($departmentHead, 'purchaseProductsApproval');
             $this->giveAutoAllPermissions($departmentHead, 'returnProducts');
             $this->giveAutoAllPermissions($departmentHead, 'purchases');
             $this->giveAutoAllPermissions($departmentHead, 'purchaseProducts');
@@ -135,6 +136,7 @@ class RolesSeeder extends Seeder
                 'name' => 'Store Manager',
                 'guard_name' => $guard
             ]);
+            $this->giveAutoAllPermissions($storeManager, 'purchaseProductsApproval');
             $this->giveAutoAllPermissions($storeManager, 'products');
             $this->giveAutoAllPermissions($storeManager, 'attributes');
             $this->giveAutoAllPermissions($storeManager, 'attributeGroups');

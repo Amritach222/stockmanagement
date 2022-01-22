@@ -786,6 +786,9 @@ export default {
     async getUserPurchaseProductRequestHistory() {
         return await apiCall(GET, `api/purchase/user-history`)
     },
+    async getAdminPurchaseProductRequest() {
+        return await apiCall(GET, `api/purchase/purchase-list`)
+    },
     async deleteUserPurchaseRequest(id) {
         return await apiCall(DELETE, `api/purchase/purchases/${id}`)
     },
