@@ -244,7 +244,7 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item class="ml-3">
+                <v-list-item class="ml-3" v-if="$can('purchasesHistory')">
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-shield-refresh</v-icon>
                     </v-list-item-icon>
@@ -252,6 +252,18 @@
                         <router-link
                             :to="'/purchase/purchase-request-history/'">
                             {{ $t('purchase') +' '+ $t('request') +' '+ $t('history') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="ml-3">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-shield-refresh</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/purchase/admin-purchase-request-approval/'">
+                            {{ $t('purchase') +' '+ $t('request') +' '+ $t('approval') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>

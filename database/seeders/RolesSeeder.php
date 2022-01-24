@@ -139,36 +139,36 @@ class RolesSeeder extends Seeder
         }
         $user = new User([
             'name' => 'Super Admin',
-            'username' => 'superAdmin',
+            'username' => 'superadmin',
             'email' => 'superadmin@rkdholdings.com',
-            'password' => bcrypt('Rkd@holdings123'),
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Super Admin');
 
         $user = new User([
             'name' => 'Admin',
-            'username' => 'admin',
+            'username' => 'admin1234',
             'email' => 'admin@rkdholdings.com',
-            'password' => bcrypt('Admin@123'),
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Admin');
 
         $user = new User([
             'name' => 'Store Keeper',
-            'username' => 'storeKeeper',
+            'username' => 'storekeeper',
             'email' => 'store.keeper@rkdholdings.com',
-            'password' => bcrypt('storeK@123'),
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Store Keeper');
 
         $user = new User([
             'name' => 'Store Manager',
-            'username' => 'storeManager',
+            'username' => 'storemanager',
             'email' => 'store.manager@rkdholdings.com',
-            'password' => bcrypt('storeM@123'),
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Store Manager');
@@ -177,25 +177,25 @@ class RolesSeeder extends Seeder
             'name' => 'Director',
             'username' => 'director',
             'email' => 'director@rkdholdings.com',
-            'password' => bcrypt('Director@123'),
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Director');
 
         $user = new User([
             'name' => 'Finance Director',
-            'username' => 'financeDirector',
+            'username' => 'findirector',
             'email' => 'finance.director@rkdholdings.com',
-            'password' => bcrypt('financeD@123'),
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Finance Director');
 
         $user = new User([
             'name' => 'Staff',
-            'username' => 'staff',
+            'username' => 'staff1234',
             'email' => 'staff@rkdholdings.com',
-            'password' => bcrypt('Staff@123'),
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Staff');
