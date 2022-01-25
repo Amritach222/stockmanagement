@@ -44,7 +44,9 @@ export default () => {
                 console.log('user unauthorized');
             }
             if (error.response.status === 403) {
-                router.replace('/home');
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Permission Error";
+                store.state.home.snackbarColor = 'red';
             }
         } else if (error.request) {
             console.log({message: 'Network Error'});
