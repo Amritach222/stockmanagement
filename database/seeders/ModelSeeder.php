@@ -59,6 +59,10 @@ class ModelSeeder extends Seeder
             'name' => 'Length',
         ]);
         $itemUC2->save();
+        $itemUC3 = new UnitCategory([
+            'name' => 'Count',
+        ]);
+        $itemUC3->save();
 
         $itemU = new Unit([
             'name' => 'Kilogram',
@@ -73,6 +77,15 @@ class ModelSeeder extends Seeder
             'name' => 'Kilometer',
             'short_code' => 'Km',
             'category_id' => $itemUC2->id,
+            'type' => 'equal',
+            'value' => '1',
+        ]);
+        $itemU->save();
+
+        $itemU = new Unit([
+            'name' => 'Pices',
+            'short_code' => 'Pcs',
+            'category_id' => $itemUC3->id,
             'type' => 'equal',
             'value' => '1',
         ]);

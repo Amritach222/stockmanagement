@@ -48,6 +48,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($director, 'returnProducts');
             $this->giveAutoAllPermissions($director, 'purchases');
             $this->giveAutoAllPermissions($director, 'purchaseProducts');
+            $this->giveAutoAllPermissions($director, 'purchaseProductsApprovalAdmin');
+            $this->giveAutoAllPermissions($director, 'purchaseProductsApprovalDepartmentHead');
             $this->giveAutoAllPermissions($director, 'quotations');
             $this->giveAutoAllPermissions($director, 'quotationProducts');
             $this->giveAutoAllPermissions($director, 'transfers');
@@ -75,6 +77,7 @@ class RolesSeeder extends Seeder
             ]);
             $this->giveAutoAllPermissions($departmentHead, 'consumes');
             $this->giveAutoAllPermissions($departmentHead, 'purchaseProductsApproval');
+            $this->giveAutoAllPermissions($departmentHead, 'purchaseProductsApprovalDepartmentHead');
             $this->giveAutoAllPermissions($departmentHead, 'returnProducts');
             $this->giveAutoAllPermissions($departmentHead, 'purchases');
             $this->giveAutoAllPermissions($departmentHead, 'purchaseProducts');
@@ -196,9 +199,20 @@ class RolesSeeder extends Seeder
             'username' => 'staff1234',
             'email' => 'staff@rkdholdings.com',
             'password' => bcrypt('Secret@123'),
+            'department_id' => 1,
         ]);
         $user->save();
         $user->assignRole('Staff');
+
+        $user = new User([
+            'name' => 'Department Head',
+            'username' => 'dhead1234',
+            'email' => 'departmenthead@rkdholdings.com',
+            'password' => bcrypt('Secret@123'),
+            'department_id' => 1,
+        ]);
+        $user->save();
+        $user->assignRole('Department Head');
     }
 
     public function giveAutoAllPermissions($role, $permissionName)

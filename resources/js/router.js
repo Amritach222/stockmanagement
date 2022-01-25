@@ -283,6 +283,15 @@ export default new Router({
             }
         },
         {
+            path: '/purchase/department-head-purchase-request-approval/',
+            name: 'Purchase Requests Approval',
+            component: PurchaseRequestAdmin,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
             path: '/products',
             name: i18n.t('products'),
             component: ProductIndex,
