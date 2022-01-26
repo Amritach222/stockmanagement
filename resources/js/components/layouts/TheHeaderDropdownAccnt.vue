@@ -81,7 +81,10 @@ export default {
             }
         },
         async profileImage() {
-            let profilePic = await ApiServices.getUserProfilePic();
+            let profilePic = false;
+            if(store.state.auth.isLoggedIn){
+                profilePic = await ApiServices.getUserProfilePic();
+            }
             if (profilePic.success === true) {
                 let link = profilePic.data;
                 this.profileImageUrl = config.cdnURL + link;

@@ -21,7 +21,8 @@ class PurchaseController extends Controller
     public function __construct()
     {
         parent::generateAllMiddlewareByPermission('purchases');
-        $this->middleware(['role:' . 'Admin|Store Manager'])->only(['adminPurchaseLists','changeStatusOfPurchaseListsProducts','departmentHeadPurchaseLists']);
+        $this->middleware(['role:' . 'Admin|Store Manager'])->only(['adminPurchaseLists','changeStatusOfPurchaseListsProducts']);
+        $this->middleware(['role:' . 'Department Head'])->only(['changeStatusOfPurchaseListsProducts','departmentHeadPurchaseLists']);
     }
 
     public function index()
