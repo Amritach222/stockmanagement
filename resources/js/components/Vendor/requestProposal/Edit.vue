@@ -313,7 +313,7 @@ import ApiServices from "../../../services/ApiServices";
 import config from "../../../config";
 
 export default {
-    name: "QuotationEdit",
+    name: "VendorQuotationEdit",
 
     props: {
         source: String,
