@@ -193,6 +193,7 @@
                                                     v-model="item.quantity"
                                                     :label="$t('quantity')"
                                                     outlined
+                                                    sm
                                                     class="mt-2"
                                                 ></v-text-field>
                                             </template>
@@ -240,14 +241,33 @@
                                     <hr>
                                     <v-row>
                                         <v-col md="4">
-                                            <v-file-input
-                                                v-model="editedItem.file"
-                                                :label="$t('file')"
-                                                filled
-                                                outlined
-                                                prepend-icon="mdi-camera"
-                                                accept="*/application"
-                                            />
+                                            <v-row>
+                                                <v-col v-if="typeof(editedItem.link) === 'string'">
+                                                    <v-file-input
+                                                        v-model="editedItem.file"
+                                                        label="File"
+                                                        filled
+                                                        outlined
+                                                        prepend-icon="mdi-camera"
+                                                        accept="*/application"
+                                                    ></v-file-input>
+                                                    <v-col width="200" class="ml-3 file-link"
+                                                           v-on:click="openImage(editedItem.link)">
+                                                        <h5> Open File </h5>
+                                                    </v-col>
+                                                </v-col>
+                                                    <v-col v-else>
+                                                        <v-file-input
+                                                            v-model="editedItem.file"
+                                                            label="File"
+                                                            :label="$t('file')"
+                                                            filled
+                                                            outlined
+                                                            prepend-icon="mdi-camera"
+                                                            accept="*/application"
+                                                        ></v-file-input>
+                                                    </v-col>
+                                            </v-row>
                                         </v-col>
                                         <v-col md="4">
                                             <v-select
@@ -488,8 +508,8 @@ export default {
         },
 
         async edit() {
-            this.validate();
-            if (this.validated) {
+            // this.validate();
+            // if (this.validated) {
                 this.changeProgress = true;
                 const data = new FormData();
                 data.append('status', this.editedItem.status);
@@ -506,7 +526,7 @@ export default {
                 if (res.success === true) {
                     route.replace('/vendor/new-product-request');
                 }
-            }
+            // }
         },
 
         async editQuoProduct() {
@@ -549,13 +569,13 @@ export default {
             }
         },
 
-        validate() {
-            if (this.department_id === '') {
-                this.validated = false;
-            } else {
-                this.validated = true;
-            }
-        },
+        // validate() {
+        //     if (this.department_id === '') {
+        //         this.validated = false;
+        //     } else {
+        //         this.validated = true;
+        //     }
+        // },
 
         productValidate() {
             if (this.product_id === '') {

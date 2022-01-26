@@ -16,8 +16,8 @@ class VendorQuotation extends JsonResource
     public function toArray($request)
     {
         $link = null;
-        if ($this->image_id !== null) {
-            $image = File::where('id', $this->image_id)->first();
+        if ($this->file_id !== null) {
+            $image = File::where('id', $this->file_id)->first();
             $link = $image->path;
         }
         return [
@@ -29,6 +29,8 @@ class VendorQuotation extends JsonResource
             'discount_type' => $this->discount_type,
             'discount' => $this->discount,
             'status' => $this->status,
+            'comment' => $this->comment,
+            'file_id' => $this->file_id,
             'link' => $link,
         ];
     }
