@@ -194,6 +194,7 @@
                                                     :label="$t('quantity')"
                                                     outlined
                                                     class="mt-2"
+                                                    height="20px"
                                                 ></v-text-field>
                                             </template>
                                             <template v-slot:item.price="{ item }">
@@ -202,6 +203,7 @@
                                                     :label="$t('price')"
                                                     outlined
                                                     class="mt-2"
+                                                    height="20px"
                                                 ></v-text-field>
                                             </template>
                                             <template v-slot:item.shipping_cost="{ item }">
@@ -210,6 +212,7 @@
                                                     :label="$t('shipping_cost')"
                                                     outlined
                                                     class="mt-2"
+                                                    height="10px"
                                                 ></v-text-field>
                                             </template>
                                             <template v-slot:item.tax_id="{ item }">
