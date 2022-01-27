@@ -48,136 +48,6 @@
                                             loading
                                             loading-text="Loading... Please wait..."
                                         >
-                                            <template v-slot:top>
-                                                <v-toolbar
-                                                    flat
-                                                >
-<!--                                                    <v-row>-->
-<!--                                                        <v-col-->
-<!--                                                            cols="12"-->
-<!--                                                            sm="4"-->
-<!--                                                            md="6"-->
-<!--                                                            lg="8"-->
-<!--                                                        >-->
-<!--                                                            <v-text-field-->
-<!--                                                                v-model="search"-->
-<!--                                                                append-icon="mdi-magnify"-->
-<!--                                                                :label="$t('search')"-->
-<!--                                                                solo-->
-<!--                                                                hide-details-->
-<!--                                                                max-width="100px"-->
-<!--                                                            ></v-text-field>-->
-<!--                                                        </v-col>-->
-<!--                                                    </v-row>-->
-                                                    <v-dialog
-                                                        v-model="dialog"
-                                                        max-width="600px"
-                                                    >
-                                                        <!--                                                        <template v-slot:activator="{ on, attrs }">-->
-                                                        <!--                                                            <v-btn-->
-                                                        <!--                                                                color="green"-->
-                                                        <!--                                                                dark-->
-                                                        <!--                                                                class="mb-2"-->
-                                                        <!--                                                                v-bind="attrs"-->
-                                                        <!--                                                                v-on="on"-->
-                                                        <!--                                                            >-->
-                                                        <!--                                                                {{ $t('button.add_new_product') }}-->
-                                                        <!--                                                            </v-btn>-->
-                                                        <!--                                                        </template>-->
-                                                        <!--                                                        <v-card>-->
-                                                        <!--                                                            <v-form ref="form">-->
-                                                        <!--                                                                <v-card-title>-->
-                                                        <!--                                                                    <span class="headline">{{ formTitle }}</span>-->
-                                                        <!--                                                                </v-card-title>-->
-
-                                                        <!--                                                                <v-card-text>-->
-                                                        <!--                                                                    <v-container>-->
-                                                        <!--                                                                        <v-row>-->
-                                                        <!--                                                                            <v-col>-->
-                                                        <!--                                                                                <v-select-->
-                                                        <!--                                                                                    v-model="addQuoProduct.product_id"-->
-                                                        <!--                                                                                    :label="$t('product')"-->
-                                                        <!--                                                                                    :items="products"-->
-                                                        <!--                                                                                    item-text="name"-->
-                                                        <!--                                                                                    item-value="id"-->
-                                                        <!--                                                                                    required-->
-                                                        <!--                                                                                    outlined-->
-                                                        <!--                                                                                    :rules="rules"-->
-                                                        <!--                                                                                    v-on:change="getVariants(addQuoProduct.product_id)"-->
-                                                        <!--                                                                                ></v-select>-->
-                                                        <!--                                                                                <div v-if="hasVariants">-->
-                                                        <!--                                                                                    <v-select-->
-                                                        <!--                                                                                        v-model="addQuoProduct.product_variant_id"-->
-                                                        <!--                                                                                        :label="$t('product') +' '+ $t('variant')"-->
-                                                        <!--                                                                                        :items="variants"-->
-                                                        <!--                                                                                        item-text="name"-->
-                                                        <!--                                                                                        item-value="id"-->
-                                                        <!--                                                                                        outlined-->
-                                                        <!--                                                                                    ></v-select>-->
-                                                        <!--                                                                                </div>-->
-                                                        <!--                                                                                <v-text-field-->
-                                                        <!--                                                                                    v-model="addQuoProduct.quantity"-->
-                                                        <!--                                                                                    :label="$t('quantity')"-->
-                                                        <!--                                                                                    type="number"-->
-                                                        <!--                                                                                    outlined-->
-                                                        <!--                                                                                ></v-text-field>-->
-                                                        <!--                                                                                <v-text-field-->
-                                                        <!--                                                                                    v-model="addQuoProduct.shipping_cost"-->
-                                                        <!--                                                                                    :label="$t('shipping_cost')"-->
-                                                        <!--                                                                                    type="number"-->
-                                                        <!--                                                                                    outlined-->
-                                                        <!--                                                                                ></v-text-field>-->
-                                                        <!--                                                                            </v-col>-->
-                                                        <!--                                                                        </v-row>-->
-                                                        <!--                                                                    </v-container>-->
-                                                        <!--                                                                </v-card-text>-->
-
-                                                        <!--                                                                <v-card-actions>-->
-                                                        <!--                                                                    <v-progress-linear-->
-                                                        <!--                                                                        v-if="progressL"-->
-                                                        <!--                                                                        indeterminate-->
-                                                        <!--                                                                        color="green"-->
-                                                        <!--                                                                    ></v-progress-linear>-->
-                                                        <!--                                                                    <v-spacer></v-spacer>-->
-                                                        <!--                                                                    <v-btn-->
-                                                        <!--                                                                        color="blue darken-1"-->
-                                                        <!--                                                                        text-->
-                                                        <!--                                                                        @click="close"-->
-                                                        <!--                                                                    >-->
-                                                        <!--                                                                        {{ $t('button.cancel') }}-->
-                                                        <!--                                                                    </v-btn>-->
-                                                        <!--                                                                    <v-btn-->
-                                                        <!--                                                                        color="blue darken-1"-->
-                                                        <!--                                                                        text-->
-                                                        <!--                                                                        @click="editQuoProduct"-->
-                                                        <!--                                                                    >-->
-                                                        <!--                                                                        {{ $t('button.submit') }}-->
-                                                        <!--                                                                    </v-btn>-->
-                                                        <!--                                                                </v-card-actions>-->
-                                                        <!--                                                            </v-form>-->
-                                                        <!--                                                        </v-card>-->
-
-                                                    </v-dialog>
-                                                    <v-dialog v-model="dialogDelete" max-width="500px">
-                                                        <v-card>
-                                                            <v-card-title class="text-h6">
-                                                                {{ $t('message.delete') }}
-                                                            </v-card-title>
-                                                            <v-card-actions>
-                                                                <v-spacer></v-spacer>
-                                                                <v-btn color="blue darken-1" text @click="closeDelete">
-                                                                    {{ $t('button.cancel') }}
-                                                                </v-btn>
-                                                                <v-btn color="blue darken-1" text
-                                                                       @click="deleteItemConfirm">
-                                                                    {{ $t('button.submit') }}
-                                                                </v-btn>
-                                                                <v-spacer></v-spacer>
-                                                            </v-card-actions>
-                                                        </v-card>
-                                                    </v-dialog>
-                                                </v-toolbar>
-                                            </template>
                                             <template v-slot:item.product_id="{ item }">
                                                 <p v-if="item.quotation_product.product_id" class="mt-3">{{ item.quotation_product.product.name }}</p>
                                             </template>
@@ -187,49 +57,44 @@
                                                     }}</p>
                                                 <p v-else class="mt-3">---</p>
                                             </template>
-<!--                                            <template v-slot:item.quantity="{ item }">-->
-<!--                                                <v-text-field-->
-<!--                                                    v-model="item.quantity"-->
-<!--                                                    :label="$t('quantity')"-->
-<!--                                                    outlined-->
-<!--                                                    sm-->
-<!--                                                    class="mt-2"-->
-<!--                                                ></v-text-field>-->
-<!--                                            </template>-->
-<!--                                            <template v-slot:item.price="{ item }">-->
-<!--                                                <v-text-field-->
-<!--                                                    v-model="item.price"-->
-<!--                                                    :label="$t('price')"-->
-<!--                                                    outlined-->
-<!--                                                    class="mt-2"-->
-<!--                                                ></v-text-field>-->
-<!--                                            </template>-->
-<!--                                            <template v-slot:item.shipping_cost="{ item }">-->
-<!--                                                <v-text-field-->
-<!--                                                    v-model="item.shipping_cost"-->
-<!--                                                    :label="$t('shipping_cost')"-->
-<!--                                                    outlined-->
-<!--                                                    class="mt-2"-->
-<!--                                                ></v-text-field>-->
-<!--                                            </template>-->
                                             <template v-slot:item.tax_id="{ item }">
-                                                <p v-if="item.tax_id" class="mt-3">{{ item.tax_id }}%</p>
+                                                <p v-if="item.tax_id" class="mt-3">{{ item.tax.value }}%</p>
                                                 <p v-else class="mt-3">0</p>
                                             </template>
                                             <template v-slot:item.actions="{ item }">
-                                                <v-icon
-                                                    small
-                                                    class="mr-2"
-                                                    @click="editItem(item)"
-                                                >
-                                                    mdi-pencil
-                                                </v-icon>
-                                                <!--                                                <v-icon-->
-                                                <!--                                                    small-->
-                                                <!--                                                    @click="deleteItem(item)"-->
-                                                <!--                                                >-->
-                                                <!--                                                    mdi-delete-->
-                                                <!--                                                </v-icon>-->
+                                                <div v-if="item.status === 'On Progress'">
+                                                    <CButton size="sm" color="secondary" class="m-1">
+                                                        On Progress
+                                                    </CButton>
+                                                </div>
+                                                <div v-if="item.status === 'Pending'">
+                                                    <CButton size="sm" color="secondary" class="m-1">
+                                                        Pending
+                                                    </CButton>
+                                                </div>
+                                                <div v-else-if="item.status === 'Rejected'">
+                                                    <CButton size="sm" class="m-1" color="danger"
+                                                    >
+                                                        Rejected
+                                                    </CButton>
+                                                </div>
+                                                <div v-else-if="item.status === 'Cancelled'">
+                                                    <CButton size="sm" class="m-1" color="danger"
+                                                    >
+                                                        Cancelled
+                                                    </CButton>
+                                                </div>
+                                                <div v-else-if="item.status === 'Approved'">
+                                                    <CButton size="sm" class="m-1" color="success"
+                                                    >
+                                                        Approved
+                                                    </CButton>
+                                                </div>
+                                                <div v-else>
+                                                    <CButton size="sm" class="m-1" color="primary">
+                                                        Accepted
+                                                    </CButton>
+                                                </div>
                                             </template>
                                             <template v-slot:no-data>
                                                 <div>No Data</div>
@@ -252,17 +117,6 @@
                                                         <h5> Open File </h5>
                                                     </v-col>
                                                 </v-col>
-<!--                                                <v-col v-else>-->
-<!--                                                    <v-file-input-->
-<!--                                                        v-model="editedItem.file"-->
-<!--                                                        label="File"-->
-<!--                                                        :label="$t('file')"-->
-<!--                                                        filled-->
-<!--                                                        outlined-->
-<!--                                                        prepend-icon="mdi-camera"-->
-<!--                                                        accept="*/application"-->
-<!--                                                    ></v-file-input>-->
-<!--                                                </v-col>-->
                                             </v-row>
                                         </v-col>
 
@@ -271,18 +125,9 @@
                                         <h6>{{ $t('comment') }}</h6>
                                         <p>{{ editedItem.comment }}</p>
                                     </div>
-<!--                                    <v-textarea-->
-<!--                                        v-model="editedItem.comment"-->
-<!--                                        :label="$t('comment')"-->
-<!--                                        outlined-->
-<!--                                    />-->
 
 
                                     <CCardFooter>
-<!--                                        <CButton type="submit" size="sm" color="primary" @click="edit">-->
-<!--                                            <CIcon name="cil-check-circle"/>-->
-<!--                                            Submit-->
-<!--                                        </CButton>-->
                                         <CButton :to="'/vendor/new-product-request'" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
                                             Cancel
@@ -327,8 +172,10 @@
                 {text: i18n.t('quantity'), value: 'quantity'},
                 {text: i18n.t('price'), value: 'price'},
                 {text: i18n.t('tax'), value: 'tax_id'},
+                {text: i18n.t('discount') + ' ' + i18n.t('type'), value: 'discount_type'},
+                {text: i18n.t('discount'), value: 'discount'},
                 {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
-                // {text: i18n.t('actions'), value: 'actions', sortable: false},
+                {text: i18n.t('actions'), value: 'actions', sortable: false},
             ],
             quotations: [],
             tableLoad: false,

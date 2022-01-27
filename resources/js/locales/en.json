@@ -182,6 +182,16 @@
     "due": "Due",
     "desired": "Desired",
     "delivery": "Delivery",
+    "discount": "Discount",
+    "discounts": "Discounts",
+    "comment": "Comment",
+    "comments": "Comments",
+    "management": "Management",
+    "managements": "Managements",
+    "product_variant": "Product Variant",
+    "product_variants": "Product Variants",
+    "general_settings": "General Settings",
+    "edit": "Edit",
 
     "validation": {
         "required": "This field is required!",

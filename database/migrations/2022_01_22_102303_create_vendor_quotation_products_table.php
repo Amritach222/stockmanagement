@@ -20,6 +20,7 @@ class CreateVendorQuotationProductsTable extends Migration
             $table->foreign('quotation_product_id')->references('id')->on('quotation_products');
             $table->integer('quantity')->nullable();
             $table->integer('price')->nullable();
+            $table->integer('shipping_cost')->nullable();
             $table->enum('discount_type', ['Percent', 'Amount'])->default('Percent')->nullable();
             $table->integer('discount')->nullable();
             $table->integer('tax_id')->unsigned()->nullable();

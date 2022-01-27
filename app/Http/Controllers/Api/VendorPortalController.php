@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\VendorQuotationProductResource;
 use App\Models\File;
 use App\Models\Product;
 use App\Http\Resources\Product as ProductResource;
@@ -143,6 +144,40 @@ class VendorPortalController extends Controller
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = "Error occurred.";
+        }
+        return $data;
+    }
+
+    public function quotationProductUpdate($id, Request $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $quotationProduct = VendorQuotationProduct::findOrFail($id);
+            $values = $request->all();
+            $quotationProduct->update($values);
+            $data['data'] = new VendorQuotationProductResource($quotationProduct);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
+        }
+        return $data;
+    }
+
+    public function quotationProductStatusUpdate($id, Request $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $quotationProduct = VendorQuotationProduct::findOrFail($id);
+            $values = $request->only('status');
+            $quotationProduct->update($values);
+            $data['data'] = new VendorQuotationProductResource($quotationProduct);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
         }
         return $data;
     }
