@@ -120,19 +120,30 @@
             {{ getUnitName(item.unit_id) }}
         </template>
         <template v-slot:item.actions="{ item }">
-            <v-icon
-                small
-                class="mr-2"
-                @click="editItem(item)"
-            >
-                mdi-pencil
-            </v-icon>
-            <v-icon
-                small
-                @click="deleteItem(item)"
-            >
-                mdi-delete
-            </v-icon>
+            <div v-if="$can('purchaseProductsApprovalDepartmentHead')">
+                <v-btn small @click="approveProduct(item)">
+                    Approve
+                </v-btn>
+                <v-btn small @click="denyProduct(item)">
+                    Deny
+                </v-btn>
+            </div>
+            <div v-else>
+                <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+                >
+                    mdi-pencil
+                </v-icon>
+                <v-icon
+                    small
+                    @click="deleteItem(item)"
+                >
+                    mdi-delete
+                </v-icon>
+            </div>
+
         </template>
         <template v-slot:no-data>
             <div>No Data</div>
@@ -176,6 +187,7 @@ export default {
             {text: 'Product Variant', value: 'product_variant_id'},
             {text: 'Quantity', value: 'quantity'},
             {text: 'Unit', value: 'unit_id'},
+            {text: 'Department Status', value: 'department_status'},
             {text: 'Status', value: 'status'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
@@ -294,6 +306,26 @@ export default {
             this.addPurchaseRequestProduct = Object.assign({}, item);
             this.addPurchaseRequestProduct.unit = result[0];
             this.dialog = true;
+        },
+
+        denyProduct(item) {
+
+        },
+
+        async approveProduct(item) {
+            console.log(item);
+            let productData = new FormData();
+            productData.append('department_status', 'Approved');
+            let res = await ApiServices.changePurchaseProductStatusRequest(item.id,productData);
+            if (res.success === false) {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Changed status";
+                store.state.home.snackbarColor = 'green';
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Could not change status";
+                store.state.home.snackbarColor = 'red';
+            }
         },
 
         deleteItem(item) {

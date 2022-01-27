@@ -244,7 +244,7 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item class="ml-3" v-if="$can('purchasesHistory')">
+                <v-list-item class="ml-3" v-if="$can('purchaseHistory')">
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-shield-refresh</v-icon>
                     </v-list-item-icon>
