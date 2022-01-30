@@ -139,6 +139,17 @@ class VendorPortalController extends Controller
                 }
                 $values['file_id'] = $newFile->id;
             }
+            $acceptCount = 0;
+            foreach ($vendorQuotation->vendorQuotationProducts as $product) {
+                if ($product->status == 'Accepted') {
+                    $acceptCount = $acceptCount + 1;
+                }
+            }
+            if ($acceptCount == count($vendorQuotation->vendorQuotationProducts)) {
+                if ($vendorQuotation->status == 'On Progress') {
+                    $values['status'] = 'Accepted';
+                }
+            }
             $vendorQuotation->update($values);
 //            $data['data'] = new \App\Http\Resources\Vendor\Quotation($vendorQuotation);
         } catch (\Exception $e) {

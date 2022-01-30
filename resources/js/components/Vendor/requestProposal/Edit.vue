@@ -351,14 +351,14 @@
                                                 </v-col>
                                             </v-row>
                                         </v-col>
-                                        <v-col md="4">
-                                            <v-select
-                                                v-model="editedItem.status"
-                                                :label="$t('status')"
-                                                :items="['Pending','On Progress','Accepted','Approved','Rejected','Cancelled']"
-                                                outlined
-                                            />
-                                        </v-col>
+<!--                                        <v-col md="4">-->
+<!--                                            <v-select-->
+<!--                                                v-model="editedItem.status"-->
+<!--                                                :label="$t('status')"-->
+<!--                                                :items="['Pending','On Progress','Accepted','Approved','Rejected','Cancelled']"-->
+<!--                                                outlined-->
+<!--                                            />-->
+<!--                                        </v-col>-->
                                     </v-row>
                                     <v-textarea
                                         v-model="editedItem.comment"

@@ -54,7 +54,39 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.status="{ item }">
-                {{ item.vendor_quotation.status }}
+                <div v-if="item.vendor_quotation.status === 'On Progress'">
+                    <CButton size="sm" color="warning" class="m-1">
+                        On Progress
+                    </CButton>
+                </div>
+                <div v-else-if="item.vendor_quotation.status === 'Pending'">
+                    <CButton size="sm" color="secondary" class="m-1">
+                        Pending
+                    </CButton>
+                </div>
+                <div v-else-if="item.vendor_quotation.status === 'Rejected'">
+                    <CButton size="sm" class="m-1" color="danger"
+                    >
+                        Rejected
+                    </CButton>
+                </div>
+                <div v-else-if="item.vendor_quotation.status === 'Cancelled'">
+                    <CButton size="sm" class="m-1" color="danger"
+                    >
+                        Cancelled
+                    </CButton>
+                </div>
+                <div v-else-if="item.vendor_quotation.status === 'Approved'">
+                    <CButton size="sm" class="m-1" color="success"
+                    >
+                        Approved
+                    </CButton>
+                </div>
+                <div v-else-if="item.vendor_quotation.status === 'Accepted'">
+                    <CButton size="sm" class="m-1" color="primary">
+                        Accepted
+                    </CButton>
+                </div>
             </template>
             <template v-slot:item.actions="{ item }">
                 <CRow>

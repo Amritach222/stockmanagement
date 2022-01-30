@@ -419,7 +419,7 @@
                                             </template>
                                             <template v-slot:item.status="{ item }">
                                                 <div v-if="item.status === 'On Progress'">
-                                                    <CButton size="sm" color="secondary" class="m-1">
+                                                    <CButton size="sm" color="warning" class="m-1">
                                                         On Progress
                                                     </CButton>
                                                 </div>

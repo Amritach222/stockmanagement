@@ -46,7 +46,7 @@ class Quotation extends Model
         return $this->hasMany(VendorQuotation::class, 'quotation_id');
     }
 
-    public function getStatus($vendor_id)
+    public function getVendorStatus($vendor_id)
     {
         $vendorQuotations = VendorQuotation::where('quotation_id', $this->id)->where('vendor_id', $vendor_id)->get();
         $accepted_count = 0;
@@ -67,6 +67,32 @@ class Quotation extends Model
         } elseif (($accepted_count > 0) && ($accepted_count < count($vendorQuotations))) {
             return "Partially Accepted";
         } elseif (($rejected_count > 0) && ($rejected_count == count($vendorQuotations))) {
+            return "Rejected";
+        }
+    }
+
+    public function getProductStatus($product_id)
+    {
+        $quotationProductIds = QuotationProduct::where('quotation_id', $this->id)->where('product_id', $product_id)->pluck('id');
+        $vendorQuotationProducts = VendorQuotationProduct::whereIn('quotation_product_id', $quotationProductIds)->get();
+        $accepted_count = 0;
+        $rejected_count = 0;
+        foreach ($vendorQuotationProducts as $vendorQuotation) {
+            if ($vendorQuotation->status == 'Accepted') {
+                $accepted_count = $accepted_count + 1;
+            } elseif ($vendorQuotation->status == 'Rejected') {
+                $rejected_count = $rejected_count + 1;
+            } elseif ($vendorQuotation->status == 'Pending') {
+                return "Pending";
+            } elseif ($vendorQuotation->status == 'On Progress') {
+                return "On Progress";
+            }
+        }
+        if (($accepted_count > 0) && ($accepted_count == count($vendorQuotationProducts))) {
+            return "Accepted";
+        } elseif (($accepted_count > 0) && ($accepted_count < count($vendorQuotationProducts))) {
+            return "Partially Accepted";
+        } elseif (($rejected_count > 0) && ($rejected_count == count($vendorQuotationProducts))) {
             return "Rejected";
         }
     }

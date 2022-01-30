@@ -6,7 +6,7 @@
                     <CCardGroup>
                         <CCard class="p-4">
                             <CCardHeader>
-                                <strong>Edit</strong> Quotation
+                                <strong>Vendor</strong> Quotation
                                 <v-progress-circular
                                     v-if="changeProgress"
                                     indeterminate
@@ -21,7 +21,7 @@
                                             <v-col md="4">
                                                 <h6>{{ $t('status') }}</h6>
                                                 <div v-if="quotationItem.status === 'On Progress'">
-                                                    <CButton size="sm" color="secondary" class="m-1">
+                                                    <CButton size="sm" color="warning" class="m-1">
                                                         On Progress
                                                     </CButton>
                                                 </div>
@@ -57,11 +57,11 @@
                                             <v-col md="4">
                                                 <v-row>
                                                     <v-col v-if="typeof(quotationItem.link) === 'string'">
-                                                        <!--                                                    <h6>FIle</h6>-->
-                                                        <v-col width="200" class="ml-3 file-link"
+                                                        <h6>FIle</h6>
+                                                        <CButton size="sm" color="primary" class="m-1"
                                                                v-on:click="openImage(quotationItem.link)">
-                                                            <h5> Open File </h5>
-                                                        </v-col>
+                                                            Open File
+                                                        </CButton>
                                                     </v-col>
                                                 </v-row>
                                             </v-col>
@@ -97,9 +97,9 @@
                                                 <p v-if="item.tax_id" class="mt-3">{{ item.tax.value }}%</p>
                                                 <p v-else class="mt-3">0</p>
                                             </template>
-                                            <template v-slot:item.actions="{ item }">
+                                            <template v-slot:item.status="{ item }">
                                                 <div v-if="item.status === 'On Progress'">
-                                                    <CButton size="sm" color="secondary" class="m-1">
+                                                    <CButton size="sm" color="warning" class="m-1">
                                                         On Progress
                                                     </CButton>
                                                 </div>
@@ -186,7 +186,8 @@ export default {
             {text: i18n.t('discount') + ' ' + i18n.t('type'), value: 'discount_type'},
             {text: i18n.t('discount'), value: 'discount'},
             {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
-            {text: i18n.t('status'), value: 'actions', sortable: false},
+            {text: i18n.t('status'), value: 'status', sortable: true},
+            {text: i18n.t('action'), value: 'actions', sortable: false},
         ],
         quotations: [],
         tableLoad: false,
