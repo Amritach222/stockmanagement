@@ -196,4 +196,19 @@ class VendorQuotationController extends Controller
         }
         return $data;
     }
+
+    public function vendorQuotation($id, $vendor)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $vendorQuotation = VendorQuotation::where('quotation_id', $id)->where('vendor_id', $vendor)->firstOrFail();
+            $data['data'] = new VendorQuotationResource($vendorQuotation);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
+        }
+        return $data;
+    }
 }

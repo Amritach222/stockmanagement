@@ -487,6 +487,9 @@ export default {
     async vendorQuotation(id) {
         return await apiCall(GET, `api/vendor/quotation/${id}`)
     },
+    async vendorQuotationDetails(id,vendor) {
+        return await apiCall(GET, `api/quotation/quotations/vendor/${id}/${vendor}`)
+    },
     async vendorQuotationUpdate(id, data) {
         return await apiCall(POST, `api/vendor/quotation/update/${id}`, data)
     },

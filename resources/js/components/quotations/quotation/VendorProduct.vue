@@ -19,28 +19,63 @@
                                     <v-form>
                                         <v-row>
                                             <v-col md="4">
-                                                <h6>{{ $t('requested') + ' ' + $t('name') }}</h6>
-                                                <p>{{ quotationItem.requested_name }}</p>
+                                                <h6>{{ $t('status') }}</h6>
+                                                <div v-if="quotationItem.status === 'On Progress'">
+                                                    <CButton size="sm" color="secondary" class="m-1">
+                                                        On Progress
+                                                    </CButton>
+                                                </div>
+                                                <div v-else-if="quotationItem.status === 'Pending'">
+                                                    <CButton size="sm" color="secondary" class="m-1">
+                                                        Pending
+                                                    </CButton>
+                                                </div>
+                                                <div v-else-if="quotationItem.status === 'Rejected'">
+                                                    <CButton size="sm" class="m-1" color="danger"
+                                                    >
+                                                        Rejected
+                                                    </CButton>
+                                                </div>
+                                                <div v-else-if="quotationItem.status === 'Cancelled'">
+                                                    <CButton size="sm" class="m-1" color="danger"
+                                                    >
+                                                        Cancelled
+                                                    </CButton>
+                                                </div>
+                                                <div v-else-if="quotationItem.status === 'Approved'">
+                                                    <CButton size="sm" class="m-1" color="success"
+                                                    >
+                                                        Approved
+                                                    </CButton>
+                                                </div>
+                                                <div v-else-if="quotationItem.status === 'Accepted'">
+                                                    <CButton size="sm" class="m-1" color="primary">
+                                                        Accepted
+                                                    </CButton>
+                                                </div>
                                             </v-col>
                                             <v-col md="4">
-                                                <h6>{{ $t('due') + ' ' + $t('date') }}</h6>
-                                                <p>{{ quotationItem.due_date }}</p>
+                                                <v-row>
+                                                    <v-col v-if="typeof(quotationItem.link) === 'string'">
+                                                        <!--                                                    <h6>FIle</h6>-->
+                                                        <v-col width="200" class="ml-3 file-link"
+                                                               v-on:click="openImage(quotationItem.link)">
+                                                            <h5> Open File </h5>
+                                                        </v-col>
+                                                    </v-col>
+                                                </v-row>
                                             </v-col>
-                                            <v-col md="4">
-                                                <h6>{{ $t('desired') + ' ' + $t('delivery') + ' ' + $t('date') }}</h6>
-                                                <p>{{ quotationItem.desired_delivery_date }}</p>
-                                            </v-col>
+
                                         </v-row>
-                                        <h6>{{ $t('note') }}</h6>
-                                        <p>{{ quotationItem.note }}</p>
+                                        <div>
+                                            <h6>{{ $t('comment') }}</h6>
+                                            <p v-if="quotationItem.comment">{{ quotationItem.comment }}</p>
+                                            <p v-else>----</p>
+                                        </div>
                                     </v-form>
 
                                     <hr>
                                     <v-card flat>
-                                        <!--                                        <v-card-title>-->
-                                        <!--                                            {{ $t('products') }}-->
-                                        <!--                                            <v-spacer></v-spacer>-->
-                                        <!--                                        </v-card-title>-->
                                         <v-data-table
                                             :headers="headers"
                                             :items="quoProducts"
@@ -103,35 +138,10 @@
                                         </v-data-table>
                                     </v-card>
 
-                                    <hr>
-                                    <v-row>
-                                        <v-col md="4">
-                                            <h6>{{ $t('status') }}</h6>
-                                            <p>{{ editedItem.status }}</p>
-                                        </v-col>
-                                        <v-col md="4">
-                                            <v-row>
-                                                <v-col v-if="typeof(editedItem.link) === 'string'">
-                                                    <!--                                                    <h6>FIle</h6>-->
-                                                    <v-col width="200" class="ml-3 file-link"
-                                                           v-on:click="openImage(editedItem.link)">
-                                                        <h5> Open File </h5>
-                                                    </v-col>
-                                                </v-col>
-                                            </v-row>
-                                        </v-col>
-
-                                    </v-row>
-                                    <div>
-                                        <h6>{{ $t('comment') }}</h6>
-                                        <p>{{ editedItem.comment }}</p>
-                                    </div>
-
-
                                     <CCardFooter>
-                                        <CButton :to="'/vendor/new-product-request'" size="sm" color="danger">
+                                        <CButton :to="'/quotations/edit/'+$route.params.id" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
-                                            Cancel
+                                            Back
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -152,7 +162,7 @@ import ApiServices from "../../../services/ApiServices";
 import config from "../../../config";
 
 export default {
-    name: "VendorQuotationShow",
+    name: "VendorProduct",
 
     props: {
         source: String,
@@ -176,7 +186,7 @@ export default {
             {text: i18n.t('discount') + ' ' + i18n.t('type'), value: 'discount_type'},
             {text: i18n.t('discount'), value: 'discount'},
             {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: i18n.t('status'), value: 'actions', sortable: false},
         ],
         quotations: [],
         tableLoad: false,
@@ -204,11 +214,13 @@ export default {
         variants: [],
         hasVariants: false,
         quotationItem: {
-            id: null,
-            note: '',
-            due_date: '',
-            desired_delivery_date: '',
-            requested_name: '',
+            comment: '',
+            file: '',
+            discount_type: '',
+            discount: '',
+            status: '',
+            total_item: '',
+            total_price: '',
         },
         editedItem: {
             id: null,
@@ -231,7 +243,6 @@ export default {
     },
     async created() {
         this.loadData();
-        this.loadDepartments();
         this.loadUserName();
         this.loadVendors();
         // this.loadQuoProducts();
@@ -240,21 +251,11 @@ export default {
         openImage(data) {
             window.open(config.cdnURL + data, `_blank`);
         },
-        async loadDepartments() {
-            let res = await ApiServices.departmentList();
-            if (res.success === true) {
-                this.departments = res.data;
-            }
-        },
         async loadData() {
-            let res = await ApiServices.vendorQuotation(this.$route.params.id);
+            let res = await ApiServices.vendorQuotationDetails(this.$route.params.id, this.$route.params.vendor);
             if (res.success === true) {
                 this.quotationItem = res.data;
-                this.editedItem = res.data.vendor_quotation;
                 this.quoProducts = res.data.vendor_quotation_products;
-                if (this.quoProducts.length > 0) {
-                    this.vendorCard = true;
-                }
             }
         },
         async loadUserName() {

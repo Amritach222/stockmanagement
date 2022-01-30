@@ -20,6 +20,7 @@ class VendorQuotation extends JsonResource
             $image = File::where('id', $this->file_id)->first();
             $link = $image->path;
         }
+        $products = VendorQuotationProductResource::collection($this->vendorQuotationProducts);
         return [
             'id' => $this->id,
             'quotation_id' => $this->quotation_id,
@@ -32,6 +33,7 @@ class VendorQuotation extends JsonResource
             'comment' => $this->comment,
             'file_id' => $this->file_id,
             'link' => $link,
+            'vendor_quotation_products' => $products,
         ];
     }
 }

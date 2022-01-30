@@ -26,6 +26,9 @@ class Quotation extends JsonResource
         $vendorQuotations = \App\Models\VendorQuotation::where('quotation_id', $this->id)->get();
         $vendor_ids = \App\Models\VendorQuotation::where('quotation_id', $this->id)->pluck('vendor_id');
         $vendors = \App\Models\Vendor::whereIn('id', $vendor_ids)->get();
+        foreach ($vendors as $vendor) {
+            $vendor->status = $this->getStatus($vendor->id);
+        }
         return [
             'id' => $this->id,
             'reference_no' => $this->reference_no,
