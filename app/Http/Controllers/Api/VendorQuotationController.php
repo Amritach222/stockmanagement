@@ -96,9 +96,14 @@ class VendorQuotationController extends Controller
             }
 
             $uniqueVendors = array_unique($relatedVendors);
-            foreach ($uniqueVendors as $uniqueVendor) {
-                $user = User::findOrFail($uniqueVendor->user_id);
-                event(new VendorAssignQuoEvent($user, $quotation));
+            try {
+                foreach ($uniqueVendors as $uniqueVendor) {
+                    $user = User::findOrFail($uniqueVendor->user_id);
+                    event(new VendorAssignQuoEvent($user, $quotation));
+                }
+            } catch (\Exception $exception) {
+                $data['success'] = true;
+                $data['message'] = "Fail to send mail to vendors.";
             }
 //            $data['data'] = new VendorQuotationResource($vendorQuotation);
 

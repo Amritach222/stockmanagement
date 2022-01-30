@@ -175,12 +175,12 @@
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
-<!--                                                                                <v-text-field-->
-<!--                                                                                    v-model="addQuoProduct.shipping_cost"-->
-<!--                                                                                    :label="$t('shipping_cost')"-->
-<!--                                                                                    type="number"-->
-<!--                                                                                    outlined-->
-<!--                                                                                ></v-text-field>-->
+                                                                                <!--                                                                                <v-text-field-->
+                                                                                <!--                                                                                    v-model="addQuoProduct.shipping_cost"-->
+                                                                                <!--                                                                                    :label="$t('shipping_cost')"-->
+                                                                                <!--                                                                                    type="number"-->
+                                                                                <!--                                                                                    outlined-->
+                                                                                <!--                                                                                ></v-text-field>-->
                                                                             </v-col>
                                                                         </v-row>
                                                                     </v-container>
@@ -504,6 +504,7 @@ export default {
         selected: [],
         deleteProduct: [],
         vendorCard: false,
+        successCount: 0,
         addQuoProduct: {
             product_id: '',
             product_variant_id: '',
@@ -684,17 +685,19 @@ export default {
 
         async addProduct() {
             var varName = '---';
+            var varId = '';
             let res = await ApiServices.productShow(this.addQuoProduct.product_id);
             if (this.addQuoProduct.product_variant_id) {
                 let rtn = await ApiServices.productVariantShow(this.addQuoProduct.product_variant_id);
                 varName = rtn.data.name;
+                varId = rtn.data.id;
             }
             if (this.editedIndex > -1) {
                 Object.assign(this.quoProducts[this.editedIndex], {
                     'product_id': this.addQuoProduct.product_id,
                     'product_name': res.data.name,
                     'product_variant': varName,
-                    'product_variant_id': this.addQuoProduct.product_variant_id,
+                    'product_variant_id': varId,
                     'quantity': this.addQuoProduct.quantity,
                     // 'shipping_cost': this.addQuoProduct.shipping_cost,
                 })
@@ -702,7 +705,7 @@ export default {
                 this.quoProducts.push({
                     'product_id': this.addQuoProduct.product_id,
                     'product_name': res.data.name,
-                    'product_variant_id': this.addQuoProduct.product_variant_id,
+                    'product_variant_id': varId,
                     'product_variant': varName,
                     'quantity': this.addQuoProduct.quantity,
                     // 'shipping_cost': this.addQuoProduct.shipping_cost,
@@ -735,7 +738,9 @@ export default {
                 if (res.success === true) {
                     if (this.quoProducts.length > 0) {
                         await this.createProduct(res.data.id);
-                        await this.createProductVendor(res.data.id);
+                        if (this.quoProducts.length === parseInt(this.successCount)) {
+                            await this.createProductVendor(res.data.id);
+                        }
                     } else {
                         route.replace('/quotations/');
                     }
@@ -752,10 +757,13 @@ export default {
                 // if(this.quoProducts[i].shipping_cost !== null && this.quoProducts[i].shipping_cost !== '' && typeof(parseInt(this.quoProducts[i].shipping_cost) === 'integer')) {
                 //     productData.append('shipping_cost', parseInt(this.quoProducts[i].shipping_cost));
                 // }
-                if (this.quoProducts[i].product_variant_id !== '') {
+                if (this.quoProducts[i].product_variant_id !== '' && typeof (parseInt(this.quoProducts[i].product_variant_id) === 'integer')) {
                     productData.append('product_variant_id', parseInt(this.quoProducts[i].product_variant_id));
                 }
                 let res = await ApiServices.quotationProductCreate(productData);
+                if (res.success === true) {
+                    this.successCount = parseInt(this.successCount) + 1;
+                }
             }
             // route.replace('/quotations/');
         },
@@ -767,7 +775,7 @@ export default {
             data.append('vendors', JSON.stringify(this.quoVendors));
             let res = await ApiServices.vendorQuotationCreate(data);
             if (res.success === true) {
-                route.replace()
+                route.replace('/quotations/')
             }
         },
 
