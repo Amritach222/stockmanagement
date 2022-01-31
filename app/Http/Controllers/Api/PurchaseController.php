@@ -55,7 +55,12 @@ class PurchaseController extends Controller
         $data['success'] = true;
         $data['message'] = '';
         $data['data'] = [];
-        $purchases = Purchase::all();
+
+        $purchases = Purchase::with(['purchaseProducts' => function($query) {
+            $query->where('department_status','Approved');
+        }
+        ])->get();
+
         $data['data'] = PurchaseResource::collection($purchases);
         return $data;
     }
