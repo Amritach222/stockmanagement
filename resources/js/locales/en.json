@@ -192,6 +192,7 @@
     "product_variants": "Product Variants",
     "general_settings": "General Settings",
     "edit": "Edit",
+    "requester": "Requester",
 
     "validation": {
         "required": "This field is required!",

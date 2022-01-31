@@ -29,6 +29,7 @@ class Quotation extends JsonResource
         foreach ($vendors as $vendor) {
             $vendor->status = $this->getVendorStatus($vendor->id);
         }
+        $is_pending = $this->isPending();
         return [
             'id' => $this->id,
             'reference_no' => $this->reference_no,
@@ -42,6 +43,7 @@ class Quotation extends JsonResource
             'status' => $this->status,
             'reviewed_by' => $this->reviewed_by,
             'approved_by' => $this->approved_by,
+            'is_pending' => $is_pending,
             'link' => $link,
             'quotation_products' => $quotationProducts,
             'department' => $department,

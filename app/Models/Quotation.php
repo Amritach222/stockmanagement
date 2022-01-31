@@ -76,24 +76,54 @@ class Quotation extends Model
         $quotationProductIds = QuotationProduct::where('quotation_id', $this->id)->where('product_id', $product_id)->pluck('id');
         $vendorQuotationProducts = VendorQuotationProduct::whereIn('quotation_product_id', $quotationProductIds)->get();
         $accepted_count = 0;
+        $approved_count = 0;
         $rejected_count = 0;
+        $cancelled_count = 0;
+        $onprogress_count = 0;
+        $pending_count = 0;
         foreach ($vendorQuotationProducts as $vendorQuotation) {
             if ($vendorQuotation->status == 'Accepted') {
                 $accepted_count = $accepted_count + 1;
             } elseif ($vendorQuotation->status == 'Rejected') {
                 $rejected_count = $rejected_count + 1;
             } elseif ($vendorQuotation->status == 'Pending') {
-                return "Pending";
+                $pending_count = $pending_count + 1;
             } elseif ($vendorQuotation->status == 'On Progress') {
-                return "On Progress";
+                $onprogress_count = $onprogress_count + 1;
+            } elseif ($vendorQuotation->status == 'Approved') {
+                $approved_count = $approved_count + 1;
+            } elseif ($vendorQuotation->status == 'Cancelled') {
+                $cancelled_count = $cancelled_count + 1;
             }
         }
-        if (($accepted_count > 0) && ($accepted_count == count($vendorQuotationProducts))) {
-            return "Accepted";
-        } elseif (($accepted_count > 0) && ($accepted_count < count($vendorQuotationProducts))) {
-            return "Partially Accepted";
+        if (($pending_count > 0) && ($pending_count == count($vendorQuotationProducts))) {
+            return "Pending";
+        } elseif (($approved_count > 0) && ($approved_count <= count($vendorQuotationProducts))) {
+            return "Approved";
+        } elseif (($onprogress_count > 0) && ($onprogress_count <= count($vendorQuotationProducts))) {
+            return "On Progress";
+        } elseif (($accepted_count > 0) && ($accepted_count <= count($vendorQuotationProducts))) {
+            return "On Progress";
         } elseif (($rejected_count > 0) && ($rejected_count == count($vendorQuotationProducts))) {
             return "Rejected";
+        } elseif (($cancelled_count > 0) && ($cancelled_count == count($vendorQuotationProducts))) {
+            return "Cancelled";
+        }
+    }
+
+    public function isPending()
+    {
+        $pending_count = 0;
+        $quotationProductIds = QuotationProduct::where('quotation_id', $this->id)->pluck('product_id');
+        foreach ($quotationProductIds as $id) {
+            if ($this->getProductStatus($id) === 'Pending') {
+                $pending_count = $pending_count + 1;
+            }
+        }
+        if (($pending_count > 0) && ($pending_count == count($quotationProductIds))) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
