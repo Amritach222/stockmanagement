@@ -308,19 +308,33 @@ export default {
             this.dialog = true;
         },
 
-        denyProduct(item) {
-
+        async denyProduct(item) {
+          let productData = new FormData();
+          productData.append('department_status', 'Rejected');
+          let res = await ApiServices.changePurchaseProductStatusRequest(item.id,productData);
+          if (res.success === true) {
+            this.editedIndex = this.prProducts.indexOf(item);
+            Object.assign(this.prProducts[this.editedIndex], res.data)
+            store.state.home.snackbar = true;
+            store.state.home.snackbarText = "Changed status";
+            store.state.home.snackbarColor = 'green';
+          } else {
+            store.state.home.snackbar = true;
+            store.state.home.snackbarText = "Could not change status";
+            store.state.home.snackbarColor = 'red';
+          }
         },
 
         async approveProduct(item) {
-            console.log(item);
             let productData = new FormData();
             productData.append('department_status', 'Approved');
             let res = await ApiServices.changePurchaseProductStatusRequest(item.id,productData);
-            if (res.success === false) {
-                store.state.home.snackbar = true;
-                store.state.home.snackbarText = "Changed status";
-                store.state.home.snackbarColor = 'green';
+            if (res.success === true) {
+              this.editedIndex = this.prProducts.indexOf(item);
+              Object.assign(this.prProducts[this.editedIndex], res.data)
+              store.state.home.snackbar = true;
+              store.state.home.snackbarText = "Changed status";
+              store.state.home.snackbarColor = 'green';
             } else {
                 store.state.home.snackbar = true;
                 store.state.home.snackbarText = "Could not change status";

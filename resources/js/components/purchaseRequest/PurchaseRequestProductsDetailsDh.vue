@@ -35,18 +35,6 @@
                     v-model="dialog"
                     max-width="600px"
                 >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            color="green"
-                            dark
-                            class="mb-2"
-                            v-bind="attrs"
-                            v-on="on"
-                            @click="sendQuotation"
-                        >
-                            Send to Quotation
-                        </v-btn>
-                    </template>
                     <v-card>
                         <v-form ref="form">
                             <v-card-title>
