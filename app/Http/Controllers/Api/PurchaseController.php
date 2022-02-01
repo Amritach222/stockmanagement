@@ -21,7 +21,7 @@ class PurchaseController extends Controller
     public function __construct()
     {
         parent::generateAllMiddlewareByPermission('purchases');
-        $this->middleware(['role:' . 'Department Head'])->only(['changeStatusOfPurchaseListsProducts','departmentHeadPurchaseLists']);
+        $this->middleware(['role:' . 'Department Head'])->only(['changeStatusOfPurchaseListsProducts', 'departmentHeadPurchaseLists']);
         $this->middleware(['role:' . 'Admin|Store Manager'])->only(['adminPurchaseLists']);
     }
 
@@ -56,10 +56,10 @@ class PurchaseController extends Controller
         $data['message'] = '';
         $data['data'] = [];
 
-        $purchases = Purchase::with(['purchaseProducts' => function($query) {
-            $query->where('department_status','Approved');
+        $purchases = Purchase::with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
+            $query->where('department_status', 'Approved');
         }
-        ])->get();
+        )->get();
 
         $data['data'] = PurchaseResource::collection($purchases);
         return $data;
@@ -71,10 +71,14 @@ class PurchaseController extends Controller
         $data['message'] = '';
         $data['data'] = [];
         $user = auth()->user();
-        if($user->department_id === null){
+        if ($user->department_id === null) {
             return response(['success' => false, "message" => 'Department id not found', "data" => []], 422);
         } else {
-            $purchases = Purchase::where('department_id',$user->department_id)->get();
+//            $purchases = Purchase::where('department_id', $user->department_id)->get();
+            $purchases = Purchase::where('department_id', $user->department_id)->with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
+                $query->where('department_status', 'Pending');
+            }
+            )->get();
             $data['data'] = PurchaseResource::collection($purchases);
             return $data;
         }

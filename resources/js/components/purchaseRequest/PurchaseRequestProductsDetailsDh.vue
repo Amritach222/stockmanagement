@@ -137,21 +137,6 @@
                 {{ item.status }}
             </v-chip>
         </template>
-<!--        <template v-slot:item.actions="{ item }">-->
-<!--            <v-icon-->
-<!--                small-->
-<!--                class="mr-2"-->
-<!--                @click="editItem(item)"-->
-<!--            >-->
-<!--                mdi-pencil-->
-<!--            </v-icon>-->
-<!--            <v-icon-->
-<!--                small-->
-<!--                @click="deleteItem(item)"-->
-<!--            >-->
-<!--                mdi-delete-->
-<!--            </v-icon>-->
-<!--        </template>-->
         <template v-slot:expanded-item="{ headers, item }" class="mb-3">
             <td :colspan="headers.length">
                 <PurchaseTableDetail :item="item" :triggerSelect="triggerSelect"></PurchaseTableDetail>
