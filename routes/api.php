@@ -182,6 +182,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('quotationProducts/{id}', [\App\Http\Controllers\Api\QuotationProductController::class, 'update']);
         Route::apiResource('vendorQuotations', \App\Http\Controllers\Api\VendorQuotationController::class);
         Route::post('vendorQuotations/{id}', [\App\Http\Controllers\Api\VendorQuotationController::class, 'update']);
+        Route::apiResource('vendorQuotationProducts', \App\Http\Controllers\Api\VendorQuotationProductController::class);
+        Route::post('vendorQuotationProducts/{id}', [\App\Http\Controllers\Api\VendorQuotationProductController::class, 'update']);
     });
 
     Route::group(['prefix' => '/purchase', 'middleware' => 'auth:api'], function () {

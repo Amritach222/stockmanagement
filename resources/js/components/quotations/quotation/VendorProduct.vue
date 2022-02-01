@@ -231,34 +231,91 @@
                                                 </div>
                                             </template>
                                             <template v-slot:item.actions="{ item }">
-                                                <div
-                                                    v-if="(item.status === 'Accepted') || (item.status === 'Reviewed')">
-                                                    <CButton size="sm" color="warning" class="m-1"
-                                                             @click="statusChange('Review',item)">
-                                                        Review
-                                                    </CButton>
-                                                    <CButton size="sm" color="success" class="m-1"
-                                                             @click="statusChange('Approved',item)">
-                                                        Approve
-                                                    </CButton>
-                                                    <CButton size="sm" class="m-1" color="danger"
-                                                             @click="statusChange('Cancelled',item)">
-                                                        Cancel
-                                                    </CButton>
+                                                <div class="text-center">
+                                                    <v-menu offset-y>
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            Actions
+                                                            <v-icon
+                                                                small
+                                                                v-bind="attrs"
+                                                                v-on="on"
+                                                            >
+                                                                mdi-chevron-double-down
+                                                            </v-icon>
+                                                        </template>
+                                                        <v-list>
+                                                            <v-list-item
+                                                            >
+                                                                <div
+                                                                    v-if="(item.status === 'Accepted') || (item.status === 'Reviewed')">
+                                                                    <v-list-item-title
+                                                                        @click="statusChange('Review',item)"
+                                                                        class="password-btn">Review
+                                                                    </v-list-item-title>
+                                                                    <hr>
+                                                                    <v-list-item-title
+                                                                        @click="statusChange('Approved',item)"
+                                                                        class="password-btn">
+                                                                        Approve
+                                                                    </v-list-item-title>
+                                                                    <hr>
+                                                                    <v-list-item-title
+                                                                        @click="statusChange('Cancelled',item)"
+                                                                        class="password-btn">
+                                                                        Cancelled
+                                                                    </v-list-item-title>
+                                                                </div>
+                                                                <div
+                                                                    v-else-if="item.status === 'Review'">
+                                                                    <v-list-item-title
+                                                                        @click="editItem(item)"
+                                                                        class="password-btn">
+                                                                        Edit
+                                                                    </v-list-item-title>
+                                                                    <hr>
+                                                                    <v-list-item-title
+                                                                        @click="statusChange('Cancelled',item)"
+                                                                        class="password-btn">
+                                                                        Cancel
+                                                                    </v-list-item-title>
+                                                                </div>
+                                                                <div v-else>
+                                                                    <v-list-item-title>
+                                                                        No Actions
+                                                                    </v-list-item-title>
+                                                                </div>
+                                                            </v-list-item>
+                                                        </v-list>
+                                                    </v-menu>
                                                 </div>
-                                                <div v-else-if="item.status === 'Review'">
-                                                    <CButton size="sm" color="primary" class="m-1"
-                                                    >
-                                                        Edit
-                                                    </CButton>
-                                                    <CButton size="sm" class="m-1" color="danger"
-                                                             @click="statusChange('Cancelled',item)">
-                                                        Cancel
-                                                    </CButton>
-                                                </div>
-                                                <div v-else>
-                                                    ----
-                                                </div>
+                                                <!--                                                <div-->
+                                                <!--                                                    v-if="(item.status === 'Accepted') || (item.status === 'Reviewed')">-->
+                                                <!--                                                    <CButton size="sm" color="warning" class="m-1"-->
+                                                <!--                                                             @click="statusChange('Review',item)">-->
+                                                <!--                                                        Review-->
+                                                <!--                                                    </CButton>-->
+                                                <!--                                                    <CButton size="sm" color="success" class="m-1"-->
+                                                <!--                                                             @click="statusChange('Approved',item)">-->
+                                                <!--                                                        Approve-->
+                                                <!--                                                    </CButton>-->
+                                                <!--                                                    <CButton size="sm" class="m-1" color="danger"-->
+                                                <!--                                                             @click="statusChange('Cancelled',item)">-->
+                                                <!--                                                        Cancel-->
+                                                <!--                                                    </CButton>-->
+                                                <!--                                                </div>-->
+                                                <!--                                                <div v-else-if="item.status === 'Review'">-->
+                                                <!--                                                    <CButton size="sm" color="primary" class="m-1"-->
+                                                <!--                                                    >-->
+                                                <!--                                                        Edit-->
+                                                <!--                                                    </CButton>-->
+                                                <!--                                                    <CButton size="sm" class="m-1" color="danger"-->
+                                                <!--                                                             @click="statusChange('Cancelled',item)">-->
+                                                <!--                                                        Cancel-->
+                                                <!--                                                    </CButton>-->
+                                                <!--                                                </div>-->
+                                                <!--                                                <div v-else>-->
+                                                <!--                                                    &#45;&#45;&#45;&#45;-->
+                                                <!--                                                </div>-->
                                             </template>
                                             <template v-slot:no-data>
                                                 <div>No Data</div>
@@ -384,6 +441,7 @@
             quoVendors: [],
             selectVendors: [],
             selectedVendors: [],
+            taxes:[],
             singleSelect: false,
             selected: [],
             deleteProduct: [],
@@ -431,6 +489,7 @@
         },
         async created() {
             this.loadData();
+            this.loadTax();
             // this.loadQuoProducts();
         },
         methods: {
@@ -446,6 +505,12 @@
                 if (res.success === true) {
                     this.quotationItem = res.data;
                     this.quoProducts = res.data.vendor_quotation_products;
+                }
+            },
+            async loadTax() {
+                let rtn = await ApiServices.taxList();
+                if (rtn.success === true) {
+                    this.taxes = rtn.data;
                 }
             },
             async getVariants(product) {
@@ -477,16 +542,15 @@
                 let res = await ApiServices.vendorQuotationStatusUpdate(id, data);
                 if (res.success === true) {
                     this.quotationItem = res.data;
-                    this.quoProducts=[];
+                    this.quoProducts = [];
                     this.quoProducts = res.vendor_quotation_products;
                 }
             },
 
             editItem(item) {
                 this.editedIndex = this.quoProducts.indexOf(item)
-                this.addQuoProduct = Object.assign({}, item)
-                this.getVariants(this.addQuoProduct.item_id)
-                this.dialog = true
+                this.quoProduct = Object.assign({}, item)
+                this.editQuoProduct();
             },
 
             deleteItem(item) {
@@ -554,42 +618,23 @@
                 // }
             },
 
+
             async editQuoProduct() {
                 this.productValidate();
                 if (this.validated) {
-                    if (this.editedIndex > -1) {
-                        //edit goes here
-                        this.progressL = true;
-                        const data = new FormData();
-                        data.append('product_id', this.addQuoProduct.product_id);
-                        if (this.addQuoProduct.product_variant_id !== null && this.addQuoProduct.product_variant_id !== '') {
-                            data.append('product_variant_id', this.addQuoProduct.product_variant_id);
-                        }
-                        data.append('quantity', this.addQuoProduct.quantity);
-                        data.append('shipping_cost', this.addQuoProduct.shipping_cost);
-                        let res = await ApiServices.quotationProductEdit(this.addQuoProduct.id, data);
-                        if (res.success === true) {
-                            Object.assign(this.quoProducts[this.editedIndex], res.data)
-                            this.$refs.form.reset();
-                            this.close();
-                        }
-                    } else {
-                        //add new
-                        this.progressL = true;
-                        const data = new FormData();
-                        data.append('product_id', this.addQuoProduct.product_id);
-                        if (this.addQuoProduct.product_variant_id !== null && this.addQuoProduct.product_variant_id !== '') {
-                            data.append('product_variant_id', this.addQuoProduct.product_variant_id);
-                        }
-                        data.append('quantity', this.addQuoProduct.quantity);
-                        data.append('shipping_cost', this.addQuoProduct.shipping_cost);
-                        data.append('quotation_id', this.editedItem.id);
-                        let res = await ApiServices.quotationProductCreate(data);
-                        if (res.success === true) {
-                            this.quoProducts.push(res.data);
-                            this.$refs.form.reset();
-                            this.close()
-                        }
+                    //edit goes here
+                    const data = new FormData();
+                    if (this.quoProduct.tax_id !== null && this.quoProduct.tax_id !== '') {
+                        data.append('tax_id', this.quoProduct.tax_id);
+                    }
+                    data.append('quantity', this.quoProduct.quantity);
+                    data.append('price', this.quoProduct.price);
+                    data.append('discount', this.quoProduct.discount);
+                    data.append('discount_type', this.quoProduct.discount_type);
+                    data.append('shipping_cost', this.quoProduct.shipping_cost);
+                    let res = await ApiServices.vendorQuotationProductEdit(this.quoProduct.id, data);
+                    if (res.success === true) {
+                        Object.assign(this.quoProducts[this.editedIndex], res.data)
                     }
                 }
             },
@@ -622,5 +667,9 @@
     .card-btn {
         color: #fff !important;
         margin-left: 3px !important;
+    }
+
+    .password-btn {
+        cursor: pointer;
     }
 </style>
