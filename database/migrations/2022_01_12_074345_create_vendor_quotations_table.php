@@ -26,7 +26,7 @@ class CreateVendorQuotationsTable extends Migration
             $table->integer('discount')->nullable();
             $table->integer('file_id')->unsigned()->nullable();
             $table->foreign('file_id')->references('id')->on('files');
-            $table->enum('status', ['Pending', 'On Progress', 'Accepted', 'Approved', 'Rejected', 'Cancel'])->default('Pending')->nullable();
+            $table->enum('status', ['Pending', 'On Progress', 'Accepted', 'Approved', 'Rejected', 'Cancelled'])->default('Pending')->nullable();
             $table->timestamps();
         });
     }

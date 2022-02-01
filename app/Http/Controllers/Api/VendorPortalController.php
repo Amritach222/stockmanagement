@@ -192,4 +192,26 @@ class VendorPortalController extends Controller
         }
         return $data;
     }
+
+    public function quotationStatusUpdate($id, Request $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $quotation = VendorQuotation::findOrFail($id);
+            $values = $request->only('status');
+            $quotation->update($values);
+            foreach ($quotation->vendorQuotationProducts as $product) {
+                $product->update($values);
+            }
+            $data['message'] = 'Status updated successfully';
+            $data['data'] = new \App\Http\Resources\VendorQuotation($quotation);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
+        }
+        return $data;
+    }
 }

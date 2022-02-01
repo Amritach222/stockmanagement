@@ -64,10 +64,12 @@
                                                                 <div
                                                                     v-if="(quotationItem.status === 'Accepted') || (quotationItem.status === 'Pending')">
                                                                     <CButton size="sm" class="m-1" color="success"
+                                                                             @click="allStatusChange('Approved',quotationItem.id)"
                                                                     >
                                                                         Approve
                                                                     </CButton>
                                                                     <CButton size="sm" class="m-1" color="danger"
+                                                                             @click="allStatusChange('Cancelled',quotationItem.id)"
                                                                     >
                                                                         Cancel
                                                                     </CButton>
@@ -244,19 +246,18 @@
                                                         Cancel
                                                     </CButton>
                                                 </div>
-                                                <div v-if="item.status === 'Review'">
+                                                <div v-else-if="item.status === 'Review'">
                                                     <CButton size="sm" color="primary" class="m-1"
                                                     >
                                                         Edit
                                                     </CButton>
-                                                    <!--                                                    <CButton size="sm" color="success" class="m-1"-->
-                                                    <!--                                                             @click="statusChange('Approved',item)">-->
-                                                    <!--                                                        Approve-->
-                                                    <!--                                                    </CButton>-->
                                                     <CButton size="sm" class="m-1" color="danger"
                                                              @click="statusChange('Cancelled',item)">
                                                         Cancel
                                                     </CButton>
+                                                </div>
+                                                <div v-else>
+                                                    ----
                                                 </div>
                                             </template>
                                             <template v-slot:no-data>
@@ -467,6 +468,17 @@
                 let res = await ApiServices.vendorQuotationProductStatusUpdate(this.quoProduct.id, data);
                 if (res.success === true) {
                     Object.assign(this.quoProducts[this.editedIndex], res.data)
+                }
+            },
+
+            async allStatusChange(type, id) {
+                const data = new FormData();
+                data.append('status', type);
+                let res = await ApiServices.vendorQuotationStatusUpdate(id, data);
+                if (res.success === true) {
+                    this.quotationItem = res.data;
+                    this.quoProducts=[];
+                    this.quoProducts = res.vendor_quotation_products;
                 }
             },
 
