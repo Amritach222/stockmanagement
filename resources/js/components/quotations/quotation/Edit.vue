@@ -264,6 +264,10 @@
                                                 <p v-if="item.tax_id" class="mt-3">{{ item.tax.value }}%</p>
                                                 <p v-else class="mt-3">0</p>
                                             </template>
+                                            <template v-slot:item.unit_id="{ item }">
+                                                <p v-if="item.unit_id" class="mt-3">{{ item.unit.name }}</p>
+                                                <p v-else class="mt-3">---</p>
+                                            </template>
                                             <template v-slot:item.status="{ item }">
                                                 <div v-if="item.status === 'On Progress'">
                                                     <CButton size="sm" color="warning" class="m-1">
@@ -298,22 +302,27 @@
                                                         Accepted
                                                     </CButton>
                                                 </div>
+                                                <div v-else>
+                                                    <CButton size="sm" class="m-1" color="warning">
+                                                        {{ item.status }}
+                                                    </CButton>
+                                                </div>
                                             </template>
                                             <template v-slot:item.actions="{ item }">
                                                 <div v-if="editedItem.is_pending">
-                                                <v-icon
-                                                    small
-                                                    class="mr-2"
-                                                    @click="editItem(item)"
-                                                >
-                                                    mdi-pencil
-                                                </v-icon>
-                                                <v-icon
-                                                    small
-                                                    @click="deleteItem(item)"
-                                                >
-                                                    mdi-delete
-                                                </v-icon>
+                                                    <v-icon
+                                                        small
+                                                        class="mr-2"
+                                                        @click="editItem(item)"
+                                                    >
+                                                        mdi-pencil
+                                                    </v-icon>
+                                                    <v-icon
+                                                        small
+                                                        @click="deleteItem(item)"
+                                                    >
+                                                        mdi-delete
+                                                    </v-icon>
                                                 </div>
                                                 <div v-else>
                                                     ---
@@ -560,6 +569,7 @@
                 {text: i18n.t('quantity'), value: 'quantity'},
                 {text: i18n.t('tax'), value: 'tax_id'},
                 {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
+                {text: i18n.t('unit'), value: 'unit'},
                 {text: i18n.t('status'), value: 'status'},
                 {text: i18n.t('actions'), value: 'actions', sortable: false},
             ],
@@ -655,6 +665,7 @@
                 if (res.success === true) {
                     this.editedItem = res.data;
                     this.quoProducts = res.data.quotation_products;
+                    // console.log(this.quoProducts[0].unit.name)
                     if (this.quoProducts.length > 0) {
                         this.vendorCard = true;
                     }

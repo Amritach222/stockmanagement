@@ -43,7 +43,7 @@
                                             <v-col md-3>
                                                 <v-card>
                                                     <v-card-title>
-                                                        <h6> Change Status </h6>
+                                                        <h6> Quotation is currently {{ quotationItem.status }} </h6>
                                                     </v-card-title>
 
                                                     <v-card-text>
@@ -52,22 +52,25 @@
                                                                 <div v-if="quotationItem.status === 'Cancelled'">
                                                                     <CButton size="sm" class="m-1" color="danger"
                                                                     >
-                                                                        Cancelled
+                                                                        {{ quotationItem.status }}
                                                                     </CButton>
                                                                 </div>
                                                                 <div v-else-if="quotationItem.status === 'Approved'">
                                                                     <CButton size="sm" class="m-1" color="success"
                                                                     >
-                                                                        Approved
+                                                                        {{ quotationItem.status }}
                                                                     </CButton>
                                                                 </div>
                                                                 <div
-                                                                    v-if="(quotationItem.status === 'Accepted') || (quotationItem.status === 'Pending')">
+                                                                    v-if="(quotationItem.status === 'Accepted') || (quotationItem.status === 'Pending') || (quotationItem.status === 'Review') || (quotationItem.status === 'Reviewed')">
                                                                     <CButton size="sm" class="m-1" color="success"
                                                                              @click="allStatusChange('Approved',quotationItem.id)"
                                                                     >
                                                                         Approve
                                                                     </CButton>
+                                                                </div>
+                                                                <div
+                                                                    v-if="(quotationItem.status === 'Accepted') || (quotationItem.status === 'Pending') || (quotationItem.status === 'Review') || (quotationItem.status === 'Reviewed') || (quotationItem.status === 'On Progress')">
                                                                     <CButton size="sm" class="m-1" color="danger"
                                                                              @click="allStatusChange('Cancelled',quotationItem.id)"
                                                                     >
@@ -441,7 +444,7 @@
             quoVendors: [],
             selectVendors: [],
             selectedVendors: [],
-            taxes:[],
+            taxes: [],
             singleSelect: false,
             selected: [],
             deleteProduct: [],

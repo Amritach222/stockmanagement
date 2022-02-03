@@ -81,6 +81,7 @@ class Quotation extends Model
         $cancelled_count = 0;
         $onprogress_count = 0;
         $pending_count = 0;
+        $status = '';
         foreach ($vendorQuotationProducts as $vendorQuotation) {
             if ($vendorQuotation->status == 'Accepted') {
                 $accepted_count = $accepted_count + 1;
@@ -94,6 +95,8 @@ class Quotation extends Model
                 $approved_count = $approved_count + 1;
             } elseif ($vendorQuotation->status == 'Cancelled') {
                 $cancelled_count = $cancelled_count + 1;
+            } else {
+                $status = $vendorQuotation->status;
             }
         }
         if (($pending_count > 0) && ($pending_count == count($vendorQuotationProducts))) {
@@ -108,6 +111,8 @@ class Quotation extends Model
             return "Rejected";
         } elseif (($cancelled_count > 0) && ($cancelled_count == count($vendorQuotationProducts))) {
             return "Cancelled";
+        } else {
+            return $status;
         }
     }
 

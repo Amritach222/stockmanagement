@@ -175,6 +175,17 @@
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
+
+                                                                                <v-select
+                                                                                    v-model="addQuoProduct.unit_id"
+                                                                                    :label="$t('unit')"
+                                                                                    :items="units"
+                                                                                    item-text="name"
+                                                                                    item-value="id"
+                                                                                    required
+                                                                                    outlined
+                                                                                    :rules="rules"
+                                                                                ></v-select>
                                                                                 <!--                                                                                <v-text-field-->
                                                                                 <!--                                                                                    v-model="addQuoProduct.shipping_cost"-->
                                                                                 <!--                                                                                    :label="$t('shipping_cost')"-->
@@ -465,7 +476,7 @@ export default {
             {text: i18n.t('product'), value: 'product_name'},
             {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant'},
             {text: i18n.t('quantity'), value: 'quantity'},
-            // {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
+            {text: i18n.t('unit'), value: 'unit'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         headersV: [
@@ -497,6 +508,7 @@ export default {
         vendors: [],
         quoVendors: [],
         products: [],
+        units:[],
         selectVendors: [],
         selectedVendors: [],
         variants: [],
@@ -534,12 +546,19 @@ export default {
         this.loadItems();
         this.loadUserName();
         this.loadVendors();
+        this.loadUnits();
     },
     methods: {
         async loadDepartments() {
             let res = await ApiServices.departmentList();
             if (res.success === true) {
                 this.departments = res.data;
+            }
+        },
+        async loadUnits() {
+            let res = await ApiServices.unitList();
+            if (res.success === true) {
+                this.units = res.data;
             }
         },
 
@@ -686,18 +705,26 @@ export default {
         async addProduct() {
             var varName = '---';
             var varId = '';
+            var unit='Kilogram';
             let res = await ApiServices.productShow(this.addQuoProduct.product_id);
             if (this.addQuoProduct.product_variant_id) {
                 let rtn = await ApiServices.productVariantShow(this.addQuoProduct.product_variant_id);
                 varName = rtn.data.name;
                 varId = rtn.data.id;
             }
+            // let rtn = await ApiServices.unitShow(this.addQuoProduct.unit_id);
+            // if (this.addQuoProduct.unit_id) {
+            //     let rtn = await ApiServices.productVariantShow(this.addQuoProduct.unit_id);
+            //     unit = rtn.data.name;
+            // }
             if (this.editedIndex > -1) {
                 Object.assign(this.quoProducts[this.editedIndex], {
                     'product_id': this.addQuoProduct.product_id,
                     'product_name': res.data.name,
                     'product_variant': varName,
                     'product_variant_id': varId,
+                    'unit': unit,
+                    'unit_id': this.addQuoProduct.unit_id,
                     'quantity': this.addQuoProduct.quantity,
                     // 'shipping_cost': this.addQuoProduct.shipping_cost,
                 })
@@ -707,6 +734,8 @@ export default {
                     'product_name': res.data.name,
                     'product_variant_id': varId,
                     'product_variant': varName,
+                    'unit': unit,
+                    'unit_id': this.addQuoProduct.unit_id,
                     'quantity': this.addQuoProduct.quantity,
                     // 'shipping_cost': this.addQuoProduct.shipping_cost,
                 });
@@ -759,6 +788,9 @@ export default {
                 // }
                 if (this.quoProducts[i].product_variant_id !== '' && typeof (parseInt(this.quoProducts[i].product_variant_id) === 'integer')) {
                     productData.append('product_variant_id', parseInt(this.quoProducts[i].product_variant_id));
+                }
+                if (this.quoProducts[i].unit_id !== '' && typeof (parseInt(this.quoProducts[i].unit_id) === 'integer')) {
+                    productData.append('unit_id', parseInt(this.quoProducts[i].unit_id));
                 }
                 let res = await ApiServices.quotationProductCreate(productData);
                 if (res.success === true) {

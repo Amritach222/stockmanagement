@@ -17,6 +17,7 @@ class QuotationProduct extends JsonResource
         $product = new Product($this->product);
         $productVariant = $this->product_variant_id ? new ProductVariant($this->productVariant) : null;
         $tax = $this->tax_id ? new Tax($this->tax) : null;
+        $unit = $this->unit_id ? new Unit($this->unit) : null;
         $quotation = \App\Models\Quotation::findOrFail($this->quotation_id);
         $status = $quotation->getProductStatus($this->product_id);
         return [
@@ -27,11 +28,13 @@ class QuotationProduct extends JsonResource
             'quantity' => $this->quantity,
             'price' => $this->price,
             'tax_id' => $this->tax_id,
+            'unit_id' => $this->unit_id,
             'shipping_cost' => $this->shipping_cost ?? 0,
             'grand_total' => $this->grand_total,
             'product' => $product,
             'product_variant' => $productVariant,
             'tax' => $tax,
+            'unit' => $unit,
             'status' => $status,
         ];
     }
