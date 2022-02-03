@@ -42,25 +42,55 @@
                                             </v-col>
                                             <v-col md-3>
                                                 <v-card>
-                                                    <v-card-title>
-                                                        <h6> Quotation is currently {{ quotationItem.status }} </h6>
+                                                    <v-card-title class="status-card-title">
+                                                        <v-row>
+                                                            <h6 class="status-title"> Quotation is </h6>
+                                                            <div v-if="quotationItem.status === 'On Progress'">
+                                                                <CButton size="sm" color="warning">
+                                                                    {{ quotationItem.status }}
+                                                                </CButton>
+                                                            </div>
+                                                            <div v-else-if="quotationItem.status === 'Pending'">
+                                                                <CButton size="sm" color="secondary">
+                                                                    {{ quotationItem.status }}
+                                                                </CButton>
+                                                            </div>
+                                                            <div v-else-if="quotationItem.status === 'Rejected'">
+                                                                <CButton size="sm" color="danger"
+                                                                >
+                                                                    {{ quotationItem.status }}
+                                                                </CButton>
+                                                            </div>
+                                                            <div v-else-if="quotationItem.status === 'Cancelled'">
+                                                                <CButton size="sm" color="danger"
+                                                                >
+                                                                    {{ quotationItem.status }}
+                                                                </CButton>
+                                                            </div>
+                                                            <div v-else-if="quotationItem.status === 'Approved'">
+                                                                <CButton size="sm" color="success"
+                                                                >
+                                                                    {{ quotationItem.status }}
+                                                                </CButton>
+                                                            </div>
+                                                            <div v-else-if="quotationItem.status === 'Accepted'">
+                                                                <CButton size="sm" color="primary">
+                                                                    {{ quotationItem.status }}
+                                                                </CButton>
+                                                            </div>
+                                                            <div v-else>
+                                                                <CButton size="sm" color="warning">
+                                                                    {{ quotationItem.status }}
+                                                                </CButton>
+                                                            </div>
+                                                            .
+                                                        </v-row>
                                                     </v-card-title>
 
                                                     <v-card-text>
-                                                        <v-container>
-                                                            <v-row>
-                                                                <div v-if="quotationItem.status === 'Cancelled'">
-                                                                    <CButton size="sm" class="m-1" color="danger"
-                                                                    >
-                                                                        {{ quotationItem.status }}
-                                                                    </CButton>
-                                                                </div>
-                                                                <div v-else-if="quotationItem.status === 'Approved'">
-                                                                    <CButton size="sm" class="m-1" color="success"
-                                                                    >
-                                                                        {{ quotationItem.status }}
-                                                                    </CButton>
-                                                                </div>
+                                                        <v-container class="mt-1">
+                                                            <h6>What do you want to do?</h6>
+                                                            <v-row class="mt-1 ml-1">
                                                                 <div
                                                                     v-if="(quotationItem.status === 'Accepted') || (quotationItem.status === 'Pending') || (quotationItem.status === 'Review') || (quotationItem.status === 'Reviewed')">
                                                                     <CButton size="sm" class="m-1" color="success"
@@ -237,13 +267,12 @@
                                                 <div class="text-center">
                                                     <v-menu offset-y>
                                                         <template v-slot:activator="{ on, attrs }">
-                                                            Actions
                                                             <v-icon
                                                                 small
                                                                 v-bind="attrs"
                                                                 v-on="on"
                                                             >
-                                                                mdi-chevron-double-down
+                                                                mdi-dots-vertical
                                                             </v-icon>
                                                         </template>
                                                         <v-list>
@@ -282,6 +311,14 @@
                                                                         Cancel
                                                                     </v-list-item-title>
                                                                 </div>
+                                                                <div
+                                                                    v-else-if="(item.status === 'On Progress') || (item.status === 'Pending')">
+                                                                    <v-list-item-title
+                                                                        @click="statusChange('Cancelled',item)"
+                                                                        class="password-btn">
+                                                                        Cancel
+                                                                    </v-list-item-title>
+                                                                </div>
                                                                 <div v-else>
                                                                     <v-list-item-title>
                                                                         No Actions
@@ -291,34 +328,6 @@
                                                         </v-list>
                                                     </v-menu>
                                                 </div>
-                                                <!--                                                <div-->
-                                                <!--                                                    v-if="(item.status === 'Accepted') || (item.status === 'Reviewed')">-->
-                                                <!--                                                    <CButton size="sm" color="warning" class="m-1"-->
-                                                <!--                                                             @click="statusChange('Review',item)">-->
-                                                <!--                                                        Review-->
-                                                <!--                                                    </CButton>-->
-                                                <!--                                                    <CButton size="sm" color="success" class="m-1"-->
-                                                <!--                                                             @click="statusChange('Approved',item)">-->
-                                                <!--                                                        Approve-->
-                                                <!--                                                    </CButton>-->
-                                                <!--                                                    <CButton size="sm" class="m-1" color="danger"-->
-                                                <!--                                                             @click="statusChange('Cancelled',item)">-->
-                                                <!--                                                        Cancel-->
-                                                <!--                                                    </CButton>-->
-                                                <!--                                                </div>-->
-                                                <!--                                                <div v-else-if="item.status === 'Review'">-->
-                                                <!--                                                    <CButton size="sm" color="primary" class="m-1"-->
-                                                <!--                                                    >-->
-                                                <!--                                                        Edit-->
-                                                <!--                                                    </CButton>-->
-                                                <!--                                                    <CButton size="sm" class="m-1" color="danger"-->
-                                                <!--                                                             @click="statusChange('Cancelled',item)">-->
-                                                <!--                                                        Cancel-->
-                                                <!--                                                    </CButton>-->
-                                                <!--                                                </div>-->
-                                                <!--                                                <div v-else>-->
-                                                <!--                                                    &#45;&#45;&#45;&#45;-->
-                                                <!--                                                </div>-->
                                             </template>
                                             <template v-slot:no-data>
                                                 <div>No Data</div>
@@ -328,42 +337,6 @@
 
                                     <hr>
                                     <v-row>
-                                        <v-col md="4">
-                                            <h6>{{ $t('status') }}</h6>
-                                            <div v-if="quotationItem.status === 'On Progress'">
-                                                <CButton size="sm" color="warning" class="m-1">
-                                                    On Progress
-                                                </CButton>
-                                            </div>
-                                            <div v-else-if="quotationItem.status === 'Pending'">
-                                                <CButton size="sm" color="secondary" class="m-1">
-                                                    Pending
-                                                </CButton>
-                                            </div>
-                                            <div v-else-if="quotationItem.status === 'Rejected'">
-                                                <CButton size="sm" class="m-1" color="danger"
-                                                >
-                                                    Rejected
-                                                </CButton>
-                                            </div>
-                                            <div v-else-if="quotationItem.status === 'Cancelled'">
-                                                <CButton size="sm" class="m-1" color="danger"
-                                                >
-                                                    Cancelled
-                                                </CButton>
-                                            </div>
-                                            <div v-else-if="quotationItem.status === 'Approved'">
-                                                <CButton size="sm" class="m-1" color="success"
-                                                >
-                                                    Approved
-                                                </CButton>
-                                            </div>
-                                            <div v-else-if="quotationItem.status === 'Accepted'">
-                                                <CButton size="sm" class="m-1" color="primary">
-                                                    Accepted
-                                                </CButton>
-                                            </div>
-                                        </v-col>
                                         <v-col md="4">
                                             <v-row>
                                                 <v-col v-if="typeof(quotationItem.link) === 'string'">
@@ -674,5 +647,15 @@
 
     .password-btn {
         cursor: pointer;
+    }
+
+    .status-title {
+        margin-top: 8px !important;
+        margin-left: 3px !important;
+        margin-right: 3px !important;
+    }
+
+    .status-card-title {
+        background-color: #efebea !important;
     }
 </style>
