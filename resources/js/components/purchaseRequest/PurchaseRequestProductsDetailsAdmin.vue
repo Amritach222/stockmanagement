@@ -32,7 +32,6 @@
                     </v-col>
                 </v-row>
                 <v-dialog
-                    v-model="dialog"
                     max-width="600px"
                 >
                     <template v-slot:activator="{ on, attrs }">
@@ -40,8 +39,6 @@
                             color="green"
                             dark
                             class="mb-2"
-                            v-bind="attrs"
-                            v-on="on"
                             @click="sendQuotation"
                         >
                             Send to Quotation
@@ -240,10 +237,35 @@ export default {
     },
 
     methods: {
-        sendQuotation(){
+        sendQuotation() {
             this.triggerSelect = !this.triggerSelect;
+            this.changeQuotationStatus();
+            route.replace('/quotations/create?create=pr');
         },
-        getColor (status) {
+
+        async changeQuotationStatus() {
+            let selectedProducts = store.state.purchase.selectedPurchaseRequestedProducts;
+            console.log('selectedProducts',selectedProducts);
+            console.log('selectedProducts dasdbasd',selectedProducts);
+            // if (selectedProducts.length > 0) {
+            //     let productData = new FormData();
+            //     productData.append('status', 'Approved');
+            //     let res = await ApiServices.changePurchaseProductStatusRequest(item.id, productData);
+            //     if (res.success === true) {
+            //         this.editedIndex = this.prProducts.indexOf(item);
+            //         Object.assign(this.prProducts[this.editedIndex], res.data);
+            //         store.state.home.snackbar = true;
+            //         store.state.home.snackbarText = "Changed status";
+            //         store.state.home.snackbarColor = 'green';
+            //     } else {
+            //         store.state.home.snackbar = true;
+            //         store.state.home.snackbarText = "Could not change status";
+            //         store.state.home.snackbarColor = 'red';
+            //     }
+            // }
+        },
+
+        getColor(status) {
             if (status === 'Pending') return 'orange'
             else if (status === 'Rejected') return 'red'
             else return 'green'
