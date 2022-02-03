@@ -167,6 +167,9 @@ class VendorPortalController extends Controller
         try {
             $quotationProduct = VendorQuotationProduct::findOrFail($id);
             $values = $request->all();
+            if ($quotationProduct->status == 'Review') {
+                $values['status'] = 'Reviewed';
+            }
             $quotationProduct->update($values);
             $data['data'] = new VendorQuotationProductResource($quotationProduct);
         } catch (\Exception $e) {
