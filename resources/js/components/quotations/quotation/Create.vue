@@ -74,7 +74,7 @@
                                                     filled
                                                     outlined
                                                     prepend-icon="mdi-camera"
-                                                    accept="*/application"
+                                                    accept="application/pdf,application"
                                                 ></v-file-input>
                                             </v-col>
                                         </v-row>

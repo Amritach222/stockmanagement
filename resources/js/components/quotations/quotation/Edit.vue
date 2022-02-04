@@ -76,7 +76,7 @@
                                                             filled
                                                             outlined
                                                             prepend-icon="mdi-camera"
-                                                            accept="*/application"
+                                                            accept="application/pdf,application"
                                                         ></v-file-input>
                                                         <v-col width="200" class="ml-3 file-link"
                                                                v-on:click="openImage(editedItem.link)">
@@ -91,7 +91,7 @@
                                                             filled
                                                             outlined
                                                             prepend-icon="mdi-camera"
-                                                            accept="*/application"
+                                                            accept="application/pdf,application"
                                                         ></v-file-input>
                                                     </v-col>
                                                 </v-row>
@@ -569,7 +569,7 @@
                 {text: i18n.t('quantity'), value: 'quantity'},
                 {text: i18n.t('tax'), value: 'tax_id'},
                 {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
-                {text: i18n.t('unit'), value: 'unit'},
+                {text: i18n.t('unit'), value: 'unit_id'},
                 {text: i18n.t('status'), value: 'status'},
                 {text: i18n.t('actions'), value: 'actions', sortable: false},
             ],
@@ -606,6 +606,7 @@
                 product_variant_id: '',
                 quantity: '',
                 shipping_cost: '',
+                unit_data: '',
             },
             changeProgress: false,
             validated: false,

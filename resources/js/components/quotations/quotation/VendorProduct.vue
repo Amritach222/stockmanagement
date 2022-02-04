@@ -92,7 +92,7 @@
                                                             <h6>What do you want to do?</h6>
                                                             <v-row class="mt-1 ml-1">
                                                                 <div
-                                                                    v-if="(quotationItem.status === 'Accepted') || (quotationItem.status === 'Pending') || (quotationItem.status === 'Review') || (quotationItem.status === 'Reviewed')">
+                                                                    v-if="(quotationItem.status === 'Accepted') || (quotationItem.status === 'Review') || (quotationItem.status === 'Reviewed')">
                                                                     <CButton size="sm" class="m-1" color="success"
                                                                              @click="allStatusChange('Approved',quotationItem.id)"
                                                                     >
