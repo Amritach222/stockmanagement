@@ -614,6 +614,9 @@ export default {
     async changePurchaseProductStatusRequest(id,data) {
         return await apiCall(POST, `api/purchase/purchaseProducts/change-status/${id}`, data)
     },
+    async changePurchaseProductStatusRequestAd(id,data) {
+        return await apiCall(POST, `api/purchase/purchaseProducts/ad-change-status/${id}`, data)
+    },
     async getUserPurchaseProductRequestHistory() {
         return await apiCall(GET, `api/purchase/user-history`)
     },

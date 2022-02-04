@@ -19,6 +19,26 @@ class PurchaseProductController extends Controller
     public function __construct()
     {
         parent::generateAllMiddlewareByPermission('purchaseProducts');
+        $this->middleware(['role:' . 'Admin|Store Manager'])->only(['changeStatusPr']);
+    }
+
+    public function changeStatusPr($id, PurchaseProductRequest $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['success'] = true;
+            $purchaseProduct = PurchaseProduct::findOrFail($id);
+            $values = $request->all();
+            $purchaseProduct->update($values);
+            event(new ActivityLogEvent('Edit', 'Purchase Product', $purchaseProduct->id));
+            $data['message'] = "Updated successfully.";
+            $data['data'] = new PurchaseProductResource($purchaseProduct);
+        } catch (\Exception $e) {
+            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
     }
 
     public function index()

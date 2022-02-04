@@ -133,6 +133,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('ad-purchase-list', [\App\Http\Controllers\Api\PurchaseController::class, 'adminPurchaseLists']);
         Route::get('dh-purchase-list', [\App\Http\Controllers\Api\PurchaseController::class, 'departmentHeadPurchaseLists']);
         Route::post('purchaseProducts/change-status/{id}', [\App\Http\Controllers\Api\PurchaseController::class, 'changeStatusOfPurchaseListsProducts']);
+        Route::post('purchaseProducts/ad-change-status/{id}', [\App\Http\Controllers\Api\PurchaseProductController::class, 'changeStatusPr']);
     });
 
     Route::apiResource('transfers', \App\Http\Controllers\Api\TransferController::class);

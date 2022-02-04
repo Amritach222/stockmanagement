@@ -166,13 +166,6 @@ export default {
         triggerSelectProduct: Boolean
     },
 
-    watch: {
-        triggerSelectProduct: async function(newVal, oldVal) {
-            let res = await store.dispatch('purchase/addSelectedProducts', this.selected);
-            console.log("selected rows hahha", res);
-        }
-    },
-
     data: () => ({
         cdnURL: config.cdnURL,
         admin: false,
@@ -228,6 +221,11 @@ export default {
             value => !!value || 'Required.',
         ]
     }),
+    watch: {
+        triggerSelectProduct: async function (newVal, oldVal) {
+            let res = await store.dispatch('purchase/addSelectedProducts', this.selected);
+        }
+    },
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'Add Quotation Product' : 'Edit Quotation Product'
@@ -309,32 +307,32 @@ export default {
         },
 
         async denyProduct(item) {
-          let productData = new FormData();
-          productData.append('department_status', 'Rejected');
-          let res = await ApiServices.changePurchaseProductStatusRequest(item.id,productData);
-          if (res.success === true) {
-            this.editedIndex = this.prProducts.indexOf(item);
-            Object.assign(this.prProducts[this.editedIndex], res.data)
-            store.state.home.snackbar = true;
-            store.state.home.snackbarText = "Changed status";
-            store.state.home.snackbarColor = 'green';
-          } else {
-            store.state.home.snackbar = true;
-            store.state.home.snackbarText = "Could not change status";
-            store.state.home.snackbarColor = 'red';
-          }
+            let productData = new FormData();
+            productData.append('department_status', 'Rejected');
+            let res = await ApiServices.changePurchaseProductStatusRequest(item.id, productData);
+            if (res.success === true) {
+                this.editedIndex = this.prProducts.indexOf(item);
+                Object.assign(this.prProducts[this.editedIndex], res.data)
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Changed status";
+                store.state.home.snackbarColor = 'green';
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Could not change status";
+                store.state.home.snackbarColor = 'red';
+            }
         },
 
         async approveProduct(item) {
             let productData = new FormData();
             productData.append('department_status', 'Approved');
-            let res = await ApiServices.changePurchaseProductStatusRequest(item.id,productData);
+            let res = await ApiServices.changePurchaseProductStatusRequest(item.id, productData);
             if (res.success === true) {
-              this.editedIndex = this.prProducts.indexOf(item);
-              Object.assign(this.prProducts[this.editedIndex], res.data)
-              store.state.home.snackbar = true;
-              store.state.home.snackbarText = "Changed status";
-              store.state.home.snackbarColor = 'green';
+                this.editedIndex = this.prProducts.indexOf(item);
+                Object.assign(this.prProducts[this.editedIndex], res.data)
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Changed status";
+                store.state.home.snackbarColor = 'green';
             } else {
                 store.state.home.snackbar = true;
                 store.state.home.snackbarText = "Could not change status";
