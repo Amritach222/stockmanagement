@@ -519,8 +519,7 @@
                 let res = await ApiServices.vendorQuotationStatusUpdate(id, data);
                 if (res.success === true) {
                     this.quotationItem = res.data;
-                    this.quoProducts = [];
-                    this.quoProducts = res.vendor_quotation_products;
+                    this.quoProducts = res.data.vendor_quotation_products;
                 }
             },
 
