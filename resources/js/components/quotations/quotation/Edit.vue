@@ -501,6 +501,11 @@
                                                         Accepted
                                                     </CButton>
                                                 </div>
+                                                <div v-else>
+                                                    <CButton size="sm" class="m-1" color="warning">
+                                                        {{ item.status }}
+                                                    </CButton>
+                                                </div>
                                             </template>
                                             <template v-slot:item.actions="{ item }">
                                                 <router-link
