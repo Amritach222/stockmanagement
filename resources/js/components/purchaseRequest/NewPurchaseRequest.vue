@@ -425,7 +425,12 @@ export default {
                 })
             } else {
                 let searchData = this.prProducts.filter((single) => {
-                    return single.product_id === this.addPurchaseRequestProduct.product_id
+                    if (this.addPurchaseRequestProduct.product_variant_id === undefined || this.addPurchaseRequestProduct.product_variant_id === '') {
+                        return single.product_id === this.addPurchaseRequestProduct.product_id
+                    }
+                    if (single.product_variant_id === this.addPurchaseRequestProduct.product_variant_id && single.product_id === this.addPurchaseRequestProduct.product_id) {
+                        return single.product_id === this.addPurchaseRequestProduct.product_id
+                    }
                 });
                 if (searchData.length === 0) {
                     this.prProducts.push({
