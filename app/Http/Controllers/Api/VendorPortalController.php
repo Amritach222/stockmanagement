@@ -227,11 +227,15 @@ class VendorPortalController extends Controller
             $values = $request->only('status');
             $quotation->update($values);
             foreach ($quotation->vendorQuotationProducts as $product) {
-                if (($request->status == 'Approved') or ($request->status == 'Cancelled')) {
+                if ($request->status == 'Approved') {
+                    if (($product->status == 'Review') or ($product->status == 'Reviewed') or ($product->status == 'Accepted')) {
+                        $product->update($values);
+                    }
+                } elseif(($request->status == 'Cancelled')) {
                     if (($product->status == 'Pending') or ($product->status == 'On Progress') or ($product->status == 'Review') or ($product->status == 'Reviewed') or ($product->status == 'Accepted')) {
                         $product->update($values);
                     }
-                } else {
+                }else {
                     $product->update($values);
                 }
             }
