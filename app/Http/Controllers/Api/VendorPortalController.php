@@ -145,9 +145,11 @@ class VendorPortalController extends Controller
                     $acceptCount = $acceptCount + 1;
                 }
             }
-            if ($acceptCount == count($vendorQuotation->vendorQuotationProducts)) {
-                if ($vendorQuotation->status == 'On Progress') {
+            if ($vendorQuotation->status == 'On Progress') {
+                if ($acceptCount == count($vendorQuotation->vendorQuotationProducts)) {
                     $values['status'] = 'Accepted';
+                } elseif (($acceptCount > 0) && ($acceptCount < count($vendorQuotation->vendorQuotationProducts))) {
+                    $values['status'] = 'Partially Accepted';
                 }
             }
             $vendorQuotation->update($values);
@@ -171,6 +173,7 @@ class VendorPortalController extends Controller
                 $values['status'] = 'Reviewed';
             }
             $quotationProduct->update($values);
+
             $data['data'] = new VendorQuotationProductResource($quotationProduct);
         } catch (\Exception $e) {
             $data['success'] = false;
@@ -188,6 +191,24 @@ class VendorPortalController extends Controller
             $quotationProduct = VendorQuotationProduct::findOrFail($id);
             $values = $request->only('status');
             $quotationProduct->update($values);
+            $vendorQuotation = $quotationProduct->vendorQuotation;
+            $acceptCount = 0;
+            $cancelCount = 0;
+            foreach ($vendorQuotation->vendorQuotationProducts as $product) {
+                if ($product->status == 'Approved') {
+                    $acceptCount = $acceptCount + 1;
+                } elseif ($product->status == 'Cancelled') {
+                    $cancelCount = $cancelCount + 1;
+                }
+            }
+            if (($vendorQuotation->status == 'Accepted') || ($vendorQuotation->status == 'Partially Accepted')) {
+                if ($acceptCount == count($vendorQuotation->vendorQuotationProducts)) {
+                    $vendorQuotation->status = 'Approved';
+                } elseif ($cancelCount == count($vendorQuotation->vendorQuotationProducts)) {
+                    $vendorQuotation->status = 'Cancelled';
+                }
+            }
+            $vendorQuotation->save();
             $data['data'] = new VendorQuotationProductResource($quotationProduct);
         } catch (\Exception $e) {
             $data['success'] = false;
@@ -207,7 +228,7 @@ class VendorPortalController extends Controller
             $quotation->update($values);
             foreach ($quotation->vendorQuotationProducts as $product) {
                 if (($request->status == 'Approved') or ($request->status == 'Cancelled')) {
-                    if (($product->status == 'Pending') or ($product->status == 'On Progress') or ($product->status == 'Review') or ($product->status == 'Reviewed')) {
+                    if (($product->status == 'Pending') or ($product->status == 'On Progress') or ($product->status == 'Review') or ($product->status == 'Reviewed') or ($product->status == 'Accepted')) {
                         $product->update($values);
                     }
                 } else {

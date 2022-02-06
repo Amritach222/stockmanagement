@@ -15,6 +15,7 @@ class VendorQuotationProductResource extends JsonResource
     public function toArray($request)
     {
         $quotationProduct = new QuotationProduct($this->quotationProduct);
+        $vendorQuotation = $this->vendorQuotation;
         $tax = null;
         if ($this->tax_id !== null) {
             $tax = new Tax(\App\Models\Tax::findOrFail($this->tax_id));
@@ -32,6 +33,7 @@ class VendorQuotationProductResource extends JsonResource
             'shipping_cost' => $this->shipping_cost,
             'quotation_product' => $quotationProduct,
             'tax' => $tax,
+            'vendor_quotation_status' => $vendorQuotation->status ?? '',
         ];
     }
 }
