@@ -36,7 +36,7 @@
                                                 <v-text-field
                                                     type="date"
                                                     v-model="editedItem.due_date"
-                                                    prepend-icon="mdi-alpha-d-circle"
+                                                    prepend-icon="mdi-alarm-check"
                                                     :label="$t('due') + ' ' + $t('date')"
                                                     placeholder="Select due date..."
                                                     required
@@ -51,7 +51,7 @@
                                                 <v-text-field
                                                     type="date"
                                                     v-model="editedItem.desired_delivery_date"
-                                                    prepend-icon="mdi-alpha-d-circle"
+                                                    prepend-icon="mdi-briefcase-variant"
                                                     :label="$t('desired') + ' ' + $t('delivery') + ' ' + $t('date')"
                                                     placeholder="Select due date..."
                                                     required
