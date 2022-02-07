@@ -89,7 +89,8 @@
 
                                                     <v-card-text>
                                                         <v-container class="mt-1">
-                                                            <h6>What do you want to do?</h6>
+                                                            <h6 v-if="(quotationItem.status === 'Accepted') || (quotationItem.status === 'Pending') || (quotationItem.status === 'Review') || (quotationItem.status === 'Reviewed') || (quotationItem.status === 'On Progress')">
+                                                                What do you want to do?</h6>
                                                             <v-row class="mt-1 ml-1">
                                                                 <div
                                                                     v-if="(quotationItem.status === 'Accepted') || (quotationItem.status === 'Review') || (quotationItem.status === 'Reviewed')">
