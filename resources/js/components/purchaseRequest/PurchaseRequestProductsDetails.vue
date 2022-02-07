@@ -114,6 +114,7 @@
             {{ getProductName(item.product_id) }}
         </template>
         <template v-slot:item.product_variant_id="{ item }">
+
             {{ getVariantName(item.product_variant_id) }}
         </template>
         <template v-slot:item.unit_id="{ item }">
@@ -195,6 +196,7 @@ export default {
         productCount: 0,
         editedIndex: -1,
         prProducts: [],
+        prVariants: [],
         products: [],
         units: [],
         variants: [],
@@ -234,39 +236,56 @@ export default {
     async created() {
         this.loadItems();
         this.loadUnits();
+        this.loadVariants();
         this.prProducts = this.details;
     },
     methods: {
         getProductName(item) {
             if (item === null || item === undefined) {
-                return "------"
+                return "---"
             }
             let result = this.products.filter(obj => {
                 return obj.id === item;
             });
             if (result[0] === null || result[0] === undefined) {
-                return "------"
+                return "---"
             }
             return result[0].name;
         },
 
         getUnitName(item) {
             if (item === null || item === undefined) {
-                return "------"
+                return "---"
             }
             let result = this.units.filter(obj => {
                 return obj.id === item;
             })
             if (result[0] === null || result[0] === undefined) {
-                return "------"
+                return "---"
             }
             return result[0].name;
         },
 
         getVariantName(item) {
             if (item === null || item === undefined) {
-                return "------"
+                return "---"
+            } else {
+                let result = this.prVariants.filter(obj => {
+                    return obj.id === item;
+                })
+                return result[0].name;
             }
+        },
+
+        loadVariants() {
+            this.details.forEach(async (singleData) => {
+                if (singleData.product_variant_id !== null) {
+                    let rtn = await ApiServices.productVariantShow(singleData.product_variant_id);
+                    rtn = rtn.data.name;
+                    let data = {'name': rtn, 'id': singleData.product_variant_id};
+                    this.prVariants.push(data);
+                }
+            });
         },
 
         async loadItems() {
