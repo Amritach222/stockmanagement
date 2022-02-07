@@ -42,7 +42,10 @@
                                                     required
                                                     :rules="rules"
                                                     solo
+                                                    v-on:change="checkDate('due_date',editedItem.due_date)"
                                                 />
+                                                <p v-if="dueDateValidation" class="date-validation">Please select a due
+                                                    date after the date of today.</p>
                                             </v-col>
                                             <v-col md="4">
                                                 <v-text-field
@@ -54,12 +57,16 @@
                                                     required
                                                     :rules="rules"
                                                     solo
+                                                    v-on:change="checkDate('delivery_date',editedItem.desired_delivery_date)"
                                                 />
+                                                <p v-if="deliveryDateValidation" class="date-validation">Please select a
+                                                    desired delivery
+                                                    date after the date of today.</p>
                                             </v-col>
                                             <v-col md="4">
                                                 <v-text-field
                                                     v-model="editedItem.requested_name"
-                                                    prepend-icon="mdi-alpha-d-circle"
+                                                    prepend-icon="mdi-account"
                                                     :label="$t('requested') + ' ' + $t('name')"
                                                     placeholder="Enter requested user name..."
                                                     required
@@ -568,6 +575,8 @@
             searchV: '',
             searchSV: '',
             dialogV: false,
+            dueDateValidation: false,
+            deliveryDateValidation: false,
             headers: [
                 {text: i18n.t('product'), value: 'product_id'},
                 {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant_id'},
@@ -769,24 +778,49 @@
                 let res = await this.loadProductVendors();
             },
 
+            async checkDate(type, date) {
+                var currDate = new Date().toISOString().slice(0, 10);
+                var inpDate1 = date.replace('-', '');
+                var inpDate2 = inpDate1.replace('-', '');
+                var currDateReplace1 = currDate.replace('-', '');
+                var currDateReplace2 = currDateReplace1.replace('-', '');
+                if (currDateReplace2 > inpDate2) {
+                    if (type === 'due_date') {
+                        this.dueDateValidation = true;
+                    } else {
+                        this.deliveryDateValidation = true;
+                    }
+                } else {
+                    if (type === 'due_date') {
+                        this.dueDateValidation = false;
+                    } else {
+                        this.deliveryDateValidation = false;
+                    }
+                }
+            },
+
             async edit() {
                 this.validate();
-                if (this.validated) {
-                    this.changeProgress = true;
-                    const data = new FormData();
-                    data.append('department_id', this.editedItem.department_id);
-                    data.append('note', this.editedItem.note);
+                let due = await this.checkDate('due_date', this.editedItem.due_date);
+                let delivery = await this.checkDate('delivery_date', this.editedItem.desired_delivery_date);
+                if ((this.deliveryDateValidation !== false) && (this.dueDateValidation !== false)) {
+                    if (this.validated) {
+                        this.changeProgress = true;
+                        const data = new FormData();
+                        data.append('department_id', this.editedItem.department_id);
+                        data.append('note', this.editedItem.note);
 
-                    if ('file' in this.editedItem) {
-                        if (typeof this.editedItem.file.name == 'string') {
-                            data.append('file', this.editedItem.file);
+                        if ('file' in this.editedItem) {
+                            if (typeof this.editedItem.file.name == 'string') {
+                                data.append('file', this.editedItem.file);
+                            }
                         }
-                    }
 
-                    let res = await ApiServices.quotationEdit(this.editedItem.id, data);
-                    this.changeProgress = false;
-                    if (res.success === true) {
-                        route.replace('/quotations/');
+                        let res = await ApiServices.quotationEdit(this.editedItem.id, data);
+                        this.changeProgress = false;
+                        if (res.success === true) {
+                            route.replace('/quotations/');
+                        }
                     }
                 }
             },

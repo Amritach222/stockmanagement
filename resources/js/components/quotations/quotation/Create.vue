@@ -57,7 +57,7 @@
                                                     required
                                                     :rules="rules"
                                                     solo
-                                                    @change="checkDate('delivery_date',desired_delivery_date)"
+                                                    v-on:change="checkDate('delivery_date',desired_delivery_date)"
                                                 />
                                                 <p v-if="deliveryDateValidation" class="date-validation">Please select a
                                                     desired delivery date after the date of today.</p>
@@ -65,7 +65,7 @@
                                             <v-col md="4">
                                                 <v-text-field
                                                     v-model="requested_name"
-                                                    prepend-icon="mdi-alpha-d-circle"
+                                                    prepend-icon="mdi-account"
                                                     :label="$t('requested') + ' ' + $t('name')"
                                                     placeholder="Enter requested user name..."
                                                     required
