@@ -53,10 +53,10 @@ class Quotation extends Model
         return $status;
     }
 
-    public function getProductStatus($product_id)
+    public function getProductStatus($id)
     {
-        $quotationProductIds = QuotationProduct::where('quotation_id', $this->id)->where('product_id', $product_id)->pluck('id');
-        $vendorQuotationProducts = VendorQuotationProduct::whereIn('quotation_product_id', $quotationProductIds)->get();
+        $quotationProduct = QuotationProduct::findOrFail($id);
+        $vendorQuotationProducts = VendorQuotationProduct::where('quotation_product_id', $quotationProduct->id)->get();
         $accepted_count = 0;
         $approved_count = 0;
         $rejected_count = 0;

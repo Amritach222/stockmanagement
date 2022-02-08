@@ -19,7 +19,7 @@ class QuotationProduct extends JsonResource
         $tax = $this->tax_id ? new Tax($this->tax) : null;
         $unit = $this->unit_id ? new Unit($this->unit) : null;
         $quotation = \App\Models\Quotation::findOrFail($this->quotation_id);
-        $status = $quotation->getProductStatus($this->product_id);
+        $status = $quotation->getProductStatus($this->id);
         return [
             'id' => $this->id,
             'quotation_id' => $this->quotation_id,

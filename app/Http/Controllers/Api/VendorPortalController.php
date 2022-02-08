@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\QuotationProduct;
 use App\Http\Resources\VendorQuotationProductResource;
 use App\Models\File;
 use App\Models\Product;
@@ -91,6 +92,10 @@ class VendorPortalController extends Controller
                     $product->status = 'On Progress';
                     $product->save();
                 }
+            }
+            if ($quotation->status == 'Pending') {
+                $quotation->status = 'Reviewed';
+                $quotation->save();
             }
             $data['data'] = new \App\Http\Resources\Vendor\Quotation($quotation);
         } catch (\Exception $e) {
@@ -216,6 +221,26 @@ class VendorPortalController extends Controller
                 }
             }
             $vendorQuotation->save();
+            $quotation = Quotation::findOrFail($vendorQuotation->quotation_id);
+            $quotationProducts = QuotationProduct::collection($quotation->quotationProducts);
+
+            $approveCount = 0;
+            $rejectCount = 0;
+            foreach ($quotationProducts as $quoProduct) {
+                if ($quoProduct->status == 'Approved') {
+                    $approveCount = $approveCount + 1;
+                } elseif (($quoProduct->status == 'Cancelled') || ($quoProduct->status == 'Rejected')) {
+                    $rejectCount = $rejectCount + 1;
+                }
+            }
+            if (($quotation->status == 'Reviewed') || ($quotation->status == 'Pending')) {
+                if ($approveCount == count($quotationProducts)) {
+                    $quotation->status = 'Approved';
+                } elseif ($rejectCount == count($quotationProducts)) {
+                    $quotation->status = 'Rejected';
+                }
+            }
+            $quotation->save();
             $data['data'] = new VendorQuotationProductResource($quotationProduct);
         } catch (\Exception $e) {
             $data['success'] = false;
