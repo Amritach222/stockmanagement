@@ -88,7 +88,7 @@ class QuotationController extends Controller
             }
             $quotation = new Quotation($values);
             $quotation->save();
-            $quotation->reference_no = 'QUO-0'.$year . $month . '-' . $quotation->id;
+            $quotation->reference_no = 'QUO-0' . $year . $month . '-' . $quotation->id;
             $quotation->save();
             event(new ActivityLogEvent('Add', 'Quotation', $quotation->id));
             $data['message'] = "Quotation added successfully.";
@@ -177,7 +177,20 @@ class QuotationController extends Controller
             $data['success'] = true;
             $quotation = Quotation::findOrFail($id);
             foreach ($quotation->quotationProducts as $product) {
+                foreach ($product->vendorQuotationProducts as $vendorQuotationProduct) {
+                    $vendorQuotationProduct->delete();
+                }
                 $product->delete();
+            }
+            foreach ($quotation->vendorQuotations as $vendorQuotation) {
+                $fileHelper1 = new SamundraFileHelper();
+                if ($quotation->file_id !== null) {
+                    $file = File::where('id', $vendorQuotation->file_id)->first();
+                    if ($file !== null) {
+                        $fileHelper1->deleteFile($file->path);
+                    }
+                }
+                $vendorQuotation->delete();
             }
             $fileHelper = new SamundraFileHelper();
             if ($quotation->file_id !== null) {
