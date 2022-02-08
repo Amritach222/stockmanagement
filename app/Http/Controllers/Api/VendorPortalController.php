@@ -191,7 +191,14 @@ class VendorPortalController extends Controller
             $quotationProduct = VendorQuotationProduct::findOrFail($id);
             $values = $request->only('status');
             $quotationProduct->update($values);
-            $vendorQuotation = $quotationProduct->vendorQuotation;
+            if ($request->status == 'Approved') {
+                $vendorQuotationProducts = VendorQuotationProduct::where('id', '!=', $id)->where('quotation_product_id', $quotationProduct->quotation_product_id)->get();
+                foreach ($vendorQuotationProducts as $vendorQuotationProduct) {
+                    $vendorQuotationProduct->status = 'Cancelled';
+                    $vendorQuotationProduct->save();
+                }
+            }
+            $vendorQuotation = VendorQuotation::findOrFail($quotationProduct->vendor_quotation_id);
             $acceptCount = 0;
             $cancelCount = 0;
             foreach ($vendorQuotation->vendorQuotationProducts as $product) {
@@ -213,6 +220,7 @@ class VendorPortalController extends Controller
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
         }
         return $data;
     }
@@ -231,11 +239,11 @@ class VendorPortalController extends Controller
                     if (($product->status == 'Review') or ($product->status == 'Reviewed') or ($product->status == 'Accepted')) {
                         $product->update($values);
                     }
-                } elseif(($request->status == 'Cancelled')) {
+                } elseif (($request->status == 'Cancelled')) {
                     if (($product->status == 'Pending') or ($product->status == 'On Progress') or ($product->status == 'Review') or ($product->status == 'Reviewed') or ($product->status == 'Accepted')) {
                         $product->update($values);
                     }
-                }else {
+                } else {
                     $product->update($values);
                 }
             }
