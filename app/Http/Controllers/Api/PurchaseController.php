@@ -8,6 +8,7 @@ use App\Http\Requests\PurchaseProductRequest;
 use App\Http\Requests\PurchaseRequest;
 use App\Http\Resources\Purchase as PurchaseResource;
 use App\Http\Resources\PurchaseProduct as PurchaseProductResource;
+use App\Http\Resources\PurchaseRequestAdminResource;
 use App\Models\File;
 use App\Models\Product;
 use App\Models\ProductVariant;
@@ -56,12 +57,12 @@ class PurchaseController extends Controller
         $data['message'] = '';
         $data['data'] = [];
 
-        $purchases = Purchase::with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
+        $purchases = Purchase::whereHas('purchaseProducts', function ($query) {
             $query->where('department_status', 'Approved');
         }
         )->get();
 
-        $data['data'] = PurchaseResource::collection($purchases);
+        $data['data'] = PurchaseRequestAdminResource::collection($purchases);
         return $data;
     }
 

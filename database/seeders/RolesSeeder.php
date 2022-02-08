@@ -94,6 +94,7 @@ class RolesSeeder extends Seeder
             $departmentHead->givePermissionTo('freezeBudgets');
             $departmentHead->givePermissionTo('units');
             $departmentHead->givePermissionTo('products');
+            $departmentHead->givePermissionTo('productVariants');
 
             $staff = Role::create([
                 'name' => 'Staff',
