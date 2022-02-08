@@ -267,6 +267,10 @@
                                                     }}</p>
                                                 <p v-else class="mt-3">---</p>
                                             </template>
+                                            <template v-slot:item.price="{ item }">
+                                                <p v-if="item.price" class="mt-3">{{ item.price }}</p>
+                                                <p v-else class="mt-3">0</p>
+                                            </template>
                                             <template v-slot:item.tax_id="{ item }">
                                                 <p v-if="item.tax_id" class="mt-3">{{ item.tax.value }}%</p>
                                                 <p v-else class="mt-3">0</p>
@@ -581,6 +585,7 @@
                 {text: i18n.t('product'), value: 'product_id'},
                 {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant_id'},
                 {text: i18n.t('quantity'), value: 'quantity'},
+                {text: i18n.t('price'), value: 'price'},
                 {text: i18n.t('tax'), value: 'tax_id'},
                 {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
                 {text: i18n.t('unit'), value: 'unit_id'},

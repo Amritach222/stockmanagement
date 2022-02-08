@@ -196,7 +196,15 @@ class VendorPortalController extends Controller
             $quotationProduct = VendorQuotationProduct::findOrFail($id);
             $values = $request->only('status');
             $quotationProduct->update($values);
+
             if ($request->status == 'Approved') {
+                $quoProduct = \App\Models\QuotationProduct::findOrFail($quotationProduct->quotation_product_id);
+                $quoProduct->price = $quotationProduct->price;
+                $quoProduct->shipping_cost = $quotationProduct->shipping_cost;
+                $quoProduct->quantity = $quotationProduct->quantity;
+                $quoProduct->tax_id = $quotationProduct->tax_id;
+                $quoProduct->save();
+
                 $vendorQuotationProducts = VendorQuotationProduct::where('id', '!=', $id)->where('quotation_product_id', $quotationProduct->quotation_product_id)->get();
                 foreach ($vendorQuotationProducts as $vendorQuotationProduct) {
                     $vendorQuotationProduct->status = 'Cancelled';
@@ -221,6 +229,7 @@ class VendorPortalController extends Controller
                 }
             }
             $vendorQuotation->save();
+
             $quotation = Quotation::findOrFail($vendorQuotation->quotation_id);
             $quotationProducts = QuotationProduct::collection($quotation->quotationProducts);
 
@@ -256,13 +265,19 @@ class VendorPortalController extends Controller
         $data['message'] = '';
         $data['data'] = [];
         try {
-            $quotation = VendorQuotation::findOrFail($id);
+            $vendorQuotation = VendorQuotation::findOrFail($id);
             $values = $request->only('status');
-            $quotation->update($values);
-            foreach ($quotation->vendorQuotationProducts as $product) {
+            $vendorQuotation->update($values);
+            foreach ($vendorQuotation->vendorQuotationProducts as $product) {
                 if ($request->status == 'Approved') {
                     if (($product->status == 'Review') or ($product->status == 'Reviewed') or ($product->status == 'Accepted')) {
                         $product->update($values);
+                        $quotationProduct = \App\Models\QuotationProduct::findOrFail($product->quotation_product_id);
+                        $quotationProduct->price = $product->price;
+                        $quotationProduct->shipping_cost = $product->shipping_cost;
+                        $quotationProduct->quantity = $product->quantity;
+                        $quotationProduct->tax_id = $product->tax_id;
+                        $quotationProduct->save();
                     }
                 } elseif (($request->status == 'Cancelled')) {
                     if (($product->status == 'Pending') or ($product->status == 'On Progress') or ($product->status == 'Review') or ($product->status == 'Reviewed') or ($product->status == 'Accepted')) {
@@ -272,8 +287,30 @@ class VendorPortalController extends Controller
                     $product->update($values);
                 }
             }
+
+            $quotation = Quotation::findOrFail($vendorQuotation->quotation_id);
+            $quotationProducts = QuotationProduct::collection($quotation->quotationProducts);
+
+            $approveCount = 0;
+            $rejectCount = 0;
+            foreach ($quotationProducts as $quoProduct) {
+                if ($quoProduct->status == 'Approved') {
+                    $approveCount = $approveCount + 1;
+                } elseif (($quoProduct->status == 'Cancelled') || ($quoProduct->status == 'Rejected')) {
+                    $rejectCount = $rejectCount + 1;
+                }
+            }
+            if (($quotation->status == 'Reviewed') || ($quotation->status == 'Pending')) {
+                if ($approveCount == count($quotationProducts)) {
+                    $quotation->status = 'Approved';
+                } elseif ($rejectCount == count($quotationProducts)) {
+                    $quotation->status = 'Rejected';
+                }
+            }
+            $quotation->save();
+            $data['quotation'] = new \App\Http\Resources\Quotation($quotation);
             $data['message'] = 'Status updated successfully';
-            $data['data'] = new \App\Http\Resources\VendorQuotation($quotation);
+            $data['data'] = new \App\Http\Resources\VendorQuotation($vendorQuotation);
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
