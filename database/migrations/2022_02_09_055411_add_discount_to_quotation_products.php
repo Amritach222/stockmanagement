@@ -14,7 +14,8 @@ class AddDiscountToQuotationProducts extends Migration
     public function up()
     {
         Schema::table('quotation_products', function (Blueprint $table) {
-            //
+            $table->enum('discount_type', ['Percent', 'Amount'])->nullable()->default('Percent');
+            $table->integer('discount')->nullable();
         });
     }
 
@@ -26,9 +27,8 @@ class AddDiscountToQuotationProducts extends Migration
     public function down()
     {
         Schema::table('quotation_products', function (Blueprint $table) {
-            $table->enum('discount_type', ['Percent', 'Amount'])->nullable()->default('Percent');
-            $table->integer('discount')->nullable();
-            $table->integer('total')->nullable();
+            $table->dropColumn('discount_type');
+            $table->dropColumn('discount');
         });
     }
 }

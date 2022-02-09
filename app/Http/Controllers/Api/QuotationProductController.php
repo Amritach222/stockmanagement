@@ -51,12 +51,11 @@ class QuotationProductController extends Controller
             if ($request->product_variant_id != null) {
                 $variant = ProductVariant::findOrFail($request->product_variant_id);
             }
-            $price = $variant != null ? $product->cost_price + $variant->price : $product->cost_price;
+//            $price = $variant != null ? $product->cost_price + $variant->price : $product->cost_price;
 //            $values['price'] = $price;
 //            $values['tax_id'] = $product->tax_id;
             $quotationProduct = new QuotationProduct($values);
             $quotationProduct->save();
-            $quotationProduct->taxCalculate();
             event(new ActivityLogEvent('Add', 'Quotation Product', $quotationProduct->id));
             $data['message'] = "Quotation Product added successfully.";
             $data['data'] = new QuotationProductResource($quotationProduct);
@@ -114,8 +113,6 @@ class QuotationProductController extends Controller
 //
 //            $values['tax_id'] = $product->tax_id;
             $quotationProduct->update($values);
-            $quotationProduct->update($values);
-            $quotationProduct->taxCalculate();
 
             event(new ActivityLogEvent('Edit', 'Quotation Product', $quotationProduct->id));
             $data['message'] = "Updated successfully.";
