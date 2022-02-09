@@ -846,7 +846,7 @@ export default {
                 this.validate();
                 this.checkDate('due_date', this.due_date);
                 this.checkDate('delivery_date', this.desired_delivery_date);
-                if ((this.deliveryDateValidation !== false) && (this.dueDateValidation !== false)) {
+                if ((this.deliveryDateValidation === false) && (this.dueDateValidation === false)) {
                     if (this.validated) {
                         this.dialogVConfirm = true;
                     }
@@ -861,7 +861,7 @@ export default {
             this.validate();
             this.checkDate('due_date', this.due_date);
             this.checkDate('delivery_date', this.desired_delivery_date);
-            if ((this.deliveryDateValidation !== false) && (this.dueDateValidation !== false)) {
+            if ((this.deliveryDateValidation === false) && (this.dueDateValidation === false)) {
                 if (this.validated) {
                     this.createProgress = true;
                     const data = new FormData();
