@@ -455,238 +455,239 @@
 </template>
 
 <script>
-    import store from "../../../store";
-    import route from "../../../router";
-    import i18n from "../../../i18n";
-    import ApiServices from "../../../services/ApiServices";
-    import config from "../../../config";
+import store from "../../../store";
+import route from "../../../router";
+import i18n from "../../../i18n";
+import ApiServices from "../../../services/ApiServices";
+import config from "../../../config";
 
-    export default {
-        name: "QuotationCreate",
+export default {
+    name: "QuotationCreate",
 
-        props: {
-            source: String,
+    props: {
+        source: String,
+    },
+    data: () => ({
+        cdnURL: config.cdnURL,
+        createProgress: false,
+        search: '',
+        searchV: '',
+        searchSV: '',
+        progressL: false,
+        dialog: false,
+        dialogV: false,
+        dialogDelete: false,
+        dialogVDelete: false,
+        dueDateValidation: false,
+        deliveryDateValidation: false,
+        headers: [
+            {text: i18n.t('product'), value: 'product_name'},
+            {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant'},
+            {text: i18n.t('quantity'), value: 'quantity'},
+            {text: i18n.t('unit'), value: 'unit'},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
+        ],
+        headersV: [
+            {text: i18n.t('name'), value: 'name'},
+            {text: i18n.t('email'), value: 'email'},
+            {text: i18n.t('company_name'), value: 'company_name'},
+            {text: i18n.t('mobile'), value: 'mobile'},
+            {text: i18n.t('actions'), value: 'actions', sortable: false},
+        ],
+        headersSV: [
+            {text: i18n.t('name'), value: 'name'},
+            {text: i18n.t('email'), value: 'email'},
+            {text: i18n.t('company_name'), value: 'company_name'},
+            {text: i18n.t('mobile'), value: 'mobile'},
+        ],
+        quotations: [],
+        tableLoad: false,
+        hasVariants: false,
+        department_id: '',
+        due_date: '',
+        desired_delivery_date: '',
+        requested_name: '',
+        file: [],
+        note: '',
+        departments: [],
+        productCount: 0,
+        editedIndex: -1,
+        quoProducts: [],
+        vendors: [],
+        quoVendors: [],
+        products: [],
+        units: [],
+        selectVendors: [],
+        selectedVendors: [],
+        variants: [],
+        singleSelect: false,
+        selected: [],
+        deleteProduct: [],
+        vendorCard: false,
+        successCount: 0,
+        addQuoProduct: {
+            product_id: '',
+            product_variant_id: '',
+            quantity: '',
         },
-        data: () => ({
-            cdnURL: config.cdnURL,
-            createProgress: false,
-            search: '',
-            searchV: '',
-            searchSV: '',
-            progressL: false,
-            dialog: false,
-            dialogV: false,
-            dialogDelete: false,
-            dialogVDelete: false,
-            dueDateValidation: false,
-            deliveryDateValidation: false,
-            headers: [
-                {text: i18n.t('product'), value: 'product_name'},
-                {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant'},
-                {text: i18n.t('quantity'), value: 'quantity'},
-                {text: i18n.t('unit'), value: 'unit'},
-                {text: i18n.t('actions'), value: 'actions', sortable: false},
-            ],
-            headersV: [
-                {text: i18n.t('name'), value: 'name'},
-                {text: i18n.t('email'), value: 'email'},
-                {text: i18n.t('company_name'), value: 'company_name'},
-                {text: i18n.t('mobile'), value: 'mobile'},
-                {text: i18n.t('actions'), value: 'actions', sortable: false},
-            ],
-            headersSV: [
-                {text: i18n.t('name'), value: 'name'},
-                {text: i18n.t('email'), value: 'email'},
-                {text: i18n.t('company_name'), value: 'company_name'},
-                {text: i18n.t('mobile'), value: 'mobile'},
-            ],
-            quotations: [],
-            tableLoad: false,
-            hasVariants: false,
+        productQuo: {
+            product_id: '',
+            product_variant_id: '',
+            quantity: '',
+        },
+        error: {
             department_id: '',
-            due_date: '',
-            desired_delivery_date: '',
-            requested_name: '',
             file: [],
             note: '',
-            departments: [],
-            productCount: 0,
-            editedIndex: -1,
-            quoProducts: [],
-            vendors: [],
-            quoVendors: [],
-            products: [],
-            units: [],
-            selectVendors: [],
-            selectedVendors: [],
-            variants: [],
-            singleSelect: false,
-            selected: [],
-            deleteProduct: [],
-            vendorCard: false,
-            successCount: 0,
-            addQuoProduct: {
-                product_id: '',
-                product_variant_id: '',
-                quantity: '',
-            },
-            productQuo: {
-                product_id: '',
-                product_variant_id: '',
-                quantity: '',
-            },
-            error: {
-                department_id: '',
-                file: [],
-                note: '',
-            },
-            rules: [
-                value => !!value || 'Required.',
-            ]
-        }),
-        computed: {
-            formTitle() {
-                return this.editedIndex === -1 ? i18n.t('card_title.add_quotation_product') : i18n.t('card_title.edit_quotation_product')
-            },
         },
-        async created() {
-            this.loadDepartments();
+        rules: [
+            value => !!value || 'Required.',
+        ]
+    }),
+    computed: {
+        formTitle() {
+            return this.editedIndex === -1 ? i18n.t('card_title.add_quotation_product') : i18n.t('card_title.edit_quotation_product')
+        },
+    },
+    async created() {
+        this.loadDepartments();
+        this.loadItems();
+        this.loadUserName();
+        this.loadVendors();
+        this.loadUnits();
+    },
+    methods: {
+        async loadDepartments() {
+            let res = await ApiServices.departmentList();
+            if (res.success === true) {
+                this.departments = res.data;
+            }
+        },
+        async loadUnits() {
+            let res = await ApiServices.unitList();
+            if (res.success === true) {
+                this.units = res.data;
+            }
+        },
+
+        async loadItems() {
+            let res = await ApiServices.productList();
+            if (res.success === true) {
+                this.products = res.data;
+            }
+        },
+
+        async loadUserName() {
+            let user = JSON.parse(localStorage.getItem('userData'));
+            this.requested_name = user.name;
+        },
+
+        async loadVendors() {
+            let res = await ApiServices.vendorList();
+            if (res.success === true) {
+                this.vendors = res.data;
+            }
+        },
+
+        async getVariants(product) {
+            let res = await ApiServices.productShow(product);
+            if (res.success === true) {
+                if (res.data.product_variants.length > 0) {
+                    this.hasVariants = true;
+                } else {
+                    this.hasVariants = false;
+                }
+                this.variants = res.data.product_variants;
+            }
+        },
+
+        editItem(item) {
+            this.editedIndex = this.quoProducts.indexOf(item)
+            this.addQuoProduct = Object.assign({}, item)
+            this.dialog = true
+        },
+
+        deleteItem(item) {
+            this.editedIndex = this.quoProducts.indexOf(item)
+            this.addQuoProduct = Object.assign({}, item)
+            this.dialogDelete = true
+        },
+
+        deleteVItem(item) {
+            this.editedIndex = this.quoVendors.indexOf(item)
+            this.dialogVDelete = true
+        },
+
+        async deleteItemConfirm() {
+            this.deleteProduct = this.quoProducts[this.editedIndex];
+            this.quoProducts.splice(this.editedIndex, 1)
+            let ven = await this.loadProductVendors();
+            // let res = await this.deleteProductVendor();
+            this.closeDelete()
+        },
+
+        async deleteVConfirm() {
+            this.quoVendors.splice(this.editedIndex, 1)
+            this.closeVDelete()
+        },
+
+        // async deleteProductVendor() {
+        //     let vendors = [];
+        //     console.log('after', vendors)
+        //     for (let j = 0; j < this.quoVendors.length; j++) {
+        //         for (let k = 0; k < this.selectVendors.length; k++) {
+        //             if (this.quoVendors[j].id === this.selectVendors[k].id) {
+        //                 if (!(vendors.indexOf(this.quoVendors[j]) >= 0)) {
+        //                     vendors.push(this.quoVendors[j]);
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     this.quoVendors = vendors;
+        // },
+
+        async setSelectedVendors() {
+            this.selectedVendors = Object.assign({}, this.quoVendors);
+        },
+
+        close() {
+            this.progressL = false;
+            this.dialog = false;
+            this.$nextTick(() => {
+                this.addQuoProduct = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            });
             this.loadItems();
-            this.loadUserName();
-            this.loadVendors();
-            this.loadUnits();
         },
-        methods: {
-            async loadDepartments() {
-                let res = await ApiServices.departmentList();
-                if (res.success === true) {
-                    this.departments = res.data;
-                }
-            },
-            async loadUnits() {
-                let res = await ApiServices.unitList();
-                if (res.success === true) {
-                    this.units = res.data;
-                }
-            },
 
-            async loadItems() {
-                let res = await ApiServices.productList();
-                if (res.success === true) {
-                    this.products = res.data;
-                }
-            },
+        closeV() {
+            this.progressL = false;
+            this.dialogV = false;
+        },
 
-            async loadUserName() {
-                let user = JSON.parse(localStorage.getItem('userData'));
-                this.requested_name = user.name;
-            },
+        closeDelete() {
+            this.dialogDelete = false
+            this.$nextTick(() => {
+                this.addQuoProduct = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            })
+        },
 
-            async loadVendors() {
-                let res = await ApiServices.vendorList();
-                if (res.success === true) {
-                    this.vendors = res.data;
-                }
-            },
+        closeVDelete() {
+            this.dialogVDelete = false
+            this.$nextTick(() => {
+                this.editedIndex = -1
+            })
+        },
 
-            async getVariants(product) {
-                let res = await ApiServices.productShow(product);
-                if (res.success === true) {
-                    if (res.data.product_variants.length > 0) {
-                        this.hasVariants = true;
-                    } else {
-                        this.hasVariants = false;
-                    }
-                    this.variants = res.data.product_variants;
-                }
-            },
+        async openDialogV() {
+            this.selected = this.quoVendors;
+            this.dialogV = true;
+            let res = await this.loadProductVendors();
+        },
 
-            editItem(item) {
-                this.editedIndex = this.quoProducts.indexOf(item)
-                this.addQuoProduct = Object.assign({}, item)
-                this.dialog = true
-            },
-
-            deleteItem(item) {
-                this.editedIndex = this.quoProducts.indexOf(item)
-                this.addQuoProduct = Object.assign({}, item)
-                this.dialogDelete = true
-            },
-
-            deleteVItem(item) {
-                this.editedIndex = this.quoVendors.indexOf(item)
-                this.dialogVDelete = true
-            },
-
-            async deleteItemConfirm() {
-                this.deleteProduct = this.quoProducts[this.editedIndex];
-                this.quoProducts.splice(this.editedIndex, 1)
-                let ven = await this.loadProductVendors();
-                // let res = await this.deleteProductVendor();
-                this.closeDelete()
-            },
-
-            async deleteVConfirm() {
-                this.quoVendors.splice(this.editedIndex, 1)
-                this.closeVDelete()
-            },
-
-            // async deleteProductVendor() {
-            //     let vendors = [];
-            //     console.log('after', vendors)
-            //     for (let j = 0; j < this.quoVendors.length; j++) {
-            //         for (let k = 0; k < this.selectVendors.length; k++) {
-            //             if (this.quoVendors[j].id === this.selectVendors[k].id) {
-            //                 if (!(vendors.indexOf(this.quoVendors[j]) >= 0)) {
-            //                     vendors.push(this.quoVendors[j]);
-            //                 }
-            //             }
-            //         }
-            //     }
-            //     this.quoVendors = vendors;
-            // },
-
-            async setSelectedVendors() {
-                this.selectedVendors = Object.assign({}, this.quoVendors);
-            },
-
-            close() {
-                this.progressL = false;
-                this.dialog = false;
-                this.$nextTick(() => {
-                    this.addQuoProduct = Object.assign({}, this.defaultItem)
-                    this.editedIndex = -1
-                });
-                this.loadItems();
-            },
-
-            closeV() {
-                this.progressL = false;
-                this.dialogV = false;
-            },
-
-            closeDelete() {
-                this.dialogDelete = false
-                this.$nextTick(() => {
-                    this.addQuoProduct = Object.assign({}, this.defaultItem)
-                    this.editedIndex = -1
-                })
-            },
-
-            closeVDelete() {
-                this.dialogVDelete = false
-                this.$nextTick(() => {
-                    this.editedIndex = -1
-                })
-            },
-
-            async openDialogV() {
-                this.selected = this.quoVendors;
-                this.dialogV = true;
-                let res = await this.loadProductVendors();
-            },
-
-            async loadProductVendors() {
+        async loadProductVendors() {
+            if (this.quoProducts.length > 0) {
                 for (let i = 0; i < this.quoProducts.length; i++) {
                     let res = await ApiServices.vendorProductIds('vendor', this.quoProducts[i].product_id);
                     if (res.success === true) {
@@ -702,165 +703,170 @@
                         }
                     }
                 }
-            },
+            } else {
+                this.vendorCard = false;
+                this.selectVendors = [];
+                this.quoVendors = [];
+            }
+        },
 
-            async addVendor() {
-                this.quoVendors = this.selected;
-                this.selected = [];
-                this.dialogV = false;
-            },
+        async addVendor() {
+            this.quoVendors = this.selected;
+            this.selected = [];
+            this.dialogV = false;
+        },
 
-            async addProduct() {
-                var varName = '---';
-                var varId = '';
-                var unit = 'Kilogram';
-                let res = await ApiServices.productShow(this.addQuoProduct.product_id);
-                if (this.addQuoProduct.product_variant_id) {
-                    let rtn = await ApiServices.productVariantShow(this.addQuoProduct.product_variant_id);
-                    varName = rtn.data.name;
-                    varId = rtn.data.id;
+        async addProduct() {
+            var varName = '---';
+            var varId = '';
+            var unit = '';
+            let res = await ApiServices.productShow(this.addQuoProduct.product_id);
+            if (this.addQuoProduct.product_variant_id) {
+                let rtn = await ApiServices.productVariantShow(this.addQuoProduct.product_variant_id);
+                varName = rtn.data.name;
+                varId = rtn.data.id;
+            }
+            for (var i = 0; i < this.units.length; i++) {
+                if (this.addQuoProduct.unit_id === this.units[i].id) {
+                    unit = this.units[i].name;
                 }
-                // let rtn = await ApiServices.unitShow(this.addQuoProduct.unit_id);
-                // if (this.addQuoProduct.unit_id) {
-                //     let rtn = await ApiServices.productVariantShow(this.addQuoProduct.unit_id);
-                //     unit = rtn.data.name;
-                // }
-                if (this.editedIndex > -1) {
-                    Object.assign(this.quoProducts[this.editedIndex], {
-                        'product_id': this.addQuoProduct.product_id,
-                        'product_name': res.data.name,
-                        'product_variant': varName,
-                        'product_variant_id': varId,
-                        'unit': unit,
-                        'unit_id': this.addQuoProduct.unit_id,
-                        'quantity': this.addQuoProduct.quantity,
-                        // 'shipping_cost': this.addQuoProduct.shipping_cost,
-                    })
+            }
+            if (this.editedIndex > -1) {
+                Object.assign(this.quoProducts[this.editedIndex], {
+                    'product_id': this.addQuoProduct.product_id,
+                    'product_name': res.data.name,
+                    'product_variant': varName,
+                    'product_variant_id': varId,
+                    'unit': unit,
+                    'unit_id': this.addQuoProduct.unit_id,
+                    'quantity': this.addQuoProduct.quantity,
+                    // 'shipping_cost': this.addQuoProduct.shipping_cost,
+                })
+            } else {
+                this.quoProducts.push({
+                    'product_id': this.addQuoProduct.product_id,
+                    'product_name': res.data.name,
+                    'product_variant_id': varId,
+                    'product_variant': varName,
+                    'unit': unit,
+                    'unit_id': this.addQuoProduct.unit_id,
+                    'quantity': this.addQuoProduct.quantity,
+                    // 'shipping_cost': this.addQuoProduct.shipping_cost,
+                });
+            }
+            if (this.quoProducts.length > 0) {
+                this.vendorCard = true;
+            }
+            this.$refs.form.reset();
+            this.close()
+        },
+
+        async checkDate(type, date) {
+            var currDate = new Date().toISOString().slice(0, 10);
+            var inpDate1 = date.replace('-', '');
+            var inpDate2 = inpDate1.replace('-', '');
+            var currDateReplace1 = currDate.replace('-', '');
+            var currDateReplace2 = currDateReplace1.replace('-', '');
+            if (currDateReplace2 > inpDate2) {
+                if (type === 'due_date') {
+                    this.dueDateValidation = true;
                 } else {
-                    this.quoProducts.push({
-                        'product_id': this.addQuoProduct.product_id,
-                        'product_name': res.data.name,
-                        'product_variant_id': varId,
-                        'product_variant': varName,
-                        'unit': unit,
-                        'unit_id': this.addQuoProduct.unit_id,
-                        'quantity': this.addQuoProduct.quantity,
-                        // 'shipping_cost': this.addQuoProduct.shipping_cost,
-                    });
+                    this.deliveryDateValidation = true;
                 }
-                if (this.quoProducts.length > 0) {
-                    this.vendorCard = true;
-                }
-                this.$refs.form.reset();
-                this.close()
-            },
-
-            async checkDate(type, date) {
-                var currDate = new Date().toISOString().slice(0, 10);
-                var inpDate1 = date.replace('-', '');
-                var inpDate2 = inpDate1.replace('-', '');
-                var currDateReplace1 = currDate.replace('-', '');
-                var currDateReplace2 = currDateReplace1.replace('-', '');
-                if (currDateReplace2 > inpDate2) {
-                    if (type === 'due_date') {
-                        this.dueDateValidation = true;
-                    } else {
-                        this.deliveryDateValidation = true;
-                    }
+            } else {
+                if (type === 'due_date') {
+                    this.dueDateValidation = false;
                 } else {
-                    if (type === 'due_date') {
-                        this.dueDateValidation = false;
-                    } else {
-                        this.deliveryDateValidation = false;
-                    }
+                    this.deliveryDateValidation = false;
                 }
-            },
+            }
+        },
 
-            async create() {
-                this.validate();
-                this.checkDate('due_date', this.due_date);
-                this.checkDate('delivery_date', this.desired_delivery_date);
-                if ((this.deliveryDateValidation !== false) && (this.dueDateValidation !== false)) {
-                    if (this.validated) {
-                        this.createProgress = true;
-                        const data = new FormData();
-                        data.append('note', this.note);
-                        data.append('department_id', this.department_id);
-                        data.append('due_date', this.due_date);
-                        data.append('desired_delivery_date', this.desired_delivery_date);
-                        data.append('requested_name', this.requested_name);
+        async create() {
+            this.validate();
+            this.checkDate('due_date', this.due_date);
+            this.checkDate('delivery_date', this.desired_delivery_date);
+            if ((this.deliveryDateValidation !== false) && (this.dueDateValidation !== false)) {
+                if (this.validated) {
+                    this.createProgress = true;
+                    const data = new FormData();
+                    data.append('note', this.note);
+                    data.append('department_id', this.department_id);
+                    data.append('due_date', this.due_date);
+                    data.append('desired_delivery_date', this.desired_delivery_date);
+                    data.append('requested_name', this.requested_name);
 
-                        if (typeof this.file.name == 'string') {
-                            data.append('file', this.file);
-                        }
-
-                        let res = await ApiServices.quotationCreate(data);
-                        this.createProgress = false;
-                        if (res.success === true) {
-                            if (this.quoProducts.length > 0) {
-                                await this.createProduct(res.data.id);
-                                if (this.quoProducts.length === parseInt(this.successCount)) {
-                                    await this.createProductVendor(res.data.id);
-                                }
-                            } else {
-                                route.replace('/quotations/');
-                            }
-                        }
+                    if (typeof this.file.name == 'string') {
+                        data.append('file', this.file);
                     }
-                }
-            },
 
-            async createProduct(id) {
-                for (var i = 0; i < this.quoProducts.length; i++) {
-                    let productData = new FormData();
-                    productData.append('product_id', parseInt(this.quoProducts[i].product_id));
-                    productData.append('quantity', parseInt(this.quoProducts[i].quantity));
-                    productData.append('quotation_id', parseInt(id));
-                    // if(this.quoProducts[i].shipping_cost !== null && this.quoProducts[i].shipping_cost !== '' && typeof(parseInt(this.quoProducts[i].shipping_cost) === 'integer')) {
-                    //     productData.append('shipping_cost', parseInt(this.quoProducts[i].shipping_cost));
-                    // }
-                    if (this.quoProducts[i].product_variant_id !== '' && typeof (parseInt(this.quoProducts[i].product_variant_id) === 'integer')) {
-                        productData.append('product_variant_id', parseInt(this.quoProducts[i].product_variant_id));
-                    }
-                    if (this.quoProducts[i].unit_id !== '' && typeof (parseInt(this.quoProducts[i].unit_id) === 'integer')) {
-                        productData.append('unit_id', parseInt(this.quoProducts[i].unit_id));
-                    }
-                    let res = await ApiServices.quotationProductCreate(productData);
+                    let res = await ApiServices.quotationCreate(data);
+                    this.createProgress = false;
                     if (res.success === true) {
-                        this.successCount = parseInt(this.successCount) + 1;
+                        if (this.quoProducts.length > 0) {
+                            await this.createProduct(res.data.id);
+                            if (this.quoProducts.length === parseInt(this.successCount)) {
+                                await this.createProductVendor(res.data.id);
+                            }
+                        } else {
+                            route.replace('/quotations/');
+                        }
                     }
                 }
-                // route.replace('/quotations/');
-            },
+            }
+        },
 
-            async createProductVendor(id) {
-                let data = new FormData();
-                data.append('quotation_id', parseInt(id));
-                data.append('products', JSON.stringify(this.quoProducts));
-                data.append('vendors', JSON.stringify(this.quoVendors));
-                let res = await ApiServices.vendorQuotationCreate(data);
+        async createProduct(id) {
+            for (var i = 0; i < this.quoProducts.length; i++) {
+                let productData = new FormData();
+                productData.append('product_id', parseInt(this.quoProducts[i].product_id));
+                productData.append('quantity', parseInt(this.quoProducts[i].quantity));
+                productData.append('quotation_id', parseInt(id));
+                // if(this.quoProducts[i].shipping_cost !== null && this.quoProducts[i].shipping_cost !== '' && typeof(parseInt(this.quoProducts[i].shipping_cost) === 'integer')) {
+                //     productData.append('shipping_cost', parseInt(this.quoProducts[i].shipping_cost));
+                // }
+                if (this.quoProducts[i].product_variant_id !== '' && typeof (parseInt(this.quoProducts[i].product_variant_id) === 'integer')) {
+                    productData.append('product_variant_id', parseInt(this.quoProducts[i].product_variant_id));
+                }
+                if (this.quoProducts[i].unit_id !== '' && typeof (parseInt(this.quoProducts[i].unit_id) === 'integer')) {
+                    productData.append('unit_id', parseInt(this.quoProducts[i].unit_id));
+                }
+                let res = await ApiServices.quotationProductCreate(productData);
                 if (res.success === true) {
-                    route.replace('/quotations/')
+                    this.successCount = parseInt(this.successCount) + 1;
                 }
-            },
+            }
+            // route.replace('/quotations/');
+        },
 
-            validate() {
-                if (this.department_id === '') {
-                    this.validated = false;
-                } else {
-                    this.validated = true;
-                }
-            },
-        }
+        async createProductVendor(id) {
+            let data = new FormData();
+            data.append('quotation_id', parseInt(id));
+            data.append('products', JSON.stringify(this.quoProducts));
+            data.append('vendors', JSON.stringify(this.quoVendors));
+            let res = await ApiServices.vendorQuotationCreate(data);
+            if (res.success === true) {
+                route.replace('/quotations/')
+            }
+        },
+
+        validate() {
+            if (this.department_id === '') {
+                this.validated = false;
+            } else {
+                this.validated = true;
+            }
+        },
     }
+}
 </script>
 <style scoped>
-    .card-btn {
-        color: #fff !important;
-        margin-left: 3px !important;
-    }
+.card-btn {
+    color: #fff !important;
+    margin-left: 3px !important;
+}
 
-    .date-validation {
-        color: #f31c1c !important;
-    }
+.date-validation {
+    color: #f31c1c !important;
+}
 </style>
