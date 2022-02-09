@@ -203,6 +203,15 @@ class VendorPortalController extends Controller
                 $quoProduct->shipping_cost = $quotationProduct->shipping_cost;
                 $quoProduct->quantity = $quotationProduct->quantity;
                 $quoProduct->tax_id = $quotationProduct->tax_id;
+                $quoProduct->unit_id = $quotationProduct->unit_id;
+                $quoProduct->discount_type = $quotationProduct->discount_type;
+                $quoProduct->discount = $quotationProduct->discount;
+                if ($quotationProduct->discount_type == 'Percent') {
+                    $discount = ($quotationProduct->price * $quotationProduct->discount) / 100;
+                } else {
+                    $discount = $quotationProduct->discount ?? 0;
+                }
+                $quoProduct->total = $quotationProduct->price * $quotationProduct->quantity + $quotationProduct->shipping_cost + ($quotationProduct->price * $quotationProduct->tax->value) / 100 - $discount;
                 $quoProduct->save();
 
                 $vendorQuotationProducts = VendorQuotationProduct::where('id', '!=', $id)->where('quotation_product_id', $quotationProduct->quotation_product_id)->get();
@@ -277,6 +286,15 @@ class VendorPortalController extends Controller
                         $quotationProduct->shipping_cost = $product->shipping_cost;
                         $quotationProduct->quantity = $product->quantity;
                         $quotationProduct->tax_id = $product->tax_id;
+                        $quotationProduct->unit_id = $product->unit_id;
+                        $quotationProduct->discount_type = $product->discount_type;
+                        $quotationProduct->discount = $product->discount;
+                        if ($product->discount_type == 'Percent') {
+                            $discount = ($product->price * $product->discount) / 100;
+                        } else {
+                            $discount = $product->discount;
+                        }
+                        $quotationProduct->total = $product->price * $product->quantity + $product->shipping_cost + ($product->price * $product->tax->value) / 100 - $discount;
                         $quotationProduct->save();
                     }
                 } elseif (($request->status == 'Cancelled')) {
