@@ -30,6 +30,8 @@ class QuotationProduct extends JsonResource
             'tax_id' => $this->tax_id,
             'unit_id' => $this->unit_id,
             'shipping_cost' => $this->shipping_cost ?? 0,
+            'discount_type' => $this->discount_type,
+            'discount' => $this->discount,
             'grand_total' => $this->grand_total,
             'product' => $product,
             'product_variant' => $productVariant,

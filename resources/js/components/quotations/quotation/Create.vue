@@ -434,8 +434,62 @@
                                         </v-data-table>
                                     </v-card>
 
+                                    <v-dialog
+                                        v-model="dialogVConfirm"
+                                        max-width="850px"
+                                        max-height="450px"
+                                    >
+                                        <v-card>
+                                            <v-card-title>
+                                                Do you want to send you quotation to these vendors?
+                                                <v-spacer></v-spacer>
+                                            </v-card-title>
+                                            <v-data-table
+                                                v-model="selected"
+                                                item-key="name"
+                                                class="elevation-1"
+                                                :headers="headersSV"
+                                                :items="quoVendors"
+                                                sort-by="id"
+                                                :loading="tableLoad"
+                                                loading-text="Loading... Please wait..."
+                                                :search="searchSV"
+                                            >
+                                                <template v-slot:top>
+                                                    <v-toolbar
+                                                        flat
+                                                    >
+                                                    </v-toolbar>
+                                                </template>
+                                                <template v-slot:no-data>
+                                                    <div>No Data</div>
+                                                </template>
+                                            </v-data-table>
+                                            <v-row class="m-4 d-flex justify-content-end">
+                                                <v-card-actions>
+                                                    <v-btn
+                                                        color="blue darken-1"
+                                                        class="btn btn-danger card-btn"
+                                                        text
+                                                        @click="closeVConfirm"
+                                                    >
+                                                        {{ $t('button.cancel') }}
+                                                    </v-btn>
+                                                    <v-btn
+                                                        color="blue darken-1"
+                                                        class="btn btn-primary card-btn"
+                                                        text
+                                                        @click="create"
+                                                    >
+                                                        {{ $t('button.submit') }}
+                                                    </v-btn>
+                                                </v-card-actions>
+                                            </v-row>
+                                        </v-card>
+                                    </v-dialog>
+
                                     <CCardFooter>
-                                        <CButton type="submit" size="sm" color="primary" @click="create">
+                                        <CButton type="submit" size="sm" color="primary" @click="confirmCreate">
                                             <CIcon name="cil-check-circle"/>
                                             {{ $t('button.submit') }}
                                         </CButton>
@@ -478,6 +532,7 @@ export default {
         dialogV: false,
         dialogDelete: false,
         dialogVDelete: false,
+        dialogVConfirm: false,
         dueDateValidation: false,
         deliveryDateValidation: false,
         headers: [
@@ -680,6 +735,10 @@ export default {
             })
         },
 
+        closeVConfirm() {
+            this.dialogVConfirm = false
+        },
+
         async openDialogV() {
             this.selected = this.quoVendors;
             this.dialogV = true;
@@ -782,7 +841,23 @@ export default {
             }
         },
 
+        async confirmCreate() {
+            if (this.quoVendors.length > 0) {
+                this.validate();
+                this.checkDate('due_date', this.due_date);
+                this.checkDate('delivery_date', this.desired_delivery_date);
+                if ((this.deliveryDateValidation !== false) && (this.dueDateValidation !== false)) {
+                    if (this.validated) {
+                        this.dialogVConfirm = true;
+                    }
+                }
+            } else {
+                this.create();
+            }
+        },
+
         async create() {
+            this.dialogVConfirm = false;
             this.validate();
             this.checkDate('due_date', this.due_date);
             this.checkDate('delivery_date', this.desired_delivery_date);
