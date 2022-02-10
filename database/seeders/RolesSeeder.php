@@ -130,6 +130,7 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeKeeper, 'unusedProducts');
             $this->giveAutoAllPermissions($storeKeeper, 'transfers');
             $this->giveAutoAllPermissions($storeKeeper, 'returnProducts');
+            $this->giveAutoAllPermissions($storeKeeper, 'purchaseProductsApprovalStoreAdmin');
             $storeKeeper->givePermissionTo('quotations');
             $storeKeeper->givePermissionTo('vendors');
 
@@ -138,9 +139,14 @@ class RolesSeeder extends Seeder
                 'guard_name' => $guard
             ]);
             $this->giveAutoAllPermissions($storeManager, 'purchaseProductsApproval');
+            $this->giveAutoAllPermissions($storeManager, 'purchaseProductsApprovalStoreAdmin');
             $this->giveAutoAllPermissions($storeManager, 'products');
             $this->giveAutoAllPermissions($storeManager, 'consumes');
+            $this->giveAutoAllPermissions($storeManager, 'purchaseProductsApprovalAdmin');
             $storeManager->givePermissionTo('quotations');
+            $storeManager->givePermissionTo('units');
+            $storeManager->givePermissionTo('products');
+            $storeManager->givePermissionTo('productVariants');
 
             $financeStaff = Role::create([
                 'name' => 'Finance Staff',

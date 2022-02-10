@@ -263,7 +263,7 @@
                     <v-list-item-title>
                         <router-link
                             :to="'/purchase/department-head-purchase-request-approval/'">
-                            {{ $t('purchase') +' '+ $t('request') +' '+ $t('approval') }}
+                            Dh {{ $t('purchase') +' '+ $t('request') +' '+ $t('approval') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
@@ -275,7 +275,7 @@
                     <v-list-item-title>
                         <router-link
                             :to="'/purchase/admin-purchase-request-approval/'">
-                            {{ $t('purchase') +' '+ $t('request') +' '+ $t('approval') }}
+                            Admin {{ $t('purchase') +' '+ $t('request') +' '+ $t('approval') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>

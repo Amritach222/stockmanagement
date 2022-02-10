@@ -30,7 +30,7 @@ class PurchaseRequestAdminResource extends JsonResource
             if(!empty($this->purchaseProducts->toArray())){
                 $item_short = '';
                 forEach($this->purchaseProducts->toArray() as $data){
-                    if($data['department_status'] !== 'Pending'){
+                    if($data['department_status'] !== 'Pending' &&  $data['department_status'] !== 'Rejected'){
                         $purchaseProd[] = $data;
                         $item = \App\Models\Product::where('id',$data['product_id'])->first();
                         $item_short = $item_short.$item->name."(".$data['quantity'].") ";

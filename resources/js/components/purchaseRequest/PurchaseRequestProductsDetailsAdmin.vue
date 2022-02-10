@@ -1,175 +1,206 @@
 <template>
-    <v-data-table
-        :headers="headers"
-        :items="purchaseHistory"
-        sort-by="id"
-        show-expand
-        :loading=tableLoad
-        loading-text="Loading... Please wait..."
-        :search="search"
+    <div>
+        <v-tabs
+            v-model="tab"
+            background-color="deep-purple accent-4"
+            centered
+            dark
+            icons-and-text
+        >
+            <v-tabs-slider></v-tabs-slider>
 
-    >
+            <v-tab href="#tab-1">
+                Pending Requests
+            </v-tab>
 
-        <template v-slot:top>
-            <v-toolbar
-                flat
+            <v-tab href="#tab-2">
+                Approval List
+            </v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="tab">
+            <v-tab-item
+                value="tab-1"
             >
-                <v-row>
-                    <v-col
-                        cols="12"
-                        sm="4"
-                        md="6"
-                        lg="8"
-                    >
-                        <v-text-field
-                            v-model="search"
-                            append-icon="mdi-magnify"
-                            label="Search"
-                            solo
-                            hide-details
-                            max-width="100px"
-                        ></v-text-field>
-                    </v-col>
-                </v-row>
-                <v-dialog
-                    max-width="600px"
+                <v-data-table
+                    :headers="headers"
+                    :items="purchaseHistory"
+                    sort-by="id"
+                    show-expand
+                    :loading=tableLoad
+                    loading-text="Loading... Please wait..."
+                    :search="search"
+
                 >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            color="green"
-                            dark
-                            class="mb-2"
-                            @click="sendQuotation"
+
+                    <template v-slot:top>
+                        <v-toolbar
+                            flat
                         >
-                            Send to Quotation
-                        </v-btn>
+                            <v-row>
+                                <v-col
+                                    cols="12"
+                                    sm="4"
+                                    md="6"
+                                    lg="8"
+                                >
+                                    <v-text-field
+                                        v-model="search"
+                                        append-icon="mdi-magnify"
+                                        label="Search"
+                                        solo
+                                        hide-details
+                                        max-width="100px"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-dialog
+                                max-width="600px"
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn
+                                        color="green"
+                                        dark
+                                        class="mb-2"
+                                        @click="sendQuotation"
+                                    >
+                                        Add To List
+                                    </v-btn>
+                                </template>
+                                <v-card>
+                                    <v-form ref="form">
+                                        <v-card-title>
+                                            <span class="headline">{{ formTitle }}</span>
+                                        </v-card-title>
+
+                                        <v-card-text>
+                                            <v-container>
+                                                <v-row>
+                                                    <v-col>
+                                                        <v-text-field
+                                                            v-model="editedItem.name"
+                                                            label="Brand Name"
+                                                            required
+                                                            outlined
+                                                            :rules="rules"
+                                                        ></v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col v-if="typeof(editedItem.link) === 'string'">
+                                                        <v-card width="200"
+                                                                v-on:click="openImage(editedItem.link)">
+                                                            <v-img
+                                                                :src="cdnURL+editedItem.link"
+                                                                height="125"
+                                                                class="grey darken-4"
+                                                            ></v-img>
+                                                            <v-card-title class="title">
+                                                                Logo
+                                                            </v-card-title>
+                                                        </v-card>
+                                                        <v-file-input
+                                                            v-model="editedItem.image"
+                                                            label="Logo"
+                                                            filled
+                                                            outlined
+                                                            prepend-icon="mdi-camera"
+                                                            accept="image/png,image/jpeg,image/jpg"
+                                                        ></v-file-input>
+                                                    </v-col>
+                                                    <v-col v-else>
+                                                        <v-file-input
+                                                            v-model="editedItem.image"
+                                                            label="Logo"
+                                                            filled
+                                                            outlined
+                                                            prepend-icon="mdi-camera"
+                                                            accept="image/png,image/jpeg,image/jpg"
+                                                        ></v-file-input>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-container>
+                                        </v-card-text>
+
+                                        <v-card-actions>
+                                            <v-progress-linear
+                                                v-if="progressL"
+                                                indeterminate
+                                                color="green"
+                                            ></v-progress-linear>
+                                            <v-spacer></v-spacer>
+                                            <v-btn
+                                                color="blue darken-1"
+                                                text
+                                                @click="close"
+                                            >
+                                                Cancel
+                                            </v-btn>
+                                            <v-btn
+                                                color="blue darken-1"
+                                                text
+                                                @click="save"
+                                            >
+                                                Save
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-form>
+                                </v-card>
+                            </v-dialog>
+                            <v-dialog v-model="dialogDelete" max-width="500px">
+                                <v-card>
+                                    <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                        <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                                        <v-spacer></v-spacer>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </v-toolbar>
                     </template>
-                    <v-card>
-                        <v-form ref="form">
-                            <v-card-title>
-                                <span class="headline">{{ formTitle }}</span>
-                            </v-card-title>
-
-                            <v-card-text>
-                                <v-container>
-                                    <v-row>
-                                        <v-col>
-                                            <v-text-field
-                                                v-model="editedItem.name"
-                                                label="Brand Name"
-                                                required
-                                                outlined
-                                                :rules="rules"
-                                            ></v-text-field>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col v-if="typeof(editedItem.link) === 'string'">
-                                            <v-card width="200"
-                                                    v-on:click="openImage(editedItem.link)">
-                                                <v-img
-                                                    :src="cdnURL+editedItem.link"
-                                                    height="125"
-                                                    class="grey darken-4"
-                                                ></v-img>
-                                                <v-card-title class="title">
-                                                    Logo
-                                                </v-card-title>
-                                            </v-card>
-                                            <v-file-input
-                                                v-model="editedItem.image"
-                                                label="Logo"
-                                                filled
-                                                outlined
-                                                prepend-icon="mdi-camera"
-                                                accept="image/png,image/jpeg,image/jpg"
-                                            ></v-file-input>
-                                        </v-col>
-                                        <v-col v-else>
-                                            <v-file-input
-                                                v-model="editedItem.image"
-                                                label="Logo"
-                                                filled
-                                                outlined
-                                                prepend-icon="mdi-camera"
-                                                accept="image/png,image/jpeg,image/jpg"
-                                            ></v-file-input>
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
-                            </v-card-text>
-
-                            <v-card-actions>
-                                <v-progress-linear
-                                    v-if="progressL"
-                                    indeterminate
-                                    color="green"
-                                ></v-progress-linear>
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                    color="blue darken-1"
-                                    text
-                                    @click="close"
-                                >
-                                    Cancel
-                                </v-btn>
-                                <v-btn
-                                    color="blue darken-1"
-                                    text
-                                    @click="save"
-                                >
-                                    Save
-                                </v-btn>
-                            </v-card-actions>
-                        </v-form>
-                    </v-card>
-                </v-dialog>
-                <v-dialog v-model="dialogDelete" max-width="500px">
-                    <v-card>
-                        <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                            <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
-                            <v-spacer></v-spacer>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </v-toolbar>
-        </template>
-        <template v-slot:item.status="{ item }">
-            <v-chip
-                :color="getColor(item.status)"
-                dark
-                small
+                    <template v-slot:item.status="{ item }">
+                        <v-chip
+                            :color="getColor(item.status)"
+                            dark
+                            small
+                        >
+                            {{ item.status }}
+                        </v-chip>
+                    </template>
+                    <template v-slot:item.actions="{ item }">
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="editItem(item)"
+                        >
+                            mdi-pencil
+                        </v-icon>
+                        <v-icon
+                            small
+                            @click="deleteItem(item)"
+                        >
+                            mdi-delete
+                        </v-icon>
+                    </template>
+                    <template v-slot:expanded-item="{ headers, item }" class="mb-3">
+                        <td :colspan="headers.length">
+                            <PurchaseTableDetail :item="item" :triggerSelect="triggerSelect"></PurchaseTableDetail>
+                        </td>
+                    </template>
+                    <template v-slot:no-data>
+                        <div>No Data</div>
+                    </template>
+                </v-data-table>
+            </v-tab-item>
+            <v-tab-item
+                value="tab-2"
+                @click="loadItem()"
             >
-                {{ item.status }}
-            </v-chip>
-        </template>
-        <template v-slot:item.actions="{ item }">
-            <v-icon
-                small
-                class="mr-2"
-                @click="editItem(item)"
-            >
-                mdi-pencil
-            </v-icon>
-            <v-icon
-                small
-                @click="deleteItem(item)"
-            >
-                mdi-delete
-            </v-icon>
-        </template>
-        <template v-slot:expanded-item="{ headers, item }" class="mb-3">
-            <td :colspan="headers.length">
-                <PurchaseTableDetail :item="item" :triggerSelect="triggerSelect"></PurchaseTableDetail>
-            </td>
-        </template>
-        <template v-slot:no-data>
-            <div>No Data</div>
-        </template>
-    </v-data-table>
+                <approval-list ref="callForUpdate"></approval-list>
+            </v-tab-item>
+        </v-tabs-items>
+    </div>
 </template>
 
 <script>
@@ -178,11 +209,13 @@ import ApiServices from "../../services/ApiServices";
 import PurchaseTableDetail from "./PurchaseTableDetail";
 import store from "../../store";
 import route from "../../router";
+import ApprovalList from "./ApprovalList";
 
 export default {
     name: "PurchaseRequestHistory",
-    components: {PurchaseTableDetail},
+    components: {ApprovalList, PurchaseTableDetail},
     data: () => ({
+        tab: null,
         cdnURL: config.cdnURL,
         search: '',
         validated: false,
@@ -230,6 +263,9 @@ export default {
         dialogDelete(val) {
             val || this.closeDelete()
         },
+        tab(val){
+            this.$refs.callForUpdate.updateData()
+        }
     },
 
     async created() {
@@ -239,7 +275,7 @@ export default {
     methods: {
         sendQuotation() {
             this.triggerSelect = !this.triggerSelect;
-            route.replace('/quotations/create?create=pr');
+            this.tab = 'tab-2';
         },
 
         getColor(status) {

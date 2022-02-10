@@ -188,6 +188,18 @@ class ModelSeeder extends Seeder
         $itemP->code = CodeGenerator::code();
         $itemP->save();
 
+        $itemP = new Product([
+            'name' => 'TV',
+            'brand_id' => $itemB->id,
+            'category_id' => $itemC->id,
+
+            'cost_price' => 1500,
+            'stock' => 5,
+            'type' => 'Serviceable'
+        ]);
+        $itemP->code = CodeGenerator::code();
+        $itemP->save();
+
         $item = new ExpenseCategory([
             'name' => 'Maintenance'
         ]);
