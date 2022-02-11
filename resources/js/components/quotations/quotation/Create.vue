@@ -299,8 +299,41 @@ export default {
     async created() {
         this.loadDepartments();
         this.loadItems();
+        if (this.$route.query.create === 'pr') {
+            let selectedProducts = store.state.purchase.selectedPurchaseRequestedProducts;
+            if (Object.keys(selectedProducts).length > 0) {
+                let productData = new FormData();
+                productData.append('status', 'Approved');
+                for (const singleData of selectedProducts) {
+                    let res = await ApiServices.changePurchaseProductStatusRequestAd(singleData.id, productData);
+                    if (res.success === true) {
+                        await this.addPrProducts(singleData);
+                    }
+                }
+            }
+        }
     },
     methods: {
+        async addPrProducts(product) {
+            var varName = '---';
+            var price = '';
+            let res = await ApiServices.productShow(product.product_id);
+            price = res.data.cost_price;
+            if (product.product_variant_id !== null) {
+                let rtn = await ApiServices.productVariantShow(product.product_variant_id);
+                varName = rtn.data.name;
+                price = rtn.data.price + price;
+            }
+            this.quoProducts.push({
+                'product_id': product.product_id,
+                'product_name': res.data.name,
+                'product_variant_id': product.product_variant_id,
+                'product_variant': varName,
+                'price': price,
+                'quantity': product.quantity,
+                'shipping_cost': 0,
+            });
+        },
         async loadDepartments() {
             let res = await ApiServices.departmentIndex();
             if (res.success === true) {

@@ -169,6 +169,7 @@ import PurchaseRequestHistory from './components/purchaseRequest/PurchaseRequest
 import EditPurchaseRequest from './components/purchaseRequest/EditPurchaseRequest'
 import PurchaseRequestProducts from './components/purchaseRequest/PurchaseRequestProducts'
 import PurchaseRequestAdmin from './components/purchaseRequest/PurchaseRequestProductsDetailsAdmin'
+import PurchaseRequestDepartmentHead from './components/purchaseRequest/PurchaseRequestProductsDetailsDh'
 
 import NotFound from './components/errorPage/NotFound'
 
@@ -300,6 +301,15 @@ export default new Router({
             path: '/purchase/admin-purchase-request-approval',
             name: 'Purchase Requests Approval',
             component: PurchaseRequestAdmin,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchase/department-head-purchase-request-approval/',
+            name: 'Purchase Requests Approval',
+            component: PurchaseRequestDepartmentHead,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

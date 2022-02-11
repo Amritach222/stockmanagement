@@ -182,6 +182,8 @@
     "permissions": "अनुमतिहरू",
     "my": "मेरो",
     "unauthorized": "अनाधिकृत",
+    "failedToSaveProduct": "उत्पादन थप्न असफल भयो",
+    "successToSave": "सफलतापूर्वक थपियो",
 
     "validation": {
         "required": "यो क्षेत्र आवश्यक छ!",

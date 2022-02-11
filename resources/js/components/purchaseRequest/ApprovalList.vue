@@ -1,162 +1,176 @@
 <template>
-    <v-data-table
-        v-model="selected"
-        :headers="headers"
-        :items="prProducts"
-        sort-by="item_name"
-        :loading=tableLoad
-        show-select
-        :hide-default-footer="true"
-        loading-text="Loading... Please wait..."
-    >
-        <template v-slot:top>
-            <v-dialog
-                v-model="dialog"
-                max-width="600px"
+    <CCard>
+        <CCardBody>
+            <v-data-table
+                v-model="selected"
+                :headers="headers"
+                :items="prProducts"
+                sort-by="item_name"
+                :loading=tableLoad
+                show-select
+                :hide-default-footer="true"
+                loading-text="Loading... Please wait..."
             >
-                <v-card>
-                    <v-form ref="form">
-                        <v-card-title>
-                            <span class="headline">{{ formTitle }}</span>
-                        </v-card-title>
+                <template v-slot:top>
+                    <v-dialog
+                        v-model="dialog"
+                        max-width="600px"
+                    >
+                        <v-card>
+                            <v-form ref="form">
+                                <v-card-title>
+                                    <span class="headline">{{ formTitle }}</span>
+                                </v-card-title>
 
-                        <v-card-text>
-                            <v-container>
-                                <v-row>
-                                    <v-col>
-                                        <v-select
-                                            v-model="addPurchaseRequestProduct.product_id"
-                                            label="Select Product"
-                                            :items="products"
-                                            item-text="name"
-                                            item-value="id"
-                                            required
-                                            outlined
-                                            :rules="rules"
-                                            v-on:change="getVariants(addPurchaseRequestProduct.product_id)"
-                                        ></v-select>
-                                        <div v-if="hasVariants">
-                                            <v-select
-                                                v-model="addPurchaseRequestProduct.product_variant_id"
-                                                label="Product Variant"
-                                                :items="variants"
-                                                item-value="id"
-                                                item-text="name"
-                                                outlined
-                                            ></v-select>
-                                        </div>
-                                        <v-text-field
-                                            v-model="addPurchaseRequestProduct.quantity"
-                                            label="Quantity"
-                                            type="number"
-                                            outlined
-                                        ></v-text-field>
-                                        <v-select
-                                            v-model="addPurchaseRequestProduct.unit"
-                                            label="Unit"
-                                            :items="units"
-                                            item-text="name"
-                                            item-value="id"
-                                            required
-                                            outlined
-                                            return-object
-                                            :rules="rules"
-                                        ></v-select>
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                        </v-card-text>
+                                <v-card-text>
+                                    <v-container>
+                                        <v-row>
+                                            <v-col>
+                                                <v-select
+                                                    v-model="addPurchaseRequestProduct.product_id"
+                                                    label="Select Product"
+                                                    :items="products"
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    required
+                                                    outlined
+                                                    :rules="rules"
+                                                    v-on:change="getVariants(addPurchaseRequestProduct.product_id)"
+                                                ></v-select>
+                                                <div v-if="hasVariants">
+                                                    <v-select
+                                                        v-model="addPurchaseRequestProduct.product_variant_id"
+                                                        label="Product Variant"
+                                                        :items="variants"
+                                                        item-value="id"
+                                                        item-text="name"
+                                                        outlined
+                                                    ></v-select>
+                                                </div>
+                                                <v-text-field
+                                                    v-model="addPurchaseRequestProduct.quantity"
+                                                    label="Quantity"
+                                                    type="number"
+                                                    outlined
+                                                ></v-text-field>
+                                                <v-select
+                                                    v-model="addPurchaseRequestProduct.unit"
+                                                    label="Unit"
+                                                    :items="units"
+                                                    item-text="name"
+                                                    item-value="id"
+                                                    required
+                                                    outlined
+                                                    return-object
+                                                    :rules="rules"
+                                                ></v-select>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </v-card-text>
 
-                        <v-card-actions>
-                            <v-progress-linear
-                                v-if="progressL"
-                                indeterminate
-                                color="green"
-                            ></v-progress-linear>
-                            <v-spacer></v-spacer>
-                            <v-btn
-                                color="blue darken-1"
-                                text
-                                @click="close"
-                            >
-                                Cancel
-                            </v-btn>
-                            <v-btn
-                                color="blue darken-1"
-                                text
-                                @click="addProduct"
-                            >
-                                Save
-                            </v-btn>
-                        </v-card-actions>
-                    </v-form>
-                </v-card>
-            </v-dialog>
-            <v-dialog v-model="dialogDelete" max-width="500px">
-                <v-card>
-                    <v-card-title class="text-h6">Are you sure you want to
-                        delete this item?
-                    </v-card-title>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="blue darken-1" text @click="closeDelete">
-                            Cancel
+                                <v-card-actions>
+                                    <v-progress-linear
+                                        v-if="progressL"
+                                        indeterminate
+                                        color="green"
+                                    ></v-progress-linear>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                        color="blue darken-1"
+                                        text
+                                        @click="close"
+                                    >
+                                        Cancel
+                                    </v-btn>
+                                    <v-btn
+                                        color="blue darken-1"
+                                        text
+                                        @click="addProduct"
+                                    >
+                                        Save
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-form>
+                        </v-card>
+                    </v-dialog>
+                    <v-dialog v-model="dialogDelete" max-width="500px">
+                        <v-card>
+                            <v-card-title class="text-h6">Are you sure you want to
+                                delete this item?
+                            </v-card-title>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" text @click="closeDelete">
+                                    Cancel
+                                </v-btn>
+                                <v-btn color="blue darken-1" text
+                                       @click="deleteItemConfirm">OK
+                                </v-btn>
+                                <v-spacer></v-spacer>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </template>
+                <template v-slot:item.product_id="{ item }">
+                    {{ getProductName(item.product_id) }}
+                </template>
+                <template v-slot:item.product_variant_id="{ item }">
+
+                    {{ getVariantName(item.product_variant_id) }}
+                </template>
+                <template v-slot:item.unit_id="{ item }">
+                    {{ getUnitName(item.unit_id) }}
+                </template>
+                <template v-slot:item.actions="{ item }">
+                    <div v-if="$can('purchaseProductsApprovalDepartmentHead')">
+                        <v-btn small @click="approveProduct(item)">
+                            Approve
                         </v-btn>
-                        <v-btn color="blue darken-1" text
-                               @click="deleteItemConfirm">OK
+                        <v-btn small @click="denyProduct(item)">
+                            Deny
                         </v-btn>
-                        <v-spacer></v-spacer>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
-        </template>
-        <template v-slot:item.product_id="{ item }">
-            {{ getProductName(item.product_id) }}
-        </template>
-        <template v-slot:item.product_variant_id="{ item }">
-
-            {{ getVariantName(item.product_variant_id) }}
-        </template>
-        <template v-slot:item.unit_id="{ item }">
-            {{ getUnitName(item.unit_id) }}
-        </template>
-        <template v-slot:item.actions="{ item }">
-            <div v-if="$can('purchaseProductsApprovalDepartmentHead')">
-                <v-btn small @click="approveProduct(item)">
-                    Approve
-                </v-btn>
-                <v-btn small @click="denyProduct(item)">
-                    Deny
-                </v-btn>
-            </div>
-            <div v-if="$can('purchaseProductsApprovalStoreAdmin')">
-                <v-btn small @click="addToApproveList(item)">
-                    Add to List
-                </v-btn>
-                <v-btn small @click="removeFromApproveList(item)">
-                    Remove From List
-                </v-btn>
-            </div>
-            <div v-else>
-                <v-icon
-                    small
-                    class="mr-2"
-                    @click="editItem(item)"
-                >
-                    mdi-pencil
-                </v-icon>
-                <v-icon
-                    small
-                    @click="deleteItem(item)"
-                >
-                    mdi-delete
-                </v-icon>
-            </div>
-        </template>
-        <template v-slot:no-data>
-            <div>No Data</div>
-        </template>
-    </v-data-table>
+                    </div>
+                    <div v-if="$can('purchaseProductsApprovalStoreAdmin')">
+                        <v-btn small @click="addToApproveList(item)">
+                            Add to List
+                        </v-btn>
+                        <v-btn small @click="removeFromApproveList(item)">
+                            Remove From List
+                        </v-btn>
+                    </div>
+                    <div v-else>
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="editItem(item)"
+                        >
+                            mdi-pencil
+                        </v-icon>
+                        <v-icon
+                            small
+                            @click="deleteItem(item)"
+                        >
+                            mdi-delete
+                        </v-icon>
+                    </div>
+                </template>
+                <template v-slot:no-data>
+                    <div>No Data</div>
+                </template>
+            </v-data-table>
+            <CCardFooter>
+                <CButton type="submit" size="sm" color="primary" @click="sendToQuotation">
+                    <CIcon name="cil-check-circle"/>
+                    {{ $t('button.submit') }}
+                </CButton>
+                <CButton size="sm" color="danger" :to="'/purchase/admin-purchase-request-approval/'">
+                    <CIcon name="cil-ban"/>
+                    {{ $t('button.cancel') }}
+                </CButton>
+            </CCardFooter>
+        </CCardBody>
+    </CCard>
 </template>
 
 <script>
@@ -166,11 +180,9 @@ import config from "../../config";
 import store from "../../store";
 
 export default {
-    name: "NewPurchaseRequest",
+    name: "ApprovalList",
 
     props: {
-        source: String,
-        details: [],
         triggerSelectProduct: Boolean
     },
 
@@ -233,20 +245,31 @@ export default {
     watch: {
         triggerSelectProduct: async function (newVal, oldVal) {
             let res = await store.dispatch('purchase/addSelectedProducts', this.selected);
-        }
+        },
     },
+
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'Add Quotation Product' : 'Edit Quotation Product'
         },
     },
+
     async created() {
+        this.details = store.state.purchase.selectedPurchaseRequestedProducts;
         this.loadItems();
         this.loadUnits();
         this.loadVariants();
         this.prProducts = this.details;
     },
     methods: {
+        updateData(){
+            this.prProducts = store.state.purchase.selectedPurchaseRequestedProducts;
+        },
+        sendToQuotation(){
+            this.triggerSelect = !this.triggerSelect;
+            route.replace('/quotations/create?create=pr');
+        },
+
         getProductName(item) {
             if (item === null || item === undefined) {
                 return "---"
@@ -332,40 +355,6 @@ export default {
             this.dialog = true;
         },
 
-        async denyProduct(item) {
-            let productData = new FormData();
-            productData.append('department_status', 'Rejected');
-            let res = await ApiServices.changePurchaseProductStatusRequest(item.id, productData);
-            if (res.success === true) {
-                this.editedIndex = this.prProducts.indexOf(item);
-                Object.assign(this.prProducts[this.editedIndex], res.data)
-                store.state.home.snackbar = true;
-                store.state.home.snackbarText = "Changed status";
-                store.state.home.snackbarColor = 'green';
-            } else {
-                store.state.home.snackbar = true;
-                store.state.home.snackbarText = "Could not change status";
-                store.state.home.snackbarColor = 'red';
-            }
-        },
-
-        async approveProduct(item) {
-            let productData = new FormData();
-            productData.append('department_status', 'Approved');
-            let res = await ApiServices.changePurchaseProductStatusRequest(item.id, productData);
-            if (res.success === true) {
-                this.editedIndex = this.prProducts.indexOf(item);
-                Object.assign(this.prProducts[this.editedIndex], res.data)
-                store.state.home.snackbar = true;
-                store.state.home.snackbarText = "Changed status";
-                store.state.home.snackbarColor = 'green';
-            } else {
-                store.state.home.snackbar = true;
-                store.state.home.snackbarText = "Could not change status";
-                store.state.home.snackbarColor = 'red';
-            }
-        },
-
         async addToApproveList(item) {
             let res = await store.dispatch('purchase/addSelectedProducts', [item]);
             if (res === true) {
@@ -381,6 +370,15 @@ export default {
 
         async removeFromApproveList(item) {
             let res = await store.dispatch('purchase/removeSelectedProduct', item);
+            let newarr = [];
+            if (this.prProducts.length > 0) {
+                this.prProducts.forEach((single) => {
+                    if (item.id !== single.id) {
+                        newarr.push(single);
+                    }
+                });
+            }
+            this.prProducts = newarr;
             if (res === true) {
                 store.state.home.snackbar = true;
                 store.state.home.snackbarText = "Removed from list";

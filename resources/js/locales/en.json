@@ -180,6 +180,8 @@
     "permissions": "Permissions",
     "my": "My",
     "unauthorized": "Unauthorized",
+    "failedToSaveProduct": "Failed to add product",
+    "successToSave": "Added Successfully",
 
     "validation": {
         "required": "This field is required!",

@@ -313,17 +313,9 @@ export default {
         },
     },
     async created() {
-        this.loadDepartments();
         this.loadItems();
     },
     methods: {
-        async loadDepartments() {
-            let res = await ApiServices.departmentIndex();
-            if (res.success === true) {
-                this.departments = res.data;
-            }
-        },
-
         async loadItems() {
             let res = await ApiServices.itemIndex();
             if (res.success === true) {
