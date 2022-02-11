@@ -34,7 +34,12 @@ class PermissionSeeder extends Seeder
             $this->createAutoAllPermissions('quotations', $guard);
             $this->createAutoAllPermissions('quotationProducts', $guard);
             $this->createAutoAllPermissions('purchases', $guard);
+            $this->createAutoAllPermissions('purchaseHistory', $guard);
             $this->createAutoAllPermissions('purchaseProducts', $guard);
+            $this->createAutoAllPermissions('purchaseProductsApproval', $guard);
+            $this->createAutoAllPermissions('purchaseProductsApprovalAdmin', $guard);
+            $this->createAutoAllPermissions('purchaseProductsApprovalDepartmentHead', $guard);
+            $this->createAutoAllPermissions('purchaseProductsApprovalStoreAdmin', $guard);
             $this->createAutoAllPermissions('vendors', $guard);
             $this->createAutoAllPermissions('returnProducts', $guard);
             $this->createAutoAllPermissions('consumes', $guard);

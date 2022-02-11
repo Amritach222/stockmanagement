@@ -5,7 +5,7 @@
 import axios from 'axios'
 import store from '../store'
 import config from '../config'
-import route from "../router";
+import router from '../router'
 
 const apiUrl = config.baseURL
 
@@ -44,7 +44,13 @@ export default () => {
                 console.log('user unauthorized');
             }
             if (error.response.status === 403) {
-                route.replace('/unauthorized');
+// <<<<<<< HEAD
+//                 route.replace('/unauthorized');
+// =======
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Permission Error";
+                store.state.home.snackbarColor = 'red';
+// >>>>>>> 778912b3fba69f0bb86326776124de7a50322fe6
             }
         } else if (error.request) {
             console.log({message: 'Network Error'});

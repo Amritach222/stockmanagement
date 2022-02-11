@@ -820,8 +820,20 @@ export default {
     async addPurchaseProductRequest(data) {
         return await apiCall(POST, `api/purchase/purchaseProducts`, data)
     },
+    async changePurchaseProductStatusRequest(id,data) {
+        return await apiCall(POST, `api/purchase/purchaseProducts/change-status/${id}`, data)
+    },
+    async changePurchaseProductStatusRequestAd(id,data) {
+        return await apiCall(POST, `api/purchase/purchaseProducts/ad-change-status/${id}`, data)
+    },
     async getUserPurchaseProductRequestHistory() {
         return await apiCall(GET, `api/purchase/user-history`)
+    },
+    async getAdminPurchaseProductRequest() {
+        return await apiCall(GET, `api/purchase/ad-purchase-list`)
+    },
+    async getDepartmentHeadPurchaseProductRequest() {
+        return await apiCall(GET, `api/purchase/dh-purchase-list`)
     },
     async deleteUserPurchaseRequest(id) {
         return await apiCall(DELETE, `api/purchase/purchases/${id}`)

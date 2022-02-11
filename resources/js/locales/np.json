@@ -94,6 +94,7 @@
     "user": "प्रयोगकर्ता",
     "users": "प्रयोगकर्ताहरु",
     "approver": "अनुमोदनकर्ता",
+    "approval": "अनुमोदन",
     "request": "अनुरोध",
     "requests": "अनुरोधहरु",
     "requested": "अनुरोध गरिएको",
@@ -195,6 +196,8 @@
     "general_settings": "सामान्य सेटिङहरू",
     "edit": "सम्पादन",
     "requester": "अनुरोधकर्ता",
+    "failedToSaveProduct": "उत्पादन थप्न असफल भयो",
+    "successToSave": "सफलतापूर्वक थपियो",
 
     "validation": {
         "required": "यो क्षेत्र आवश्यक छ!",

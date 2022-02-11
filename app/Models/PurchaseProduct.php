@@ -9,7 +9,7 @@ class PurchaseProduct extends Model
 
     protected $table = 'purchase_products';
     public $timestamps = true;
-    protected $fillable = array('purchase_id', 'product_id', 'product_variant_id', 'vendor_id', 'quantity', 'price', 'tax_id', 'total_price', 'unit_id','status');
+    protected $fillable = array('purchase_id', 'product_id', 'product_variant_id', 'vendor_id', 'quantity', 'price', 'tax_id', 'total_price', 'unit_id', 'status', 'department_status');
 
     public function purchase()
     {

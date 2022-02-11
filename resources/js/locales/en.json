@@ -93,6 +93,7 @@
     "user": "User",
     "users": "Users",
     "approver": "Approver",
+    "approval": "Approval",
     "request": "Request",
     "requests": "Requests",
     "requested": "Requested",
@@ -193,6 +194,8 @@
     "general_settings": "General Settings",
     "edit": "Edit",
     "requester": "Requester",
+    "failedToSaveProduct": "Failed to add product",
+    "successToSave": "Added Successfully",
 
     "validation": {
         "required": "This field is required!",

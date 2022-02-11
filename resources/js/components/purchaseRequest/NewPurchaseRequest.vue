@@ -234,7 +234,7 @@
                                             filled
                                             outlined
                                             prepend-icon="mdi-camera"
-                                            accept="*/application"
+                                            accept="image/png, image/jpeg, image/bmp, application/pdf, application/msword"
                                         ></v-file-input>
                                     </v-form>
                                     <CCardFooter>
@@ -242,7 +242,7 @@
                                             <CIcon name="cil-check-circle"/>
                                             Submit
                                         </CButton>
-                                        <CButton size="sm" color="danger" :to="'/quotations/'">
+                                        <CButton size="sm" color="danger" :to="'/purchase/purchase-request-history/'">
                                             <CIcon name="cil-ban"/>
                                             Cancel
                                         </CButton>
@@ -261,6 +261,7 @@
 import route from "../../router";
 import ApiServices from "../../services/ApiServices";
 import config from "../../config";
+import store from "../../store";
 
 export default {
     name: "NewPurchaseRequest",
@@ -354,7 +355,7 @@ export default {
 
         async getVariants(item) {
             let res = await ApiServices.productShow(item);
-            console.log('we get here',res);
+            console.log('we get here', res);
             if (res.success === true) {
                 if (res.data.product_variants.length > 0) {
                     this.hasVariants = true;
@@ -366,10 +367,13 @@ export default {
         },
 
         editItem(item) {
-            console.log('hey item', item);
-            this.editedIndex = this.prProducts.indexOf(item)
-            this.addPurchaseRequestProduct = Object.assign({}, item)
-            this.dialog = true
+            this.editedIndex = this.prProducts.indexOf(item);
+            let result = this.units.filter(obj => {
+                return obj.id === item.unit_id;
+            })
+            this.addPurchaseRequestProduct = Object.assign({}, item);
+            this.addPurchaseRequestProduct.unit = result[0];
+            this.dialog = true;
         },
 
         deleteItem(item) {
@@ -408,6 +412,7 @@ export default {
                 let rtn = await ApiServices.productVariantShow(this.addPurchaseRequestProduct.product_variant_id);
                 varName = rtn.data.name;
             }
+
             if (this.editedIndex > -1) {
                 Object.assign(this.prProducts[this.editedIndex], {
                     'product_id': this.addPurchaseRequestProduct.product_id,
@@ -419,25 +424,39 @@ export default {
                     'unit_id': this.addPurchaseRequestProduct.unit.id,
                 })
             } else {
-                this.prProducts.push({
-                    'product_id': this.addPurchaseRequestProduct.product_id,
-                    'product_name': res.data.name,
-                    'product_variant_id': this.addPurchaseRequestProduct.product_variant_id,
-                    'product_variant': varName,
-                    'quantity': this.addPurchaseRequestProduct.quantity,
-                    'unit_name': this.addPurchaseRequestProduct.unit.name,
-                    'unit_id': this.addPurchaseRequestProduct.unit.id,
+                let searchData = this.prProducts.filter((single) => {
+                    if (this.addPurchaseRequestProduct.product_variant_id === undefined || this.addPurchaseRequestProduct.product_variant_id === '') {
+                        return single.product_id === this.addPurchaseRequestProduct.product_id
+                    }
+                    if (single.product_variant_id === this.addPurchaseRequestProduct.product_variant_id && single.product_id === this.addPurchaseRequestProduct.product_id) {
+                        return single.product_id === this.addPurchaseRequestProduct.product_id
+                    }
                 });
+                if (searchData.length === 0) {
+                    this.prProducts.push({
+                        'product_id': this.addPurchaseRequestProduct.product_id,
+                        'product_name': res.data.name,
+                        'product_variant_id': this.addPurchaseRequestProduct.product_variant_id,
+                        'product_variant': varName,
+                        'quantity': this.addPurchaseRequestProduct.quantity,
+                        'unit_name': this.addPurchaseRequestProduct.unit.name,
+                        'unit_id': this.addPurchaseRequestProduct.unit.id,
+                    });
+                } else {
+                    let indexOfSearch = this.prProducts.indexOf(searchData[0]);
+                    this.prProducts[indexOfSearch]['quantity'] = parseInt(this.prProducts[indexOfSearch]['quantity']) + parseInt(this.addPurchaseRequestProduct.quantity);
+                }
             }
             this.$refs.form.reset();
             this.close();
+            this.hasVariants = false;
         },
 
         async create() {
             this.createProgress = true;
             const data = new FormData();
             data.append('note', this.note);
-            if(this.due_date){
+            if (this.due_date) {
                 data.append('due_date', this.due_date);
             }
             if (this.admin) {
@@ -451,26 +470,43 @@ export default {
             let res = await ApiServices.addPurchaseRequest(data);
             this.createProgress = false;
             if (res.success === true) {
+                let dat = false;
                 if (this.prProducts.length > 0) {
-                    await this.createProduct(res.data.id);
-                } else {
-                    route.replace('/purchase/purchase-request-history/');
+                    dat = await this.createProduct(res.data.id);
+                    console.log("result from the purchase request", dat);
+                    if (dat) {
+                        route.replace('/purchase/purchase-request-history/');
+                        store.state.home.snackbar = true;
+                        store.state.home.snackbarText = this.$i18n.t('successToSave');
+                        store.state.home.snackbarColor = 'green';
+                    } else {
+                        store.state.home.snackbar = true;
+                        store.state.home.snackbarText = this.$i18n.t('failedToSaveProduct');
+                        store.state.home.snackbarColor = 'red';
+                    }
                 }
-                route.replace('/purchase/purchase-request-history');
+            } else {
+                // send error message here
             }
         },
 
         async createProduct(id) {
+            let returnValue = true;
             for (var i = 0; i < this.prProducts.length; i++) {
                 let productData = new FormData();
                 productData.append('quantity', parseInt(this.prProducts[i].quantity));
                 productData.append('product_id', parseInt(this.prProducts[i].product_id));
                 productData.append('purchase_id', parseInt(id));
-                if (this.prProducts[i].product_variant_id !== '') {
+                productData.append('unit_id', parseInt(this.prProducts[i].unit_id));
+                if (this.prProducts[i].product_variant_id !== '' && this.prProducts[i].product_variant_id !== undefined) {
                     productData.append('product_variant_id', parseInt(this.prProducts[i].product_variant_id));
                 }
                 let res = await ApiServices.addPurchaseProductRequest(productData);
+                if (res.success === false) {
+                    returnValue = false;
+                }
             }
+            return returnValue;
         },
     }
 }
