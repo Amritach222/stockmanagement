@@ -138,16 +138,6 @@ class ModelSeeder extends Seeder
         $item->save();
 
         $item = new Department([
-            'name' => 'Finance'
-        ]);
-        $item->save();
-
-        $item = new Department([
-            'name' => 'IT'
-        ]);
-        $item->save();
-
-        $item = new Department([
             'name' => 'HR'
         ]);
         $item->save();

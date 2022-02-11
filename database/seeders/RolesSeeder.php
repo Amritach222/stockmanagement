@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Department;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -223,6 +224,16 @@ class RolesSeeder extends Seeder
         ]);
         $user->save();
         $user->assignRole('Finance Director');
+
+        $item = new Department([
+            'name' => 'Finance'
+        ]);
+        $item->save();
+
+        $item = new Department([
+            'name' => 'IT'
+        ]);
+        $item->save();
 
         $user = new User([
             'name' => 'Staff one',

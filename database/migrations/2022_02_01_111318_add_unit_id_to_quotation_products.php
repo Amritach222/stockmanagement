@@ -15,7 +15,7 @@ class AddUnitIdToQuotationProducts extends Migration
     {
         Schema::table('quotation_products', function (Blueprint $table) {
             $table->integer('unit_id')->nullable()->unsigned();
-            $table->foreign('unit_id')->references('id')->on('quotation_products');
+            $table->foreign('unit_id')->references('id')->on('units');
         });
     }
 
