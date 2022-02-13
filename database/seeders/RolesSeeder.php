@@ -103,19 +103,18 @@ class RolesSeeder extends Seeder
                 'name' => 'Staff',
                 'guard_name' => $guard
             ]);
-            $permissions = Permission::where('guard_name', $guard)->where('name', '!=', 'roles')->where('name', '!=', 'permissions')->get();
-            $staff->givePermissionTo($permissions);
-//            $this->giveAutoAllPermissions($staff, 'categories');
-//            $this->giveAutoAllPermissions($staff, 'items');
-//            $this->giveAutoAllPermissions($staff, 'productVariants');
-//            $this->giveAutoAllPermissions($staff, 'productVariantAttributes');
-//            $this->giveAutoAllPermissions($staff, 'quotations');
-//            $this->giveAutoAllPermissions($staff, 'quotationProducts');
-//            $this->giveAutoAllPermissions($staff, 'unusedProducts');
-//            $staff->givePermissionTo('units');
-//            $staff->givePermissionTo('brands');
-//            $staff->givePermissionTo('taxes');
-//            $staff->givePermissionTo('products');
+            $this->giveAutoAllPermissions($staff, 'categories');
+            $this->giveAutoAllPermissions($staff, 'products');
+            $this->giveAutoAllPermissions($staff, 'items');
+            $staff->givePermissionTo('units');
+            $this->giveAutoAllPermissions($staff, 'purchaseHistory');
+            $this->giveAutoAllPermissions($staff, 'purchases');
+            $this->giveAutoAllPermissions($staff, 'purchaseProducts');
+            $this->giveAutoAllPermissions($staff, 'productVariants');
+            $this->giveAutoAllPermissions($staff, 'productVariantAttributes');
+            $this->giveAutoAllPermissions($staff, 'quotations');
+            $this->giveAutoAllPermissions($staff, 'quotationProducts');
+            $this->giveAutoAllPermissions($staff, 'unusedProducts');
 
             $storeKeeper = Role::create([
                 'name' => 'Store Keeper',
