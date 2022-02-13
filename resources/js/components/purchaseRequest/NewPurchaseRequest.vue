@@ -333,20 +333,20 @@ export default {
     },
     methods: {
         async loadDepartments() {
-            let res = await ApiServices.departmentIndex();
+            let res = await ApiServices.departmentList();
             if (res.success === true) {
                 this.departments = res.data;
             }
         },
 
         async loadItems() {
-            let res = await ApiServices.productIndex();
+            let res = await ApiServices.productList();
             if (res.success === true) {
                 this.products = res.data;
             }
         },
         async loadUnits() {
-            let res = await ApiServices.unitIndex();
+            let res = await ApiServices.unitList();
             if (res.success === true) {
                 this.units = res.data;
             }

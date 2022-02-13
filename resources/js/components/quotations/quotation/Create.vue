@@ -619,24 +619,40 @@ export default {
                     let res = await ApiServices.changePurchaseProductStatusRequestAd(singleData.id, productData);
                     if (res.success === true) {
                         await this.addPrProducts(singleData);
+                        console.log(singleData)
                     }
                 }
             }
         }
     },
     methods: {
-        // async addPrProducts(product) {
-        //     var varName = '---';
-        //     var price = '';
-        //     this.quoProducts.push({
-        //         'product_id': product.product_id,
-        //         'product_name': res.data.name,
-        //         'product_variant_id': product.product_variant_id,
-        //         'product_variant': varName,
-        //         'quantity': product.quantity,
-        //         'shipping_cost': 0,
-        //     });
-        // },
+        async addPrProducts(product) {
+            var varName = '---';
+            var varId = '';
+            var price = '';
+            var unit = '';
+            let res = await ApiServices.productShow(product.product_id);
+            if (res === true) {
+                if (this.addQuoProduct.product_variant_id) {
+                    let rtn = await ApiServices.productVariantShow(this.addQuoProduct.product_variant_id);
+                    varName = rtn.data.name;
+                    varId = rtn.data.id;
+                }
+                for (var i = 0; i < this.units.length; i++) {
+                    if (this.addQuoProduct.unit_id === this.units[i].id) {
+                        unit = this.units[i].name;
+                    }
+                }
+                this.quoProducts.push({
+                    'product_id': product.product_id,
+                    'product_name': res.data.name,
+                    'product_variant_id': product.product_variant_id,
+                    'product_variant': varName,
+                    'quantity': product.quantity,
+                    'shipping_cost': 0
+                });
+            }
+        },
         async loadDepartments() {
             let res = await ApiServices.departmentList();
             if (res.success === true) {

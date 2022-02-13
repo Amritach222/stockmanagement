@@ -234,6 +234,17 @@ class RolesSeeder extends Seeder
         ]);
         $item->save();
 
+
+        $item = new Department([
+            'name' => 'Finance'
+        ]);
+        $item->save();
+
+        $item = new Department([
+            'name' => 'IT'
+        ]);
+        $item->save();
+
         $user = new User([
             'name' => 'Staff one',
             'username' => 'staff1234',
