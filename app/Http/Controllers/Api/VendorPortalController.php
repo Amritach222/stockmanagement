@@ -211,7 +211,7 @@ class VendorPortalController extends Controller
                 } else {
                     $discount = $quotationProduct->discount ?? 0;
                 }
-                $quoProduct->total = $quotationProduct->price * $quotationProduct->quantity + $quotationProduct->shipping_cost + ($quotationProduct->price * $quotationProduct->tax->value) / 100 - $discount;
+                $quoProduct->grand_total = $quotationProduct->price * $quotationProduct->quantity + $quotationProduct->shipping_cost + ($quotationProduct->price * $quotationProduct->tax->value??0) / 100 - $discount;
                 $quoProduct->save();
 
                 $vendorQuotationProducts = VendorQuotationProduct::where('id', '!=', $id)->where('quotation_product_id', $quotationProduct->quotation_product_id)->get();
@@ -294,7 +294,7 @@ class VendorPortalController extends Controller
                         } else {
                             $discount = $product->discount;
                         }
-                        $quotationProduct->total = $product->price * $product->quantity + $product->shipping_cost + ($product->price * $product->tax->value) / 100 - $discount;
+                        $quotationProduct->grand_total = $product->price * $product->quantity + $product->shipping_cost + ($product->price * $product->tax->value) / 100 - $discount;
                         $quotationProduct->save();
                     }
                 } elseif (($request->status == 'Cancelled')) {

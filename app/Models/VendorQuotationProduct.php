@@ -9,7 +9,7 @@ class VendorQuotationProduct extends Model
 {
     use HasFactory;
 
-    protected $guarded=['id'];
+    protected $guarded = ['id'];
 
     public function vendorQuotation()
     {
@@ -19,5 +19,10 @@ class VendorQuotationProduct extends Model
     public function quotationProduct()
     {
         return $this->belongsTo(QuotationProduct::class, 'quotation_product_id');
+    }
+
+    public function tax()
+    {
+        return $this->belongsTo(Tax::class, 'tax_id');
     }
 }

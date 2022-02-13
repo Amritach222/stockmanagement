@@ -25,7 +25,7 @@ class CreateVendorQuotationProductsTable extends Migration
             $table->integer('discount')->nullable();
             $table->integer('tax_id')->unsigned()->nullable();
             $table->foreign('tax_id')->references('id')->on('taxes');
-            $table->enum('status', ['Pending', 'On Progress', 'Accepted', 'Review', 'Reviewed', 'Approved', 'Rejected', 'Cancel'])->default('Pending')->nullable();
+            $table->enum('status', ['Pending', 'On Progress', 'Accepted', 'Review', 'Reviewed', 'Approved', 'Rejected', 'Cancelled'])->default('Pending')->nullable();
             $table->timestamps();
         });
     }
