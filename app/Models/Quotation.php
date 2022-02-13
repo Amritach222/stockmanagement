@@ -9,7 +9,7 @@ class Quotation extends Model
 
     protected $table = 'quotations';
     public $timestamps = true;
-    protected $fillable = array('reference_no', 'user_id', 'department_id', 'file_id', 'status', 'note', 'reviewed_by', 'approved_by', 'due_date', 'desired_delivery_date', 'requested_name');
+    protected $fillable = array('reference_no', 'user_id', 'department_id', 'file_id', 'status', 'note', 'reviewed_by', 'approved_by', 'due_date', 'desired_delivery_date', 'requested_name','is_from_purchase');
 
     public function user()
     {
@@ -101,7 +101,7 @@ class Quotation extends Model
     public function isPending()
     {
         $pending_count = 0;
-        $quotationProductIds = QuotationProduct::where('quotation_id', $this->id)->pluck('product_id');
+        $quotationProductIds = QuotationProduct::where('quotation_id', $this->id)->pluck('id');
         foreach ($quotationProductIds as $id) {
             if ($this->getProductStatus($id) === 'Pending') {
                 $pending_count = $pending_count + 1;

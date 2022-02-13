@@ -33,6 +33,7 @@ class QuotationProduct extends JsonResource
             'discount_type' => $this->discount_type,
             'discount' => $this->discount,
             'grand_total' => $this->grand_total,
+            'purchase_product_id' => $this->purchase_product_id,
             'product' => $product,
             'product_variant' => $productVariant,
             'tax' => $tax,

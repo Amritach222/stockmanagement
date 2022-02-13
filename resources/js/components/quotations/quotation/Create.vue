@@ -618,7 +618,7 @@ export default {
                 for (const singleData of selectedProducts) {
                     let res = await ApiServices.changePurchaseProductStatusRequestAd(singleData.id, productData);
                     if (res.success === true) {
-                       await this.addPrProducts(singleData);
+                        await this.addPrProducts(singleData);
                     }
                 }
             }
@@ -913,6 +913,10 @@ export default {
                     data.append('due_date', this.due_date);
                     data.append('desired_delivery_date', this.desired_delivery_date);
                     data.append('requested_name', this.requested_name);
+
+                    if (this.$route.query.create === 'pr') {
+                        data.append('is_from_purchase', 0);
+                    }
 
                     if (typeof this.file.name == 'string') {
                         data.append('file', this.file);

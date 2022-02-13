@@ -22,14 +22,14 @@ class Quotation extends JsonResource
             $image = File::where('id', $this->file_id)->first();
             $link = $image->path;
         }
-        $quotationProducts = QuotationProduct::collection($this->quotationProducts);
+        $quotationProducts = QuotationProduct::collection(\App\Models\QuotationProduct::where('quotation_id', $this->id)->get());
         $vendorQuotations = \App\Models\VendorQuotation::where('quotation_id', $this->id)->get();
         $vendor_ids = \App\Models\VendorQuotation::where('quotation_id', $this->id)->pluck('vendor_id');
         $vendors = \App\Models\Vendor::whereIn('id', $vendor_ids)->get();
         foreach ($vendors as $vendor) {
             $vendor->status = $this->getVendorStatus($vendor->id);
-        }
-        $is_pending = $this->isPending();
+            }
+            $is_pending = $this->isPending();
         return [
             'id' => $this->id,
             'reference_no' => $this->reference_no,
@@ -44,6 +44,7 @@ class Quotation extends JsonResource
             'reviewed_by' => $this->reviewed_by,
             'approved_by' => $this->approved_by,
             'is_pending' => $is_pending,
+            'is_from_purchase' => $this->is_from_purchase,
             'link' => $link,
             'quotation_products' => $quotationProducts,
             'department' => $department,
