@@ -20,6 +20,11 @@ class QuotationProduct extends JsonResource
         $unit = $this->unit_id ? new Unit($this->unit) : null;
         $quotation = \App\Models\Quotation::findOrFail($this->quotation_id);
         $status = $quotation->getProductStatus($this->id);
+        $purchase = null;
+        if ($this->purchase_product_id !== null) {
+            $purchaseProduct = \App\Models\PurchaseProduct::findOrFail($this->purchase_product_id);
+            $purchase = new Purchase(\App\Models\Purchase::findOrFail($purchaseProduct->purchase_id));
+        }
         return [
             'id' => $this->id,
             'quotation_id' => $this->quotation_id,
@@ -39,6 +44,7 @@ class QuotationProduct extends JsonResource
             'tax' => $tax,
             'unit' => $unit,
             'status' => $status,
+            'purchase' => $purchase,
         ];
     }
 }

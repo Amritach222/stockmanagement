@@ -267,6 +267,16 @@
                                                     }}</p>
                                                 <p v-else class="mt-3">---</p>
                                             </template>
+                                            <template v-slot:item.purchase_product_id="{ item }">
+                                                <!--                                                <router-link-->
+                                                <!--                                                    :to="'/purchases/'+item.purchase.id"-->
+                                                <p
+                                                    v-if="item.purchase_product_id" class="mt-3">
+                                                    {{ item.purchase.reference_no }}
+                                                </p>
+                                                <!--                                                </router-link>-->
+                                                                                                <p v-else class="mt-3">---</p>
+                                            </template>
                                             <template v-slot:item.price="{ item }">
                                                 <p v-if="item.price" class="mt-3">{{ item.price }}</p>
                                                 <p v-else class="mt-3">0</p>
@@ -662,7 +672,7 @@ export default {
         let department = await this.loadDepartments();
         let item = await this.loadItems();
         let user = await this.loadUserName();
-        let vendor = await  this.loadVendors();
+        let vendor = await this.loadVendors();
         // this.loadQuoProducts();
     },
     methods: {
@@ -686,11 +696,15 @@ export default {
             if (res.success === true) {
                 this.editedItem = res.data;
                 this.quoProducts = res.data.quotation_products;
-                // console.log(this.quoProducts[0].unit.name)
                 if (this.quoProducts.length > 0) {
                     this.vendorCard = true;
                 }
                 this.quoVendors = res.data.vendors;
+                if (res.data.is_from_purchase === 1) {
+                    this.headers.unshift({
+                        text: i18n.t('purchase'), value: 'purchase_product_id'
+                    })
+                }
             }
         },
         async loadUserName() {
