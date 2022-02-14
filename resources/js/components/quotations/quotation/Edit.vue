@@ -906,61 +906,10 @@ export default {
             }
         },
 
-        async editQuoProduct() {
-            this.productValidate();
-            if (this.validated) {
-                if (this.editedIndex > -1) {
-                    //edit goes here
-                    this.progressL = true;
-                    const data = new FormData();
-                    data.append('product_id', this.addQuoProduct.product_id);
-                    if (this.addQuoProduct.product_variant_id !== null && this.addQuoProduct.product_variant_id !== '') {
-                        data.append('product_variant_id', this.addQuoProduct.product_variant_id);
-                    }
-                    data.append('quantity', this.addQuoProduct.quantity);
-                    data.append('shipping_cost', this.addQuoProduct.shipping_cost);
-                    let res = await ApiServices.quotationProductEdit(this.addQuoProduct.id, data);
-                    if (res.success === true) {
-                        Object.assign(this.quoProducts[this.editedIndex], res.data)
-                        this.$refs.form.reset();
-                        this.close();
-                    }
-                } else {
-                    //add new
-                    this.progressL = true;
-                    const data = new FormData();
-                    data.append('product_id', this.addQuoProduct.product_id);
-                    if (this.addQuoProduct.product_variant_id !== null && this.addQuoProduct.product_variant_id !== '') {
-                        data.append('product_variant_id', this.addQuoProduct.product_variant_id);
-                    }
-                    data.append('quantity', this.addQuoProduct.quantity);
-                    data.append('shipping_cost', this.addQuoProduct.shipping_cost);
-                    data.append('quotation_id', this.editedItem.id);
-                    let res = await ApiServices.quotationProductCreate(data);
-                    if (res.success === true) {
-                        this.quoProducts.push(res.data);
-                        this.$refs.form.reset();
-                        this.close()
-                    }
-                }
-            }
-        },
-
         async addVendor() {
             this.quoVendors = this.selected;
             this.selected = [];
             this.dialogV = false;
-        },
-
-        async createProductVendor() {
-            let data = new FormData();
-            data.append('quotation_id', parseInt(this.$route.params.id));
-            data.append('products', JSON.stringify(this.quoProducts));
-            data.append('vendors', JSON.stringify(this.quoVendors));
-            let res = await ApiServices.vendorQuotationCreate(data);
-            if (res.success === true) {
-                route.replace()
-            }
         },
 
         async editQuoProduct() {
@@ -1001,12 +950,6 @@ export default {
                     }
                 }
             }
-        },
-
-        async addVendor() {
-            this.quoVendors = this.selected;
-            this.selected = [];
-            this.dialogV = false;
         },
 
         async createProductVendor() {
@@ -1022,14 +965,6 @@ export default {
 
         validate() {
             if (this.department_id === '') {
-                this.validated = false;
-            } else {
-                this.validated = true;
-            }
-        },
-
-        productValidate() {
-            if (this.product_id === '') {
                 this.validated = false;
             } else {
                 this.validated = true;
