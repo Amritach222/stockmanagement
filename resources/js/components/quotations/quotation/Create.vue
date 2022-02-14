@@ -621,6 +621,7 @@ export default {
                         await this.addPrProducts(singleData);
                     }
                 }
+                this.vendorCard = true;
             }
         }
     },
@@ -630,7 +631,6 @@ export default {
             var varId = '';
             var unit = '';
             let res = await ApiServices.productShow(product.product_id);
-            console.log(product)
             if (res.success === true) {
                 if (product.product_variant_id) {
                     let rtn = await ApiServices.productVariantShow(product.product_variant_id);
@@ -915,7 +915,7 @@ export default {
                     data.append('requested_name', this.requested_name);
 
                     if (this.$route.query.create === 'pr') {
-                        data.append('is_from_purchase', 0);
+                        data.append('is_from_purchase', 1);
                     }
 
                     if (typeof this.file.name == 'string') {
@@ -947,11 +947,17 @@ export default {
                 // if(this.quoProducts[i].shipping_cost !== null && this.quoProducts[i].shipping_cost !== '' && typeof(parseInt(this.quoProducts[i].shipping_cost) === 'integer')) {
                 //     productData.append('shipping_cost', parseInt(this.quoProducts[i].shipping_cost));
                 // }
-                if (this.quoProducts[i].product_variant_id !== '' && typeof (parseInt(this.quoProducts[i].product_variant_id) === 'integer')) {
+                if ((this.quoProducts[i].product_variant_id !== '') && (typeof (parseInt(this.quoProducts[i].product_variant_id) === 'integer')) && (this.quoProducts[i].product_variant_id !== null)) {
+                    console.log(this.quoProducts[i].product_variant_id)
                     productData.append('product_variant_id', parseInt(this.quoProducts[i].product_variant_id));
                 }
-                if (this.quoProducts[i].unit_id !== '' && typeof (parseInt(this.quoProducts[i].unit_id) === 'integer')) {
+                if ((this.quoProducts[i].unit_id !== '') && (typeof (parseInt(this.quoProducts[i].unit_id) === 'integer')) && (this.quoProducts[i].unit_id !== null)) {
                     productData.append('unit_id', parseInt(this.quoProducts[i].unit_id));
+                }
+                if (this.$route.query.create === 'pr') {
+                    if ((this.quoProducts[i].purchase_product_id !== '') && (typeof (parseInt(this.quoProducts[i].purchase_product_id) === 'integer')) && (this.quoProducts[i].purchase_product_id !== null)) {
+                        productData.append('purchase_product_id', parseInt(this.quoProducts[i].purchase_product_id));
+                    }
                 }
                 let res = await ApiServices.quotationProductCreate(productData);
                 if (res.success === true) {
