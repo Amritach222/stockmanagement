@@ -156,6 +156,7 @@ import ProfileSetting from './components/Settings/profile/Index'
 
 import i18n from './i18n'
 
+import DetailPurchaseRequest from './components/purchaseRequest/NewPurchaseRequest'
 import NewPurchaseRequest from './components/purchaseRequest/NewPurchaseRequest'
 import PurchaseRequestHistory from './components/purchaseRequest/PurchaseRequestHistory'
 import EditPurchaseRequest from './components/purchaseRequest/EditPurchaseRequest'
@@ -233,6 +234,15 @@ export default new Router({
             path: '/reset-password',
             name: 'reset-password',
             component: ResetPassword,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchase/purchase-request/:id',
+            name: i18n.t('new') +' '+ i18n.t('purchase') +' '+ i18n.t('request'),
+            component: NewPurchaseRequest,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
