@@ -770,15 +770,29 @@ export default {
             let res = await ApiServices.vendorList();
             if (res.success === true) {
                 this.vendors = res.data;
-                for (var i = 0; i < this.vendors.length; i++) {
-                    for (var j = 0; j < this.quoVendors.length; j++) {
-                        if (this.quoVendors[j].id === this.vendors[i].id) {
-                            this.vendors.slice(i, 1);
-                        }
+                // for (var i = 0; i < this.vendors.length; i++) {
+                //     for (var j = 0; j < this.quoVendors.length; j++) {
+                //         if (this.quoVendors[j].id === this.vendors[i].id) {
+                //             this.vendors.slice(i, 1);
+                //         }
+                //     }
+                // }
+                let rtn = await this.filterVendors();
+            }
+        },
+
+        async filterVendors(){
+            for (var i = 0; i < this.vendors.length; i++) {
+                for (var j = 0; j < this.quoVendors.length; j++) {
+                    if (this.quoVendors[j].id === this.vendors[i].id) {
+                        this.vendors.splice(i, 1);
+                        console.log(this.quoVendors)
+                        console.log(this.vendors)
                     }
                 }
             }
         },
+
         async getVariants(product) {
             let res = await ApiServices.productShow(product);
             if (res.success === true) {
@@ -884,7 +898,7 @@ export default {
             this.validate();
             let due = await this.checkDate('due_date', this.editedItem.due_date);
             let delivery = await this.checkDate('delivery_date', this.editedItem.desired_delivery_date);
-            if ((this.deliveryDateValidation !== false) && (this.dueDateValidation !== false)) {
+            if ((this.deliveryDateValidation === false) && (this.dueDateValidation === false)) {
                 if (this.validated) {
                     this.changeProgress = true;
                     const data = new FormData();
