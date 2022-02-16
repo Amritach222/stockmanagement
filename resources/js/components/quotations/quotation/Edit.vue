@@ -538,6 +538,24 @@
                                                             </v-row>
                                                         </v-card>
                                                     </v-dialog>
+                                                    <v-dialog v-model="dialogVDelete" max-width="500px">
+                                                        <v-card>
+                                                            <v-card-title class="text-h6">
+                                                                {{ $t('message.delete') }}
+                                                            </v-card-title>
+                                                            <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn color="blue darken-1" text @click="closeVDelete">
+                                                                    {{ $t('button.cancel') }}
+                                                                </v-btn>
+                                                                <v-btn color="blue darken-1" text
+                                                                       @click="deleteVConfirm">
+                                                                    {{ $t('button.submit') }}
+                                                                </v-btn>
+                                                                <v-spacer></v-spacer>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-dialog>
                                                 </v-toolbar>
                                             </template>
                                             <template v-slot:item.status="{ item }">
@@ -581,7 +599,17 @@
                                                 </div>
                                             </template>
                                             <template v-slot:item.actions="{ item }">
+                                                <div
+                                                    v-if="item.status === 'Additional'">
+                                                <v-icon
+                                                    small
+                                                    @click="deleteVItem(item)"
+                                                >
+                                                    mdi-delete
+                                                </v-icon>
+                                                </div>
                                                 <router-link
+                                                    v-else
                                                     :to="'/quotations/vendor/'+$route.params.id+'/'+item.id"
                                                 >
                                                     <v-icon
@@ -889,12 +917,25 @@
                 this.dialogDelete = true
             },
 
+            deleteVItem(item) {
+                this.editedIndex = this.quoVendors.indexOf(item)
+                this.dialogVDelete = true
+            },
+
             async deleteItemConfirm() {
                 let res = await ApiServices.quotationProductDelete(this.addQuoProduct.id);
                 if (res.success === true) {
                     this.quoProducts.splice(this.editedIndex, 1)
                 }
                 this.closeDelete()
+            },
+
+            async deleteVConfirm() {
+                var vendor = this.quoVendors[this.editedIndex];
+                var index = this.newQuoVendors.indexOf(vendor);
+                this.quoVendors.splice(this.editedIndex, 1)
+                this.newQuoVendors.splice(index, 1);
+                this.closeVDelete()
             },
 
             close() {
@@ -916,6 +957,13 @@
                 this.dialogDelete = false
                 this.$nextTick(() => {
                     this.addQuoProduct = Object.assign({}, this.defaultItem)
+                    this.editedIndex = -1
+                })
+            },
+
+            closeVDelete() {
+                this.dialogVDelete = false
+                this.$nextTick(() => {
                     this.editedIndex = -1
                 })
             },
@@ -964,7 +1012,7 @@
             },
 
             async confirmEdit() {
-                if (this.quoVendors.length > 0) {
+                if (this.newQuoVendors.length > 0) {
                     this.validate();
                     this.checkDate('due_date', this.due_date);
                     this.checkDate('delivery_date', this.desired_delivery_date);
