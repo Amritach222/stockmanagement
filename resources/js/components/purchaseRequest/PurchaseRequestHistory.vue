@@ -140,6 +140,11 @@
                     </v-dialog>
                 </v-toolbar>
             </template>
+            <template v-slot:item.status="{ item }">
+                <CButton size="sm" :color="getColor(item.status)">
+                    {{ item.status }}
+                </CButton>
+            </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
                     small
@@ -231,6 +236,12 @@ export default {
     },
 
     methods: {
+        getColor(status) {
+            if (status === 'Pending') return 'warning'
+            else if (status === 'Rejected') return 'danger'
+            else return 'success'
+        },
+
         openImage(data) {
             window.open(config.cdnURL + data, `_blank`);
         },

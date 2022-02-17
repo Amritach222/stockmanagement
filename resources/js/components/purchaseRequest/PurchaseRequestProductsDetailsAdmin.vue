@@ -160,13 +160,9 @@
                         </v-toolbar>
                     </template>
                     <template v-slot:item.status="{ item }">
-                        <v-chip
-                            :color="getColor(item.status)"
-                            dark
-                            small
-                        >
+                        <CButton size="sm" :color="getColor(item.status)">
                             {{ item.status }}
-                        </v-chip>
+                        </CButton>
                     </template>
                     <template v-slot:item.actions="{ item }">
                         <v-icon
@@ -279,9 +275,9 @@ export default {
         },
 
         getColor(status) {
-            if (status === 'Pending') return 'orange'
-            else if (status === 'Rejected') return 'red'
-            else return 'green'
+            if (status === 'Pending') return 'warning'
+            else if (status === 'Rejected') return 'danger'
+            else return 'success'
         },
 
         openImage(data) {

@@ -26,14 +26,15 @@
             </tr>
             </tbody>
         </table>
-        <PurchaseRequestProductsDetails :details="item.purchase_products" :triggerSelectProduct="triggerSelectProduct"></PurchaseRequestProductsDetails>
+        <PurchaseRequestProductsDetails :details="item.purchase_products"
+                                        :triggerSelectProduct="triggerSelectProduct"></PurchaseRequestProductsDetails>
     </div>
 </template>
 
 <script>
 import config from "../../config";
 import PurchaseRequestProductsDetails from "./PurchaseRequestProductsDetails";
-import ApiServices from "../../services/ApiServices";
+import store from "../../store";
 
 export default {
     name: "DetailPurchaseRequest",
@@ -42,16 +43,14 @@ export default {
     data: () => ({
         cdnURL: config.cdnURL,
         triggerSelectProduct: false,
-        item: '',
+        item: [],
     }),
-    async mounted() {
-        let res = await ApiServices.showPurchaseRequest(this.$route.params.id);
-        if (res.success === true) {
-            this.item = res.data;
-        }
+    created() {
+        this.item = store.state.purchase.itemDetail;
     },
+
     watch: {
-        triggerSelect: function(newVal, oldVal) {
+        triggerSelect: function (newVal, oldVal) {
             this.triggerSelectProduct = !this.triggerSelectProduct;
         }
     },

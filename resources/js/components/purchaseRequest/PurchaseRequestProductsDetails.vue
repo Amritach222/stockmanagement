@@ -136,24 +136,34 @@
         <template v-slot:item.unit_id="{ item }">
             {{ getUnitName(item.unit_id) }}
         </template>
+        <template v-slot:item.department_status="{ item }">
+            <CButton size="sm" :color="getColor(item.department_status)">
+                {{ item.department_status }}
+            </CButton>
+        </template>
+        <template v-slot:item.status="{ item }">
+            <CButton size="sm" :color="getColor(item.status)">
+                {{ item.status }}
+            </CButton>
+        </template>
         <template v-slot:item.actions="{ item }">
             <div v-if="$can('purchaseProductsApprovalDepartmentHead')">
-                <v-btn small @click="approveProduct(item)">
+                <CButton size="sm" color="success" @click="approveProduct(item)">
                     Approve
-                </v-btn>
-                <v-btn small @click="denyProduct(item)">
+                </CButton>
+                <CButton size="sm" color="danger" @click="denyProduct(item)">
                     Deny
-                </v-btn>
+                </CButton>
             </div>
             <div v-if="$can('purchaseProductsApprovalStoreAdmin')">
-                <v-btn small @click="addToApproveList(item)">
+                <CButton size="sm" color="success" @click="addToApproveList(item)">
                     Add to List
-                </v-btn>
-                <v-btn small @click="removeFromApproveList(item)">
+                </CButton>
+                <CButton size="sm" color="danger" @click="removeFromApproveList(item)">
                     Remove From List
-                </v-btn>
+                </CButton>
             </div>
-            <div v-else>
+            <div v-if="!$can('purchaseProductsApprovalStoreAdmin') && !$can('purchaseProductsApprovalDepartmentHead')">
                 <v-icon
                     small
                     class="mr-2"
@@ -263,10 +273,15 @@ export default {
         this.prProducts = this.details;
     },
     methods: {
-        async saveDat (item) {
+        getColor(status) {
+            if (status === 'Pending') return 'warning'
+            else if (status === 'Rejected') return 'danger'
+            else return 'success'
+        },
+        async saveDat(item) {
             let productData = new FormData();
             productData.append('quantity', parseInt(item.quantity));
-            let res = await ApiServices.editPurchaseRequestProduct(item.id,productData);
+            let res = await ApiServices.editPurchaseRequestProduct(item.id, productData);
             if (res.success === true) {
                 store.state.home.snackbar = true;
                 store.state.home.snackbarText = "Quantity Edited";
@@ -277,7 +292,7 @@ export default {
                 store.state.home.snackbarColor = 'red';
             }
         },
-        cancel () {
+        cancel() {
             this.snack = true
             this.snackColor = 'error'
             this.snackText = 'Canceled'
