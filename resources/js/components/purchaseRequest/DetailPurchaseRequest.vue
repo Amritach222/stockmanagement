@@ -44,8 +44,11 @@ export default {
         triggerSelectProduct: false,
         item: '',
     }),
-    async created() {
-        this.items();
+    async mounted() {
+        let res = await ApiServices.showPurchaseRequest(this.$route.params.id);
+        if (res.success === true) {
+            this.item = res.data;
+        }
     },
     watch: {
         triggerSelect: function(newVal, oldVal) {
@@ -53,13 +56,6 @@ export default {
         }
     },
     methods: {
-        async items() {
-            let res = await ApiServices.departmentIndex();
-            if (res.success === true) {
-                this.departments = res.data;
-            }
-        },
-
         openImage(data) {
             window.open(this.cdnURL + data, `_blank`);
         },

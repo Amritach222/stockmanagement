@@ -117,6 +117,22 @@
 
             {{ getVariantName(item.product_variant_id) }}
         </template>
+        <template v-slot:item.quantity="{ item }">
+            <v-edit-dialog
+                :return-value.sync="item.quantity"
+                @save="saveDat(item)"
+                @cancel="cancel"
+            >
+                {{ item.quantity }}
+                <template v-slot:input>
+                    <v-text-field
+                        v-model="item.quantity"
+                        label="Edit"
+                        single-line
+                    ></v-text-field>
+                </template>
+            </v-edit-dialog>
+        </template>
         <template v-slot:item.unit_id="{ item }">
             {{ getUnitName(item.unit_id) }}
         </template>
@@ -247,6 +263,26 @@ export default {
         this.prProducts = this.details;
     },
     methods: {
+        async saveDat (item) {
+            let productData = new FormData();
+            productData.append('quantity', parseInt(item.quantity));
+            let res = await ApiServices.editPurchaseRequestProduct(item.id,productData);
+            if (res.success === true) {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Quantity Edited";
+                store.state.home.snackbarColor = 'green';
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Could not edit";
+                store.state.home.snackbarColor = 'red';
+            }
+        },
+        cancel () {
+            this.snack = true
+            this.snackColor = 'error'
+            this.snackText = 'Canceled'
+        },
+
         getProductName(item) {
             if (item === null || item === undefined) {
                 return "---"
