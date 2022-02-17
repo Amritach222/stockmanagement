@@ -324,25 +324,25 @@ export default {
     },
     methods: {
         async loadProducts() {
-            let res = await ApiServices.productIndex();
+            let res = await ApiServices.productList();
             if (res.success === true) {
                 this.products = res.data;
             }
         },
         async loadBrands() {
-            let res = await ApiServices.brandIndex();
+            let res = await ApiServices.brandList();
             if (res.success === true) {
                 this.brands = res.data;
             }
         },
         async loadUsers() {
-            let res = await ApiServices.userIndex();
+            let res = await ApiServices.userList();
             if (res.success === true) {
                 this.users = res.data;
             }
         },
         async loadUnits() {
-            let res = await ApiServices.unitIndex();
+            let res = await ApiServices.unitList();
             if (res.success === true) {
                 this.units = res.data;
             }

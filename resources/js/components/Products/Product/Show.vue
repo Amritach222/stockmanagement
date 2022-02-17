@@ -220,44 +220,6 @@
                                                 <template v-slot:item.city="{ item }">
                                                     {{ getCityName(item) }}
                                                 </template>
-                                                <template v-slot:item.actions="{ item }">
-                                                    <router-link
-                                                        :to="'/vendors/'+item.id"
-                                                        v-if="$can('vendors')"
-                                                    >
-                                                        <v-icon
-                                                            small
-                                                        >
-                                                            mdi-eye
-                                                        </v-icon>
-                                                    </router-link>
-                                                    <v-icon
-                                                        small
-                                                        class="mr-2"
-                                                        @click="editItem(item)"
-                                                        v-if="$can('vendors.edit')"
-                                                    >
-                                                        mdi-pencil
-                                                    </v-icon>
-                                                    <v-icon
-                                                        small
-                                                        @click="deleteItem(item)"
-                                                        v-if="$can('vendors.delete')"
-                                                    >
-                                                        mdi-delete
-                                                    </v-icon>
-                                                    <router-link
-                                                        :to="'/vendorProducts/add/'+item.id"
-                                                        v-if="$is('Store Keeper')"
-                                                    >
-                                                        <v-icon
-                                                            small
-                                                        >
-                                                            mdi-chart-box-plus-outline
-                                                        </v-icon>
-                                                    </router-link>
-
-                                                </template>
                                                 <template v-slot:no-data>
                                                     <div>No Data</div>
                                                 </template>
@@ -353,7 +315,7 @@ export default {
                 this.show = res.data;
                 this.variants = res.data.product_variants;
             }
-            let rtn = await ApiServices.vendorIndex();
+            let rtn = await ApiServices.vendorList();
             if (rtn.success === true) {
                 this.tableLoad = false;
                 this.allVendors = rtn.data;
