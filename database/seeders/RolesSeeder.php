@@ -95,6 +95,7 @@ class RolesSeeder extends Seeder
             $departmentHead->givePermissionTo('settings');
             $departmentHead->givePermissionTo('units');
             $departmentHead->givePermissionTo('products');
+            $departmentHead->givePermissionTo('products.show');
             $departmentHead->givePermissionTo('productVariants');
 
             $staff = Role::create([
@@ -128,11 +129,11 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeKeeper, 'items');
             $this->giveAutoAllPermissions($storeKeeper, 'productVariants');
             $this->giveAutoAllPermissions($storeKeeper, 'productVariantAttributes');
+            $this->giveAutoAllPermissions($storeKeeper, 'quotations');
             $this->giveAutoAllPermissions($storeKeeper, 'unusedProducts');
             $this->giveAutoAllPermissions($storeKeeper, 'transfers');
             $this->giveAutoAllPermissions($storeKeeper, 'returnProducts');
             $this->giveAutoAllPermissions($storeKeeper, 'purchaseProductsApprovalStoreAdmin');
-            $storeKeeper->givePermissionTo('quotations');
             $storeKeeper->givePermissionTo('vendors');
             $storeKeeper->givePermissionTo('vendors.show');
             $storeKeeper->givePermissionTo('settings');
@@ -152,10 +153,7 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeManager, 'consumes');
             $storeManager->givePermissionTo('settings');
             $this->giveAutoAllPermissions($storeManager, 'purchaseProductsApprovalAdmin');
-            $storeManager->givePermissionTo('quotations');
             $storeManager->givePermissionTo('units');
-            $storeManager->givePermissionTo('products');
-            $storeManager->givePermissionTo('productVariants');
 
             $financeStaff = Role::create([
                 'name' => 'Finance Staff',

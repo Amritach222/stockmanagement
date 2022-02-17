@@ -560,47 +560,52 @@ export default {
             window.open(config.cdnURL + data, `_blank`);
         },
         async loadBrands() {
-            let res = await ApiServices.brandIndex();
+            let res = await ApiServices.brandList();
             if (res.success === true) {
                 this.brands = res.data;
             }
         },
         async loadCategories() {
-            let res = await ApiServices.categoryIndex();
+            let res = await ApiServices.categoryList();
             if (res.success === true) {
                 this.categories = res.data;
             }
         },
         async loadUnits() {
-            let res = await ApiServices.unitIndex();
+            let res = await ApiServices.unitList();
             if (res.success === true) {
                 this.units = res.data;
             }
         },
         async getSubUnits(unit) {
             this.subUnits = [];
-            let res = await ApiServices.unitShow(unit);
+            var category_id = '';
+            for (var k = 0; k < this.units.length; k++) {
+                if (this.units[k].id === unit) {
+                    category_id = this.units[k].category_id;
+                }
+            }
             for (var i = 0; i < this.units.length; i++) {
-                if (this.units[i].category_id === res.data.category_id) {
+                if (this.units[i].category_id === category_id) {
                     this.subUnits.push(this.units[i]);
                 }
             }
         },
         async loadTaxes() {
-            let res = await ApiServices.taxIndex();
+            let res = await ApiServices.taxList();
             if (res.success === true) {
                 this.taxes = res.data;
             }
         },
         async loadProductAttributeGroups() {
-            let res = await ApiServices.productAttributeGroupIndex();
+            let res = await ApiServices.productAttributeGroupList();
             if (res.success === true) {
                 this.productAttributeGroups = res.data;
             }
         },
         async getAttributes(attributeGroup) {
             this.productAttributes = [];
-            let res = await ApiServices.productAttributeIndex();
+            let res = await ApiServices.productAttributeList();
             for (var i = 0; i < res.data.length; i++) {
                 for (var j = 0; j < attributeGroup.length; j++) {
                     if (res.data[i].attribute_group_id === attributeGroup[j].id) {
