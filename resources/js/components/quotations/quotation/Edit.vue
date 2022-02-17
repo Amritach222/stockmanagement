@@ -320,13 +320,12 @@
                                                 <p v-else class="mt-3">---</p>
                                             </template>
                                             <template v-slot:item.purchase_product_id="{ item }">
-                                                <!--                                                <router-link-->
-                                                <!--                                                    :to="'/purchases/'+item.purchase.id"-->
-                                                <p
+                                                                                                <router-link
+                                                                                                    :to="'/purchase/purchase-request/'+item.purchase.id"
                                                     v-if="item.purchase_product_id" class="mt-3">
                                                     {{ item.purchase.reference_no }}
-                                                </p>
-                                                <!--                                                </router-link>-->
+<!--                                                </p>-->
+                                                                                                </router-link>
                                                 <p v-else class="mt-3">---</p>
                                             </template>
                                             <template v-slot:item.price="{ item }">
