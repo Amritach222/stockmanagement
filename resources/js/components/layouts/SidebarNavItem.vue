@@ -324,7 +324,7 @@
                     <v-list-item-title class="ml-2 item-color">{{ $t('purchases') }}</v-list-item-title>
                 </template>
 
-                <v-list-item class="ml-3" v-if="$can('purchases')">
+                <v-list-item class="ml-3" v-if="$can('purchases') && !($is('Admin'))">
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-shield-plus</v-icon>
                     </v-list-item-icon>

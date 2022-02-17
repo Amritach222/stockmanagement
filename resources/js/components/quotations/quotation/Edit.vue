@@ -838,7 +838,7 @@
                     this.quoVendors = res.data.vendors;
                     if (res.data.is_from_purchase === 1) {
                         this.headers.unshift({
-                            text: i18n.t('purchase'), value: 'purchase_product_id'
+                            text: i18n.t('purchase') + ' ' + i18n.t('request'), value: 'purchase_product_id'
                         })
                     }
                 }
