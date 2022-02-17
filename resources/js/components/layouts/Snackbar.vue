@@ -1,7 +1,8 @@
 <template>
     <v-snackbar
+        id="snackbarr"
         v-model="snackbar"
-        :color="snackbarColor"
+        color='green'
         bottom
         :timeout="snackbarTimeout"
     >{{ snackbarText }}
@@ -36,5 +37,7 @@ export default {
 </script>
 
 <style scoped>
-
+#snackbarr{
+    color: #00ff00;
+}
 </style>

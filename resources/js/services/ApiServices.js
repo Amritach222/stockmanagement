@@ -691,4 +691,10 @@ export default {
     async deleteUserPurchaseRequest(id) {
         return await apiCall(DELETE, `api/purchase/purchases/${id}`)
     },
+    async showPurchaseRequest(id) {
+        return await apiCall(GET, `api/purchase/purchases/${id}`)
+    },
+    async editPurchaseRequestProduct(id,data) {
+        return await apiCall(POST, `api/purchase/purchaseProducts/${id}`, data)
+    },
 }
