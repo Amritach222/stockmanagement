@@ -8,6 +8,7 @@ use App\Http\Requests\PurchaseProductRequest;
 use App\Http\Requests\PurchaseRequest;
 use App\Http\Resources\Purchase as PurchaseResource;
 use App\Http\Resources\PurchaseProduct as PurchaseProductResource;
+use App\Http\Resources\PurchaseRequestAdminResource;
 use App\Models\File;
 use App\Models\Product;
 use App\Models\ProductVariant;
@@ -21,7 +22,8 @@ class PurchaseController extends Controller
     public function __construct()
     {
         parent::generateAllMiddlewareByPermission('purchases');
-        $this->middleware(['role:' . 'Admin|Store Manager'])->only(['adminPurchaseLists','changeStatusOfPurchaseListsProducts','departmentHeadPurchaseLists']);
+        $this->middleware(['role:' . 'Department Head'])->only(['changeStatusOfPurchaseListsProducts', 'departmentHeadPurchaseLists']);
+        $this->middleware(['role:' . 'Admin|Store Manager'])->only(['adminPurchaseLists']);
     }
 
     public function index()
@@ -54,9 +56,13 @@ class PurchaseController extends Controller
         $data['success'] = true;
         $data['message'] = '';
         $data['data'] = [];
-        $user = auth()->user();
-        $purchases = Purchase::all();
-        $data['data'] = PurchaseResource::collection($purchases);
+
+        $purchases = Purchase::whereHas('purchaseProducts', function ($query) {
+            $query->where('department_status', 'Approved');
+        }
+        )->get();
+
+        $data['data'] = PurchaseRequestAdminResource::collection($purchases);
         return $data;
     }
 
@@ -66,10 +72,14 @@ class PurchaseController extends Controller
         $data['message'] = '';
         $data['data'] = [];
         $user = auth()->user();
-        if($user->department_id === null){
+        if ($user->department_id === null) {
             return response(['success' => false, "message" => 'Department id not found', "data" => []], 422);
         } else {
-            $purchases = Purchase::where('department_id',$user->department_id)->get();
+//            $purchases = Purchase::where('department_id', $user->department_id)->get();
+            $purchases = Purchase::where('department_id', $user->department_id)->with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
+                $query->where('department_status', 'Pending');
+            }
+            )->get();
             $data['data'] = PurchaseResource::collection($purchases);
             return $data;
         }

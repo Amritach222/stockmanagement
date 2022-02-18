@@ -48,6 +48,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($director, 'returnProducts');
             $this->giveAutoAllPermissions($director, 'purchases');
             $this->giveAutoAllPermissions($director, 'purchaseProducts');
+            $this->giveAutoAllPermissions($director, 'purchaseProductsApprovalAdmin');
+            $this->giveAutoAllPermissions($director, 'purchaseProductsApprovalDepartmentHead');
             $this->giveAutoAllPermissions($director, 'quotations');
             $this->giveAutoAllPermissions($director, 'quotationProducts');
             $this->giveAutoAllPermissions($director, 'transfers');
@@ -77,8 +79,10 @@ class RolesSeeder extends Seeder
             ]);
             $this->giveAutoAllPermissions($departmentHead, 'consumes');
             $this->giveAutoAllPermissions($departmentHead, 'purchaseProductsApproval');
+            $this->giveAutoAllPermissions($departmentHead, 'purchaseProductsApprovalDepartmentHead');
             $this->giveAutoAllPermissions($departmentHead, 'returnProducts');
             $this->giveAutoAllPermissions($departmentHead, 'purchases');
+            $this->giveAutoAllPermissions($departmentHead, 'purchaseHistory');
             $this->giveAutoAllPermissions($departmentHead, 'purchaseProducts');
             $this->giveAutoAllPermissions($departmentHead, 'quotations');
             $this->giveAutoAllPermissions($departmentHead, 'quotationProducts');
@@ -91,6 +95,9 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($departmentHead, 'unusedProducts');
             $departmentHead->givePermissionTo('freezeBudgets');
             $departmentHead->givePermissionTo('settings');
+            $departmentHead->givePermissionTo('units');
+            $departmentHead->givePermissionTo('products');
+            $departmentHead->givePermissionTo('productVariants');
 
             $staff = Role::create([
                 'name' => 'Staff',
@@ -109,6 +116,18 @@ class RolesSeeder extends Seeder
 //            $staff->givePermissionTo('brands');
 //            $staff->givePermissionTo('taxes');
 //            $staff->givePermissionTo('products');
+            $this->giveAutoAllPermissions($staff, 'categories');
+            $this->giveAutoAllPermissions($staff, 'products');
+            $this->giveAutoAllPermissions($staff, 'items');
+            $staff->givePermissionTo('units');
+            $this->giveAutoAllPermissions($staff, 'purchaseHistory');
+            $this->giveAutoAllPermissions($staff, 'purchases');
+            $this->giveAutoAllPermissions($staff, 'purchaseProducts');
+            $this->giveAutoAllPermissions($staff, 'productVariants');
+            $this->giveAutoAllPermissions($staff, 'productVariantAttributes');
+            $this->giveAutoAllPermissions($staff, 'quotations');
+            $this->giveAutoAllPermissions($staff, 'quotationProducts');
+            $this->giveAutoAllPermissions($staff, 'unusedProducts');
 
             $storeKeeper = Role::create([
                 'name' => 'Store Keeper',
@@ -128,6 +147,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeKeeper, 'transfers');
             $this->giveAutoAllPermissions($storeKeeper, 'returnProducts');
             $storeKeeper->givePermissionTo('quotations.show');
+            $this->giveAutoAllPermissions($storeKeeper, 'purchaseProductsApprovalStoreAdmin');
+            $storeKeeper->givePermissionTo('quotations');
             $storeKeeper->givePermissionTo('vendors');
             $storeKeeper->givePermissionTo('vendors.show');
             $storeKeeper->givePermissionTo('settings');
@@ -137,6 +158,7 @@ class RolesSeeder extends Seeder
                 'guard_name' => $guard
             ]);
             $this->giveAutoAllPermissions($storeManager, 'purchaseProductsApproval');
+            $this->giveAutoAllPermissions($storeManager, 'purchaseProductsApprovalStoreAdmin');
             $this->giveAutoAllPermissions($storeManager, 'products');
             $this->giveAutoAllPermissions($storeManager, 'attributes');
             $this->giveAutoAllPermissions($storeManager, 'attributeGroups');
@@ -144,6 +166,11 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeManager, 'quotations');
             $this->giveAutoAllPermissions($storeManager, 'quotationProducts');
             $this->giveAutoAllPermissions($storeManager, 'consumes');
+            $this->giveAutoAllPermissions($storeManager, 'purchaseProductsApprovalAdmin');
+            $storeManager->givePermissionTo('quotations');
+            $storeManager->givePermissionTo('units');
+            $storeManager->givePermissionTo('products');
+            $storeManager->givePermissionTo('productVariants');
             $storeManager->givePermissionTo('settings');
 
             $financeStaff = Role::create([
@@ -155,40 +182,36 @@ class RolesSeeder extends Seeder
         }
         $user = new User([
             'name' => 'Super Admin',
-            'username' => 'superAdmin',
+            'username' => 'superadmin',
             'email' => 'superadmin@rkdholdings.com',
-            'password' => bcrypt('Rkd@holdings123'),
-            'is_active' => 1
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Super Admin');
 
         $user = new User([
             'name' => 'Admin',
-            'username' => 'admin',
+            'username' => 'admin1234',
             'email' => 'admin@rkdholdings.com',
-            'password' => bcrypt('Admin@123'),
-            'is_active' => 1
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Admin');
 
         $user = new User([
             'name' => 'Store Keeper',
-            'username' => 'storeKeeper',
+            'username' => 'storekeeper',
             'email' => 'store.keeper@rkdholdings.com',
-            'password' => bcrypt('storeK@123'),
-            'is_active' => 1
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Store Keeper');
 
         $user = new User([
             'name' => 'Store Manager',
-            'username' => 'storeManager',
+            'username' => 'storemanager',
             'email' => 'store.manager@rkdholdings.com',
-            'password' => bcrypt('storeM@123'),
-            'is_active' => 1
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Store Manager');
@@ -197,37 +220,54 @@ class RolesSeeder extends Seeder
             'name' => 'Director',
             'username' => 'director',
             'email' => 'director@rkdholdings.com',
-            'password' => bcrypt('Director@123'),
-            'is_active' => 1
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Director');
 
         $user = new User([
             'name' => 'Finance Director',
-            'username' => 'financeDirector',
+            'username' => 'findirector',
             'email' => 'finance.director@rkdholdings.com',
-            'password' => bcrypt('financeD@123'),
-            'is_active' => 1
+            'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
         $user->assignRole('Finance Director');
 
         $user = new User([
-            'name' => 'Staff',
-            'username' => 'staff',
+            'name' => 'Staff one',
+            'username' => 'staff1234',
             'email' => 'staff@rkdholdings.com',
-            'password' => bcrypt('Staff@123'),
-            'is_active' => 1
+            'password' => bcrypt('Secret@123'),
+            'department_id' => 1,
         ]);
         $user->save();
         $user->assignRole('Staff');
+
+        $user = new User([
+            'name' => 'Staff',
+            'username' => 'staff5678',
+            'email' => 'staff1@rkdholdings.com',
+            'password' => bcrypt('Secret@123'),
+            'department_id' => 2,
+        ]);
+        $user->save();
+        $user->assignRole('Staff');
+
+        $user = new User([
+            'name' => 'Department Head',
+            'username' => 'dhead1234',
+            'email' => 'departmenthead@rkdholdings.com',
+            'password' => bcrypt('Secret@123'),
+            'department_id' => 1,
+        ]);
+        $user->save();
+        $user->assignRole('Department Head');
     }
 
     public function giveAutoAllPermissions($role, $permissionName)
     {
         $role->givePermissionTo($permissionName);
-        $role->givePermissionTo($permissionName . '.show');
         $role->givePermissionTo($permissionName . '.create');
         $role->givePermissionTo($permissionName . '.edit');
         $role->givePermissionTo($permissionName . '.delete');

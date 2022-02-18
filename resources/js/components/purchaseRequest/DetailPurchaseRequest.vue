@@ -12,7 +12,7 @@
             <tr>
                 <td>Line Items: {{ item.total_item }}</td>
                 <td>Due Date: {{ item.due_date }}</td>
-                <td>Status: <CButton size="sm" :color="getColor(item.status)">{{ item.status }}</CButton></td>
+                <td>Status: {{ item.status }}</td>
             </tr>
             <tr>
                 <td>File link:
@@ -22,39 +22,41 @@
                     <button v-else>No file</button>
                 </td>
                 <td>Department: {{ item.department_name }}</td>
-                <td>Delivery Status: <CButton size="sm" :color="getColor(item.status)">{{ item.delivery_status }}</CButton></td>
+                <td>Delivery Status: {{ item.delivery_status }}</td>
             </tr>
             </tbody>
         </table>
-        <PurchaseRequestProductsDetails :details="item.purchase_products" :triggerSelectProduct="triggerSelectProduct"></PurchaseRequestProductsDetails>
+        <PurchaseRequestProductsDetails :details="item.purchase_products"
+                                        :triggerSelectProduct="triggerSelectProduct"></PurchaseRequestProductsDetails>
     </div>
 </template>
 
 <script>
 import config from "../../config";
 import PurchaseRequestProductsDetails from "./PurchaseRequestProductsDetails";
+import store from "../../store";
 
 export default {
-    name: "PurchaseTableDetail",
+    name: "DetailPurchaseRequest",
     components: {PurchaseRequestProductsDetails},
-    props: ['item','triggerSelect'],
+    props: ['triggerSelect'],
     data: () => ({
         cdnURL: config.cdnURL,
-        triggerSelectProduct: false
+        triggerSelectProduct: false,
+        item: [],
     }),
+    created() {
+        this.item = store.state.purchase.itemDetail;
+    },
+
     watch: {
-        triggerSelect: function(newVal, oldVal) {
+        triggerSelect: function (newVal, oldVal) {
             this.triggerSelectProduct = !this.triggerSelectProduct;
         }
     },
     methods: {
         openImage(data) {
             window.open(this.cdnURL + data, `_blank`);
-        },
-        getColor(status) {
-            if (status === 'Pending') return 'warning'
-            else if (status === 'Rejected') return 'danger'
-            else return 'success'
         },
     }
 }

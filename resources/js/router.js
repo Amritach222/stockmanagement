@@ -122,6 +122,11 @@ import BudgetLimitCreate from './components/budgets/budgetLimit/Create'
 import BudgetLimitShow from './components/budgets/budgetLimit/Show'
 import BudgetLimitEdit from './components/budgets/budgetLimit/Edit'
 
+import BudgetExtendIndex from './components/budgets/budgetExtend/Index'
+import BudgetExtendCreate from './components/budgets/budgetExtend/Create'
+import BudgetExtendShow from './components/budgets/budgetExtend/Show'
+import BudgetExtendEdit from './components/budgets/budgetExtend/Edit'
+
 import FreezeBudgetIndex from './components/budgets/freezeBudget/Index'
 import FreezeBudgetCreate from './components/budgets/freezeBudget/Create'
 import FreezeBudgetShow from './components/budgets/freezeBudget/Show'
@@ -164,11 +169,15 @@ import ProfileSetting from './components/Settings/profile/Index'
 
 import i18n from './i18n'
 
+import DetailPurchaseRequest from './components/purchaseRequest/DetailPurchaseRequest'
 import NewPurchaseRequest from './components/purchaseRequest/NewPurchaseRequest'
 import PurchaseRequestHistory from './components/purchaseRequest/PurchaseRequestHistory'
 import EditPurchaseRequest from './components/purchaseRequest/EditPurchaseRequest'
 import PurchaseRequestProducts from './components/purchaseRequest/PurchaseRequestProducts'
 import PurchaseRequestAdmin from './components/purchaseRequest/PurchaseRequestProductsDetailsAdmin'
+import PurchaseRequestDepartmentHead from './components/purchaseRequest/PurchaseRequestProductsDetailsDh'
+import ApiServices from "./services/ApiServices";
+import store from "./store";
 
 import NotFound from './components/errorPage/NotFound'
 
@@ -261,8 +270,21 @@ export default new Router({
             }
         },
         {
+            path: '/purchase/purchase-request/:id',
+            name: i18n.t('new') +' '+ i18n.t('purchase') +' '+ i18n.t('request'),
+            component: DetailPurchaseRequest,
+            beforeEnter: async (to, from, next) => {
+                let res = await ApiServices.showPurchaseRequest(to.params.id);
+                if (res.success === true) {
+                    store.state.purchase.itemDetail = res.data;
+                }
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
             path: '/purchase/new-purchase-request',
-            name: i18n.t('new') + ' ' + i18n.t('purchase') + ' ' + i18n.t('request'),
+            name: i18n.t('new') +' '+ i18n.t('purchase') +' '+ i18n.t('request'),
             component: NewPurchaseRequest,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -271,7 +293,7 @@ export default new Router({
         },
         {
             path: '/purchase/purchase-request-history',
-            name: i18n.t('purchase') + ' ' + i18n.t('request') + ' ' + i18n.t('history'),
+            name: i18n.t('purchase') +' '+ i18n.t('request') +' '+ i18n.t('history'),
             component: PurchaseRequestHistory,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -300,6 +322,15 @@ export default new Router({
             path: '/purchase/admin-purchase-request-approval',
             name: 'Purchase Requests Approval',
             component: PurchaseRequestAdmin,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchase/department-head-purchase-request-approval/',
+            name: 'Purchase Requests Approval',
+            component: PurchaseRequestDepartmentHead,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
@@ -1087,6 +1118,43 @@ export default new Router({
             path: '/budgetLimits/:id',
             name: i18n.t('budget') + ' / ' + i18n.t('budget_limit'),
             component: BudgetLimitShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/budgetExtends',
+            name: 'Budget Extend',
+            component: BudgetExtendIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/budgetExtends/create',
+            name: 'budgetExtends-create',
+            component: BudgetExtendCreate,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/budgetExtends/edit/:id',
+            name: 'budgetExtends-edit',
+            component: BudgetExtendEdit,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/budgetExtends/:id',
+            name: 'budgetExtends-show',
+            component: BudgetExtendShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
