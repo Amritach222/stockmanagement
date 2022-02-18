@@ -46,13 +46,22 @@
 
             <v-list-item v-if="$is('Vendor')">
                 <v-list-item-icon class="mr-2">
-                    <v-icon>mdi-alpha-p-box</v-icon>
+                    <v-icon>mdi-message-alert</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <router-link
-                        :to="'/vendor/new-product-request'">
-                        {{ $t('new') + ' ' + $t('products') +' '+ $t('request') }}
-                    </router-link>
+                    <v-row class="mt-1">
+                        <v-col md="9">
+                            <router-link
+                                :to="'/vendor/new-product-request'">
+                                {{ $t('new') + ' ' + $t('products') + ' ' + $t('request') }}
+
+
+                            </router-link>
+                        </v-col>
+                        <v-col md="1">
+                            <p>{{ count }}</p>
+                        </v-col>
+                    </v-row>
                 </v-list-item-title>
             </v-list-item>
 
@@ -331,7 +340,7 @@
                     <v-list-item-title>
                         <router-link
                             :to="'/purchase/new-purchase-request/'">
-                            {{ $t('new') +' '+ $t('purchase') +' '+ $t('request') }}
+                            {{ $t('new') + ' ' + $t('purchase') + ' ' + $t('request') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
@@ -343,7 +352,7 @@
                     <v-list-item-title>
                         <router-link
                             :to="'/purchase/purchase-request-history/'">
-                            {{ $t('purchase') +' '+ $t('request') +' '+ $t('history') }}
+                            {{ $t('purchase') + ' ' + $t('request') + ' ' + $t('history') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
@@ -355,7 +364,7 @@
                     <v-list-item-title>
                         <router-link
                             :to="'/purchase/department-head-purchase-request-approval/'">
-                            Dh {{ $t('purchase') +' '+ $t('request') +' '+ $t('approval') }}
+                            Dh {{ $t('purchase') + ' ' + $t('request') + ' ' + $t('approval') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
@@ -367,7 +376,7 @@
                     <v-list-item-title>
                         <router-link
                             :to="'/purchase/admin-purchase-request-approval/'">
-                            Admin {{ $t('purchase') +' '+ $t('request') +' '+ $t('approval') }}
+                            Admin {{ $t('purchase') + ' ' + $t('request') + ' ' + $t('approval') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
@@ -400,7 +409,7 @@
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-cogs</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title class="item-color">{{ $t('user') +' '+ $t('management') }}</v-list-item-title>
+                    <v-list-item-title class="item-color">{{ $t('user') + ' ' + $t('management') }}</v-list-item-title>
                 </template>
 
                 <v-list-item class="ml-5" v-if="$can('users')">
@@ -415,10 +424,11 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-group v-if="($can('departments') || $can('designations') || $can('signatures') || $can('signatureUseDepartments'))"
-                              :value="true"
-                              no-action
-                              sub-group
+                <v-list-group
+                    v-if="($can('departments') || $can('designations') || $can('signatures') || $can('signatureUseDepartments'))"
+                    :value="true"
+                    no-action
+                    sub-group
                 >
                     <template v-slot:activator>
                         <v-list-item-title class="item-color">{{
@@ -501,10 +511,11 @@
                     <v-list-item-title class="item-color">{{ $t('settings') }}</v-list-item-title>
                 </template>
 
-                <v-list-group v-if="($can('fiscalYears') || $can('logs') || $can('settings.edit') || $can('mailSettings.edit') || $can('smsSettings.edit'))"
-                              :value="true"
-                              no-action
-                              sub-group
+                <v-list-group
+                    v-if="($can('fiscalYears') || $can('logs') || $can('settings.edit') || $can('mailSettings.edit') || $can('smsSettings.edit'))"
+                    :value="true"
+                    no-action
+                    sub-group
                 >
                     <template v-slot:activator>
                         <v-list-item-title class="item-color">{{ $t('web') + ' ' + $t('settings') }}</v-list-item-title>
@@ -600,8 +611,35 @@
     </CSidebarNav>
 </template>
 <script>
+import ApiServices from "../../services/ApiServices";
+import store from "../../store";
+
 export default {
     name: 'SidebarNavItem',
+    data: () => ({
+        count: '',
+    }),
+
+    async created() {
+        this.getPendingQuotationCount();
+    },
+
+    watch: {
+        vendorPendingCount() {
+            store.watch(state => store.state.auth.vedorPendingCount, () => {
+                this.count = store.state.auth.vedorPendingCount
+            });
+        },
+    },
+
+    methods: {
+        async getPendingQuotationCount() {
+            let res = await ApiServices.getVendorPendingQuotationCount();
+            if (res.success === true) {
+                this.count = res.data;
+            }
+        },
+    },
 }
 </script>
 <style scoped>

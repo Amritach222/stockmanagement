@@ -211,7 +211,7 @@ class VendorPortalController extends Controller
                 } else {
                     $discount = $quotationProduct->discount ?? 0;
                 }
-                $quoProduct->grand_total = $quotationProduct->price * $quotationProduct->quantity + $quotationProduct->shipping_cost + ($quotationProduct->price * $quotationProduct->tax->value??0) / 100 - $discount;
+                $quoProduct->grand_total = $quotationProduct->price * $quotationProduct->quantity + $quotationProduct->shipping_cost + ($quotationProduct->price * $quotationProduct->tax->value ?? 0) / 100 - $discount;
                 $quoProduct->save();
 
                 $vendorQuotationProducts = VendorQuotationProduct::where('id', '!=', $id)->where('quotation_product_id', $quotationProduct->quotation_product_id)->get();
@@ -333,6 +333,27 @@ class VendorPortalController extends Controller
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
             $data['data'] = $e;
+        }
+        return $data;
+    }
+
+    public function getPendingQuotationCount()
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            if (auth()->user()->hasRole(['Vendor'])) {
+                $user = User::findOrFail(auth()->user()->id);
+                $vendorQuotations = VendorQuotation::where('vendor_id', $user->vendor->id)->where('status', 'Pending')->get();
+                $data['data'] = count($vendorQuotations);
+            }else{
+                $data['success'] = false;
+                $data['message'] = 'Error occurred.';
+            }
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
         }
         return $data;
     }

@@ -10,6 +10,7 @@ use App\Http\Requests\UserRegistration;
 use App\Http\Resources\AuthResource;
 use App\Http\Resources\AuthUserResource;
 use App\Models\User;
+use App\Models\VendorQuotation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -44,9 +45,9 @@ class AuthController extends Controller
         }
         $access_token = $user->createToken($user->username)->accessToken;
         $user->access_token = $access_token;
-        if($request->role){
+        if ($request->role) {
             $user->assignRole($request->role);
-        }else{
+        } else {
             $user->assignRole('Staff');
         }
         $permissions = [];
@@ -73,7 +74,7 @@ class AuthController extends Controller
             $user_login_token = auth()->user()->createToken($request->username)->accessToken;
             $user = auth()->user();
             $is_vendor = $user->is_vendor;
-            if($is_vendor){
+            if ($is_vendor) {
                 $user->access_token = $user_login_token;
                 $user->responseMessage = trans('messages.login_success');
                 event(new ActivityLogEvent('Login', 'User'));

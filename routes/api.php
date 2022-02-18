@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('quotation-product/update/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationProductUpdate']);
         Route::get('product-list', [\App\Http\Controllers\Api\VendorPortalController::class, 'productList']);
         Route::get('all-products', [\App\Http\Controllers\Api\VendorPortalController::class, 'allProducts']);
+        Route::get('pending-quotation-count', [\App\Http\Controllers\Api\VendorPortalController::class, 'getPendingQuotationCount']);
     });
 
     Route::group(['prefix' => '/list'], function () {

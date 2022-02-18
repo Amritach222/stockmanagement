@@ -38,6 +38,7 @@ export default {
         last_name: null,
         mobile_no: null,
         address: null,
+        vendorPendingCount: null,
     },
 
     mutations: {

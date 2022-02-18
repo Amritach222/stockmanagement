@@ -99,6 +99,9 @@ export default {
     async permissionRoleUpdate(data) {
         return await apiCall(POST, `api/update-role-permissions`, data)
     },
+    async getVendorPendingQuotationCount() {
+        return await apiCall(GET, `api/vendor/pending-quotation-count`)
+    },
     async logout() {
         return await apiCall(GET, `api/user/logout`)
     },
