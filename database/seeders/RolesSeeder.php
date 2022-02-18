@@ -78,6 +78,8 @@ class RolesSeeder extends Seeder
                 'name' => 'Department Head',
                 'guard_name' => $guard
             ]);
+            $this->giveAutoAllPermissions($departmentHead, 'purchaseProductsApproval');
+            $this->giveAutoAllPermissions($departmentHead, 'purchaseProductsApprovalDepartmentHead');
             $this->giveAutoAllPermissions($departmentHead, 'consumes');
             $this->giveAutoAllPermissions($departmentHead, 'returnProducts');
             $this->giveAutoAllPermissions($departmentHead, 'purchases');
