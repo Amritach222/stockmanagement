@@ -171,6 +171,8 @@ import EditPurchaseRequest from './components/purchaseRequest/EditPurchaseReques
 import PurchaseRequestProducts from './components/purchaseRequest/PurchaseRequestProducts'
 import PurchaseRequestAdmin from './components/purchaseRequest/PurchaseRequestProductsDetailsAdmin'
 import PurchaseRequestDepartmentHead from './components/purchaseRequest/PurchaseRequestProductsDetailsDh'
+import ApiServices from "./services/ApiServices";
+import store from "./store";
 
 import NotFound from './components/errorPage/NotFound'
 
@@ -267,6 +269,10 @@ export default new Router({
             name: i18n.t('new') + ' ' + i18n.t('purchase') + ' ' + i18n.t('request'),
             component: DetailPurchaseRequest,
             beforeEnter: async (to, from, next) => {
+                let res = await ApiServices.showPurchaseRequest(to.params.id);
+                if (res.success === true) {
+                    store.state.purchase.itemDetail = res.data;
+                }
                 await logMe(to, from);
                 next();
             }

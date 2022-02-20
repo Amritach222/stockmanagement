@@ -122,22 +122,21 @@
                 <template v-slot:item.unit_id="{ item }">
                     {{ getUnitName(item.unit_id) }}
                 </template>
+                <template v-slot:item.department_status="{ item }">
+                    <CButton size="sm" :color="getColor(item.department_status)">
+                        {{ item.department_status }}
+                    </CButton>
+                </template>
+                <template v-slot:item.status="{ item }">
+                    <CButton size="sm" :color="getColor(item.status)">
+                        {{ item.status }}
+                    </CButton>
+                </template>
                 <template v-slot:item.actions="{ item }">
-                    <div v-if="$can('purchaseProductsApprovalDepartmentHead')">
-                        <v-btn small @click="approveProduct(item)">
-                            Approve
-                        </v-btn>
-                        <v-btn small @click="denyProduct(item)">
-                            Deny
-                        </v-btn>
-                    </div>
                     <div v-if="$can('purchaseProductsApprovalStoreAdmin')">
-                        <v-btn small @click="addToApproveList(item)">
-                            Add to List
-                        </v-btn>
-                        <v-btn small @click="removeFromApproveList(item)">
+                        <CButton size="sm" color="danger" @click="removeFromApproveList(item)">
                             Remove From List
-                        </v-btn>
+                        </CButton>
                     </div>
                     <div v-else>
                         <v-icon
@@ -262,6 +261,11 @@ export default {
         this.prProducts = this.details;
     },
     methods: {
+        getColor(status) {
+            if (status === 'Pending') return 'warning'
+            else if (status === 'Rejected') return 'danger'
+            else return 'success'
+        },
         updateData(){
             this.prProducts = store.state.purchase.selectedPurchaseRequestedProducts;
         },

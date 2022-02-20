@@ -5,6 +5,7 @@ export default {
     state: {
         editItem: [],
         selectedPurchaseRequestedProducts: [],
+        itemDetail: []
     },
     mutations: {
         resetState(state) {

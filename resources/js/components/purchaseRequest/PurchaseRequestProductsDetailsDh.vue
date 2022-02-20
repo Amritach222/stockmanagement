@@ -129,13 +129,9 @@
             </v-toolbar>
         </template>
         <template v-slot:item.status="{ item }">
-            <v-chip
-                :color="getColor(item.status)"
-                dark
-                small
-            >
+            <CButton size="sm" :color="getColor(item.status)">
                 {{ item.status }}
-            </v-chip>
+            </CButton>
         </template>
         <template v-slot:expanded-item="{ headers, item }" class="mb-3">
             <td :colspan="headers.length">
@@ -213,13 +209,13 @@ export default {
     },
 
     methods: {
-        sendQuotation(){
+        sendQuotation() {
             this.triggerSelect = !this.triggerSelect;
         },
-        getColor (status) {
-            if (status === 'Pending') return 'orange'
-            else if (status === 'Rejected') return 'red'
-            else return 'green'
+        getColor(status) {
+            if (status === 'Pending') return 'warning'
+            else if (status === 'Rejected') return 'danger'
+            else return 'success'
         },
 
         openImage(data) {
