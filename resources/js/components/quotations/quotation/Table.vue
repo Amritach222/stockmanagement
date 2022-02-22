@@ -78,16 +78,16 @@
                 {{ item.department.name }}
             </template>
                         <template v-slot:item.status="{ item }">
-                            <CButton size="sm" color="secondary" v-if="item.status == 'Pending'">
+                            <CButton size="sm" color="secondary" v-if="item.status === 'Pending'">
                                 {{ item.status }}
                             </CButton>
-                            <CButton size="sm" color="warning" v-else-if="item.status == 'Reviewed'">
+                            <CButton size="sm" color="warning" v-else-if="item.status === 'Reviewed'">
                                 {{ item.status }}
                             </CButton>
-                            <CButton size="sm" color="success" v-else-if="item.status == 'Approved'">
+                            <CButton size="sm" color="success" v-else-if="item.status === 'Approved'">
                                 {{ item.status }}
                             </CButton>
-                            <CButton size="sm" color="danger" v-else-if="item.status == 'Rejected'">
+                            <CButton size="sm" color="danger" v-else-if="item.status === 'Rejected'">
                                 {{ item.status }}
                             </CButton>
                         </template>
@@ -105,7 +105,7 @@
                 <v-icon
                     small
                     @click="deleteItem(item)"
-                    v-if="$can('quotations.delete')"
+                    v-if="$can('quotations.delete') && (item.status === 'Pending')"
                 >
                     mdi-delete
                 </v-icon>

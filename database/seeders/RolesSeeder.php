@@ -224,27 +224,6 @@ class RolesSeeder extends Seeder
         $user->save();
         $user->assignRole('Finance Director');
 
-        $item = new Department([
-            'name' => 'Finance'
-        ]);
-        $item->save();
-
-        $item = new Department([
-            'name' => 'IT'
-        ]);
-        $item->save();
-
-
-        $item = new Department([
-            'name' => 'Finance'
-        ]);
-        $item->save();
-
-        $item = new Department([
-            'name' => 'IT'
-        ]);
-        $item->save();
-
         $user = new User([
             'name' => 'Staff one',
             'username' => 'staff1234',

@@ -52,6 +52,7 @@ class QuotationController extends Controller
             $data['success'] = true;
             $values = $request->all();
             $values['user_id'] = auth()->user()->id;
+            $values['status'] = 'Pending';
             $currentDate = Carbon::now();
             $convertDate = new DateConverter();
             $nepDate = $convertDate->eng_to_nep($currentDate->format('Y'), $currentDate->format('m'), $currentDate->format('d'));

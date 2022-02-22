@@ -1009,7 +1009,7 @@ export default {
                     productData.append('unit_id', parseInt(this.quoProducts[i].unit_id));
                 }
                 if (this.$route.query.create === 'pr') {
-                    if ((this.quoProducts[i].purchase_product_id !== '') && (typeof (parseInt(this.quoProducts[i].purchase_product_id) === 'integer')) && (this.quoProducts[i].purchase_product_id !== null)) {
+                    if ((this.quoProducts[i].purchase_product_id) && (this.quoProducts[i].purchase_product_id !== '') && (typeof (parseInt(this.quoProducts[i].purchase_product_id) === 'integer')) && (this.quoProducts[i].purchase_product_id !== null)) {
                         productData.append('purchase_product_id', parseInt(this.quoProducts[i].purchase_product_id));
                     }
                 }
