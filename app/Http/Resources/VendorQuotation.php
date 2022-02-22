@@ -29,6 +29,7 @@ class VendorQuotation extends JsonResource
             'total_price' => $this->total_price,
             'discount_type' => $this->discount_type,
             'discount' => $this->discount,
+            'grand_total'=>$this->grand_total,
             'status' => $this->status,
             'comment' => $this->comment,
             'file_id' => $this->file_id,

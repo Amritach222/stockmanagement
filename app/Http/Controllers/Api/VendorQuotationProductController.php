@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VendorQuotationProductResource;
+use App\Models\Tax;
+use App\Models\VendorQuotation;
 use App\Models\VendorQuotationProduct;
 use Illuminate\Http\Request;
 
@@ -77,7 +79,24 @@ class VendorQuotationProductController extends Controller
         try {
             $vendorQuotationProduct = VendorQuotationProduct::findOrFail($id);
             $values = $request->all();
+
+            $discount = 0;
+            if ($request->discount !== null) {
+                if ($request->discount_type == 'Percent') {
+                    $discount = ($request->price * $request->quantity) * ($request->discount / 100);
+                } else {
+                    $discount = $request->discount ?? 0;
+                }
+            }
+            $taxValue = 0;
+            if (($request->tax_id !== null) && ($request->tax_id != '')) {
+                $tax = Tax::findOrFail($request->tax_id);
+                $taxValue = ($tax->value / 100) * $request->quantity * $request->price;
+            }
+            $values['total'] = $request->price * $request->quantity + $request->shipping_cost - $discount + $taxValue;
             $vendorQuotationProduct->update($values);
+            $vendorQuotation = VendorQuotation::findOrFail($vendorQuotationProduct->vendor_quotation_id);
+            $vendorQuotation->calculateTotal();
             $data['message'] = 'Updated successfully.';
             $data['data'] = new VendorQuotationProductResource($vendorQuotationProduct);
         } catch (\Exception $e) {

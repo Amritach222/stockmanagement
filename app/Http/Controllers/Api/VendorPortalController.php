@@ -9,6 +9,7 @@ use App\Models\File;
 use App\Models\Product;
 use App\Http\Resources\Product as ProductResource;
 use App\Models\Quotation;
+use App\Models\Tax;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Models\VendorProduct;
@@ -177,12 +178,29 @@ class VendorPortalController extends Controller
             if ($quotationProduct->status == 'Review') {
                 $values['status'] = 'Reviewed';
             }
+            $discount = 0;
+            if ($request->discount !== null) {
+                if ($request->discount_type == 'Percent') {
+                    $discount = ($request->price * $request->quantity) * ($request->discount / 100);
+                } else {
+                    $discount = $request->discount ?? 0;
+                }
+            }
+            $taxValue = 0;
+            if (($request->tax_id !== null) && ($request->tax_id != '')) {
+                $tax = Tax::findOrFail($request->tax_id);
+                $taxValue = ($tax->value / 100) * $request->quantity * $request->price;
+            }
+            $values['total'] = $request->price * $request->quantity + $request->shipping_cost - $discount + $taxValue;
             $quotationProduct->update($values);
+            $vendorQuotation = VendorQuotation::findOrFail($quotationProduct->vendor_quotation_id);
+            $vendorQuotation->calculateTotal();
 
             $data['data'] = new VendorQuotationProductResource($quotationProduct);
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
         }
         return $data;
     }
@@ -347,7 +365,7 @@ class VendorPortalController extends Controller
                 $user = User::findOrFail(auth()->user()->id);
                 $vendorQuotations = VendorQuotation::where('vendor_id', $user->vendor->id)->where('status', 'Pending')->get();
                 $data['data'] = count($vendorQuotations);
-            }else{
+            } else {
                 $data['success'] = false;
                 $data['message'] = 'Error occurred.';
             }

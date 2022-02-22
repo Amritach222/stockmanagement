@@ -21,12 +21,13 @@
                                             <v-col md="9">
                                                 <v-row>
                                                     <v-col md="4">
-                                                        <h6>{{ $t('desired') + ' ' + $t('delivery') + ' ' + $t('date')
+                                                        <h6>{{
+                                                                $t('desired') + ' ' + $t('delivery') + ' ' + $t('date')
                                                             }}</h6>
                                                         <p>{{ editedItem.desired_delivery_date }}</p>
                                                     </v-col>
                                                     <v-col md="4">
-                                                        <h6>{{ $t('due') +' '+ $t('date') }}</h6>
+                                                        <h6>{{ $t('due') + ' ' + $t('date') }}</h6>
                                                         <p>{{ editedItem.due_date }}</p>
                                                     </v-col>
                                                     <v-col md="4">
@@ -131,7 +132,7 @@
                                             </template>
                                             <template v-slot:item.product_variant_id="{ item }">
                                                 <p v-if="item.quotation_product.product_variant_id" class="mt-3">{{
-                                                    item.quotation_product.product_variant.name
+                                                        item.quotation_product.product_variant.name
                                                     }}</p>
                                                 <p v-else class="mt-3">---</p>
                                             </template>
@@ -171,7 +172,7 @@
                                                 </div>
                                                 <div v-else>
                                                     <p class="mt-3" v-if="item.shipping_cost">{{
-                                                        item.shipping_cost
+                                                            item.shipping_cost
                                                         }}</p>
                                                     <p class="mt-3" v-else>---</p>
                                                 </div>
@@ -374,289 +375,300 @@
 </template>
 
 <script>
-    import store from "../../../store";
-    import route from "../../../router";
-    import i18n from "../../../i18n";
-    import ApiServices from "../../../services/ApiServices";
-    import config from "../../../config";
+import store from "../../../store";
+import route from "../../../router";
+import i18n from "../../../i18n";
+import ApiServices from "../../../services/ApiServices";
+import config from "../../../config";
 
-    export default {
-        name: "VendorProduct",
+export default {
+    name: "VendorProduct",
 
-        props: {
-            source: String,
+    props: {
+        source: String,
+    },
+    data: () => ({
+        cdnURL: config.cdnURL,
+        createProgress: false,
+        search: '',
+        progressL: false,
+        dialog: false,
+        dialogDelete: false,
+        searchV: '',
+        searchSV: '',
+        dialogV: false,
+        headers: [
+            {text: i18n.t('product'), value: 'product_id'},
+            {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant_id'},
+            {text: i18n.t('quantity'), value: 'quantity'},
+            {text: i18n.t('price'), value: 'price'},
+            {text: i18n.t('tax'), value: 'tax_id'},
+            {text: i18n.t('discount') + ' ' + i18n.t('type'), value: 'discount_type'},
+            {text: i18n.t('discount'), value: 'discount'},
+            {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
+            {text: i18n.t('total'), value: 'total'},
+            {text: i18n.t('status'), value: 'status', sortable: true},
+            {text: i18n.t('action'), value: 'actions', sortable: false},
+        ],
+        quotations: [],
+        tableLoad: false,
+        productCount: 0,
+        editedIndex: -1,
+        quoProducts: [],
+        products: [],
+        vendors: [],
+        quoVendors: [],
+        selectVendors: [],
+        selectedVendors: [],
+        taxes: [],
+        singleSelect: false,
+        selected: [],
+        deleteProduct: [],
+        vendorCard: false,
+        quoProduct: {
+            id: null,
+            product_id: '',
+            product_variant_id: '',
+            quantity: '',
+            shipping_cost: '',
+            discount_type: '',
+            discount: '',
+            tax_id: '',
+            price: '',
         },
-        data: () => ({
-            cdnURL: config.cdnURL,
-            createProgress: false,
-            search: '',
-            progressL: false,
-            dialog: false,
-            dialogDelete: false,
-            searchV: '',
-            searchSV: '',
-            dialogV: false,
-            headers: [
-                {text: i18n.t('product'), value: 'product_id'},
-                {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant_id'},
-                {text: i18n.t('quantity'), value: 'quantity'},
-                {text: i18n.t('price'), value: 'price'},
-                {text: i18n.t('tax'), value: 'tax_id'},
-                {text: i18n.t('discount') + ' ' + i18n.t('type'), value: 'discount_type'},
-                {text: i18n.t('discount'), value: 'discount'},
-                {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
-                {text: i18n.t('status'), value: 'status', sortable: true},
-                {text: i18n.t('action'), value: 'actions', sortable: false},
-            ],
-            quotations: [],
-            tableLoad: false,
-            productCount: 0,
-            editedIndex: -1,
-            quoProducts: [],
-            products: [],
-            vendors: [],
-            quoVendors: [],
-            selectVendors: [],
-            selectedVendors: [],
-            taxes: [],
-            singleSelect: false,
-            selected: [],
-            deleteProduct: [],
-            vendorCard: false,
-            quoProduct: {
-                id: null,
-                product_id: '',
-                product_variant_id: '',
-                quantity: '',
-                shipping_cost: '',
-                discount_type: '',
-                discount: '',
-                tax_id: '',
-                price: '',
-            },
-            changeProgress: false,
-            validated: false,
-            departments: [],
-            variants: [],
-            hasVariants: false,
-            quotationItem: {
-                comment: '',
-                file: '',
-                discount_type: '',
-                discount: '',
-                status: '',
-                total_item: '',
-                total_price: '',
-            },
-            editedItem: {
-                id: null,
-                due_date: '',
-                desired_delivery_date: '',
-                requested_name: '',
-                details: '',
-            },
-            rules: [
-                value => !!value || 'Required.',
-            ]
-        }),
-        computed: {
-            formTitle() {
-                return this.editedIndex === -1 ? i18n.t('card_title.add_quotation_product') : i18n.t('card_title.edit_quotation_product')
-            },
+        changeProgress: false,
+        validated: false,
+        departments: [],
+        variants: [],
+        hasVariants: false,
+        quotationItem: {
+            comment: '',
+            file: '',
+            discount_type: '',
+            discount: '',
+            status: '',
+            total_item: '',
+            total_price: '',
         },
-        async created() {
-            this.loadData();
-            this.loadTax();
-            // this.loadQuoProducts();
+        editedItem: {
+            id: null,
+            due_date: '',
+            desired_delivery_date: '',
+            requested_name: '',
+            details: '',
         },
-        methods: {
-            openImage(data) {
-                window.open(config.cdnURL + data, `_blank`);
-            },
-            async loadData() {
-                let rtn = await ApiServices.quotationShow(this.$route.params.id);
-                if (rtn.success === true) {
-                    this.editedItem = rtn.data;
+        rules: [
+            value => !!value || 'Required.',
+        ]
+    }),
+    computed: {
+        formTitle() {
+            return this.editedIndex === -1 ? i18n.t('card_title.add_quotation_product') : i18n.t('card_title.edit_quotation_product')
+        },
+    },
+    async created() {
+        this.loadData();
+        this.loadTax();
+        // this.loadQuoProducts();
+    },
+    methods: {
+        openImage(data) {
+            window.open(config.cdnURL + data, `_blank`);
+        },
+        async loadData() {
+            let rtn = await ApiServices.quotationShow(this.$route.params.id);
+            if (rtn.success === true) {
+                this.editedItem = rtn.data;
+            }
+            let res = await ApiServices.vendorQuotationDetails(this.$route.params.id, this.$route.params.vendor);
+            if (res.success === true) {
+                this.quotationItem = res.data;
+                this.quoProducts = res.data.vendor_quotation_products;
+            }
+        },
+        async loadTax() {
+            let rtn = await ApiServices.taxList();
+            if (rtn.success === true) {
+                this.taxes = rtn.data;
+            }
+        },
+        async getVariants(product) {
+            let res = await ApiServices.productShow(product);
+            if (res.success === true) {
+                if (res.data.product_variants.length > 0) {
+                    this.hasVariants = true;
+                } else {
+                    this.hasVariants = false;
                 }
-                let res = await ApiServices.vendorQuotationDetails(this.$route.params.id, this.$route.params.vendor);
-                if (res.success === true) {
-                    this.quotationItem = res.data;
-                    this.quoProducts = res.data.vendor_quotation_products;
-                }
-            },
-            async loadTax() {
-                let rtn = await ApiServices.taxList();
-                if (rtn.success === true) {
-                    this.taxes = rtn.data;
-                }
-            },
-            async getVariants(product) {
-                let res = await ApiServices.productShow(product);
-                if (res.success === true) {
-                    if (res.data.product_variants.length > 0) {
-                        this.hasVariants = true;
-                    } else {
-                        this.hasVariants = false;
-                    }
-                    this.variants = res.data.product_variants;
-                }
-            },
+                this.variants = res.data.product_variants;
+            }
+        },
 
-            async statusChange(type, item) {
-                this.editedIndex = this.quoProducts.indexOf(item)
-                this.quoProduct = Object.assign({}, item)
+        async statusChange(type, item) {
+            this.editedIndex = this.quoProducts.indexOf(item)
+            this.quoProduct = Object.assign({}, item)
+            const data = new FormData();
+            data.append('status', type);
+            let res = await ApiServices.vendorQuotationProductStatusUpdate(this.quoProduct.id, data);
+            if (res.success === true) {
+                Object.assign(this.quoProducts[this.editedIndex], res.data)
+                this.quotationItem.status = res.data.vendor_quotation_status;
+            }
+        },
+
+        async allStatusChange(type, id) {
+            const data = new FormData();
+            data.append('status', type);
+            let res = await ApiServices.vendorQuotationStatusUpdate(id, data);
+            if (res.success === true) {
+                this.quotationItem = res.data;
+                this.quoProducts = res.data.vendor_quotation_products;
+            }
+        },
+
+        editItem(item) {
+            this.editedIndex = this.quoProducts.indexOf(item)
+            this.quoProduct = Object.assign({}, item)
+            this.editQuoProduct();
+        },
+
+        deleteItem(item) {
+            this.editedIndex = this.quoProducts.indexOf(item)
+            this.addQuoProduct = Object.assign({}, item)
+            this.dialogDelete = true
+        },
+
+        async deleteItemConfirm() {
+            let res = await ApiServices.quotationProductDelete(this.addQuoProduct.id);
+            if (res.success === true) {
+                this.quoProducts.splice(this.editedIndex, 1)
+            }
+            this.closeDelete()
+        },
+
+        close() {
+            this.progressL = false;
+            this.dialog = false;
+            this.$nextTick(() => {
+                this.addQuoProduct = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            });
+            this.loadItems();
+        },
+
+        closeV() {
+            this.progressL = false;
+            this.dialogV = false;
+        },
+
+        closeDelete() {
+            this.dialogDelete = false
+            this.$nextTick(() => {
+                this.addQuoProduct = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            })
+        },
+
+        async openDialogV() {
+            this.selected = this.quoVendors;
+            this.dialogV = true;
+            let res = await this.loadProductVendors();
+        },
+
+        async edit() {
+            // this.validate();
+            // if (this.validated) {
+            this.changeProgress = true;
+            const data = new FormData();
+            data.append('status', this.editedItem.status);
+            data.append('comment', this.editedItem.comment);
+
+            if ('file' in this.editedItem) {
+                if (typeof this.editedItem.file.name == 'string') {
+                    data.append('file', this.editedItem.file);
+                }
+            }
+
+            let res = await ApiServices.vendorQuotationUpdate(this.editedItem.id, data);
+            this.changeProgress = false;
+            if (res.success === true) {
+                route.replace('/vendor/new-product-request');
+            }
+            // }
+        },
+
+
+        async editQuoProduct() {
+            this.productValidate();
+            if (this.validated) {
+                //edit goes here
                 const data = new FormData();
-                data.append('status', type);
-                let res = await ApiServices.vendorQuotationProductStatusUpdate(this.quoProduct.id, data);
+                if (this.quoProduct.tax_id !== null && this.quoProduct.tax_id !== '') {
+                    data.append('tax_id', this.quoProduct.tax_id);
+                }
+                if (this.quoProduct.quantity !== null && this.quoProduct.quantity !== '') {
+                    data.append('quantity', this.quoProduct.quantity);
+                }
+                if (this.quoProduct.price !== null && this.quoProduct.price !== '') {
+                    data.append('price', this.quoProduct.price);
+                }
+                if (this.quoProduct.discount !== null && this.quoProduct.discount !== '') {
+                    data.append('discount', this.quoProduct.discount);
+                }
+                if (this.quoProduct.discount_type !== null && this.quoProduct.discount_type !== '') {
+                    data.append('discount_type', this.quoProduct.discount_type);
+                }
+                if (this.quoProduct.shipping_cost !== null && this.quoProduct.shipping_cost !== '') {
+                    data.append('shipping_cost', this.quoProduct.shipping_cost);
+                }
+                let res = await ApiServices.vendorQuotationProductEdit(this.quoProduct.id, data);
                 if (res.success === true) {
                     Object.assign(this.quoProducts[this.editedIndex], res.data)
-                    this.quotationItem.status = res.data.vendor_quotation_status;
                 }
-            },
+            }
+        },
 
-            async allStatusChange(type, id) {
-                const data = new FormData();
-                data.append('status', type);
-                let res = await ApiServices.vendorQuotationStatusUpdate(id, data);
-                if (res.success === true) {
-                    this.quotationItem = res.data;
-                    this.quoProducts = res.data.vendor_quotation_products;
-                }
-            },
+        // validate() {
+        //     if (this.department_id === '') {
+        //         this.validated = false;
+        //     } else {
+        //         this.validated = true;
+        //     }
+        // },
 
-            editItem(item) {
-                this.editedIndex = this.quoProducts.indexOf(item)
-                this.quoProduct = Object.assign({}, item)
-                this.editQuoProduct();
-            },
-
-            deleteItem(item) {
-                this.editedIndex = this.quoProducts.indexOf(item)
-                this.addQuoProduct = Object.assign({}, item)
-                this.dialogDelete = true
-            },
-
-            async deleteItemConfirm() {
-                let res = await ApiServices.quotationProductDelete(this.addQuoProduct.id);
-                if (res.success === true) {
-                    this.quoProducts.splice(this.editedIndex, 1)
-                }
-                this.closeDelete()
-            },
-
-            close() {
-                this.progressL = false;
-                this.dialog = false;
-                this.$nextTick(() => {
-                    this.addQuoProduct = Object.assign({}, this.defaultItem)
-                    this.editedIndex = -1
-                });
-                this.loadItems();
-            },
-
-            closeV() {
-                this.progressL = false;
-                this.dialogV = false;
-            },
-
-            closeDelete() {
-                this.dialogDelete = false
-                this.$nextTick(() => {
-                    this.addQuoProduct = Object.assign({}, this.defaultItem)
-                    this.editedIndex = -1
-                })
-            },
-
-            async openDialogV() {
-                this.selected = this.quoVendors;
-                this.dialogV = true;
-                let res = await this.loadProductVendors();
-            },
-
-            async edit() {
-                // this.validate();
-                // if (this.validated) {
-                this.changeProgress = true;
-                const data = new FormData();
-                data.append('status', this.editedItem.status);
-                data.append('comment', this.editedItem.comment);
-
-                if ('file' in this.editedItem) {
-                    if (typeof this.editedItem.file.name == 'string') {
-                        data.append('file', this.editedItem.file);
-                    }
-                }
-
-                let res = await ApiServices.vendorQuotationUpdate(this.editedItem.id, data);
-                this.changeProgress = false;
-                if (res.success === true) {
-                    route.replace('/vendor/new-product-request');
-                }
-                // }
-            },
-
-
-            async editQuoProduct() {
-                this.productValidate();
-                if (this.validated) {
-                    //edit goes here
-                    const data = new FormData();
-                    if (this.quoProduct.tax_id !== null && this.quoProduct.tax_id !== '') {
-                        data.append('tax_id', this.quoProduct.tax_id);
-                    }
-                    data.append('quantity', this.quoProduct.quantity);
-                    data.append('price', this.quoProduct.price);
-                    data.append('discount', this.quoProduct.discount);
-                    data.append('discount_type', this.quoProduct.discount_type);
-                    data.append('shipping_cost', this.quoProduct.shipping_cost);
-                    let res = await ApiServices.vendorQuotationProductEdit(this.quoProduct.id, data);
-                    if (res.success === true) {
-                        Object.assign(this.quoProducts[this.editedIndex], res.data)
-                    }
-                }
-            },
-
-            // validate() {
-            //     if (this.department_id === '') {
-            //         this.validated = false;
-            //     } else {
-            //         this.validated = true;
-            //     }
-            // },
-
-            productValidate() {
-                if (this.product_id === '') {
-                    this.validated = false;
-                } else {
-                    this.validated = true;
-                }
-            },
-        }
+        productValidate() {
+            if (this.product_id === '') {
+                this.validated = false;
+            } else {
+                this.validated = true;
+            }
+        },
     }
+}
 </script>
 
 <style scoped>
-    .file-link {
-        cursor: pointer;
-        text-decoration: underline;
-    }
+.file-link {
+    cursor: pointer;
+    text-decoration: underline;
+}
 
-    .card-btn {
-        color: #fff !important;
-        margin-left: 3px !important;
-    }
+.card-btn {
+    color: #fff !important;
+    margin-left: 3px !important;
+}
 
-    .password-btn {
-        cursor: pointer;
-    }
+.password-btn {
+    cursor: pointer;
+}
 
-    .status-title {
-        margin-top: 8px !important;
-        margin-left: 3px !important;
-        margin-right: 3px !important;
-    }
+.status-title {
+    margin-top: 8px !important;
+    margin-left: 3px !important;
+    margin-right: 3px !important;
+}
 
-    .status-card-title {
-        background-color: #efebea !important;
-    }
+.status-card-title {
+    background-color: #efebea !important;
+}
 </style>

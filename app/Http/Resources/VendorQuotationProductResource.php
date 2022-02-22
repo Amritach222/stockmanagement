@@ -31,6 +31,7 @@ class VendorQuotationProductResource extends JsonResource
             'tax_id' => $this->tax_id,
             'status' => $this->status,
             'shipping_cost' => $this->shipping_cost,
+            'total' => $this->total,
             'quotation_product' => $quotationProduct,
             'tax' => $tax,
             'vendor_quotation_status' => $vendorQuotation->status ?? '',

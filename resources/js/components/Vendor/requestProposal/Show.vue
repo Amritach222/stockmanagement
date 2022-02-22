@@ -58,9 +58,25 @@
                                                     }}</p>
                                                 <p v-else class="mt-3">---</p>
                                             </template>
+                                            <template v-slot:item.quantity="{ item }">
+                                                <p v-if="item.quantity" class="mt-3">{{ item.quantity }}</p>
+                                                <p v-else class="mt-3">---</p>
+                                            </template>
+                                            <template v-slot:item.price="{ item }">
+                                                <p v-if="item.price" class="mt-3">{{ item.price }}</p>
+                                                <p v-else class="mt-3">---</p>
+                                            </template>
+                                            <template v-slot:item.discount="{ item }">
+                                                <p v-if="item.discount" class="mt-3">{{ item.discount }}</p>
+                                                <p v-else class="mt-3">---</p>
+                                            </template>
+                                            <template v-slot:item.shipping_cost="{ item }">
+                                                <p v-if="item.shipping_cost" class="mt-3">{{ item.shipping_cost }}</p>
+                                                <p v-else class="mt-3">---</p>
+                                            </template>
                                             <template v-slot:item.tax_id="{ item }">
                                                 <p v-if="item.tax_id" class="mt-3">{{ item.tax.value }}%</p>
-                                                <p v-else class="mt-3">0</p>
+                                                <p v-else class="mt-3">---</p>
                                             </template>
                                             <template v-slot:item.actions="{ item }">
                                                 <div v-if="item.status === 'On Progress'">
@@ -94,6 +110,11 @@
                                                 <div v-else-if="item.status === 'Accepted'">
                                                     <CButton size="sm" class="m-1" color="primary">
                                                         Accepted
+                                                    </CButton>
+                                                </div>
+                                                <div v-else>
+                                                    <CButton size="sm" class="m-1" color="warning">
+                                                        {{ item.status }}
                                                     </CButton>
                                                 </div>
                                             </template>
@@ -176,7 +197,8 @@ export default {
             {text: i18n.t('discount') + ' ' + i18n.t('type'), value: 'discount_type'},
             {text: i18n.t('discount'), value: 'discount'},
             {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            {text: i18n.t('total'), value: 'total'},
+            {text: i18n.t('status'), value: 'actions', sortable: false},
         ],
         quotations: [],
         tableLoad: false,
