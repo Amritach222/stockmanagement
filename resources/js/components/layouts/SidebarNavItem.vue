@@ -49,19 +49,12 @@
                     <v-icon>mdi-message-alert</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>
-                    <v-row class="mt-1">
-                        <v-col md="9">
                             <router-link
                                 :to="'/vendor/new-product-request'">
                                 {{ $t('new') + ' ' + $t('products') + ' ' + $t('request') }}
 
 
                             </router-link>
-                        </v-col>
-                        <v-col md="1">
-                            <p>{{ count }}</p>
-                        </v-col>
-                    </v-row>
                 </v-list-item-title>
             </v-list-item>
 
