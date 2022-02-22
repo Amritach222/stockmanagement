@@ -626,6 +626,12 @@ export default {
     async getDepartmentHeadPurchaseProductRequest() {
         return await apiCall(GET, `api/purchase/dh-purchase-list`)
     },
+    async getDepartmentHeadPurchaseProductRequestApproved() {
+        return await apiCall(GET, `api/purchase/dh-purchase-list?status=approved`)
+    },
+    async getDepartmentHeadPurchaseProductRequestRejected() {
+        return await apiCall(GET, `api/purchase/dh-purchase-list?status=rejected`)
+    },
     async deleteUserPurchaseRequest(id) {
         return await apiCall(DELETE, `api/purchase/purchases/${id}`)
     },

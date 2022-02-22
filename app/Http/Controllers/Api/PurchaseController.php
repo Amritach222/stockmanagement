@@ -66,7 +66,7 @@ class PurchaseController extends Controller
         return $data;
     }
 
-    public function departmentHeadPurchaseLists()
+    public function departmentHeadPurchaseLists(Request $request)
     {
         $data['success'] = true;
         $data['message'] = '';
@@ -75,11 +75,24 @@ class PurchaseController extends Controller
         if ($user->department_id === null) {
             return response(['success' => false, "message" => 'Department id not found', "data" => []], 422);
         } else {
-//            $purchases = Purchase::where('department_id', $user->department_id)->get();
-            $purchases = Purchase::where('department_id', $user->department_id)->with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
-                $query->where('department_status', 'Pending');
+            $getStatus = $request->query('status');
+            if ($getStatus === 'approved') {
+                $purchases = Purchase::where('department_id', $user->department_id)->with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
+                    $query->where('department_status', 'Approved');
+                }
+                )->get();
+            } elseif ($getStatus === 'rejected') {
+                $purchases = Purchase::where('department_id', $user->department_id)->with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
+                    $query->where('department_status', 'Rejected');
+                }
+                )->get();
+            } else {
+                $purchases = Purchase::where('department_id', $user->department_id)->with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
+                    $query->where('department_status', 'Pending');
+                }
+                )->get();
             }
-            )->get();
+
             $data['data'] = PurchaseResource::collection($purchases);
             return $data;
         }
