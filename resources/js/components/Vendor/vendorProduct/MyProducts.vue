@@ -28,13 +28,13 @@
                     flat
                 >
                     <v-row>
-<!--                        <v-col-->
-<!--                            cols="12"-->
-<!--                            sm="2"-->
-<!--                            md="3"-->
-<!--                            lg="4"-->
-<!--                        >-->
-<!--                        </v-col>-->
+                        <!--                        <v-col-->
+                        <!--                            cols="12"-->
+                        <!--                            sm="2"-->
+                        <!--                            md="3"-->
+                        <!--                            lg="4"-->
+                        <!--                        >-->
+                        <!--                        </v-col>-->
                         <v-col
                             cols="12"
                             sm="4"
@@ -70,6 +70,19 @@
             <template v-slot:item.category="{ item }">
                 {{ item.category.name }}
             </template>
+            <template v-slot:item.status="{ item }">
+                <div v-if="item.status === 'Pending'">
+                    <CButton size="sm" color="secondary" class="m-1">
+                        Pending
+                    </CButton>
+                </div>
+                <div v-else>
+                    <CButton size="sm" class="m-1" color="success"
+                    >
+                        Approved
+                    </CButton>
+                </div>
+            </template>
             <template v-slot:no-data>
                 <div>No Data</div>
             </template>
@@ -96,8 +109,8 @@ export default {
         dialog: false,
         dialogDelete: false,
         singleSelect: false,
-        user:{
-          id:null,
+        user: {
+            id: null,
         },
         headers: [
             {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
@@ -105,6 +118,7 @@ export default {
             {text: i18n.t('image'), value: 'link', sortable: false},
             {text: i18n.t('brand'), value: 'brand', sortable: false},
             {text: i18n.t('category'), value: 'category', sortable: false},
+            {text: i18n.t('status'), value: 'status'},
         ],
         activePassive: [
             {text: 'Active', value: 1},

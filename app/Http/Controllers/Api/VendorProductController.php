@@ -67,8 +67,10 @@ class VendorProductController extends Controller
             if (auth()->user()->isVendor()) {
                 $user = User::findOrFail($request->id);
                 $vendor = $user->vendor;
+                $values['status'] = 'Pending';
             } else {
                 $vendor = Vendor::findOrFail($request->id);
+                $values['status'] = 'Approved';
             }
             $requestProductIds = json_decode($request->product_ids);
             $product_ids = VendorProduct::where('vendor_id', $vendor->id)->pluck('product_id');

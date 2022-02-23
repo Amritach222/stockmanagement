@@ -998,9 +998,6 @@ export default {
                 productData.append('product_id', parseInt(this.quoProducts[i].product_id));
                 productData.append('quantity', parseInt(this.quoProducts[i].quantity));
                 productData.append('quotation_id', parseInt(id));
-                // if(this.quoProducts[i].shipping_cost !== null && this.quoProducts[i].shipping_cost !== '' && typeof(parseInt(this.quoProducts[i].shipping_cost) === 'integer')) {
-                //     productData.append('shipping_cost', parseInt(this.quoProducts[i].shipping_cost));
-                // }
                 if ((this.quoProducts[i].product_variant_id !== '') && (typeof (parseInt(this.quoProducts[i].product_variant_id) === 'integer')) && (this.quoProducts[i].product_variant_id !== null)) {
                     console.log(this.quoProducts[i].product_variant_id)
                     productData.append('product_variant_id', parseInt(this.quoProducts[i].product_variant_id));

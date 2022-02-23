@@ -103,7 +103,7 @@
                                 <hr>
                                 <CRow>
                                     <CCol md="12">
-                                        <v-card>
+                                        <v-card flat>
                                             <v-card-title>
                                                 {{ $t('products') }}
                                                 <v-spacer></v-spacer>
@@ -167,7 +167,7 @@
                                 <hr>
                                 <CForm>
                                     <CCardFooter>
-                                        <CButton size="sm" color="primary" :to="'/vendors/edit/'+show.id">
+                                        <CButton size="sm" color="primary" v-if="$can('vendors.edit')" :to="'/vendors/edit/'+show.id">
                                             <CIcon name="cil-check-circle"/>
                                             {{ $t('button.edit') }}
                                         </CButton>

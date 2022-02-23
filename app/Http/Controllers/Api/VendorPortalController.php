@@ -34,7 +34,12 @@ class VendorPortalController extends Controller
             $user = User::findOrFail(auth()->user()->id);
             $vendor = $user->vendor;
             $productIds = VendorProduct::where('vendor_id', $vendor->id)->pluck('product_id');
-            $data['data'] = ProductResource::collection(Product::whereIn('id', $productIds)->get());
+            $products = Product::whereIn('id', $productIds)->get();
+            foreach ($products as $product) {
+                $vendorProduct = VendorProduct::where('vendor_id', $vendor->id)->where('product_id', $product->id)->firstOrFail();
+                $product->vendor_status = $vendorProduct->status;
+            }
+            $data['data'] = ProductResource::collection($products);
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
