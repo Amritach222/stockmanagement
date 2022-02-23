@@ -327,10 +327,11 @@ export default {
             let res = await ApiServices.vendorProductIds('vendor', this.$route.params.id);
             if (res.success === true) {
                 this.tableLoad = false;
-                this.vendor_ids = res.data;
+                this.vendor_products = res.data;
                 for (let i = 0; i < this.allVendors.length; i++) {
-                    for (let j = 0; j < this.vendor_ids.length; j++) {
-                        if (this.allVendors[i].id === this.vendor_ids[j]) {
+                    for (let j = 0; j < this.vendor_products.length; j++) {
+                        if (this.allVendors[i].id === this.vendor_products[j].vendor_id) {
+                            this.allVendors[i].status = this.vendor_products[j].status;
                             this.vendors.push(this.allVendors[i]);
                         }
                     }

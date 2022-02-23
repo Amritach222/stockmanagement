@@ -22,6 +22,7 @@ class VendorProductController extends Controller
         $data['message'] = '';
         $data['data'] = [];
         try {
+            $arrayData = [];
             if ($type == 'product') {
                 if (auth()->user()->isVendor()) {
                     $user = User::findOrFail($id);
@@ -29,11 +30,20 @@ class VendorProductController extends Controller
                 } else {
                     $vendor = Vendor::findOrFail($id);
                 }
-                $data['data'] = VendorProduct::where('vendor_id', $vendor->id)->pluck('product_id');
+                $vendorProducts = VendorProduct::where('vendor_id', $vendor->id)->get();
+                foreach ($vendorProducts as $k=>$vendorProduct) {
+                    $arrayData[$k]['product_id'] = $vendorProduct->product_id;
+                    $arrayData[$k]['status'] = $vendorProduct->status;
+                }
             } else {
                 $product = Product::findOrFail($id);
-                $data['data'] = VendorProduct::where('product_id', $product->id)->pluck('vendor_id');
+                $vendorProducts = VendorProduct::where('product_id', $product->id)->get();
+                foreach ($vendorProducts as $k=>$vendorProduct) {
+                    $arrayData[$k]['vendor_id'] = $vendorProduct->vendor_id;
+                    $arrayData[$k]['status'] = $vendorProduct->status;
+                }
             }
+            $data['data'] = $arrayData;
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';

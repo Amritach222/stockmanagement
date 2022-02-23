@@ -157,6 +157,19 @@
                                                 <template v-slot:item.category="{ item }">
                                                     {{ item.category.name }}
                                                 </template>
+                                                <template v-slot:item.status="{ item }">
+                                                    <div v-if="item.status === 'Pending'">
+                                                        <CButton size="sm" color="secondary" class="m-1">
+                                                            Pending
+                                                        </CButton>
+                                                    </div>
+                                                    <div v-else>
+                                                        <CButton size="sm" class="m-1" color="success"
+                                                        >
+                                                            Approved
+                                                        </CButton>
+                                                    </div>
+                                                </template>
                                                 <template v-slot:no-data>
                                                     <div>No Data</div>
                                                 </template>
@@ -219,6 +232,7 @@ export default {
             {text: i18n.t('image'), value: 'link', sortable: false},
             {text: i18n.t('brand'), value: 'brand', sortable: false},
             {text: i18n.t('category'), value: 'category', sortable: false},
+            {text: i18n.t('status'), value: 'status'},
         ],
         show: {
             id: null,
@@ -256,7 +270,7 @@ export default {
                 this.show.state = JSON.parse(this.show.state);
                 this.show.city = JSON.parse(this.show.city);
             }
-            let res = await ApiServices.productIndex();
+            let res = await ApiServices.productList();
             if (res.success === true) {
                 this.tableLoad = false;
                 this.allProducts = res.data;
@@ -267,10 +281,11 @@ export default {
             let res = await ApiServices.vendorProductIds('product',this.$route.params.id);
             if (res.success === true) {
                 this.tableLoad = false;
-                this.product_ids = res.data;
-                for (let i = 0; i < this.product_ids.length; i++) {
+                this.vendor_products = res.data;
+                for (let i = 0; i < this.vendor_products.length; i++) {
                     for (let j = 0; j < this.allProducts.length; j++) {
-                        if (this.allProducts[j].id === this.product_ids[i]) {
+                        if (this.allProducts[j].id === this.vendor_products[i].product_id) {
+                            this.allProducts[j].status = this.vendor_products[i].status;
                             this.products.push(this.allProducts[j]);
                         }
                     }
