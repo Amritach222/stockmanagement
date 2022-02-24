@@ -414,7 +414,8 @@
                                         :label="$t('comment')"
                                         outlined
                                     />
-
+                                    <p>Please mention your terms and conditions on the above comment box for us to
+                                        consider your proposal.</p>
 
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
