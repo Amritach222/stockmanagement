@@ -100,17 +100,17 @@
                                                         v-on:change="checkDate('desired_delivery_date',desired_delivery_date)"
                                                     ></v-date-picker>
                                                 </v-menu>
-<!--                                                <v-text-field-->
-<!--                                                    type="date"-->
-<!--                                                    v-model="desired_delivery_date"-->
-<!--                                                    prepend-icon="mdi-briefcase-variant"-->
-<!--                                                    :label="$t('desired') + ' ' + $t('delivery') + ' ' + $t('date')"-->
-<!--                                                    placeholder="Select due date..."-->
-<!--                                                    required-->
-<!--                                                    :rules="rules"-->
-<!--                                                    solo-->
-<!--                                                    v-on:change="checkDate('delivery_date',desired_delivery_date)"-->
-<!--                                                />-->
+                                                <!--                                                <v-text-field-->
+                                                <!--                                                    type="date"-->
+                                                <!--                                                    v-model="desired_delivery_date"-->
+                                                <!--                                                    prepend-icon="mdi-briefcase-variant"-->
+                                                <!--                                                    :label="$t('desired') + ' ' + $t('delivery') + ' ' + $t('date')"-->
+                                                <!--                                                    placeholder="Select due date..."-->
+                                                <!--                                                    required-->
+                                                <!--                                                    :rules="rules"-->
+                                                <!--                                                    solo-->
+                                                <!--                                                    v-on:change="checkDate('delivery_date',desired_delivery_date)"-->
+                                                <!--                                                />-->
                                                 <p v-if="deliveryDateValidation" class="date-validation">Please select a
                                                     desired delivery date after the date of today.</p>
                                             </v-col>
@@ -847,12 +847,14 @@ export default {
                 for (let i = 0; i < this.quoProducts.length; i++) {
                     let res = await ApiServices.vendorProductIds('vendor', this.quoProducts[i].product_id);
                     if (res.success === true) {
-                        this.vendor_ids = res.data;
+                        this.vendor_products = res.data;
                         for (let j = 0; j < this.vendors.length; j++) {
-                            for (let k = 0; k < this.vendor_ids.length; k++) {
-                                if (this.vendors[j].id === this.vendor_ids[k]) {
+                            for (let k = 0; k < this.vendor_products.length; k++) {
+                                if (this.vendors[j].id === this.vendor_products[k].vendor_id) {
                                     if (!(this.selectVendors.indexOf(this.vendors[j]) >= 0)) {
-                                        this.selectVendors.push(this.vendors[j]);
+                                        if (this.vendor_products[k].status === 'Verified') {
+                                            this.selectVendors.push(this.vendors[j]);
+                                        }
                                     }
                                 }
                             }
