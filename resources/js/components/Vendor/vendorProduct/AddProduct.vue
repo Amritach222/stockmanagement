@@ -152,8 +152,9 @@ export default {
                 for (let i = 0; i < this.vendor_products.length; i++) {
                     for (let j = 0; j < this.products.length; j++) {
                         if (this.products[j].id === this.vendor_products[i].product_id) {
-                            this.products[j].status = this.vendor_products[i].status;
-                            this.selected.push(this.products[j]);
+                            if (this.vendor_products[i].status === 'Verified') {
+                                this.selected.push(this.products[j]);
+                            }
                         }
                     }
                 }

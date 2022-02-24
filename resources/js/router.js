@@ -104,7 +104,7 @@ import VendorPermission from './components/vendor/Permissions'
 import VendorMyProducts from './components/vendor/vendorProduct/MyProducts'
 import VendorAddProductList from './components/vendor/vendorProduct/AddMyProducts'
 
-import VendorProductShow from './components/vendor/vendorProduct/ShowProduct'
+import VendorProductVerifyRequest from './components/Vendor/vendorProduct/VerifyRequestProduct'
 import VendorProductAdd from './components/vendor/vendorProduct/AddProduct'
 import VendorProductRequests from './components/Vendor/requestProposal/Index'
 import VendorProductRequest from './components/Vendor/requestProposal/Show'
@@ -1013,9 +1013,9 @@ export default new Router({
             }
         },
         {
-            path: '/vendorProducts/:id',
-            name: i18n.t('vendor') + ' ' + i18n.t('product'),
-            component: VendorProductShow,
+            path: '/vendorProducts/verify/:id',
+            name: i18n.t('vendor') + ' ' + i18n.t('product') +' ' + i18n.t('verify'),
+            component: VendorProductVerifyRequest,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

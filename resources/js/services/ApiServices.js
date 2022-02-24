@@ -484,13 +484,16 @@ export default {
     async vendorProductList() {
         return await apiCall(GET, `api/vendor/product-list`)
     },
+    async vendorProductStatusUpdate(id, data) {
+        return await apiCall(POST, `api/vendorProduct/status-update/${id}`, data)
+    },
     async vendorQuotationList() {
         return await apiCall(GET, `api/vendor/quotation-list`)
     },
     async vendorQuotation(id) {
         return await apiCall(GET, `api/vendor/quotation/${id}`)
     },
-    async vendorQuotationDetails(id,vendor) {
+    async vendorQuotationDetails(id, vendor) {
         return await apiCall(GET, `api/quotation/quotations/vendor/${id}/${vendor}`)
     },
     async vendorQuotationUpdate(id, data) {
@@ -823,10 +826,10 @@ export default {
     async addPurchaseProductRequest(data) {
         return await apiCall(POST, `api/purchase/purchaseProducts`, data)
     },
-    async changePurchaseProductStatusRequest(id,data) {
+    async changePurchaseProductStatusRequest(id, data) {
         return await apiCall(POST, `api/purchase/purchaseProducts/change-status/${id}`, data)
     },
-    async changePurchaseProductStatusRequestAd(id,data) {
+    async changePurchaseProductStatusRequestAd(id, data) {
         return await apiCall(POST, `api/purchase/purchaseProducts/ad-change-status/${id}`, data)
     },
     async getUserPurchaseProductRequestHistory() {
@@ -844,7 +847,7 @@ export default {
     async showPurchaseRequest(id) {
         return await apiCall(GET, `api/purchase/purchases/${id}`)
     },
-    async editPurchaseRequestProduct(id,data) {
+    async editPurchaseRequestProduct(id, data) {
         return await apiCall(POST, `api/purchase/purchaseProducts/${id}`, data)
     },
 }

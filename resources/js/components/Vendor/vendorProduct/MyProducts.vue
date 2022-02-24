@@ -71,15 +71,15 @@
                 {{ item.category.name }}
             </template>
             <template v-slot:item.status="{ item }">
-                <div v-if="item.status === 'Pending'">
+                <div v-if="item.status === 'Unverified'">
                     <CButton size="sm" color="secondary" class="m-1">
-                        Pending
+                        {{ item.status }}
                     </CButton>
                 </div>
                 <div v-else>
                     <CButton size="sm" class="m-1" color="success"
                     >
-                        Approved
+                        {{ item.status }}
                     </CButton>
                 </div>
             </template>

@@ -31,14 +31,16 @@ class VendorProductController extends Controller
                     $vendor = Vendor::findOrFail($id);
                 }
                 $vendorProducts = VendorProduct::where('vendor_id', $vendor->id)->get();
-                foreach ($vendorProducts as $k=>$vendorProduct) {
+                foreach ($vendorProducts as $k => $vendorProduct) {
+                    $arrayData[$k]['id'] = $vendorProduct->id;
                     $arrayData[$k]['product_id'] = $vendorProduct->product_id;
                     $arrayData[$k]['status'] = $vendorProduct->status;
                 }
             } else {
                 $product = Product::findOrFail($id);
                 $vendorProducts = VendorProduct::where('product_id', $product->id)->get();
-                foreach ($vendorProducts as $k=>$vendorProduct) {
+                foreach ($vendorProducts as $k => $vendorProduct) {
+                    $arrayData[$k]['id'] = $vendorProduct->id;
                     $arrayData[$k]['vendor_id'] = $vendorProduct->vendor_id;
                     $arrayData[$k]['status'] = $vendorProduct->status;
                 }
@@ -77,10 +79,10 @@ class VendorProductController extends Controller
             if (auth()->user()->isVendor()) {
                 $user = User::findOrFail($request->id);
                 $vendor = $user->vendor;
-                $values['status'] = 'Pending';
+                $values['status'] = 'Unverified';
             } else {
                 $vendor = Vendor::findOrFail($request->id);
-                $values['status'] = 'Approved';
+                $values['status'] = 'Verified';
             }
             $requestProductIds = json_decode($request->product_ids);
             $product_ids = VendorProduct::where('vendor_id', $vendor->id)->pluck('product_id');
@@ -151,5 +153,27 @@ class VendorProductController extends Controller
     public function destroy(VendorProduct $vendorProduct)
     {
         //
+    }
+
+    public function statusUpdate($id, Request $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $vendorProduct = VendorProduct::findOrFail($id);
+            if ($request->status == 'Verified') {
+                $vendorProduct->status = $request->status;
+                $vendorProduct->save();
+            } else {
+                $vendorProduct->delete();
+            }
+            $data['message'] = "Status changed successfully.";
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = "Error occurred.";
+            $data['data'] = $e;
+        }
+        return $data;
     }
 }

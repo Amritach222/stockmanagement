@@ -3,31 +3,28 @@
         <v-card-title>
             {{ $t('products') }}
             <v-spacer></v-spacer>
-            <v-card-actions>
-                <v-btn
-                    class="btn-danger m-1 btn-back"
-                    text
-                    :to="'/vendors'"
-                >
-                    {{ $t('button.cancel') }}
-                </v-btn>
-                <v-btn
-                    class="btn-primary btn-submit"
-                    text
-                    @click="save"
-                >
-                    {{ $t('button.submit') }}
-                </v-btn>
-            </v-card-actions>
+            <!--            <v-card-actions>-->
+            <!--                <v-btn-->
+            <!--                    class="btn-danger m-1 btn-back"-->
+            <!--                    text-->
+            <!--                    :to="'/vendors'"-->
+            <!--                >-->
+            <!--                    {{ $t('button.cancel') }}-->
+            <!--                </v-btn>-->
+            <!--                <v-btn-->
+            <!--                    class="btn-primary btn-submit"-->
+            <!--                    text-->
+            <!--                    @click="save"-->
+            <!--                >-->
+            <!--                    {{ $t('button.submit') }}-->
+            <!--                </v-btn>-->
+            <!--            </v-card-actions>-->
         </v-card-title>
         <v-data-table
-            v-model="selected"
-            :single-select="singleSelect"
             item-key="name"
-            show-select
             class="elevation-1"
             :headers="headers"
-            :items="products"
+            :items="selected"
             sort-by="id"
             :loading="tableLoad"
             loading-text="Loading... Please wait..."
@@ -38,18 +35,6 @@
                     flat
                 >
                     <v-row>
-                        <v-col
-                            cols="12"
-                            sm="2"
-                            md="3"
-                            lg="4"
-                        >
-                            <v-switch
-                                v-model="singleSelect"
-                                label="Single select"
-                                class="pa-3"
-                            ></v-switch>
-                        </v-col>
                         <v-col
                             cols="12"
                             sm="4"
@@ -86,17 +71,14 @@
                 {{ item.category.name }}
             </template>
             <template v-slot:item.status="{ item }">
-                <div v-if="item.status === 'Pending'">
-                    <CButton size="sm" color="secondary" class="m-1">
-                        Pending
+                    <CButton size="sm" color="success" class="m-1"
+                             @click="statusChange(item.vendor_product_id,item,'Verified')">
+                        Verify
                     </CButton>
-                </div>
-                <div v-else>
-                    <CButton size="sm" class="m-1" color="success"
-                    >
-                        Approved
+                    <CButton size="sm" class="m-1" color="danger"
+                             @click="statusChange(item.vendor_product_id,item,'Deny')">
+                        Deny
                     </CButton>
-                </div>
             </template>
             <template v-slot:no-data>
                 <div>No Data</div>
@@ -114,7 +96,7 @@ import route from "../../../router";
 
 
 export default {
-    name: "VendorProductShow",
+    name: "VendorProductVerifyRequest",
     data: () => ({
         search: '',
         cdnURL: config.cdnURL,
@@ -124,13 +106,14 @@ export default {
         dialog: false,
         dialogDelete: false,
         singleSelect: false,
+        editedIndex: -1,
         selected: [],
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
             {text: i18n.t('name'), value: 'name'},
             {text: i18n.t('image'), value: 'link', sortable: false},
             {text: i18n.t('brand'), value: 'brand', sortable: false},
             {text: i18n.t('category'), value: 'category', sortable: false},
+            {text: i18n.t('status'), value: 'status', sortable: false},
         ],
         activePassive: [
             {text: 'Active', value: 1},
@@ -146,6 +129,9 @@ export default {
     },
 
     methods: {
+        openImage(data) {
+            window.open(config.cdnURL + data, `_blank`);
+        },
         async loadItems() {
             let res = await ApiServices.productIndex();
             if (res.success === true) {
@@ -154,15 +140,28 @@ export default {
                 let ids = await this.loadVendorProductIds();
             }
         },
+        async statusChange(id, item, status) {
+            this.editedIndex = this.selected.indexOf(item)
+            const data = new FormData();
+            data.append('status', status);
+            let res = await ApiServices.vendorProductStatusUpdate(id, data);
+            if (res.success === true) {
+                this.selected.splice(this.editedIndex, 1)
+            }
+        },
         async loadVendorProductIds() {
-            let res = await ApiServices.vendorProductIds(this.$route.params.id);
+            let res = await ApiServices.vendorProductIds('product', this.$route.params.id);
             if (res.success === true) {
                 this.tableLoad = false;
-                this.product_ids = res.data;
-                for (let i = 0; i < this.product_ids.length; i++) {
+                this.vendor_products = res.data;
+                for (let i = 0; i < this.vendor_products.length; i++) {
                     for (let j = 0; j < this.products.length; j++) {
-                        if (this.products[j].id === this.product_ids[i]) {
-                            this.selected.push(this.products[j]);
+                        if (this.products[j].id === this.vendor_products[i].product_id) {
+                            if (this.vendor_products[i].status === 'Unverified') {
+                                this.products[j].status = this.vendor_products[i].status;
+                                this.products[j].vendor_product_id = this.vendor_products[i].id;
+                                this.selected.push(this.products[j]);
+                            }
                         }
                     }
                 }

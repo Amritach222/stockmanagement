@@ -212,6 +212,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('vendorProducts', \App\Http\Controllers\Api\VendorProductController::class);
     Route::get('vendorProductIds/{type}/{id}', [\App\Http\Controllers\Api\VendorProductController::class, 'index']);
     Route::post('vendorProducts/{id}', [\App\Http\Controllers\Api\VendorProductController::class, 'update']);
+    Route::post('vendorProduct/status-update/{id}', [\App\Http\Controllers\Api\VendorProductController::class, 'statusUpdate']);
 
     Route::group(['prefix' => '/budget'], function () {
         Route::apiResource('budgets', \App\Http\Controllers\Api\BudgetController::class);
