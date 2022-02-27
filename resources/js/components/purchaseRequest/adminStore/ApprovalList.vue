@@ -173,10 +173,10 @@
 </template>
 
 <script>
-import route from "../../router";
-import ApiServices from "../../services/ApiServices";
-import config from "../../config";
-import store from "../../store";
+import route from "../../../router";
+import ApiServices from "../../../services/ApiServices";
+import config from "../../../config";
+import store from "../../../store";
 
 export default {
     name: "ApprovalList",

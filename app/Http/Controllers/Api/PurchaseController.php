@@ -51,16 +51,37 @@ class PurchaseController extends Controller
         return $data;
     }
 
-    public function adminPurchaseLists()
+    public function adminPurchaseLists(Request $request)
     {
         $data['success'] = true;
         $data['message'] = '';
         $data['data'] = [];
-
-        $purchases = Purchase::whereHas('purchaseProducts', function ($query) {
-            $query->where('department_status', 'Approved');
+        $getStatus = $request->query('status');
+        if ($getStatus === 'approved') {
+            $purchases = Purchase::with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
+                $query->where('department_status', 'Approved');
+                $query->where('status', 'Approved');
+            }
+            )->get();
         }
-        )->get();
+        elseif ($getStatus === 'rejected') {
+            $purchases = Purchase::with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
+                $query->where('department_status', 'Approved');
+                $query->where('status', 'Rejected');
+            }
+            )->get();
+        } else {
+            $purchases = Purchase::with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
+                $query->where('department_status', 'Approved');
+                $query->where('status', 'Pending');
+            }
+            )->get();
+        }
+
+//        $purchases = Purchase::whereHas('purchaseProducts', function ($query) {
+//            $query->where('department_status', 'Approved');
+//        }
+//        )->get();
 
         $data['data'] = PurchaseRequestAdminResource::collection($purchases);
         return $data;
