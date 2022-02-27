@@ -9,7 +9,7 @@ class QuotationProduct extends Model
 
     protected $table = 'quotation_products';
     public $timestamps = true;
-    protected $fillable = array('quotation_id', 'product_id', 'product_variant_id', 'quantity', 'price', 'tax_id', 'shipping_cost', 'grand_total', 'unit_id', 'discount_type', 'discount', 'purchase_product_id');
+    protected $fillable = array('quotation_id', 'product_id', 'product_variant_id', 'quantity', 'price', 'tax_id', 'shipping_cost', 'grand_total', 'unit_id', 'discount_type', 'discount', 'purchase_product_id','vendor_id');
 
     public function quotation()
     {
@@ -60,5 +60,10 @@ class QuotationProduct extends Model
     public function vendorQuotationProducts()
     {
         return $this->hasMany(VendorQuotationProduct::class, 'quotation_product_id');
+    }
+
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id');
     }
 }

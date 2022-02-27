@@ -229,6 +229,7 @@ class VendorPortalController extends Controller
                 $quoProduct->unit_id = $quotationProduct->unit_id;
                 $quoProduct->discount_type = $quotationProduct->discount_type;
                 $quoProduct->discount = $quotationProduct->discount;
+                $quoProduct->vendor_id = $quotationProduct->vendorQuotation->vendor_id;
                 if ($quotationProduct->discount_type == 'Percent') {
                     $discount = ($quotationProduct->price * $quotationProduct->discount) / 100;
                 } else {
@@ -312,6 +313,7 @@ class VendorPortalController extends Controller
                         $quotationProduct->unit_id = $product->unit_id;
                         $quotationProduct->discount_type = $product->discount_type;
                         $quotationProduct->discount = $product->discount;
+                        $quotationProduct->vendor_id = $product->vendorQuotation->vendor_id;
                         if ($product->discount_type == 'Percent') {
                             $discount = ($product->price * $product->discount) / 100;
                         } else {

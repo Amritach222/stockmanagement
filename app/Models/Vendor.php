@@ -40,8 +40,13 @@ class Vendor extends Model
         return $this->hasMany(VendorQuotation::class, 'vendor_id');
     }
 
-    public function vendor()
+//    public function vendor()
+//    {
+//        return $this->hasOne(Vendor::class, 'user_id');
+//    }
+
+    public function quotationProducts()
     {
-        return $this->hasOne(Vendor::class, 'user_id');
+        return $this->hasMany(QuotationProduct::class, 'vendor_id');
     }
 }
