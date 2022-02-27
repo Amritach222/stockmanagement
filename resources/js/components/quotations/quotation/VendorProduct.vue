@@ -158,7 +158,7 @@
                                                     ></v-text-field>
                                                 </div>
                                                 <div v-else>
-                                                    <p class="mt-3" v-if="item.price">{{ item.price }}</p>
+                                                    <p class="mt-3" v-if="item.price">NRs. {{ item.price }}</p>
                                                     <p class="mt-3" v-else>---</p>
                                                 </div>
                                             </template>
@@ -171,7 +171,7 @@
                                                     ></v-text-field>
                                                 </div>
                                                 <div v-else>
-                                                    <p class="mt-3" v-if="item.shipping_cost">{{
+                                                    <p class="mt-3" v-if="item.shipping_cost">NRs. {{
                                                             item.shipping_cost
                                                         }}</p>
                                                     <p class="mt-3" v-else>---</p>
@@ -403,7 +403,6 @@ export default {
             {text: i18n.t('quantity'), value: 'quantity'},
             {text: i18n.t('price'), value: 'price'},
             {text: i18n.t('tax'), value: 'tax_id'},
-            {text: i18n.t('discount') + ' ' + i18n.t('type'), value: 'discount_type'},
             {text: i18n.t('discount'), value: 'discount'},
             {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
             {text: i18n.t('total'), value: 'total'},

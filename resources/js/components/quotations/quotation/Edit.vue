@@ -329,7 +329,7 @@
                                                 <p v-else class="mt-3">---</p>
                                             </template>
                                             <template v-slot:item.price="{ item }">
-                                                <p v-if="item.price" class="mt-3">{{ item.price }}</p>
+                                                <p v-if="item.price" class="mt-3">NRs. {{ item.price }}</p>
                                                 <p v-else class="mt-3">0</p>
                                             </template>
                                             <template v-slot:item.tax_id="{ item }">
@@ -339,6 +339,19 @@
                                             <template v-slot:item.unit_id="{ item }">
                                                 <p v-if="item.unit_id" class="mt-3">{{ item.unit.name }}</p>
                                                 <p v-else class="mt-3">---</p>
+                                            </template>
+                                            <template v-slot:item.shipping_cost="{ item }">
+                                                <p v-if="item.shipping_cost" class="mt-3">NRs. {{ item.shipping_cost }}</p>
+                                                <p v-else class="mt-3">---</p>
+                                            </template>
+                                            <template v-slot:item.discount="{ item }">
+                                                    <p class="mt-3"
+                                                       v-if="item.discount && item.discount_type === 'Amount'">NRs.
+                                                        {{ item.discount }}</p>
+                                                    <p class="mt-3"
+                                                       v-else-if="item.discount && item.discount_type === 'Percent'">
+                                                        {{ item.discount }}%</p>
+                                                    <p class="mt-3" v-else>---</p>
                                             </template>
                                             <template v-slot:item.status="{ item }">
                                                 <div v-if="item.status === 'On Progress'">
@@ -733,10 +746,12 @@ export default {
             {text: i18n.t('quantity'), value: 'quantity'},
             {text: i18n.t('price'), value: 'price'},
             {text: i18n.t('tax'), value: 'tax_id'},
+            {text: i18n.t('discount'), value: 'discount'},
             {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
             {text: i18n.t('unit'), value: 'unit_id'},
+            {text: i18n.t('total'), value: 'grand_total'},
             {text: i18n.t('status'), value: 'status'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
+            // {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         headersV: [
             {text: i18n.t('name'), value: 'name'},
