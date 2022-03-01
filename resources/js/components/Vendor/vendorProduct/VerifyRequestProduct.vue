@@ -76,7 +76,7 @@
                         Verify
                     </CButton>
                     <CButton size="sm" class="m-1" color="danger"
-                             @click="statusChange(item.vendor_product_id,item,'Deny')">
+                             @click="statusChange(item.vendor_product_id,item,'Unverified')">
                         Deny
                     </CButton>
             </template>
@@ -157,7 +157,7 @@ export default {
                 for (let i = 0; i < this.vendor_products.length; i++) {
                     for (let j = 0; j < this.products.length; j++) {
                         if (this.products[j].id === this.vendor_products[i].product_id) {
-                            if (this.vendor_products[i].status === 'Unverified') {
+                            if (this.vendor_products[i].status === 'Pending') {
                                 this.products[j].status = this.vendor_products[i].status;
                                 this.products[j].vendor_product_id = this.vendor_products[i].id;
                                 this.selected.push(this.products[j]);

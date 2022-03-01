@@ -14,7 +14,7 @@ class AddStatusToVendorProducts extends Migration
     public function up()
     {
         Schema::table('vendor_products', function (Blueprint $table) {
-            $table->enum('status', ['Verified','Unverified'])->nullable();
+            $table->enum('status', ['Pending', 'Verified', 'Unverified'])->nullable();
         });
     }
 

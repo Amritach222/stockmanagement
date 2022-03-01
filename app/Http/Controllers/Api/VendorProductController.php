@@ -79,7 +79,7 @@ class VendorProductController extends Controller
             if (auth()->user()->isVendor()) {
                 $user = User::findOrFail($request->id);
                 $vendor = $user->vendor;
-                $values['status'] = 'Unverified';
+                $values['status'] = 'Pending';
             } else {
                 $vendor = Vendor::findOrFail($request->id);
                 $values['status'] = 'Verified';
@@ -92,12 +92,20 @@ class VendorProductController extends Controller
                     $values['product_id'] = $id;
                     $vendorProduct = new VendorProduct($values);
                     $vendorProduct->save();
+                } else {
+                    $vendorProduct = VendorProduct::where('vendor_id', $vendor->id)->where('product_id', $id)->firstOrFail();
+                    if (($vendorProduct->status == 'Unverified') or ($vendorProduct->status == 'Pending')) {
+                        $vendorProduct->status = $values['status'];
+                        $vendorProduct->save();
+                    }
                 }
             }
             foreach ($product_ids as $pid) {
                 if (!in_array($pid, $requestProductIds)) {
                     $vP = VendorProduct::where('vendor_id', $vendor->id)->where('product_id', $pid)->first();
-                    $vP->delete();
+                    if (auth()->user()->isVendor()) {
+                        $vP->delete();
+                    }
                 }
             }
 
@@ -162,12 +170,11 @@ class VendorProductController extends Controller
         $data['data'] = [];
         try {
             $vendorProduct = VendorProduct::findOrFail($id);
-            if ($request->status == 'Verified') {
-                $vendorProduct->status = $request->status;
-                $vendorProduct->save();
-            } else {
-                $vendorProduct->delete();
-            }
+            $vendorProduct->status = $request->status;
+            $vendorProduct->save();
+//            } else {
+//                $vendorProduct->delete();
+//            }
             $data['message'] = "Status changed successfully.";
         } catch (\Exception $e) {
             $data['success'] = false;
