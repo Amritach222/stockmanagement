@@ -4,9 +4,13 @@ namespace App\Providers;
 
 use App\Events\ActivityLogEvent;
 use App\Events\PasswordResetEvent;
+use App\Events\QuotationCreateEvent;
+use App\Events\QuotationStatusChangeEvent;
 use App\Events\VendorAssignQuoEvent;
 use App\Listeners\ActivityLogListener;
 use App\Listeners\PasswordResetListener;
+use App\Listeners\QuotationCreateListener;
+use App\Listeners\QuotationStatusChangeListener;
 use App\Listeners\VendorAssignQuoListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -32,6 +36,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         VendorAssignQuoEvent::class => [
             VendorAssignQuoListener::class,
+        ],
+        QuotationCreateEvent::class => [
+            QuotationCreateListener::class,
+        ],
+        QuotationStatusChangeEvent::class => [
+            QuotationStatusChangeListener::class,
         ],
     ];
 

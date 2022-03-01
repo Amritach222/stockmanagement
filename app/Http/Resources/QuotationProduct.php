@@ -25,6 +25,7 @@ class QuotationProduct extends JsonResource
             $purchaseProduct = \App\Models\PurchaseProduct::findOrFail($this->purchase_product_id);
             $purchase = new Purchase(\App\Models\Purchase::findOrFail($purchaseProduct->purchase_id));
         }
+        $total = $this->price * $this->quantity;
         return [
             'id' => $this->id,
             'quotation_id' => $this->quotation_id,
@@ -32,6 +33,7 @@ class QuotationProduct extends JsonResource
             'product_variant_id' => $this->product_variant_id,
             'quantity' => $this->quantity,
             'price' => $this->price,
+            'total' => $total,
             'tax_id' => $this->tax_id,
             'unit_id' => $this->unit_id,
             'shipping_cost' => $this->shipping_cost ?? 0,
