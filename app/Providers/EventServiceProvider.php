@@ -37,9 +37,6 @@ class EventServiceProvider extends ServiceProvider
         VendorAssignQuoEvent::class => [
             VendorAssignQuoListener::class,
         ],
-        QuotationCreateEvent::class => [
-            QuotationCreateListener::class,
-        ],
         QuotationStatusChangeEvent::class => [
             QuotationStatusChangeListener::class,
         ],
