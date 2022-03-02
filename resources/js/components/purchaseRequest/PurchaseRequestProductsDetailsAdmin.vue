@@ -30,7 +30,7 @@
             <v-tab-item
                 value="tab-1"
             >
-
+                <AdminPending></AdminPending>
             </v-tab-item>
             <v-tab-item
                 value="tab-2"
@@ -40,7 +40,7 @@
             <v-tab-item
                 value="tab-3"
             >
-
+                <AdminAccepted></AdminAccepted>
             </v-tab-item>
             <v-tab-item
                 value="tab-4"
@@ -54,10 +54,15 @@
 <script>
 
 import ApprovalList from "./adminStore/ApprovalList";
+import AdminPending from "./adminStore/AdminPending";
+import AdminAccepted from "./adminStore/AdminAccepted";
 
 export default {
     name: "PurchaseRequestProductsDetailsAdmin",
-    components: {ApprovalList},
+    components: {AdminAccepted, AdminPending, ApprovalList},
+    data: () => ({
+        tab: null,
+    })
 }
 </script>
 

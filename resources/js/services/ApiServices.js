@@ -611,10 +611,10 @@ export default {
     async addPurchaseProductRequest(data) {
         return await apiCall(POST, `api/purchase/purchaseProducts`, data)
     },
-    async changePurchaseProductStatusRequest(id,data) {
+    async changePurchaseProductStatusRequest(id, data) {
         return await apiCall(POST, `api/purchase/purchaseProducts/change-status/${id}`, data)
     },
-    async changePurchaseProductStatusRequestAd(id,data) {
+    async changePurchaseProductStatusRequestAd(id, data) {
         return await apiCall(POST, `api/purchase/purchaseProducts/ad-change-status/${id}`, data)
     },
     async getUserPurchaseProductRequestHistory() {
@@ -622,6 +622,12 @@ export default {
     },
     async getAdminPurchaseProductRequest() {
         return await apiCall(GET, `api/purchase/ad-purchase-list`)
+    },
+    async getAdminPurchaseProductRequestApproved() {
+        return await apiCall(GET, `api/purchase/ad-purchase-list?status=approved`)
+    },
+    async getAdminPurchaseProductRequestRejected() {
+        return await apiCall(GET, `api/purchase/ad-purchase-list?status=rejected`)
     },
     async getDepartmentHeadPurchaseProductRequest() {
         return await apiCall(GET, `api/purchase/dh-purchase-list`)
@@ -638,7 +644,7 @@ export default {
     async showPurchaseRequest(id) {
         return await apiCall(GET, `api/purchase/purchases/${id}`)
     },
-    async editPurchaseRequestProduct(id,data) {
+    async editPurchaseRequestProduct(id, data) {
         return await apiCall(POST, `api/purchase/purchaseProducts/${id}`, data)
     },
 }
