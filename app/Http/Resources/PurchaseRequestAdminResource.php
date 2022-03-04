@@ -67,7 +67,7 @@ class PurchaseRequestAdminResource extends JsonResource
                 'due_date' => $due_date,
                 'note' => $note,
                 'approved_by' => $this->approved_by,
-                'delivery_status' => $this->delivery_status,
+                'seen_status' => $this->seen_status,
                 'purchase_products' => $purchaseProd,
                 'purchase_products_shortcode' => $item_short,
             ];

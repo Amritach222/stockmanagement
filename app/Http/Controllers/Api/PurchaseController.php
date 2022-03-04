@@ -78,11 +78,6 @@ class PurchaseController extends Controller
             )->get();
         }
 
-//        $purchases = Purchase::whereHas('purchaseProducts', function ($query) {
-//            $query->where('department_status', 'Approved');
-//        }
-//        )->get();
-
         $data['data'] = PurchaseRequestAdminResource::collection($purchases);
         return $data;
     }

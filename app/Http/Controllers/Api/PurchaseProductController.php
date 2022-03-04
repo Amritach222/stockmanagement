@@ -33,12 +33,49 @@ class PurchaseProductController extends Controller
             $values = $request->all();
             $purchaseProduct->update($values);
             event(new ActivityLogEvent('Edit', 'Purchase Product', $purchaseProduct->id));
+            $this->changeStatusOfPurchaseRequestFromPpStatus($values['status'],$purchaseProduct->purchase_id);
             $data['message'] = "Updated successfully.";
             $data['data'] = new PurchaseProductResource($purchaseProduct);
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
         return $data;
+    }
+
+    public function changeStatusOfPurchaseRequestFromPpStatus($status, $prid)
+    {
+        $products = PurchaseProduct::where('purchase_id', $prid)->get();
+        if ($status === 'Approved') {
+            $checkKey = true;
+            foreach ($products as $single) {
+                if ($single->status !== 'Approved') {
+                    $checkKey = false;
+                }
+            }
+            $purchase = Purchase::where('id', $prid)->first();
+            if ($checkKey) {
+                $purchase->status = 'Approved';
+            } else {
+                $purchase->status = 'Partial Approved';
+            }
+            $purchase->seen_status = 'seen';
+            $purchase->save();
+        } elseif ($status === 'Rejected') {
+            $checkKey = true;
+            foreach ($products as $single) {
+                if ($single->status !== 'Rejected') {
+                    $checkKey = false;
+                }
+            }
+            $purchase = Purchase::where('id', $prid)->first();
+            if ($checkKey) {
+                $purchase->status = 'Rejected';
+            } else {
+                $purchase->status = 'Partial Rejected';
+            }
+            $purchase->seen_status = 'seen';
+            $purchase->save();
+        }
     }
 
     public function index()
