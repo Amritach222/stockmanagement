@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\QuotationStatusChangeEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\QuotationProduct;
 use App\Http\Resources\VendorQuotationProductResource;
+use App\Listeners\QuotationStatusChangeListener;
 use App\Models\File;
 use App\Models\Product;
 use App\Http\Resources\Product as ProductResource;
@@ -219,6 +221,7 @@ class VendorPortalController extends Controller
             $quotationProduct = VendorQuotationProduct::findOrFail($id);
             $values = $request->only('status');
             $quotationProduct->update($values);
+            event(new QuotationStatusChangeEvent($request->status, $quotationProduct));
 
             if ($request->status == 'Approved') {
                 $quoProduct = \App\Models\QuotationProduct::findOrFail($quotationProduct->quotation_product_id);
