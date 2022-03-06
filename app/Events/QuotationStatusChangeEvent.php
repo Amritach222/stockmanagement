@@ -20,8 +20,9 @@ class QuotationStatusChangeEvent
      *
      * @return void
      */
-    public function __construct($status, VendorQuotationProduct $vendorQuotationProduct)
+    public function __construct($type, $status, VendorQuotationProduct $vendorQuotationProduct)
     {
+        $this->type = $type;
         $this->status = $status;
         $this->vendorQuotationProduct = $vendorQuotationProduct;
     }

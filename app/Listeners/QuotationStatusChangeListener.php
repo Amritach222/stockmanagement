@@ -24,21 +24,22 @@ class QuotationStatusChangeListener
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param object $event
      * @return void
      */
     public function handle($event)
     {
+        $type = $event->type;
         $status = $event->status;
         $vendorQuotationProduct = $event->vendorQuotationProduct;
-        if((($status == 'Approved') or ($status=='Cancelled')) or ($status == 'Review')){
+        if ((($status == 'Approved') or ($status == 'Cancelled')) or ($status == 'Review')) {
             $vendor = $vendorQuotationProduct->vendorQuotation->vendor;
             $user = User::findOrFail($vendor->user_id);
-            Notification::send($user, new VendorQuotationStatusChangeNotification($status, $vendorQuotationProduct));
-        }else{
+            Notification::send($user, new VendorQuotationStatusChangeNotification($type, $status, $vendorQuotationProduct));
+        } else {
             $quotation = $vendorQuotationProduct->vendorQuotation->quotation;
             $user = User::findOrFail($quotation->user_id);
-            Notification::send($user, new SMQuotationStatusChangeNotification($status, $vendorQuotationProduct));
+            Notification::send($user, new SMQuotationStatusChangeNotification($type, $status, $vendorQuotationProduct));
         }
     }
 }

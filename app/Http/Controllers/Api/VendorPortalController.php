@@ -184,6 +184,7 @@ class VendorPortalController extends Controller
             $values = $request->all();
             if ($quotationProduct->status == 'Review') {
                 $values['status'] = 'Reviewed';
+                event(new QuotationStatusChangeEvent('Quotation', 'Reviewed', $quotationProduct));
             }
             $discount = 0;
             if ($request->discount !== null) {
@@ -221,7 +222,7 @@ class VendorPortalController extends Controller
             $quotationProduct = VendorQuotationProduct::findOrFail($id);
             $values = $request->only('status');
             $quotationProduct->update($values);
-            event(new QuotationStatusChangeEvent($request->status, $quotationProduct));
+            event(new QuotationStatusChangeEvent('Quotation', $request->status, $quotationProduct));
 
             if ($request->status == 'Approved') {
                 $quoProduct = \App\Models\QuotationProduct::findOrFail($quotationProduct->quotation_product_id);

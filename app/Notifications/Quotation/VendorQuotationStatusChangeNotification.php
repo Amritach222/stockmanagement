@@ -17,8 +17,9 @@ class VendorQuotationStatusChangeNotification extends Notification
      *
      * @return void
      */
-    public function __construct($status, VendorQuotationProduct $vendorQuotationProduct)
+    public function __construct($type, $status, VendorQuotationProduct $vendorQuotationProduct)
     {
+        $this->type = $type;
         $this->status = $status;
         $this->vendorQuotationProduct = $vendorQuotationProduct;
     }
@@ -57,6 +58,7 @@ class VendorQuotationStatusChangeNotification extends Notification
     public function toArray($notifiable)
     {
         return [
+            'type' => $this->type,
             'status' => $this->status,
             'vendorQuotationProduct' => $this->vendorQuotationProduct
         ];
