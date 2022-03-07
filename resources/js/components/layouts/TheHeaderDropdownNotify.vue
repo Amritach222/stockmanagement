@@ -9,10 +9,10 @@
             <CHeaderNavLink>
                 <div class="c-avatar">
                     <CIcon name="cil-bell"/>
-<!--                    <img-->
-<!--                        :src=profileImageUrl-->
-<!--                        class="c-avatar-img "-->
-<!--                    />-->
+                    <!--                    <img-->
+                    <!--                        :src=profileImageUrl-->
+                    <!--                        class="c-avatar-img "-->
+                    <!--                    />-->
                 </div>
             </CHeaderNavLink>
         </template>
@@ -20,14 +20,26 @@
             <strong>Notifications</strong>
         </CDropdownHeader>
         <CDropdownItem>
-            <CIcon name="cil-bell"/>
-            Quotations
-            <CBadge color="info" class="mfs-auto">{{ itemsCount }}</CBadge>
+            <router-link
+                :to="'/notification/quotation'"
+                v-if="$can('quotations.edit')"
+                class="notify-items"
+            >
+                <CIcon name="cil-bell"/>
+                Quotations
+                <CBadge color="info" class="mfs-auto">{{ itemsCount }}</CBadge>
+            </router-link>
         </CDropdownItem>
         <CDropdownItem>
-            <CIcon name="cil-bell"/>
-            Purchase Order
-            <CBadge color="success" class="mfs-auto">{{ itemsCount }}</CBadge>
+            <router-link
+                :to="'/notification/purchase'"
+                v-if="$can('quotations.edit')"
+                class="notify-items"
+            >
+                <CIcon name="cil-bell"/>
+                Purchase Order
+                <CBadge color="success" class="mfs-auto">{{ itemsCount }}</CBadge>
+            </router-link>
         </CDropdownItem>
     </CDropdown>
 </template>
@@ -49,7 +61,7 @@ export default {
     },
     created() {
         let userData = localStorage.getItem('userData');
-        if(userData !== ''){
+        if (userData !== '') {
             userData = JSON.parse(userData);
             this.username = userData.name;
         }
@@ -69,7 +81,7 @@ export default {
         },
         async profileImage() {
             let profilePic = false;
-            if(store.state.auth.isLoggedIn){
+            if (store.state.auth.isLoggedIn) {
                 profilePic = await ApiServices.getUserProfilePic();
             }
             if (profilePic.success === true) {
@@ -84,5 +96,19 @@ export default {
 <style scoped>
 .c-icon {
     margin-right: 0.3rem;
+}
+
+.notify-items {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    /*padding: 0.5rem 1.25rem !important;*/
+    clear: both !important;
+    font-weight: 400 !important;
+    text-align: inherit !important;
+    white-space: nowrap !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    color: #4f5d73 !important;
 }
 </style>

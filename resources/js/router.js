@@ -175,6 +175,7 @@ import EditPurchaseRequest from './components/purchaseRequest/EditPurchaseReques
 import PurchaseRequestProducts from './components/purchaseRequest/PurchaseRequestProducts'
 import PurchaseRequestAdmin from './components/purchaseRequest/PurchaseRequestProductsDetailsAdmin'
 import PurchaseRequestDepartmentHead from './components/purchaseRequest/PurchaseRequestProductsDetailsDh'
+import Notification from './components/notification/Notification'
 import ApiServices from "./services/ApiServices";
 import store from "./store";
 
@@ -1468,6 +1469,16 @@ export default new Router({
             path: '/users/permission/:username',
             name: i18n.t('user') + ' ' + i18n.t('permission'),
             component: UserPermission,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/notification/:type',
+            name: i18n.t('notifications'),
+            component: Notification,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

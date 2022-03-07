@@ -44,7 +44,7 @@ class VendorQuotationStatusChangeNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('Quotation no. ' . $this->vendorQuotationProduct->vendorQuotation->quotation->reference_no . ' is ' . $this->status)
+            ->line('Quotation no. ' . $this->vendorQuotationProduct->vendorQuotation->quotation->reference_no . $this->status == 'Review' ? ' is sent for Review.' : ' is ' . $this->status . '.')
 //                    ->action('Notification Action', url('/'))
             ->line('Thank you for using our application!');
     }
