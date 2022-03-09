@@ -1,234 +1,168 @@
 <template>
-    <div class="c-app flex-row align-items-center">
-        <CContainer>
-            <CRow class="justify-content-center">
-                <CCol sm="12">
-                    <CCardGroup>
-                        <CCard class="p-4">
-                            <CCardHeader>
-                                <strong>Add</strong> Vendor
-                                <v-progress-circular
-                                    v-if="createProgress"
-                                    indeterminate
-                                    color="white"
-                                    size="30"
-                                ></v-progress-circular>
-                            </CCardHeader>
-                            <CCardBody>
-                                <CForm>
-                                    <v-form>
-                                        <v-text-field
-                                            v-model="name"
-                                            type="text"
-                                            name="name"
-                                            description="Please enter vendor name."
-                                            autocomplete=""
-                                            label="Name"
-                                            prepend-inner-icon="mdi-account"
-                                            placeholder="Enter vendor name..."
-                                            required
-                                            @keyup="clearError('name')"
-                                            @keyup.enter="create"
-                                            :rules="rules.name"
-                                            solo
-                                        >
-                                        </v-text-field>
-                                        <v-text-field
-                                            v-model="company_name"
-                                            type="text"
-                                            name="company_name"
-                                            description="Please enter company name."
-                                            prepend-inner-icon="mdi-alpha-c-circle"
-                                            autocomplete=""
-                                            label="Company Name"
-                                            placeholder="Enter company name..."
-                                            required
-                                            @keyup="clearError('company_name')"
-                                            @keyup.enter="create"
-                                            :rules="rules.company_name"
-                                            solo
-                                        ></v-text-field>
-                                        <v-text-field
-                                            v-model="vat_no"
-                                            type="number"
-                                            name="vat_no"
-                                            description="Please enter VAT number."
-                                            prepend-inner-icon="mdi-alpha-v-circle"
-                                            autocomplete=""
-                                            label="VAT No."
-                                            placeholder="Enter VAT number..."
-                                            required
-                                            @keyup="clearError('vat_no')"
-                                            @keyup.enter="create"
-                                            :rules="rules.vat_no"
-                                            solo
-                                        ></v-text-field>
-                                        <v-text-field
-                                            v-model="email"
-                                            type="email"
-                                            name="email"
-                                            description="Please enter email."
-                                            prepend-inner-icon="@"
-                                            autocomplete=""
-                                            label="Email"
-                                            placeholder="Enter email..."
-                                            required
-                                            @keyup="clearError('email')"
-                                            @keyup.enter="create"
-                                            :rules="rules.email"
-                                            solo
-                                        ></v-text-field>
-                                        <v-text-field
-                                            v-model="address"
-                                            type="text"
-                                            name="address"
-                                            description="Please enter address."
-                                            prepend-inner-icon="mdi-bookmark-minus"
-                                            autocomplete=""
-                                            label="Address"
-                                            placeholder="Enter address..."
-                                            @keyup="clearError('address')"
-                                            @keyup.enter="create"
-                                            solo
-                                        ></v-text-field>
-                                        <v-text-field
-                                            v-model="landline"
-                                            type="number"
-                                            name="landline"
-                                            description="Please enter landline number."
-                                            prepend-inner-icon="mdi-phone-classic"
-                                            autocomplete=""
-                                            label="Landline No."
-                                            placeholder="Enter landline number..."
-                                            @keyup="clearError('landline')"
-                                            @keyup.enter="create"
-                                            :rules="rules.landline"
-                                            solo
-                                        ></v-text-field>
-                                        <v-text-field
-                                            v-model="mobile"
-                                            type="number"
-                                            name="mobile"
-                                            description="Please enter mobile number."
-                                            prepend-inner-icon="mdi-cellphone"
-                                            autocomplete=""
-                                            label="Mobile No."
-                                            placeholder="Enter mobile number..."
-                                            required
-                                            @keyup="clearError('mobile')"
-                                            @keyup.enter="create"
-                                            :rules="rules.mobile"
-                                            solo
-                                        ></v-text-field>
-                                        <v-select
-                                            v-model="country"
-                                            name="country"
-                                            description="Please select a country."
-                                            prepend-inner-icon="mdi-web"
-                                            autocomplete=""
-                                            label="Country"
-                                            placeholder="Select country..."
-                                            required
-                                            @keyup="clearError('country')"
-                                            @keyup.enter="create"
-                                            :rules="rules.country"
-                                            solo
-                                        ></v-select>
-                                        <v-select
-                                            v-model="state"
-                                            name="state"
-                                            description="Please select a state."
-                                            prepend-inner-icon="mdi-billboard"
-                                            autocomplete=""
-                                            label="State"
-                                            placeholder="Select state..."
-                                            required
-                                            @keyup="clearError('state')"
-                                            @keyup.enter="create"
-                                            :rules="rules.state"
-                                            solo
-                                        ></v-select>
-                                        <v-select
-                                            v-model="city"
-                                            name="city"
-                                            description="Please select a city."
-                                            prepend-inner-icon="mdi-city"
-                                            autocomplete=""
-                                            label="City"
-                                            placeholder="Select city..."
-                                            required
-                                            @keyup="clearError('city')"
-                                            @keyup.enter="create"
-                                            :rules="rules.city"
-                                            solo
-                                        ></v-select>
-                                        <v-text-field
-                                            v-model="postal_code"
-                                            type="text"
-                                            name="postal_code"
-                                            prepend-inner-icon="mdi-code-not-equal"
-                                            description="Please enter postal code."
-                                            autocomplete=""
-                                            label="Postal Code"
-                                            placeholder="Select postal code..."
-                                            @keyup="clearError('postal_code')"
-                                            @keyup.enter="create"
-                                            solo
-                                        ></v-text-field>
-                                        <v-file-input
-                                            v-model="image"
-                                            type="file"
-                                            name="image"
-                                            description="Please upload a image."
-                                            prepend-inner-icon="mdi-image"
-                                            autocomplete=""
-                                            label="Image"
-                                            @keyup="clearError('image')"
-                                            @keyup.enter="create"
-                                            solo
-                                        ></v-file-input>
-                                        <v-select
-                                            v-model="category_id"
-                                            name="category_id"
-                                            description="Please select category."
-                                            prepend-inner-icon="mdi-shape"
-                                            autocomplete=""
-                                            label="Category"
-                                            placeholder="Select category..."
-                                            @keyup="clearError('category_id')"
-                                            @keyup.enter="create"
-                                            solo
-                                        ></v-select>
-                                        <v-checkbox
-                                            v-model="is_active"
-                                            name="is_active"
-                                            description="Please check the box if vendor is active."
-                                            autocomplete=""
-                                            label="Active"
-                                            value="1"
-                                            @keyup="clearError('is_active')"
-                                            @keyup.enter="create"
-                                            solo
-                                        ></v-checkbox>
-                                    </v-form>
-                                    <CCardFooter>
-                                        <CButton type="submit" size="sm" color="primary" @click="create">
-                                            <CIcon name="cil-check-circle"/>
-                                            Submit
-                                        </CButton>
-                                        <CButton type="reset" size="sm" color="danger">
-                                            <CIcon name="cil-ban"/>
-                                            Reset
-                                        </CButton>
-                                    </CCardFooter>
-                                </CForm>
-                            </CCardBody>
-                        </CCard>
-                    </CCardGroup>
-                </CCol>
-            </CRow>
-        </CContainer>
-    </div>
+    <v-card>
+        <v-card-title>
+            <span class="headline">Add Vendor</span>
+        </v-card-title>
+        <v-form ref="form">
+            <v-container>
+                <v-row>
+                    <v-col>
+                        <v-text-field
+                            v-model="editedItem.name"
+                            label="Name"
+                            required
+                            outlined
+                            :rules="rules.name"
+                            class="shrink"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col>
+                        <v-text-field
+                            v-model="editedItem.company_name"
+                            label="Company Name"
+                            required
+                            outlined
+                            :rules="rules.company_name"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col>
+                        <v-text-field
+                            v-model="editedItem.vat_no"
+                            label="Vat/Pan No"
+                            outlined
+                            type="number"
+                            :rules="rules.vat_no"
+                        ></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <v-text-field
+                            v-model="editedItem.email"
+                            label="Email"
+                            required
+                            outlined
+                            :rules="rules.email"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col>
+                        <v-text-field
+                            v-model="editedItem.landline"
+                            label="Landline No."
+                            required
+                            outlined
+                            type="number"
+                            :rules="rules.landline"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col>
+                        <v-text-field
+                            v-model="editedItem.mobile"
+                            label="Mobile No."
+                            required
+                            outlined
+                            type="number"
+                            :rules="rules.mobile"
+                        ></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <v-select
+                            v-model="editedItem.country"
+                            :items="country"
+                            item-text="name"
+                            item-value="name"
+                            label="Country"
+                            dense
+                            outlined
+                            required
+                            :rules="rules.country"
+                            return-object
+                            v-on:change=getStates(editedItem.country)
+                        ></v-select>
+                    </v-col>
+                    <v-col>
+                        <v-select
+                            v-model="editedItem.state"
+                            :items="state"
+                            item-text="name"
+                            item-value="name"
+                            label="State"
+                            dense
+                            outlined
+                            required
+                            :rules="rules.state"
+                            return-object
+                            v-on:change=getCities(editedItem.state)
+                        ></v-select>
+                    </v-col>
+                    <v-col>
+                        <v-select
+                            v-model="editedItem.city"
+                            :items="city"
+                            item-text="name"
+                            item-value="name"
+                            label="City"
+                            dense
+                            outlined
+                            required
+                            :rules="rules.city"
+                            return-object
+                        ></v-select>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <v-text-field
+                            v-model="editedItem.postal_code"
+                            label="Postal Code"
+                            required
+                            outlined
+                            type="number"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col>
+                        <v-select
+                            v-model="editedItem.category_id"
+                            :items="categories"
+                            item-text="name"
+                            item-value="id"
+                            label="Categories"
+                            dense
+                            outlined
+                            required
+                            :rules="rules.category_id"
+                        ></v-select>
+                    </v-col>
+                    <v-col>
+                        <v-select
+                            v-model="editedItem.is_active"
+                            :items="activePassive"
+                            item-text="text"
+                            item-value="value"
+                            label="Active or Inactive"
+                            dense
+                            outlined
+                            required
+                            :rules="rules.is_active"
+                        ></v-select>
+                    </v-col>
+                </v-row>
+
+            </v-container>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="save"
+                >
+                    Save
+                </v-btn>
+            </v-card-actions>
+        </v-form>
+    </v-card>
 </template>
 
 <script>
@@ -273,6 +207,21 @@ export default {
             postal_code: '',
             is_active: '',
             category_id: '',
+        },
+        editedItem: {
+            id: null,
+            name: '',
+            company_name: '',
+            vat_no: '',
+            email: '',
+            landline: '',
+            mobile: '',
+            country: '',
+            state: '',
+            city: '',
+            postal_code: '',
+            category_id: '',
+            is_active: '',
         },
         rules: {
             name: [
