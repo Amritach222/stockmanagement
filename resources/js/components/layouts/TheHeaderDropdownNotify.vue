@@ -55,8 +55,6 @@
                 totalUnreadCount: '',
                 quotationCount: '',
                 purchaseCount: '',
-                profileImageUrl: 'images/avatars/7.jpg',
-                username: 'Username'
             }
         },
         created() {
@@ -77,16 +75,6 @@
                     this.purchaseCount = res2.data;
                 }
             },
-            async profileImage() {
-                let profilePic = false;
-                if (store.state.auth.isLoggedIn) {
-                    profilePic = await ApiServices.getUserProfilePic();
-                }
-                if (profilePic.success === true) {
-                    let link = profilePic.data;
-                    this.profileImageUrl = config.cdnURL + link;
-                }
-            }
         }
     }
 </script>

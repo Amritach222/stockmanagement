@@ -111,6 +111,9 @@ export default {
     async getNotifications(type) {
         return await apiCall(GET, `api/get-notifications/${type}`)
     },
+    async redirectNotification(id) {
+        return await apiCall(GET, `api/redirect-notification/${id}`)
+    },
     async logout() {
         return await apiCall(GET, `api/user/logout`)
     },

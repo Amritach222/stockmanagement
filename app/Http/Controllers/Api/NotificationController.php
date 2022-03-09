@@ -49,6 +49,7 @@ class NotificationController extends Controller
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
         }
         return $data;
     }
@@ -97,6 +98,24 @@ class NotificationController extends Controller
                 $data['data'] = Auth::user()->unreadNotifications->count();
             }
         } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
+        }
+        return $data;
+    }
+
+    public function redirect($id)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $notification = Auth::user()->notifications->find($id);
+            if ($notification) {
+                $notification->markAsRead();
+            }
+            $data['data'] = NotificationsHelper::getDetail($notification)['link'] ?? url('/');
+        } catch (\Exception $exception) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
         }
