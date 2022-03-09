@@ -102,6 +102,15 @@ export default {
     async getVendorPendingQuotationCount() {
         return await apiCall(GET, `api/vendor/pending-quotation-count`)
     },
+    async getUnreadCount(type = null) {
+        return await apiCall(GET, `api/get-unread-count/${type}`)
+    },
+    async getAllNotifications() {
+        return await apiCall(GET, `api/get-all-notifications`)
+    },
+    async getNotifications(type) {
+        return await apiCall(GET, `api/get-notifications/${type}`)
+    },
     async logout() {
         return await apiCall(GET, `api/user/logout`)
     },

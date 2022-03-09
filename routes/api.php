@@ -34,6 +34,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('get-all-notifications', [\App\Http\Controllers\Api\NotificationController::class, 'getAllNotifications']);
+    Route::get('get-notifications/{type}', [\App\Http\Controllers\Api\NotificationController::class, 'getNotifications']);
+    Route::get('get-unread-count/{type}', [\App\Http\Controllers\Api\NotificationController::class, 'unreadCount']);
     Route::group(['prefix' => '/vendor'], function () {
         Route::get('quotation-list', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationList']);
         Route::get('quotation/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationShow']);
