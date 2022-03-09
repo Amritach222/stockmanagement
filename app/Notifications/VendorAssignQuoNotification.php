@@ -34,7 +34,7 @@ class VendorAssignQuoNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -63,7 +63,9 @@ class VendorAssignQuoNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'type' => 'Quotation',
+            'status' => 'Create',
+            'quotation' => $this->quotation
         ];
     }
 }

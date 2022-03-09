@@ -222,7 +222,12 @@ class VendorPortalController extends Controller
             $quotationProduct = VendorQuotationProduct::findOrFail($id);
             $values = $request->only('status');
             $quotationProduct->update($values);
-            event(new QuotationStatusChangeEvent('Quotation', $request->status, $quotationProduct));
+            try {
+                event(new QuotationStatusChangeEvent('Quotation', $request->status, $quotationProduct));
+            } catch (\Exception $exception) {
+                $data['message'] = 'Error while sending notification';
+                $data['data'] = $exception;
+            }
 
             if ($request->status == 'Approved') {
                 $quoProduct = \App\Models\QuotationProduct::findOrFail($quotationProduct->quotation_product_id);

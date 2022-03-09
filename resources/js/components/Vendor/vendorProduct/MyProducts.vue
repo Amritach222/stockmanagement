@@ -72,15 +72,22 @@
             </template>
             <template v-slot:item.status="{ item }">
                 <div v-if="item.status === 'Unverified'">
-                    <CButton size="sm" color="secondary" class="m-1">
+                    <CButton size="sm" color="danger" class="m-1">
+                        {{ item.status }}
+                    </CButton>
+                </div>
+                <div v-else-if="item.status === 'Pending'">
+                    <CButton size="sm" class="m-1" color="secondary">
+                        {{ item.status }}
+                    </CButton>
+                </div>
+                <div v-else-if="item.status === 'Verified'">
+                    <CButton size="sm" class="m-1" color="success">
                         {{ item.status }}
                     </CButton>
                 </div>
                 <div v-else>
-                    <CButton size="sm" class="m-1" color="success"
-                    >
-                        {{ item.status }}
-                    </CButton>
+                    ----
                 </div>
             </template>
             <template v-slot:no-data>

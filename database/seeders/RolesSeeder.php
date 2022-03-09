@@ -152,6 +152,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeManager, 'productVariants');
             $this->giveAutoAllPermissions($storeManager, 'quotations');
             $this->giveAutoAllPermissions($storeManager, 'quotationProducts');
+            $this->giveAutoAllPermissions($storeManager, 'purchases');
+            $this->giveAutoAllPermissions($storeManager, 'purchaseProducts');
             $this->giveAutoAllPermissions($storeManager, 'consumes');
             $storeManager->givePermissionTo('settings');
             $this->giveAutoAllPermissions($storeManager, 'purchaseProductsApprovalAdmin');
@@ -168,7 +170,7 @@ class RolesSeeder extends Seeder
             'name' => 'Super Admin',
             'username' => 'superAdmin',
             'email' => 'superadmin@rkdholdings.com',
-            'is_active'=>1,
+            'is_active' => 1,
             'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
@@ -178,7 +180,7 @@ class RolesSeeder extends Seeder
             'name' => 'Admin',
             'username' => 'admin1234',
             'email' => 'admin@rkdholdings.com',
-            'is_active'=>1,
+            'is_active' => 1,
             'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
@@ -188,7 +190,7 @@ class RolesSeeder extends Seeder
             'name' => 'Store Keeper',
             'username' => 'storeKeeper',
             'email' => 'store.keeper@rkdholdings.com',
-            'is_active'=>1,
+            'is_active' => 1,
             'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
@@ -198,7 +200,7 @@ class RolesSeeder extends Seeder
             'name' => 'Store Manager',
             'username' => 'storeManager',
             'email' => 'store.manager@rkdholdings.com',
-            'is_active'=>1,
+            'is_active' => 1,
             'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
@@ -208,7 +210,7 @@ class RolesSeeder extends Seeder
             'name' => 'Director',
             'username' => 'director',
             'email' => 'director@rkdholdings.com',
-            'is_active'=>1,
+            'is_active' => 1,
             'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
@@ -218,7 +220,7 @@ class RolesSeeder extends Seeder
             'name' => 'Finance Director',
             'username' => 'financeDirector',
             'email' => 'finance.director@rkdholdings.com',
-            'is_active'=>1,
+            'is_active' => 1,
             'password' => bcrypt('Secret@123'),
         ]);
         $user->save();
@@ -228,7 +230,7 @@ class RolesSeeder extends Seeder
             'name' => 'Staff one',
             'username' => 'staff1234',
             'email' => 'staff@rkdholdings.com',
-            'is_active'=>1,
+            'is_active' => 1,
             'password' => bcrypt('Secret@123'),
             'department_id' => 1,
         ]);
