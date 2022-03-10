@@ -10,8 +10,6 @@ use App\Http\Resources\Purchase as PurchaseResource;
 use App\Http\Resources\PurchaseProduct as PurchaseProductResource;
 use App\Http\Resources\PurchaseRequestAdminResource;
 use App\Models\File;
-use App\Models\Product;
-use App\Models\ProductVariant;
 use App\Models\Purchase;
 use App\Models\PurchaseProduct;
 use Illuminate\Http\Request;

@@ -268,15 +268,19 @@ export default {
 
     methods: {
         async searchPan(pan) {
-            this.load = true;
-            let res = await ApiServices.getPanDetails(pan);
-            if (res.data.data === 0) {
+            if(pan === '' || pan === undefined){
                 this.wright = false;
             } else {
-                this.wright = true;
-                this.editedItem.company_name = res.data.data.panDetails[0].trade_Name_Eng.toUpperCase();
-                this.editedItem.landline = res.data.data.panDetails[0].telephone;
-                this.editedItem.mobile = res.data.data.panDetails[0].mobile;
+                this.load = true;
+                let res = await ApiServices.getPanDetails(pan);
+                if (res.data.data === 0) {
+                    this.wright = false;
+                } else {
+                    this.wright = true;
+                    this.editedItem.company_name = res.data.data.panDetails[0].trade_Name_Eng.toUpperCase();
+                    this.editedItem.landline = res.data.data.panDetails[0].telephone;
+                    this.editedItem.mobile = res.data.data.panDetails[0].mobile;
+                }
             }
             this.load = false;
         },
@@ -316,10 +320,16 @@ export default {
             data.append('postal_code', this.editedItem.postal_code);
             data.append('category_id', this.editedItem.category_id);
             data.append('is_active', this.editedItem.is_active);
-            let res = await ApiServices.vendorCreate(data);
-            if (res.success === true) {
-                this.$refs.form.reset();
-                route.replace('/vendors');
+            if(this.wright){
+                let res = await ApiServices.vendorCreate(data);
+                if (res.success === true) {
+                    this.$refs.form.reset();
+                    route.replace('/vendors');
+                }
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Pan/Vat Number is not valid";
+                store.state.home.snackbarColor = 'danger';
             }
         },
     }
