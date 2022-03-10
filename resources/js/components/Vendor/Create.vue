@@ -12,11 +12,15 @@
                             label="Vat/Pan No"
                             outlined
                             :append-icon="wright ? 'mdi-checkbox-marked-circle-outline' : 'mdi-close-circle-outline'"
-                            :append-outer-icon="'mdi-sync'"
+                            :append-outer-icon="'mdi-cloud-download'"
                             type="number"
                             :rules="rules.vat_no"
+                            :error-messages="error.vat_no"
                             @click:append-outer="searchPan(editedItem.vat_no)"
                         ></v-text-field>
+                    </v-col>
+                    <v-col cols="1" v-if="load">
+                        <CSpinner color="warning" variant="grow"/>
                     </v-col>
                     <v-col>
                         <v-text-field
@@ -156,12 +160,13 @@
             </v-container>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <CButton
-                    color="primary"
-                    text
-                    @click="save"
-                >
-                    Save
+                <CButton type="submit" size="sm" color="primary" @click="save">
+                    <CIcon name="cil-check-circle"/>
+                    {{ $t('button.submit') }}
+                </CButton>
+                <CButton class="ml-2" size="sm" color="danger" :to="'/vendors'">
+                    <CIcon name="cil-ban"/>
+                    {{ $t('button.cancel') }}
                 </CButton>
             </v-card-actions>
         </v-form>
@@ -197,6 +202,7 @@ export default {
         category_id: '',
         createProgress: false,
         wright: false,
+        load: false,
         country: [],
         state: [],
         city: [],
@@ -256,21 +262,23 @@ export default {
     }),
 
     async created() {
+        this.loadCategories();
         this.country = countryList;
     },
 
     methods: {
         async searchPan(pan) {
+            this.load = true;
             let res = await ApiServices.getPanDetails(pan);
             if (res.data.data === 0) {
                 this.wright = false;
             } else {
                 this.wright = true;
-                // this.editedItem.name = res.data.data.panDetails[0].trade_Name_Eng;
                 this.editedItem.company_name = res.data.data.panDetails[0].trade_Name_Eng.toUpperCase();
                 this.editedItem.landline = res.data.data.panDetails[0].telephone;
                 this.editedItem.mobile = res.data.data.panDetails[0].mobile;
             }
+            this.load = false;
         },
         getCityName(item) {
             if (item.city !== null) return JSON.parse(item.city).name;
@@ -292,138 +300,28 @@ export default {
                 this.categories = res.data;
             }
         },
-        clearError(name) {
-            if (name === 'name') {
-                this.error.name = '';
-            }
-            if (name === 'vat_no') {
-                this.error.vat_no = '';
-            }
-            if (name === 'company_name') {
-                this.error.company_name = '';
-            }
-            if (name === 'email') {
-                this.error.email = '';
-            }
-            if (name === 'landline') {
-                this.error.landline = '';
-            }
-            if (name === 'mobile') {
-                this.error.mobile = '';
-            }
-            if (name === 'address') {
-                this.error.address = '';
-            }
-            if (name === 'country') {
-                this.error.country = '';
-            }
-            if (name === 'city') {
-                this.error.city = '';
-            }
-            if (name === 'state') {
-                this.error.state = '';
-            }
-            if (name === 'postal_code') {
-                this.error.postal_code = '';
-            }
-            if (name === 'category_id') {
-                this.error.category_id = '';
-            }
-            if (name === 'is_active') {
-                this.error.is_active = '';
-            }
-        },
         async save() {
-            if (this.editedIndex > -1) {
-                //edit goes here
-                this.progressL = true;
-                const data = new FormData();
-                data.append('name', this.editedItem.name);
-                data.append('company_name', this.editedItem.company_name);
-                data.append('vat_no', this.editedItem.vat_no);
-                data.append('email', this.editedItem.email);
-                data.append('landline', this.editedItem.landline);
-                data.append('mobile', this.editedItem.mobile);
-                data.append('country', JSON.stringify(this.editedItem.country));
-                data.append('state', JSON.stringify(this.editedItem.state));
-                data.append('city', JSON.stringify(this.editedItem.city));
-                data.append('postal_code', this.editedItem.postal_code);
-                data.append('category_id', this.editedItem.category_id);
-                data.append('is_active', this.editedItem.is_active);
-                let res = await ApiServices.vendorEdit(this.editedItem.id, data);
-                if (res.success === true) {
-                    Object.assign(this.vendors[this.editedIndex], this.editedItem)
-                    this.$refs.form.reset();
-                    this.close();
-                }
-            } else {
-                //add new
-                this.validateData();
-                if (this.validated) {
-                    this.progressL = true;
-                    const data = new FormData();
-                    data.append('name', this.editedItem.name);
-                    data.append('company_name', this.editedItem.company_name);
-                    data.append('vat_no', this.editedItem.vat_no);
-                    data.append('email', this.editedItem.email);
-                    data.append('landline', this.editedItem.landline);
-                    data.append('mobile', this.editedItem.mobile);
-                    data.append('country', JSON.stringify(this.editedItem.country));
-                    data.append('state', JSON.stringify(this.editedItem.state));
-                    data.append('city', JSON.stringify(this.editedItem.city));
-                    data.append('postal_code', this.editedItem.postal_code);
-                    data.append('category_id', this.editedItem.category_id);
-                    data.append('is_active', this.editedItem.is_active);
-                    let res = await ApiServices.vendorCreate(data);
-                    if (res.success === true) {
-                        this.vendors.push(this.editedItem);
-                        this.$refs.form.reset();
-                        this.close()
-                    }
-                }
+            this.$refs.form.validate();
+            this.progressL = true;
+            const data = new FormData();
+            data.append('name', this.editedItem.name);
+            data.append('company_name', this.editedItem.company_name);
+            data.append('vat_no', this.editedItem.vat_no);
+            data.append('email', this.editedItem.email);
+            data.append('landline', this.editedItem.landline);
+            data.append('mobile', this.editedItem.mobile);
+            data.append('country', JSON.stringify(this.editedItem.country));
+            data.append('state', JSON.stringify(this.editedItem.state));
+            data.append('city', JSON.stringify(this.editedItem.city));
+            data.append('postal_code', this.editedItem.postal_code);
+            data.append('category_id', this.editedItem.category_id);
+            data.append('is_active', this.editedItem.is_active);
+            let res = await ApiServices.vendorCreate(data);
+            if (res.success === true) {
+                this.$refs.form.reset();
+                route.replace('/vendors');
             }
         },
-        validateData() {
-            this.$refs.form.validate();
-            if (this.editedItem.name === null) {
-                this.validated = false
-            }
-            if (this.editedItem.company_name === null) {
-                this.validated = false
-            }
-            if (this.editedItem.vat_no === null) {
-                this.validated = false
-            }
-            if (this.editedItem.email === null) {
-                this.validated = false
-            }
-            if (this.editedItem.landline === null) {
-                this.validated = false
-            }
-            if (this.editedItem.mobile === null) {
-                this.validated = false
-            }
-            if (this.editedItem.country === null) {
-                this.validated = false
-            }
-            if (this.editedItem.state === null) {
-                this.validated = false
-            }
-            if (this.editedItem.city === null) {
-                this.validated = false
-            }
-            if (this.editedItem.postal_code === null) {
-                this.validated = false
-            }
-            if (this.editedItem.category_id === null) {
-                this.validated = false
-            }
-            if (this.editedItem.is_active === null) {
-                this.validated = false
-            } else {
-                this.validated = true
-            }
-        }
     }
 }
 </script>

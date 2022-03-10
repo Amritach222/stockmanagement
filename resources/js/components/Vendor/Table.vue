@@ -43,7 +43,7 @@
                                 dark
                                 class="mb-2"
                                 v-bind="attrs"
-                                v-on="on"
+                                :to="'/vendors/create'"
                             >
                                 Add New Vendor
                             </v-btn>

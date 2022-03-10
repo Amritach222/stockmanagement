@@ -14,9 +14,10 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
+        "lcobucci/jwt": "^3.3.3",
         "propaganistas/laravel-disposable-email": "^2.1",
-        "spatie/laravel-permission": "^5.1",
-        "lcobucci/jwt": "^3.3.3"
+        "pusher/pusher-php-server": "^7.0",
+        "spatie/laravel-permission": "^5.1"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
