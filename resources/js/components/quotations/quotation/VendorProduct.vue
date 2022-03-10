@@ -470,6 +470,20 @@ export default {
         this.loadData();
         this.loadTax();
         // this.loadQuoProducts();
+
+        Echo.join(`chat`)
+            .here((users) => {
+                //
+            })
+            .joining((user) => {
+                console.log(user.name);
+            })
+            .leaving((user) => {
+                console.log(user.name);
+            })
+            .error((error) => {
+                console.error(error);
+            });
     },
     methods: {
         openImage(data) {
