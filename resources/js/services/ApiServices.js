@@ -3,6 +3,7 @@
  * Date: 15/09/2021
  */
 import Api from './Api'
+import axios from 'axios'
 
 const POST = 'post'
 const GET = 'get'
@@ -646,5 +647,9 @@ export default {
     },
     async editPurchaseRequestProduct(id, data) {
         return await apiCall(POST, `api/purchase/purchaseProducts/${id}`, data)
+    },
+
+    async getPanDetails(id) {
+        return await axios.get(`https://lc.lacc.website/search/pan?pan=${id}`);
     },
 }
