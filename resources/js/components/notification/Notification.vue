@@ -46,8 +46,17 @@
                                                     v-for="item in items"
                                                     :key="item.name"
                                                 >
-                                                    <td v-on:click="redirectNotification(item.notification.id)">{{
-                                                        item.title }}
+                                                    <td v-on:click="redirectNotification(item.notification.id)"
+                                                        v-if="item.notification.read_at === null"
+                                                        class="unread"
+                                                    >
+                                                        {{ item.title }}
+                                                    </td>
+                                                    <td v-on:click="redirectNotification(item.notification.id)"
+                                                        v-else
+                                                        class="read"
+                                                    >
+                                                        {{ item.title }}
                                                     </td>
                                                     <!--                                                    <td>-->
                                                     <!--                                                        <div v-if="permissions.indexOf(item.value) !== -1">-->
@@ -182,3 +191,22 @@
         }
     }
 </script>
+<style scoped>
+.read{
+    background: #e6e6e8 !important;
+    border-radius: 8px;
+    cursor: pointer;
+    /*list-style-type: disc !important;*/
+}
+.read:before{
+    content: '#';
+    list-style-type: disc !important;
+}
+.unread{
+    cursor: pointer;
+}
+.unread:before{
+    content: '#';
+    list-style-type: disc !important;
+}
+</style>
