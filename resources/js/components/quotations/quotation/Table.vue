@@ -20,9 +20,9 @@
                     <v-row>
                         <v-col
                             cols="12"
-                            sm="4"
-                            md="6"
-                            lg="8"
+                            sm="3"
+                            md="4"
+                            lg="6"
                         >
                             <v-text-field
                                 v-model="search"
@@ -32,6 +32,20 @@
                                 hide-details
                                 max-width="100px"
                             ></v-text-field>
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            sm="3"
+                            md="3"
+                            lg="2"
+                        >
+                            <v-card>
+                                <v-card-actions>
+                                    <!--                                <v-card-text class="card-text-filter"><h6>-->
+                                    <v-btn color="blue darken-1" text @click="openFilter">Filter</v-btn>
+                                    <!--                                    </h6></v-card-text>-->
+                                </v-card-actions>
+                            </v-card>
                         </v-col>
                     </v-row>
                     <v-dialog
@@ -63,11 +77,59 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
+                    <v-dialog v-model="dialogFilter" max-width="800px">
+                        <v-card>
+                            <v-card-title class="text-h6">Filters</v-card-title>
+                            <v-card-text>
+                                <v-form>
+                                    <v-row>
+                                        <v-col md="4">
+                                            <v-select
+                                                v-model="status"
+                                                :items="['Pending','Reviewed','Approved','Cancelled']"
+                                                persistent-hint
+                                                prepend-icon="mdi-alpha-s-circle"
+                                                :label="$t('status')"
+                                                placeholder="Select status ..."
+                                                multiple
+                                            />
+                                        </v-col>
+                                        <v-col md="4">
+                                            <v-select
+                                                v-model="status"
+                                                :items="['John','Binisha']"
+                                                persistent-hint
+                                                prepend-icon="mdi-alpha-s-circle"
+                                                :label="$t('suppliers')"
+                                                placeholder="Select suppliers ..."
+                                            />
+                                        </v-col>
+                                        <v-col md="4">
+                                            <v-select
+                                                v-model="status"
+                                                :items="['Finance','IT','HR']"
+                                                persistent-hint
+                                                prepend-icon="mdi-alpha-d-circle"
+                                                :label="$t('department')"
+                                                placeholder="Select department ..."
+                                            />
+                                        </v-col>
+                                    </v-row>
+                                </v-form>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" text @click="closeFilter">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="filterItemConfirm">Submit</v-btn>
+                                <v-spacer></v-spacer>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
                 </v-toolbar>
             </template>
             <template v-slot:item.link="{ item }">
                 <CButton size="sm" color="primary" class="file-link" v-if="item.link"
-                       v-on:click="openImage(item.link)"> Open
+                         v-on:click="openImage(item.link)"> Open
                     File
                 </CButton>
                 <p v-else>
@@ -77,20 +139,20 @@
             <template v-slot:item.department_id="{ item }">
                 {{ item.department.name }}
             </template>
-                        <template v-slot:item.status="{ item }">
-                            <CButton size="sm" color="secondary" v-if="item.status === 'Pending'">
-                                {{ item.status }}
-                            </CButton>
-                            <CButton size="sm" color="warning" v-else-if="item.status === 'Reviewed'">
-                                {{ item.status }}
-                            </CButton>
-                            <CButton size="sm" color="success" v-else-if="item.status === 'Approved'">
-                                {{ item.status }}
-                            </CButton>
-                            <CButton size="sm" color="danger" v-else-if="item.status === 'Rejected'">
-                                {{ item.status }}
-                            </CButton>
-                        </template>
+            <template v-slot:item.status="{ item }">
+                <CButton size="sm" color="secondary" v-if="item.status === 'Pending'">
+                    {{ item.status }}
+                </CButton>
+                <CButton size="sm" color="warning" v-else-if="item.status === 'Reviewed'">
+                    {{ item.status }}
+                </CButton>
+                <CButton size="sm" color="success" v-else-if="item.status === 'Approved'">
+                    {{ item.status }}
+                </CButton>
+                <CButton size="sm" color="danger" v-else-if="item.status === 'Rejected'">
+                    {{ item.status }}
+                </CButton>
+            </template>
             <template v-slot:item.actions="{ item }">
                 <router-link
                     :to="'/quotations/edit/'+item.id"
@@ -132,6 +194,7 @@ export default {
         progressL: false,
         dialog: false,
         dialogDelete: false,
+        dialogFilter: false,
         headers: [
             {text: 'Id', align: 'start', sortable: true, value: 'id'},
             {text: 'Reference No.', value: 'reference_no'},
@@ -143,6 +206,7 @@ export default {
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         quotations: [],
+        status: '',
         tableLoad: true
     }),
 
@@ -182,6 +246,10 @@ export default {
             this.dialog = true
         },
 
+        openFilter() {
+            this.dialogFilter = true
+        },
+
         deleteItem(item) {
             this.editedIndex = this.quotations.indexOf(item)
             this.editedItem = Object.assign({}, item)
@@ -189,6 +257,14 @@ export default {
         },
 
         async deleteItemConfirm() {
+            let res = await ApiServices.quotationDelete(this.editedItem.id);
+            if (res.success === true) {
+                this.quotations.splice(this.editedIndex, 1)
+            }
+            this.closeDelete()
+        },
+
+        async filterItemConfirm() {
             let res = await ApiServices.quotationDelete(this.editedItem.id);
             if (res.success === true) {
                 this.quotations.splice(this.editedIndex, 1)
@@ -213,6 +289,14 @@ export default {
                 this.editedIndex = -1
             })
         },
+
+        closeFilter() {
+            this.dialogDelete = false
+            this.$nextTick(() => {
+                this.editedItem = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            })
+        },
     },
 }
 </script>
@@ -224,5 +308,9 @@ export default {
     margin-top: 6px;
     font-size: 14px;
     font-weight: 400;
+}
+
+.card-text-filter {
+    padding: 12px !important;
 }
 </style>
