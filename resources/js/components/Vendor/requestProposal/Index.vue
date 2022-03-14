@@ -141,10 +141,10 @@ export default {
             id: null,
         },
         headers: [
-            {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
+            // {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
             {text: i18n.t('reference'), value: 'reference_no'},
-            {text: i18n.t('due') + ' ' + i18n.t('date'), value: 'due_date'},
-            {text: i18n.t('desired') + ' ' + i18n.t('delivery') + ' ' + i18n.t('date'), value: 'desired_delivery_date'},
+            {text: i18n.t('due') + ' ' + i18n.t('date'), value: 'due_date_format'},
+            {text: i18n.t('desired') + ' ' + i18n.t('delivery') + ' ' + i18n.t('date'), value: 'desired_delivery_date_format'},
             {text: i18n.t('status'), value: 'status'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],

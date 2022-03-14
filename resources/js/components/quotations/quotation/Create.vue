@@ -989,6 +989,10 @@ export default {
                         } else {
                             route.replace('/quotations/');
                         }
+                    } else {
+                        store.state.home.snackbar = true;
+                        store.state.home.snackbarText = res.message;
+                        store.state.home.snackbarColor = 'red';
                     }
                 }
             }
@@ -1015,6 +1019,10 @@ export default {
                 let res = await ApiServices.quotationProductCreate(productData);
                 if (res.success === true) {
                     this.successCount = parseInt(this.successCount) + 1;
+                } else {
+                    store.state.home.snackbar = true;
+                    store.state.home.snackbarText = res.message;
+                    store.state.home.snackbarColor = 'red';
                 }
             }
             // route.replace('/quotations/');
@@ -1027,7 +1035,16 @@ export default {
             data.append('vendors', JSON.stringify(this.quoVendors));
             let res = await ApiServices.vendorQuotationCreate(data);
             if (res.success === true) {
+                if(res.message !== null){
+                    store.state.home.snackbar = true;
+                    store.state.home.snackbarText = res.message;
+                    store.state.home.snackbarColor = 'red';
+                }
                 route.replace('/quotations/')
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = res.message;
+                store.state.home.snackbarColor = 'red';
             }
         },
 

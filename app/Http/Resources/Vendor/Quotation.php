@@ -26,12 +26,22 @@ class Quotation extends JsonResource
         $vendorQuotationProducts = VendorQuotationProductResource::collection(\App\Models\VendorQuotationProduct::where('vendor_quotation_id', $vendorQuotation->id)->get());
         $quotationProducts = QuotationProduct::collection(\App\Models\QuotationProduct::whereIn('id', $quotation_product_ids)->get());
 //        $vendorQuotations = \App\Models\VendorQuotation::where('quotation_id', $this->id)->where('vendor_id', $vendor->id)->get();
+        $due_date = '';
+        if($this->due_date){
+            $due_date = date('F j, Y', strtotime($this->due_date));
+        }
+        $desired_delivery_date = '';
+        if($this->desired_delivery_date){
+            $desired_delivery_date = date('F j, Y', strtotime($this->desired_delivery_date));
+        }
         return [
             'id' => $this->id,
             'reference_no' => $this->reference_no,
             'note' => $this->note,
             'due_date' => $this->due_date,
+            'due_date_format' => $due_date,
             'desired_delivery_date' => $this->desired_delivery_date,
+            'desired_delivery_date_format' => $desired_delivery_date,
             'requested_name' => $this->requested_name,
             'status' => $this->status,
             'quotation_products' => $quotationProducts,
