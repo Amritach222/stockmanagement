@@ -77,7 +77,7 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
-                    <v-dialog v-model="dialogFilter" max-width="800px">
+                    <v-dialog v-model="dialogFilter" max-width="1000px">
                         <v-card>
                             <v-card-title class="text-h6">Filters</v-card-title>
                             <v-card-text>
@@ -96,8 +96,10 @@
                                         </v-col>
                                         <v-col md="4">
                                             <v-select
-                                                v-model="status"
-                                                :items="['John','Binisha']"
+                                                v-model="vendor_id"
+                                                :items="vendors"
+                                                item-text="name"
+                                                item-value="id"
                                                 persistent-hint
                                                 prepend-icon="mdi-alpha-s-circle"
                                                 :label="$t('suppliers')"
@@ -106,13 +108,68 @@
                                         </v-col>
                                         <v-col md="4">
                                             <v-select
-                                                v-model="status"
-                                                :items="['Finance','IT','HR']"
+                                                v-model="department_ids"
+                                                :items="departments"
+                                                item-text="name"
+                                                item-value="id"
                                                 persistent-hint
                                                 prepend-icon="mdi-alpha-d-circle"
                                                 :label="$t('department')"
                                                 placeholder="Select department ..."
+                                                multiple
                                             />
+                                        </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col md="12">
+                                            Desired Delivery Date
+                                        </v-col>
+                                        <v-col md="4">
+                                            <v-text-field
+                                                v-model="delivery_from"
+                                                type="date"
+                                                persistent-hint
+                                                :label="$t('from')"
+                                            />
+                                        </v-col>
+                                        <v-col md="4">
+                                            <v-text-field
+                                                v-model="delivery_to"
+                                                type="date"
+                                                persistent-hint
+                                                :label="$t('to')"
+                                            />
+                                        </v-col>
+                                        <v-col md="4">
+                                            <CButton size="sm" color="danger"
+                                                     v-on:click="resetDate('delivery')"> Reset
+                                            </CButton>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col md="12">
+                                            Created Date
+                                        </v-col>
+                                        <v-col md="4">
+                                            <v-text-field
+                                                v-model="created_from"
+                                                type="date"
+                                                persistent-hint
+                                                :label="$t('from')"
+                                            />
+                                        </v-col>
+                                        <v-col md="4">
+                                            <v-text-field
+                                                v-model="created_to"
+                                                type="date"
+                                                persistent-hint
+                                                :label="$t('to')"
+                                            />
+                                        </v-col>
+                                        <v-col md="4">
+                                            <CButton size="sm" color="danger"
+                                                     v-on:click="resetDate('created')"> Reset
+                                            </CButton>
                                         </v-col>
                                     </v-row>
                                 </v-form>
@@ -183,6 +240,7 @@
 import config from "../../../config";
 import store from "../../../store";
 import ApiServices from "../../../services/ApiServices";
+import route from "../../../router";
 
 export default {
     name: "TableWrapper",
@@ -190,6 +248,14 @@ export default {
         cdnURL: config.cdnURL,
         baseURL: config.baseURL,
         search: '',
+        vendor_id: '',
+        vendors: [],
+        department_ids: [],
+        departments: [],
+        delivery_from: '',
+        delivery_to: '',
+        created_from: '',
+        created_to: '',
         validated: false,
         progressL: false,
         dialog: false,
@@ -206,7 +272,8 @@ export default {
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         quotations: [],
-        status: '',
+        filter_quotations: [],
+        status: [],
         tableLoad: true
     }),
 
@@ -227,6 +294,8 @@ export default {
 
     async created() {
         this.loadItems();
+        this.loadDepartments();
+        this.loadVendors();
     },
 
     methods: {
@@ -238,6 +307,27 @@ export default {
             if (res.success === true) {
                 this.tableLoad = false;
                 this.quotations = res.data;
+            }
+        },
+        async loadDepartments() {
+            let res = await ApiServices.departmentList();
+            if (res.success === true) {
+                this.departments = res.data;
+            }
+        },
+        async loadVendors() {
+            let res = await ApiServices.vendorList();
+            if (res.success === true) {
+                this.vendors = res.data;
+            }
+        },
+        async resetDate(type) {
+            if (type === 'delivery') {
+                this.delivery_from = '';
+                this.delivery_to = '';
+            } else {
+                this.created_from = '';
+                this.created_to = '';
             }
         },
         editItem(item) {
@@ -265,11 +355,35 @@ export default {
         },
 
         async filterItemConfirm() {
-            let res = await ApiServices.quotationDelete(this.editedItem.id);
-            if (res.success === true) {
-                this.quotations.splice(this.editedIndex, 1)
+            const data = new FormData();
+            if (this.status !== null && this.status !== []) {
+                data.append('status', JSON.stringify(this.status));
             }
-            this.closeDelete()
+            if (this.department_ids !== null && this.department_ids !== []) {
+                data.append('department_ids', JSON.stringify(this.department_ids));
+            }
+            if (this.delivery_from !== null && this.delivery_from !== '') {
+                data.append('delivery_from', this.delivery_from);
+            }
+            if (this.delivery_to !== null && this.delivery_to !== '') {
+                data.append('delivery_to', this.delivery_to);
+            }
+            if (this.created_from !== null && this.created_from !== '') {
+                data.append('created_from', this.created_from);
+            }
+            if (this.created_to !== null && this.created_to !== '') {
+                data.append('created_to', this.created_to);
+            }
+
+            let res = await ApiServices.quotationFilter(data);
+            if (res.success === true) {
+                this.quotations = res.data;
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = res.message;
+                store.state.home.snackbarColor = 'red';
+            }
+            this.closeFilter();
         },
 
         close() {
@@ -291,11 +405,7 @@ export default {
         },
 
         closeFilter() {
-            this.dialogDelete = false
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
-                this.editedIndex = -1
-            })
+            this.dialogFilter = false
         },
     },
 }

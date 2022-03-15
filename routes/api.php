@@ -49,6 +49,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('pending-quotation-count', [\App\Http\Controllers\Api\VendorPortalController::class, 'getPendingQuotationCount']);
     });
 
+    Route::group(['prefix' => '/filter'], function () {
+        Route::post('quotations', [\App\Http\Controllers\Api\FilterController::class, 'quotation']);
+    });
+
     Route::group(['prefix' => '/list'], function () {
         Route::get('brands', [\App\Http\Controllers\Api\ListController::class, 'brandList']);
         Route::get('bank-accounts', [\App\Http\Controllers\Api\ListController::class, 'bankAccountList']);
