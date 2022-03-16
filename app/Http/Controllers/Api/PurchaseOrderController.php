@@ -8,7 +8,6 @@ use App\Http\Requests\PurchaseProductRequest;
 use App\Http\Requests\PurchaseRequest;
 use App\Http\Resources\Purchase as PurchaseResource;
 use App\Http\Resources\PurchaseProduct as PurchaseProductResource;
-use App\Http\Resources\PurchaseRequestAdminResource;
 use App\Models\File;
 use App\Models\Purchase;
 use App\Models\PurchaseProduct;
@@ -36,81 +35,6 @@ class PurchaseOrderController extends Controller
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
         return $data;
-    }
-
-    public function userPurchaseHistory()
-    {
-        $data['success'] = true;
-        $data['message'] = '';
-        $data['data'] = [];
-        $user = auth()->user();
-        $purchases = Purchase::where('user_id', $user->id)->get();
-        $data['data'] = PurchaseResource::collection($purchases);
-        return $data;
-    }
-
-    public function adminPurchaseLists(Request $request)
-    {
-        $data['success'] = true;
-        $data['message'] = '';
-        $data['data'] = [];
-        $getStatus = $request->query('status');
-        if ($getStatus === 'approved') {
-            $purchases = Purchase::with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
-                $query->where('department_status', 'Approved');
-                $query->where('status', 'Approved');
-            }
-            )->get();
-        }
-        elseif ($getStatus === 'rejected') {
-            $purchases = Purchase::with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
-                $query->where('department_status', 'Approved');
-                $query->where('status', 'Rejected');
-            }
-            )->get();
-        } else {
-            $purchases = Purchase::with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
-                $query->where('department_status', 'Approved');
-                $query->where('status', 'Pending');
-            }
-            )->get();
-        }
-
-        $data['data'] = PurchaseRequestAdminResource::collection($purchases);
-        return $data;
-    }
-
-    public function departmentHeadPurchaseLists(Request $request)
-    {
-        $data['success'] = true;
-        $data['message'] = '';
-        $data['data'] = [];
-        $user = auth()->user();
-        if ($user->department_id === null) {
-            return response(['success' => false, "message" => 'Department id not found', "data" => []], 422);
-        } else {
-            $getStatus = $request->query('status');
-            if ($getStatus === 'approved') {
-                $purchases = Purchase::where('department_id', $user->department_id)->with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
-                    $query->where('department_status', 'Approved');
-                }
-                )->get();
-            } elseif ($getStatus === 'rejected') {
-                $purchases = Purchase::where('department_id', $user->department_id)->with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
-                    $query->where('department_status', 'Rejected');
-                }
-                )->get();
-            } else {
-                $purchases = Purchase::where('department_id', $user->department_id)->with('purchaseProducts')->whereHas('purchaseProducts', function ($query) {
-                    $query->where('department_status', 'Pending');
-                }
-                )->get();
-            }
-
-            $data['data'] = PurchaseResource::collection($purchases);
-            return $data;
-        }
-
     }
 
     public function changeStatusOfPurchaseListsProducts($id, PurchaseProductRequest $request)
