@@ -830,6 +830,9 @@ export default {
     async quotationFilter(data) {
         return await apiCall(POST, `api/filter/quotations`, data)
     },
+    async purchaseFilter(data) {
+        return await apiCall(POST, `api/filter/purchases`, data)
+    },
 
     async addPurchaseRequest(data) {
         const config = {

@@ -41,9 +41,7 @@
                         >
                             <v-card>
                                 <v-card-actions>
-                                    <!--                                <v-card-text class="card-text-filter"><h6>-->
                                     <v-btn color="blue darken-1" text @click="openFilter">Filter</v-btn>
-                                    <!--                                    </h6></v-card-text>-->
                                 </v-card-actions>
                             </v-card>
                         </v-col>
