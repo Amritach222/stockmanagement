@@ -176,7 +176,7 @@
                                     <v-card-text>
                                         <v-form>
                                             <v-row>
-                                                <v-col md="4">
+                                                <v-col md="6">
                                                     <v-select
                                                         v-model="status"
                                                         :items="['Pending','Reviewed','Approved','Cancelled']"
@@ -187,19 +187,7 @@
                                                         multiple
                                                     />
                                                 </v-col>
-                                                <v-col md="4">
-                                                    <v-select
-                                                        v-model="vendor_id"
-                                                        :items="vendors"
-                                                        item-text="name"
-                                                        item-value="id"
-                                                        persistent-hint
-                                                        prepend-icon="mdi-alpha-s-circle"
-                                                        :label="$t('suppliers')"
-                                                        placeholder="Select suppliers ..."
-                                                    />
-                                                </v-col>
-                                                <v-col md="4">
+                                                <v-col md="6">
                                                     <v-select
                                                         v-model="department_ids"
                                                         :items="departments"
@@ -270,7 +258,7 @@
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
                                         <v-btn color="blue darken-1" text @click="closeFilter">Cancel</v-btn>
-                                        <v-btn color="blue darken-1" text @click="filterItemConfirm">Submit</v-btn>
+                                        <v-btn color="blue darken-1" text @click="filterItemConfirm">Apply</v-btn>
                                         <v-spacer></v-spacer>
                                     </v-card-actions>
                                 </v-card>
