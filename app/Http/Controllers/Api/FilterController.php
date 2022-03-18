@@ -17,6 +17,7 @@ class FilterController extends Controller
         try {
             $requestStatus = [];
             $requestDepartmentIds = [];
+            $requestVendorId = '';
             $requestDeliveryFrom = '';
             $requestDeliveryTo = '';
             $requestCreatedTo = '';
@@ -26,6 +27,9 @@ class FilterController extends Controller
             }
             if ($request->department_ids) {
                 $requestDepartmentIds = json_decode($request->department_ids);
+            }
+            if ($request->vendor_id) {
+                $requestVendorId = $request->vendor_id;
             }
             if ($request->delivery_from) {
                 $requestDeliveryFrom = $request->delivery_from;
@@ -43,19 +47,37 @@ class FilterController extends Controller
             } else {
                 $requestCreatedTo = $requestCreatedFrom;
             }
-            $quotations = Quotation::when($requestStatus != null, function ($query) use ($requestStatus) {
-                return $query->whereIn('status', $requestStatus);
-            })->when($requestDepartmentIds != null, function ($query) use ($requestDepartmentIds) {
-                return $query->whereIn('department_id', $requestDepartmentIds);
-            })->when($requestDeliveryFrom != null, function ($query) use ($requestDeliveryFrom) {
-                return $query->where('desired_delivery_date', '>=', $requestDeliveryFrom);
-            })->when($requestDeliveryTo != null, function ($query) use ($requestDeliveryTo) {
-                return $query->where('desired_delivery_date', '<=', $requestDeliveryTo);
-            })->when($requestCreatedFrom != null, function ($query) use ($requestCreatedFrom) {
-                return $query->where('created_at', '>=', $requestCreatedFrom);
-            })->when($requestCreatedTo != null, function ($query) use ($requestCreatedTo) {
-                return $query->where('created_at', '<=', $requestCreatedTo);
-            })->get();
+            if($requestVendorId != null){
+                $quotations = Quotation::when($requestStatus != null, function ($query) use ($requestStatus) {
+                    return $query->whereIn('status', $requestStatus);
+                })->when($requestDepartmentIds != null, function ($query) use ($requestDepartmentIds) {
+                    return $query->whereIn('department_id', $requestDepartmentIds);
+                })->when($requestDeliveryFrom != null, function ($query) use ($requestDeliveryFrom) {
+                    return $query->where('desired_delivery_date', '>=', $requestDeliveryFrom);
+                })->when($requestDeliveryTo != null, function ($query) use ($requestDeliveryTo) {
+                    return $query->where('desired_delivery_date', '<=', $requestDeliveryTo);
+                })->when($requestCreatedFrom != null, function ($query) use ($requestCreatedFrom) {
+                    return $query->where('created_at', '>=', $requestCreatedFrom);
+                })->when($requestCreatedTo != null, function ($query) use ($requestCreatedTo) {
+                    return $query->where('created_at', '<=', $requestCreatedTo);
+                })->with(['quotationProducts' => function ($query) use ($requestVendorId) {
+                    $query->where('vendor_id', $requestVendorId);
+                }])->get();
+            }else {
+                $quotations = Quotation::when($requestStatus != null, function ($query) use ($requestStatus) {
+                    return $query->whereIn('status', $requestStatus);
+                })->when($requestDepartmentIds != null, function ($query) use ($requestDepartmentIds) {
+                    return $query->whereIn('department_id', $requestDepartmentIds);
+                })->when($requestDeliveryFrom != null, function ($query) use ($requestDeliveryFrom) {
+                    return $query->where('desired_delivery_date', '>=', $requestDeliveryFrom);
+                })->when($requestDeliveryTo != null, function ($query) use ($requestDeliveryTo) {
+                    return $query->where('desired_delivery_date', '<=', $requestDeliveryTo);
+                })->when($requestCreatedFrom != null, function ($query) use ($requestCreatedFrom) {
+                    return $query->where('created_at', '>=', $requestCreatedFrom);
+                })->when($requestCreatedTo != null, function ($query) use ($requestCreatedTo) {
+                    return $query->where('created_at', '<=', $requestCreatedTo);
+                })->get();
+            }
             $data['data'] = \App\Http\Resources\Quotation::collection($quotations);
         } catch (\Exception $e) {
             $data['success'] = false;

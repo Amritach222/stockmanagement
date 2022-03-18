@@ -93,7 +93,7 @@
                                             />
                                         </v-col>
                                         <v-col md="4">
-                                            <v-select
+                                            <v-autocomplete
                                                 v-model="vendor_id"
                                                 :items="vendors"
                                                 item-text="name"
@@ -102,7 +102,17 @@
                                                 prepend-icon="mdi-alpha-s-circle"
                                                 :label="$t('suppliers')"
                                                 placeholder="Select suppliers ..."
-                                            />
+                                            ></v-autocomplete>
+<!--                                            <v-select-->
+<!--                                                v-model="vendor_id"-->
+<!--                                                :items="vendors"-->
+<!--                                                item-text="name"-->
+<!--                                                item-value="id"-->
+<!--                                                persistent-hint-->
+<!--                                                prepend-icon="mdi-alpha-s-circle"-->
+<!--                                                :label="$t('suppliers')"-->
+<!--                                                placeholder="Select suppliers ..."-->
+<!--                                            />-->
                                         </v-col>
                                         <v-col md="4">
                                             <v-select
@@ -359,6 +369,9 @@ export default {
             }
             if (this.department_ids !== null && this.department_ids !== []) {
                 data.append('department_ids', JSON.stringify(this.department_ids));
+            }
+            if (this.vendor_ids !== null && this.vendor_id !== '') {
+                data.append('vendor_id', this.vendor_id);
             }
             if (this.delivery_from !== null && this.delivery_from !== '') {
                 data.append('delivery_from', this.delivery_from);
