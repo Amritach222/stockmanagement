@@ -167,19 +167,19 @@
                                                 multiple
                                             />
                                         </v-col>
-                                        <v-col md="6">
-                                            <v-select
-                                                v-model="department_ids"
-                                                :items="departments"
-                                                item-text="name"
-                                                item-value="id"
-                                                persistent-hint
-                                                prepend-icon="mdi-alpha-d-circle"
-                                                :label="$t('department')"
-                                                placeholder="Select department ..."
-                                                multiple
-                                            />
-                                        </v-col>
+<!--                                        <v-col md="6">-->
+<!--                                            <v-select-->
+<!--                                                v-model="department_ids"-->
+<!--                                                :items="departments"-->
+<!--                                                item-text="name"-->
+<!--                                                item-value="id"-->
+<!--                                                persistent-hint-->
+<!--                                                prepend-icon="mdi-alpha-d-circle"-->
+<!--                                                :label="$t('department')"-->
+<!--                                                placeholder="Select department ..."-->
+<!--                                                multiple-->
+<!--                                            />-->
+<!--                                        </v-col>-->
                                     </v-row>
                                     <v-row>
                                         <v-col md="12">
@@ -443,6 +443,11 @@ export default {
             const data = new FormData();
             if (this.status !== null && this.status !== []) {
                 data.append('status', JSON.stringify(this.status));
+            }
+            let userData = localStorage.getItem('userData');
+            if(userData !== ''){
+                userData = JSON.parse(userData);
+                this.department_ids.push(userData.department_id);
             }
             if (this.department_ids !== null && this.department_ids !== []) {
                 data.append('department_ids', JSON.stringify(this.department_ids));
