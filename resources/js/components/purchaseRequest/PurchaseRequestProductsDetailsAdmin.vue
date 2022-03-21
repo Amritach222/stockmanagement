@@ -294,10 +294,20 @@
                         <div>No Data</div>
                     </template>
                 </v-data-table>
+                <AdminPending></AdminPending>
             </v-tab-item>
             <v-tab-item
                 value="tab-2"
-                @click="loadItem()"
+            >
+                <approval-list ref="callForUpdate"></approval-list>
+            </v-tab-item>
+            <v-tab-item
+                value="tab-3"
+            >
+                <AdminAccepted></AdminAccepted>
+            </v-tab-item>
+            <v-tab-item
+                value="tab-4"
             >
                 <approval-list ref="callForUpdate"></approval-list>
             </v-tab-item>
@@ -306,18 +316,22 @@
 </template>
 
 <script>
-import config from "../../config";
-import ApiServices from "../../services/ApiServices";
-import PurchaseTableDetail from "./PurchaseTableDetail";
-import store from "../../store";
-import route from "../../router";
-import ApprovalList from "./ApprovalList";
+
+    import config from "../../config";
+    import ApiServices from "../../services/ApiServices";
+    import PurchaseTableDetail from "./PurchaseTableDetail";
+    import store from "../../store";
+    import route from "../../router";
+import ApprovalList from "./adminStore/ApprovalList";
+import AdminPending from "./adminStore/AdminPending";
+import AdminAccepted from "./adminStore/AdminAccepted";
 
 export default {
-    name: "PurchaseRequestHistory",
-    components: {ApprovalList, PurchaseTableDetail},
+    name: "PurchaseRequestProductsDetailsAdmin",
+    components: {AdminAccepted, AdminPending, ApprovalList},
     data: () => ({
         tab: null,
+    })
         cdnURL: config.cdnURL,
         search: '',
         status: [],

@@ -3,6 +3,7 @@
  * Date: 15/09/2021
  */
 import Api from './Api'
+import axios from 'axios'
 
 const POST = 'post'
 const GET = 'get'
@@ -857,8 +858,20 @@ export default {
     async getAdminPurchaseProductRequest() {
         return await apiCall(GET, `api/purchase/ad-purchase-list`)
     },
+    async getAdminPurchaseProductRequestApproved() {
+        return await apiCall(GET, `api/purchase/ad-purchase-list?status=approved`)
+    },
+    async getAdminPurchaseProductRequestRejected() {
+        return await apiCall(GET, `api/purchase/ad-purchase-list?status=rejected`)
+    },
     async getDepartmentHeadPurchaseProductRequest() {
         return await apiCall(GET, `api/purchase/dh-purchase-list`)
+    },
+    async getDepartmentHeadPurchaseProductRequestApproved() {
+        return await apiCall(GET, `api/purchase/dh-purchase-list?status=approved`)
+    },
+    async getDepartmentHeadPurchaseProductRequestRejected() {
+        return await apiCall(GET, `api/purchase/dh-purchase-list?status=rejected`)
     },
     async deleteUserPurchaseRequest(id) {
         return await apiCall(DELETE, `api/purchase/purchases/${id}`)
@@ -868,5 +881,9 @@ export default {
     },
     async editPurchaseRequestProduct(id, data) {
         return await apiCall(POST, `api/purchase/purchaseProducts/${id}`, data)
+    },
+
+    async getPanDetails(id) {
+        return await axios.get(`https://lc.lacc.website/search/pan?pan=${id}`);
     },
 }

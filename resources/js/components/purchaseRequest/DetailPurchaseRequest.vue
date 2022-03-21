@@ -22,7 +22,7 @@
                     <button v-else>No file</button>
                 </td>
                 <td>Department: {{ item.department_name }}</td>
-                <td>Delivery Status: {{ item.delivery_status }}</td>
+                <td>Seen Status: {{ item.seen_status }}</td>
             </tr>
             </tbody>
         </table>

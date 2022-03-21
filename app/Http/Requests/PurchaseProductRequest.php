@@ -33,7 +33,7 @@ class PurchaseProductRequest extends FormRequest
                 'quantity' => 'int|min:1',
                 'tax_id' => 'int|exists:taxes,id',
                 'status' => 'string',
-                'department_status' => 'string',
+                'seen_status' => 'string',
                 'unit_id' => 'int|exists:units,id',
             ];
         } else {
@@ -46,7 +46,7 @@ class PurchaseProductRequest extends FormRequest
                 'tax_id' => 'int|exists:taxes,id',
                 'status' => 'string',
                 'unit_id' => 'int|exists:units,id',
-                'department_status' => 'string',
+                'seen_status' => 'string',
             ];
         }
     }

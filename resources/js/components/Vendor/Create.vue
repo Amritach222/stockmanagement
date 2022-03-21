@@ -446,6 +446,20 @@ export default {
         this.countries = countryList;
     },
     methods: {
+        async searchPan(pan) {
+            if(pan === '' || pan === undefined){
+                this.wright = false;
+            } else {
+                this.load = true;
+                let res = await ApiServices.getPanDetails(pan);
+                if (res.data.data === 0) {
+                    this.wright = false;
+                } else {
+                    this.wright = true;
+                    this.editedItem.company_name = res.data.data.panDetails[0].trade_Name_Eng.toUpperCase();
+                    this.editedItem.landline = res.data.data.panDetails[0].telephone;
+                    this.editedItem.mobile = res.data.data.panDetails[0].mobile;
+                }
         async loadUsers() {
             let rtn = await ApiServices.userIndex();
             if (rtn.success === true) {
@@ -479,14 +493,54 @@ export default {
             if (name === 'vat_no') {
                 this.error.vat_no = '';
             }
-            if (name === 'company_name') {
-                this.error.company_name = '';
+            this.load = false;
+        },
+        getCityName(item) {
+            if (item.city !== null) return JSON.parse(item.city).name;
+        },
+        async getStates(country) {
+            this.state = stateList.filter(function (value, index) {
+                return value.country_id === country.id;
+            })
+        },
+        async getCities(state) {
+            this.city = cityList.filter(function (value, index) {
+                return value.state_id === state.id
+            })
+        },
+        async loadCategories() {
+            let res = await ApiServices.categoryIndex();
+            if (res.success === true) {
+                this.tableLoad = false;
+                this.categories = res.data;
             }
-            if (name === 'email') {
-                this.error.email = '';
-            }
-            if (name === 'landline') {
-                this.error.landline = '';
+        },
+        async save() {
+            this.$refs.form.validate();
+            this.progressL = true;
+            const data = new FormData();
+            data.append('name', this.editedItem.name);
+            data.append('company_name', this.editedItem.company_name);
+            data.append('vat_no', this.editedItem.vat_no);
+            data.append('email', this.editedItem.email);
+            data.append('landline', this.editedItem.landline);
+            data.append('mobile', this.editedItem.mobile);
+            data.append('country', JSON.stringify(this.editedItem.country));
+            data.append('state', JSON.stringify(this.editedItem.state));
+            data.append('city', JSON.stringify(this.editedItem.city));
+            data.append('postal_code', this.editedItem.postal_code);
+            data.append('category_id', this.editedItem.category_id);
+            data.append('is_active', this.editedItem.is_active);
+            if(this.wright){
+                let res = await ApiServices.vendorCreate(data);
+                if (res.success === true) {
+                    this.$refs.form.reset();
+                    route.replace('/vendors');
+                }
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Pan/Vat Number is not valid";
+                store.state.home.snackbarColor = 'danger';
             }
             if (name === 'mobile') {
                 this.error.mobile = '';
