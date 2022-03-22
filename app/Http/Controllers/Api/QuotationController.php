@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
 use App\Helpers\DateConverter;
+use App\Helpers\ReferenceNoGenerator;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\QuotationRequest;
 use App\Http\Resources\Quotation as QuotationResource;
@@ -53,25 +54,6 @@ class QuotationController extends Controller
             $values = $request->all();
             $values['user_id'] = auth()->user()->id;
             $values['status'] = 'Pending';
-            $currentDate = Carbon::now();
-            $convertDate = new DateConverter();
-            $nepDate = $convertDate->eng_to_nep($currentDate->format('Y'), $currentDate->format('m'), $currentDate->format('d'));
-            $setting = Setting::findOrFail(1);
-            if ($setting->fiscal_year_id) {
-                $fiscalYear = $setting->fiscalYear;
-                $fromDate = $fiscalYear->from;
-                $toDate = $fiscalYear->to;
-                $fromNepDate = $convertDate->eng_to_nep(Carbon::parse($fromDate)->format('Y'), Carbon::parse($fromDate)->format('m'), Carbon::parse($fromDate)->format('d'));
-                $toNepDate = $convertDate->eng_to_nep(Carbon::parse($toDate)->format('Y'), Carbon::parse($toDate)->format('m'), Carbon::parse($toDate)->format('d'));
-                $year = $fromNepDate['year'] % 1000 . '/' . $toNepDate['year'] % 100;
-            } else {
-                $year = $nepDate['year'] % 1000;
-            }
-            if ($nepDate['month'] < 10) {
-                $month = '-0' . $nepDate['month'];
-            } else {
-                $month = '-' . $nepDate['month'];
-            }
             if ($request->hasFile('file')) {
                 $fileHelper = new SamundraFileHelper();
                 $file = $fileHelper->saveFile($request->file, 'quotation');
@@ -89,7 +71,8 @@ class QuotationController extends Controller
             }
             $quotation = new Quotation($values);
             $quotation->save();
-            $quotation->reference_no = 'QUO-0' . $year . $month . '-' . $quotation->id;
+            $ref = ReferenceNoGenerator::referenceNo();
+            $quotation->reference_no = 'QUO-0' . $ref . '-' . $quotation->id;
             $quotation->save();
             event(new ActivityLogEvent('Add', 'Quotation', $quotation->id));
             $data['message'] = "Quotation added successfully.";

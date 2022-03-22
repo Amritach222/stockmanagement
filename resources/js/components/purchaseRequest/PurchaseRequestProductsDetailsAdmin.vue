@@ -29,9 +29,7 @@
                     :loading=tableLoad
                     loading-text="Loading... Please wait..."
                     :search="search"
-
                 >
-
                     <template v-slot:top>
                         <v-toolbar
                             flat
@@ -285,16 +283,16 @@
                             mdi-delete
                         </v-icon>
                     </template>
-                    <template v-slot:expanded-item="{ headers, item }" class="mb-3">
-                        <td :colspan="headers.length">
-                            <PurchaseTableDetail :item="item" :triggerSelect="triggerSelect"></PurchaseTableDetail>
-                        </td>
-                    </template>
+<!--                    <template v-slot:expanded-item="{ headers, item }" class="mb-3">-->
+<!--                        <td :colspan="headers.length">-->
+<!--                            <PurchaseTableDetail :item="item" :triggerSelect="triggerSelect"></PurchaseTableDetail>-->
+<!--                        </td>-->
+<!--                    </template>-->
                     <template v-slot:no-data>
                         <div>No Data</div>
                     </template>
                 </v-data-table>
-                <AdminPending></AdminPending>
+<!--                <AdminPending></AdminPending>-->
             </v-tab-item>
             <v-tab-item
                 value="tab-2"

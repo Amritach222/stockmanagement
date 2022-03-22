@@ -75,4 +75,9 @@ class Department extends Model
     {
         return $this->hasMany(BudgetLimit::class, 'department_id');
     }
+
+    public function purchaseOrders()
+    {
+        return $this->hasMany(PurchaseOrder::class, 'dept_id');
+    }
 }

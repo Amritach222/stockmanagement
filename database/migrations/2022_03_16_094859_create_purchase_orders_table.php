@@ -19,6 +19,9 @@ class CreatePurchaseOrdersTable extends Migration
             $table->date('date_of_order');
             $table->date('shipping_date');
             $table->string('requester');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('supplier');
+            $table->unsignedBigInteger('vendor_id');
             $table->string('location');
             $table->unsignedBigInteger('dept_id');
             $table->enum('status', array('Draft', 'Pending', 'Approved', 'Not Sent', 'Sent', 'Message Received',

@@ -15,17 +15,17 @@ class CreatePurchaseOrderProductsTable extends Migration
     {
         Schema::create('purchase_order_products', function (Blueprint $table) {
             $table->id();
-            $table->integer('quotation_id')->unsigned();
+            $table->integer('purchase_order_id')->unsigned()->nullable();
+            $table->integer('quotation_product_id')->unsigned()->nullable();
             $table->integer('product_id')->unsigned();
             $table->integer('product_variant_id')->unsigned()->nullable();
-            $table->integer('quantity')->nullable()->default('1');
-            $table->integer('unit_id')->nullable()->default('1');
-            $table->integer('price')->nullable()->default('0');
+            $table->integer('quantity')->nullable()->default(1);
+            $table->integer('price')->nullable()->default(0);
+            $table->decimal('total',8,2)->nullable()->default(0);
+            $table->integer('unit_id')->unsigned()->nullable();
             $table->integer('tax_id')->unsigned()->nullable();
             $table->integer('shipping_cost')->nullable();
-            $table->integer('grand_total')->nullable()->default('0');
-            $table->string('supplier');
-            $table->unsignedBigInteger('vendor_id');
+            $table->decimal('grand_total',8,2)->nullable()->default(0);
             $table->timestamps();
         });
     }

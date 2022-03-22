@@ -3,14 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
+use App\Helpers\ReferenceNoGenerator;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PurchaseOrderRequest;
 use App\Http\Requests\PurchaseProductRequest;
 use App\Http\Requests\PurchaseRequest;
-use App\Http\Resources\Purchase as PurchaseResource;
-use App\Http\Resources\PurchaseProduct as PurchaseProductResource;
+use App\Http\Resources\PurchaseOrder as PurchaseOrderResource;
+use App\Http\Resources\PurchaseOrderProduct as PurchaseOrderProductResource;
 use App\Models\File;
 use App\Models\Purchase;
+use App\Models\PurchaseOrder;
+use App\Models\PurchaseOrderProduct;
 use App\Models\PurchaseProduct;
+use App\Models\QuotationProduct;
+use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Samundra\File\SamundraFileHelper;
 
@@ -19,8 +26,6 @@ class PurchaseOrderController extends Controller
     public function __construct()
     {
         parent::generateAllMiddlewareByPermission('purchases');
-        $this->middleware(['role:' . 'Department Head'])->only(['changeStatusOfPurchaseListsProducts', 'departmentHeadPurchaseLists']);
-        $this->middleware(['role:' . 'Admin|Store Manager'])->only(['adminPurchaseLists']);
     }
 
     public function index()
@@ -30,7 +35,7 @@ class PurchaseOrderController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $data['data'] = PurchaseResource::collection(Purchase::all());
+            $data['data'] = PurchaseOrderResource::collection(Purchase::all());
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
@@ -44,19 +49,19 @@ class PurchaseOrderController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $purchaseProduct = PurchaseProduct::findOrFail($id);
+            $purchaseProduct = PurchaseOrderProduct::findOrFail($id);
             $values = $request->all();
             $purchaseProduct->update($values);
-            event(new ActivityLogEvent('Edit', 'Purchase Product', $purchaseProduct->id));
+            event(new ActivityLogEvent('Edit', 'Purchase Order Product', $purchaseProduct->id));
             $data['message'] = "Updated successfully.";
-            $data['data'] = new PurchaseProductResource($purchaseProduct);
+            $data['data'] = new PurchaseOrderProductResource($purchaseProduct);
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
         return $data;
     }
 
-    public function store(PurchaseRequest $request)
+    public function store(PurchaseOrderRequest $request)
     {
         $data['success'] = true;
         $data['message'] = '';
@@ -64,15 +69,16 @@ class PurchaseOrderController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
+            $user = User::findOrFail(auth()->user()->id);
             if (!$request->has('user_id')) {
-                $values['user_id'] = auth()->user()->id;
+                $values['user_id'] = $user->id;
             }
             if (!$request->has('department_id')) {
-                $values['department_id'] = auth()->user()->department_id;
+                $values['department_id'] = $user->department_id;
             }
             if ($request->hasFile('file')) {
                 $fileHelper = new SamundraFileHelper();
-                $file = $fileHelper->saveFile($request->file, 'purchase');
+                $file = $fileHelper->saveFile($request->file, 'purchaseOrder');
                 if ($file['success'] !== true) {
                     return response(['success' => false, 'message' => 'Data could not be saved at the moment', "data" => null], 400);
                 }
@@ -85,12 +91,39 @@ class PurchaseOrderController extends Controller
                 $newFile->save();
                 $values['file_id'] = $newFile->id;
             }
-            $values['reference_no'] = 'REF-' . $this->random_id(8);
-            $purchase = new Purchase($values);
-            $purchase->save();
-            event(new ActivityLogEvent('Add', 'Purchase', $purchase->id));
-            $data['message'] = "Purchase added successfully.";
-            $data['data'] = new PurchaseResource($purchase);
+            $reqVendorIds = json_decode($request->vendor_ids);
+            $reqQuotationProductIds = json_decode($request->quotation_product_ids);
+            foreach ($reqVendorIds as $vendorId) {
+                $vendor = Vendor::findOrFail($vendorId);
+                $values['supplier'] = $vendor->company_name;
+                $values['vendor_id'] = $vendor->id;
+                $purchaseOrder = new PurchaseOrder($values);
+                $purchaseOrder->save();
+                $ref = ReferenceNoGenerator::referenceNo();
+                $purchaseOrder->reference = 'PO-0' . $ref . $purchaseOrder->id;
+                $purchaseOrder->save();
+                foreach ($reqQuotationProductIds as $id){
+                    $quotationProduct = QuotationProduct::findOrFail($id);
+                    if($quotationProduct->vendor_id == $vendor->id){
+                        $purchaseOrderProduct = new PurchaseOrderProduct();
+                        $purchaseOrderProduct->purchase_order_id = $purchaseOrder->id;
+                        $purchaseOrderProduct->quotation_product_id = $quotationProduct->id;
+                        $purchaseOrderProduct->product_id = $quotationProduct->product_id;
+                        $purchaseOrderProduct->product_variant_id = $quotationProduct->product_variant_id;
+                        $purchaseOrderProduct->quantity = $quotationProduct->quantity;
+                        $purchaseOrderProduct->price = $quotationProduct->price;
+                        $purchaseOrderProduct->total = $quotationProduct->total;
+                        $purchaseOrderProduct->unit_id = $quotationProduct->unit_id;
+                        $purchaseOrderProduct->tax_id = $quotationProduct->tax_id;
+                        $purchaseOrderProduct->shipping_cost = $quotationProduct->shipping_cost;
+                        $purchaseOrderProduct->grand_total = $quotationProduct->grand_total;
+                        $purchaseOrderProduct->save();
+                    }
+                }
+            }
+            event(new ActivityLogEvent('Add', 'PurchaseOrder', $purchaseOrder->id));
+            $data['message'] = "Purchase Order added successfully.";
+            $data['data'] = new PurchaseOrderResource($purchaseOrder);
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
@@ -110,27 +143,26 @@ class PurchaseOrderController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $data['data'] = new PurchaseResource(Purchase::findOrFail($id));
+            $data['data'] = new PurchaseOrderResource(PurchaseOrder::findOrFail($id));
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
         return $data;
     }
 
-    public function update($id, PurchaseRequest $request)
+    public function update($id, PurchaseOrderRequest $request)
     {
         $data['success'] = true;
         $data['message'] = '';
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $purchase = Purchase::findOrFail($id);
+            $purchase = PurchaseOrder::findOrFail($id);
             $values = $request->all();
             $purchase->update($values);
-            $purchase->total();
-            event(new ActivityLogEvent('Edit', 'Purchase', $purchase->id));
+            event(new ActivityLogEvent('Edit', 'PurchaseOrder', $purchase->id));
             $data['message'] = "Updated successfully.";
-            $data['data'] = new PurchaseResource($purchase);
+            $data['data'] = new PurchaseOrderResource($purchase);
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
@@ -144,12 +176,12 @@ class PurchaseOrderController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $purchase = Purchase::findOrFail($id);
-            foreach ($purchase->purchaseProducts as $product) {
+            $purchase = PurchaseOrder::findOrFail($id);
+            foreach ($purchase->purchaseOrderProducts as $product) {
                 $product->delete();
             }
             $purchase->delete();
-            event(new ActivityLogEvent('Delete', 'Purchase', $id));
+            event(new ActivityLogEvent('Delete', 'PurchaseOrder', $id));
             $data['message'] = "Deleted successfully.";
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);

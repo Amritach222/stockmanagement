@@ -49,4 +49,9 @@ class Vendor extends Model
     {
         return $this->hasMany(QuotationProduct::class, 'vendor_id');
     }
+
+    public function purchaseOrders()
+    {
+        return $this->hasMany(PurchaseOrder::class, 'vendor_id');
+    }
 }

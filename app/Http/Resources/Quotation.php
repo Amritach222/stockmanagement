@@ -15,8 +15,14 @@ class Quotation extends JsonResource
      */
     public function toArray($request)
     {
-        $department = new Department($this->department);
-        $user = new AuthResource($this->user);
+        $department = null;
+        if ($this->department_id !== null) {
+            $department = new Department($this->department);
+        }
+        $user = null;
+        if ($this->user_id !== null) {
+            $user = new AuthResource($this->user);
+        }
         $link = null;
         if ($this->file_id !== null) {
             $image = File::where('id', $this->file_id)->first();
@@ -27,17 +33,17 @@ class Quotation extends JsonResource
         $vendor_ids = \App\Models\VendorQuotation::where('quotation_id', $this->id)->pluck('vendor_id');
         $vendors = \App\Models\Vendor::whereIn('id', $vendor_ids)->get();
         $due_date = '';
-        if($this->due_date){
+        if ($this->due_date) {
             $due_date = date('F j, Y', strtotime($this->due_date));
         }
         $desired_delivery_date = '';
-        if($this->desired_delivery_date){
+        if ($this->desired_delivery_date) {
             $desired_delivery_date = date('F j, Y', strtotime($this->desired_delivery_date));
         }
         foreach ($vendors as $vendor) {
             $vendor->status = $this->getVendorStatus($vendor->id);
-            }
-            $is_pending = $this->isPending();
+        }
+        $is_pending = $this->isPending();
         return [
             'id' => $this->id,
             'reference_no' => $this->reference_no,
