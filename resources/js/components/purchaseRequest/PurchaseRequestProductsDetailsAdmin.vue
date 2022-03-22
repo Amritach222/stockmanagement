@@ -330,8 +330,6 @@ export default {
     name: "PurchaseRequestProductsDetailsAdmin",
     components: {AdminAccepted, AdminPending, ApprovalList},
     data: () => ({
-        tab: null,
-    })
         cdnURL: config.cdnURL,
         search: '',
         status: [],

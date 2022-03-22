@@ -447,7 +447,7 @@ export default {
     },
     methods: {
         async searchPan(pan) {
-            if(pan === '' || pan === undefined){
+            if (pan === '' || pan === undefined) {
                 this.wright = false;
             } else {
                 this.load = true;
@@ -460,6 +460,8 @@ export default {
                     this.editedItem.landline = res.data.data.panDetails[0].telephone;
                     this.editedItem.mobile = res.data.data.panDetails[0].mobile;
                 }
+            }
+        },
         async loadUsers() {
             let rtn = await ApiServices.userIndex();
             if (rtn.success === true) {

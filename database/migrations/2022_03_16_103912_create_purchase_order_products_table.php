@@ -24,6 +24,8 @@ class CreatePurchaseOrderProductsTable extends Migration
             $table->integer('tax_id')->unsigned()->nullable();
             $table->integer('shipping_cost')->nullable();
             $table->integer('grand_total')->nullable()->default('0');
+            $table->string('supplier');
+            $table->unsignedBigInteger('vendor_id');
             $table->timestamps();
         });
     }
