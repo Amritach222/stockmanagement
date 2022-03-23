@@ -1402,8 +1402,8 @@ export default new Router({
             }
         },
         {
-            path: '/quotations/approved-list',
-            name: i18n.t('quotation'),
+            path: '/quotations/list/approved',
+            name: i18n.t('quotation')+' '+i18n.t('approved'),
             component: ApprovedQuotationList,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);

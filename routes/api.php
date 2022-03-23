@@ -187,6 +187,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::apiResource('quotations', \App\Http\Controllers\Api\QuotationController::class);
         Route::post('quotations/{id}', [\App\Http\Controllers\Api\QuotationController::class, 'update']);
         Route::get('quotations/vendor/{id}/{vendor}', [\App\Http\Controllers\Api\VendorQuotationController::class, 'vendorQuotation']);
+        Route::get('quotations/list/approved', [\App\Http\Controllers\Api\QuotationController::class, 'approvedList']);
         Route::apiResource('quotationProducts', \App\Http\Controllers\Api\QuotationProductController::class);
         Route::post('quotationProducts/{id}', [\App\Http\Controllers\Api\QuotationProductController::class, 'update']);
         Route::apiResource('vendorQuotations', \App\Http\Controllers\Api\VendorQuotationController::class);

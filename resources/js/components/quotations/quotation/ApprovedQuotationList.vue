@@ -1,239 +1,280 @@
 <template>
-    <v-data-table
-        :headers="headers"
-        :items="purchaseHistory"
-        sort-by="id"
-        show-expand
-        :loading=tableLoad
-        loading-text="Loading... Please wait..."
-        :search="search"
+    <v-card>
+        <v-data-table
+            :headers="headers"
+            :items="purchaseHistory"
+            sort-by="id"
+            show-expand
+            :loading=tableLoad
+            loading-text="Loading... Please wait..."
+            :search="search"
+        >
 
-    >
-
-        <template v-slot:top>
-            <v-toolbar
-                flat
-            >
-                <v-row>
-                    <v-col
-                        cols="12"
-                        sm="3"
-                        md="4"
-                        lg="6"
+            <template v-slot:top>
+                <v-toolbar
+                    flat
+                >
+                    <v-row>
+                        <v-col
+                            cols="12"
+                            sm="3"
+                            md="4"
+                            lg="6"
+                        >
+                            <v-text-field
+                                v-model="search"
+                                append-icon="mdi-magnify"
+                                label="Search"
+                                solo
+                                hide-details
+                                max-width="100px"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            sm="3"
+                            md="3"
+                            lg="2"
+                        >
+                            <v-card>
+                                <v-card-actions>
+                                    <v-btn color="blue darken-1" text @click="openFilter">Filter</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                    <v-dialog
+                        v-model="dialog"
+                        max-width="600px"
                     >
-                        <v-text-field
-                            v-model="search"
-                            append-icon="mdi-magnify"
-                            label="Search"
-                            solo
-                            hide-details
-                            max-width="100px"
-                        ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="3"
-                        md="3"
-                        lg="2"
-                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                color="green"
+                                dark
+                                class="mb-2"
+                                v-bind="attrs"
+                                v-on="on"
+                                :to="'/purchase/new-purchase-request'"
+                            >
+                                Add New Purchase Request
+                            </v-btn>
+                        </template>
                         <v-card>
+                            <v-form ref="form">
+                                <v-card-title>
+                                    <span class="headline">{{ formTitle }}</span>
+                                </v-card-title>
+
+                                <v-card-text>
+                                    <v-container>
+                                        <v-row>
+                                            <v-col>
+                                                <v-text-field
+                                                    v-model="editedItem.name"
+                                                    label="Brand Name"
+                                                    required
+                                                    outlined
+                                                    :rules="rules"
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col v-if="typeof(editedItem.link) === 'string'">
+                                                <v-card width="200"
+                                                        v-on:click="openImage(editedItem.link)">
+                                                    <v-img
+                                                        :src="cdnURL+editedItem.link"
+                                                        height="125"
+                                                        class="grey darken-4"
+                                                    ></v-img>
+                                                    <v-card-title class="title">
+                                                        Logo
+                                                    </v-card-title>
+                                                </v-card>
+                                                <v-file-input
+                                                    v-model="editedItem.image"
+                                                    label="Logo"
+                                                    filled
+                                                    outlined
+                                                    prepend-icon="mdi-camera"
+                                                    accept="image/png,image/jpeg,image/jpg"
+                                                ></v-file-input>
+                                            </v-col>
+                                            <v-col v-else>
+                                                <v-file-input
+                                                    v-model="editedItem.image"
+                                                    label="Logo"
+                                                    filled
+                                                    outlined
+                                                    prepend-icon="mdi-camera"
+                                                    accept="image/png,image/jpeg,image/jpg"
+                                                ></v-file-input>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </v-card-text>
+
+                                <v-card-actions>
+                                    <v-progress-linear
+                                        v-if="progressL"
+                                        indeterminate
+                                        color="green"
+                                    ></v-progress-linear>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                        color="blue darken-1"
+                                        text
+                                        @click="close"
+                                    >
+                                        Cancel
+                                    </v-btn>
+                                    <v-btn
+                                        color="blue darken-1"
+                                        text
+                                        @click="save"
+                                    >
+                                        Save
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-form>
+                        </v-card>
+                    </v-dialog>
+                    <v-dialog v-model="dialogDelete" max-width="500px">
+                        <v-card>
+                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
                             <v-card-actions>
-                                <v-btn color="blue darken-1" text @click="openFilter">Filter</v-btn>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                                <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
-                    </v-col>
-                </v-row>
-                <v-dialog
-                    v-model="dialog"
-                    max-width="600px"
-                >
-                    <v-card>
-                        <v-form ref="form">
-                            <v-card-title>
-                                <span class="headline">{{ formTitle }}</span>
-                            </v-card-title>
-
+                    </v-dialog>
+                    <v-dialog v-model="dialogFilter" max-width="1000px">
+                        <v-card>
+                            <v-card-title class="text-h6">Filters</v-card-title>
                             <v-card-text>
-                                <v-container>
+                                <v-form>
                                     <v-row>
-                                        <v-col>
+                                        <v-col md="6">
+                                            <v-select
+                                                v-model="status"
+                                                :items="['Pending','Reviewed','Approved','Cancelled']"
+                                                persistent-hint
+                                                prepend-icon="mdi-alpha-s-circle"
+                                                :label="$t('status')"
+                                                placeholder="Select status ..."
+                                                multiple
+                                            />
+                                        </v-col>
+                                        <!--                                        <v-col md="6">-->
+                                        <!--                                            <v-select-->
+                                        <!--                                                v-model="department_ids"-->
+                                        <!--                                                :items="departments"-->
+                                        <!--                                                item-text="name"-->
+                                        <!--                                                item-value="id"-->
+                                        <!--                                                persistent-hint-->
+                                        <!--                                                prepend-icon="mdi-alpha-d-circle"-->
+                                        <!--                                                :label="$t('department')"-->
+                                        <!--                                                placeholder="Select department ..."-->
+                                        <!--                                                multiple-->
+                                        <!--                                            />-->
+                                        <!--                                        </v-col>-->
+                                    </v-row>
+                                    <v-row>
+                                        <v-col md="12">
+                                            Due Date
+                                        </v-col>
+                                        <v-col md="4">
                                             <v-text-field
-                                                v-model="editedItem.name"
-                                                label="Brand Name"
-                                                required
-                                                outlined
-                                                :rules="rules"
-                                            ></v-text-field>
+                                                v-model="due_from"
+                                                type="date"
+                                                persistent-hint
+                                                :label="$t('from')"
+                                            />
+                                        </v-col>
+                                        <v-col md="4">
+                                            <v-text-field
+                                                v-model="due_to"
+                                                type="date"
+                                                persistent-hint
+                                                :label="$t('to')"
+                                            />
+                                        </v-col>
+                                        <v-col md="4">
+                                            <CButton size="sm" color="danger"
+                                                     v-on:click="resetDate('due')"> Reset
+                                            </CButton>
                                         </v-col>
                                     </v-row>
                                     <v-row>
-                                        <v-col v-if="typeof(editedItem.link) === 'string'">
-                                            <v-card width="200"
-                                                    v-on:click="openImage(editedItem.link)">
-                                                <v-img
-                                                    :src="cdnURL+editedItem.link"
-                                                    height="125"
-                                                    class="grey darken-4"
-                                                ></v-img>
-                                                <v-card-title class="title">
-                                                    Logo
-                                                </v-card-title>
-                                            </v-card>
-                                            <v-file-input
-                                                v-model="editedItem.image"
-                                                label="Logo"
-                                                filled
-                                                outlined
-                                                prepend-icon="mdi-camera"
-                                                accept="image/png,image/jpeg,image/jpg"
-                                            ></v-file-input>
+                                        <v-col md="12">
+                                            Created Date
                                         </v-col>
-                                        <v-col v-else>
-                                            <v-file-input
-                                                v-model="editedItem.image"
-                                                label="Logo"
-                                                filled
-                                                outlined
-                                                prepend-icon="mdi-camera"
-                                                accept="image/png,image/jpeg,image/jpg"
-                                            ></v-file-input>
+                                        <v-col md="4">
+                                            <v-text-field
+                                                v-model="created_from"
+                                                type="date"
+                                                persistent-hint
+                                                :label="$t('from')"
+                                            />
+                                        </v-col>
+                                        <v-col md="4">
+                                            <v-text-field
+                                                v-model="created_to"
+                                                type="date"
+                                                persistent-hint
+                                                :label="$t('to')"
+                                            />
+                                        </v-col>
+                                        <v-col md="4">
+                                            <CButton size="sm" color="danger"
+                                                     v-on:click="resetDate('created')"> Reset
+                                            </CButton>
                                         </v-col>
                                     </v-row>
-                                </v-container>
+                                </v-form>
                             </v-card-text>
-
                             <v-card-actions>
-                                <v-progress-linear
-                                    v-if="progressL"
-                                    indeterminate
-                                    color="green"
-                                ></v-progress-linear>
                                 <v-spacer></v-spacer>
-                                <v-btn
-                                    color="blue darken-1"
-                                    text
-                                    @click="close"
-                                >
-                                    Cancel
-                                </v-btn>
-                                <v-btn
-                                    color="blue darken-1"
-                                    text
-                                    @click="save"
-                                >
-                                    Save
-                                </v-btn>
+                                <v-btn color="blue darken-1" text @click="closeFilter">Cancel</v-btn>
+                                <v-btn color="blue darken-1" text @click="filterItemConfirm">Apply</v-btn>
+                                <v-spacer></v-spacer>
                             </v-card-actions>
-                        </v-form>
-                    </v-card>
-                </v-dialog>
-                <v-dialog v-model="dialogDelete" max-width="500px">
-                    <v-card>
-                        <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                            <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
-                            <v-spacer></v-spacer>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-                <v-dialog v-model="dialogFilter" max-width="1000px">
-                    <v-card>
-                        <v-card-title class="text-h6">Filters</v-card-title>
-                        <v-card-text>
-                            <v-form>
-                                <v-row>
-                                    <v-col md="6">
-                                        <v-select
-                                            v-model="status"
-                                            :items="['Pending','Reviewed','Approved','Cancelled']"
-                                            persistent-hint
-                                            prepend-icon="mdi-alpha-s-circle"
-                                            :label="$t('status')"
-                                            placeholder="Select status ..."
-                                            multiple
-                                        />
-                                    </v-col>
-                                </v-row>
-                                <v-row>
-                                    <v-col md="12">
-                                        Due Date
-                                    </v-col>
-                                    <v-col md="4">
-                                        <v-text-field
-                                            v-model="due_from"
-                                            type="date"
-                                            persistent-hint
-                                            :label="$t('from')"
-                                        />
-                                    </v-col>
-                                    <v-col md="4">
-                                        <v-text-field
-                                            v-model="due_to"
-                                            type="date"
-                                            persistent-hint
-                                            :label="$t('to')"
-                                        />
-                                    </v-col>
-                                    <v-col md="4">
-                                        <CButton size="sm" color="danger"
-                                                 v-on:click="resetDate('due')"> Reset
-                                        </CButton>
-                                    </v-col>
-                                </v-row>
-                                <v-row>
-                                    <v-col md="12">
-                                        Created Date
-                                    </v-col>
-                                    <v-col md="4">
-                                        <v-text-field
-                                            v-model="created_from"
-                                            type="date"
-                                            persistent-hint
-                                            :label="$t('from')"
-                                        />
-                                    </v-col>
-                                    <v-col md="4">
-                                        <v-text-field
-                                            v-model="created_to"
-                                            type="date"
-                                            persistent-hint
-                                            :label="$t('to')"
-                                        />
-                                    </v-col>
-                                    <v-col md="4">
-                                        <CButton size="sm" color="danger"
-                                                 v-on:click="resetDate('created')"> Reset
-                                        </CButton>
-                                    </v-col>
-                                </v-row>
-                            </v-form>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="closeFilter">Cancel</v-btn>
-                            <v-btn color="blue darken-1" text @click="filterItemConfirm">Apply</v-btn>
-                            <v-spacer></v-spacer>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </v-toolbar>
-        </template>
-        <template v-slot:item.status="{ item }">
-            <CButton size="sm" :color="getColor(item.status)">
-                {{ item.status }}
-            </CButton>
-        </template>
-        <template v-slot:expanded-item="{ headers, item }" class="mb-3">
-            <td :colspan="headers.length">
-                <PurchaseTableDetail :item="item" :triggerSelect="triggerSelect"></PurchaseTableDetail>
-            </td>
-        </template>
-        <template v-slot:no-data>
-            <div>No Data</div>
-        </template>
-    </v-data-table>
+                        </v-card>
+                    </v-dialog>
+                </v-toolbar>
+            </template>
+            <template v-slot:item.status="{ item }">
+                <CButton size="sm" :color="getColor(item.status)">
+                    {{ item.status }}
+                </CButton>
+            </template>
+            <template v-slot:item.actions="{ item }">
+                <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+                >
+                    mdi-pencil
+                </v-icon>
+                <v-icon
+                    small
+                    @click="deleteItem(item)"
+                >
+                    mdi-delete
+                </v-icon>
+            </template>
+            <template v-slot:expanded-item="{ headers, item }">
+                <td :colspan="headers.length">
+                    <PurchaseTableDetail :item="item"></PurchaseTableDetail>
+                </td>
+            </template>
+            <template v-slot:no-data>
+                <div>No Data</div>
+            </template>
+        </v-data-table>
+    </v-card>
 </template>
 
 <script>
@@ -242,7 +283,6 @@ import ApiServices from "../../../services/ApiServices";
 import PurchaseTableDetail from "../../purchaseRequest/PurchaseTableDetail";
 import store from "../../../store";
 import route from "../../../router";
-
 
 export default {
     name: "ApprovedQuotationList",
@@ -269,7 +309,7 @@ export default {
             {text: 'Department', value: 'department_name'},
             {text: 'Status', value: 'status'},
             {text: 'Due Date', value: 'due_date'},
-            // {text: 'Actions', value: 'actions', sortable: false},
+            {text: 'Actions', value: 'actions', sortable: false},
         ],
         purchaseHistory: [],
         filterPurchaseHistory: [],
@@ -287,8 +327,7 @@ export default {
         rules: [
             value => !!value || 'Required.',
         ],
-        tableLoad: true,
-        triggerSelect: false
+        tableLoad: true
     }),
 
     computed: {
@@ -308,12 +347,10 @@ export default {
 
     async created() {
         this.loadItems();
+        this.loadDepartments();
     },
 
     methods: {
-        sendQuotation() {
-            this.triggerSelect = !this.triggerSelect;
-        },
         getColor(status) {
             if (status === 'Pending') return 'warning'
             else if (status === 'Rejected') return 'danger'
@@ -324,15 +361,21 @@ export default {
             window.open(config.cdnURL + data, `_blank`);
         },
         async loadItems() {
-            let res = await ApiServices.getDepartmentHeadPurchaseProductRequest();
+            let res = await ApiServices.getUserPurchaseProductRequestHistory();
             if (res.success === true) {
                 this.tableLoad = false;
                 this.purchaseHistory = res.data;
                 this.filterPurchaseHistory = res.data;
             }
         },
+        async loadDepartments() {
+            let res = await ApiServices.departmentList();
+            if (res.success === true) {
+                this.departments = res.data;
+            }
+        },
         editItem(item) {
-            if (item.status === "Pending") {
+            if(item.status === "Pending"){
                 this.editedIndex = this.purchaseHistory.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 store.state.purchase.editItem = item;
@@ -345,7 +388,7 @@ export default {
         },
 
         deleteItem(item) {
-            if (item.status === "Pending") {
+            if(item.status === "Pending") {
                 this.editedIndex = this.purchaseHistory.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialogDelete = true

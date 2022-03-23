@@ -28,7 +28,7 @@ class Quotation extends JsonResource
             $image = File::where('id', $this->file_id)->first();
             $link = $image->path;
         }
-        $quotationProducts = QuotationProduct::collection(\App\Models\QuotationProduct::where('quotation_id', $this->id)->get());
+        $quotationProducts = QuotationProduct::collection($this->quotationProducts);
         $vendorQuotations = \App\Models\VendorQuotation::where('quotation_id', $this->id)->get();
         $vendor_ids = \App\Models\VendorQuotation::where('quotation_id', $this->id)->pluck('vendor_id');
         $vendors = \App\Models\Vendor::whereIn('id', $vendor_ids)->get();

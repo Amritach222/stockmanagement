@@ -191,4 +191,19 @@ class QuotationController extends Controller
         }
         return $data;
     }
+
+    public function approvedList()
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $quotations = Quotation::whereIn('status', ['Approved', 'Partially Approved'])->get();
+            $data['data'] = QuotationResource::collection($quotations);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred';
+        }
+        return $data;
+    }
 }

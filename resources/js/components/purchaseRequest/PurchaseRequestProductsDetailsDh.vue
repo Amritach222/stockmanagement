@@ -218,6 +218,86 @@
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
+                <v-dialog v-model="dialogFilter" max-width="1000px">
+                    <v-card>
+                        <v-card-title class="text-h6">Filters</v-card-title>
+                        <v-card-text>
+                            <v-form>
+                                <v-row>
+                                    <v-col md="6">
+                                        <v-select
+                                            v-model="status"
+                                            :items="['Pending','Reviewed','Approved','Cancelled']"
+                                            persistent-hint
+                                            prepend-icon="mdi-alpha-s-circle"
+                                            :label="$t('status')"
+                                            placeholder="Select status ..."
+                                            multiple
+                                        />
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col md="12">
+                                        Due Date
+                                    </v-col>
+                                    <v-col md="4">
+                                        <v-text-field
+                                            v-model="due_from"
+                                            type="date"
+                                            persistent-hint
+                                            :label="$t('from')"
+                                        />
+                                    </v-col>
+                                    <v-col md="4">
+                                        <v-text-field
+                                            v-model="due_to"
+                                            type="date"
+                                            persistent-hint
+                                            :label="$t('to')"
+                                        />
+                                    </v-col>
+                                    <v-col md="4">
+                                        <CButton size="sm" color="danger"
+                                                 v-on:click="resetDate('due')"> Reset
+                                        </CButton>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col md="12">
+                                        Created Date
+                                    </v-col>
+                                    <v-col md="4">
+                                        <v-text-field
+                                            v-model="created_from"
+                                            type="date"
+                                            persistent-hint
+                                            :label="$t('from')"
+                                        />
+                                    </v-col>
+                                    <v-col md="4">
+                                        <v-text-field
+                                            v-model="created_to"
+                                            type="date"
+                                            persistent-hint
+                                            :label="$t('to')"
+                                        />
+                                    </v-col>
+                                    <v-col md="4">
+                                        <CButton size="sm" color="danger"
+                                                 v-on:click="resetDate('created')"> Reset
+                                        </CButton>
+                                    </v-col>
+                                </v-row>
+                            </v-form>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="closeFilter">Cancel</v-btn>
+                            <v-btn color="blue darken-1" text @click="filterItemConfirm">Apply</v-btn>
+                            <v-spacer></v-spacer>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
             </v-toolbar>
         </template>
         <template v-slot:item.status="{ item }">
