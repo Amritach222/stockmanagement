@@ -268,6 +268,8 @@ class VendorPortalController extends Controller
                     $vendorQuotation->status = 'Approved';
                 } elseif ($cancelCount == count($vendorQuotation->vendorQuotationProducts)) {
                     $vendorQuotation->status = 'Cancelled';
+                } else {
+                    $vendorQuotation->status = 'Partially Approved';
                 }
             }
             $vendorQuotation->save();
@@ -285,10 +287,14 @@ class VendorPortalController extends Controller
                 }
             }
             if (($quotation->status == 'Reviewed') || ($quotation->status == 'Pending')) {
-                if ($approveCount == count($quotationProducts)) {
+                if (($approveCount != 0) && ($approveCount == count($quotationProducts))) {
                     $quotation->status = 'Approved';
-                } elseif ($rejectCount == count($quotationProducts)) {
+                } elseif (($rejectCount != 0) && ($rejectCount == count($quotationProducts))) {
                     $quotation->status = 'Rejected';
+                } elseif ($approveCount > 0) {
+                    $quotation->status = 'Partially Approved';
+                } elseif (($rejectCount > 0) && ($approveCount == 0)) {
+                    $quotation->status = 'Partially Accepted';
                 }
             }
             $quotation->save();
@@ -330,15 +336,20 @@ class VendorPortalController extends Controller
                         }
                         $quotationProduct->grand_total = $product->price * $product->quantity + $product->shipping_cost + ($product->price * $product->tax->value) / 100 - $discount;
                         $quotationProduct->save();
+                    } elseif (($product->status == 'Cancelled') or ($product->status == 'On Progress')) {
+                        $vendorQuotation->status = 'Partially Approved';
                     }
                 } elseif (($request->status == 'Cancelled')) {
                     if (($product->status == 'Pending') or ($product->status == 'On Progress') or ($product->status == 'Review') or ($product->status == 'Reviewed') or ($product->status == 'Accepted')) {
                         $product->update($values);
+                    } elseif ($product->status == 'Approved') {
+                        $vendorQuotation->status = 'Partially Approved';
                     }
                 } else {
                     $product->update($values);
                 }
             }
+            $vendorQuotation->save();
 
             $quotation = Quotation::findOrFail($vendorQuotation->quotation_id);
             $quotationProducts = QuotationProduct::collection($quotation->quotationProducts);
@@ -357,6 +368,8 @@ class VendorPortalController extends Controller
                     $quotation->status = 'Approved';
                 } elseif ($rejectCount == count($quotationProducts)) {
                     $quotation->status = 'Rejected';
+                } else {
+                    $quotation->status = 'Partially Accepted';
                 }
             }
             $quotation->save();

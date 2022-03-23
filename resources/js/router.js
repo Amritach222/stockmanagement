@@ -145,6 +145,7 @@ import QuotationCreate from './components/quotations/quotation/Create'
 import QuotationEdit from './components/quotations/quotation/Edit'
 import QuotationShow from './components/quotations/quotation/Show'
 import VendorProduct from './components/quotations/quotation/VendorProduct'
+import ApprovedQuotationList from './components/quotations/quotation/ApprovedQuotationList'
 
 import RoleIndex from './components/Settings/role/Index'
 import RolePermission from './components/Settings/role/Permissions'
@@ -1395,6 +1396,15 @@ export default new Router({
             path: '/quotations/:id',
             name: i18n.t('quotation'),
             component: QuotationShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/quotations/approved-list',
+            name: i18n.t('quotation'),
+            component: ApprovedQuotationList,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

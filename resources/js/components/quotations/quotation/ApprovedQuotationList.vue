@@ -237,18 +237,15 @@
 </template>
 
 <script>
-import config from "../../config";
-import ApiServices from "../../services/ApiServices";
-import PurchaseTableDetail from "./PurchaseTableDetail";
-import store from "../../store";
-import route from "../../router";
-import DhApproved from "./departmentHead/DhApproved";
-import DhPending from "./departmentHead/DhPending";
-import DhRejected from "./departmentHead/DhRejected";
+import config from "../../../config";
+import ApiServices from "../../../services/ApiServices";
+import PurchaseTableDetail from "../../purchaseRequest/PurchaseTableDetail";
+import store from "../../../store";
+import route from "../../../router";
 
 
 export default {
-    name: "PurchaseRequestHistory",
+    name: "ApprovedQuotationList",
     components: {PurchaseTableDetail},
     data: () => ({
         cdnURL: config.cdnURL,
