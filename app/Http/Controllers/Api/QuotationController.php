@@ -199,6 +199,16 @@ class QuotationController extends Controller
         $data['data'] = [];
         try {
             $quotations = Quotation::whereIn('status', ['Approved', 'Partially Approved'])->get();
+            foreach ($quotations as $quotation) {
+                $quotationProducts = [];
+                $quotationProducts = \App\Http\Resources\QuotationProduct::collection($quotation->quotationProducts);
+                foreach ($quotationProducts as $quotationProduct) {
+                    if ($quotationProduct->status == 'Approved') {
+                        $quotationProducts[] = $quotationProduct;
+                    }
+                }
+                $quotation->quotationProducts = $quotationProducts;
+            }
             $data['data'] = QuotationResource::collection($quotations);
         } catch (\Exception $e) {
             $data['success'] = false;

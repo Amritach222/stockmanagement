@@ -83,7 +83,7 @@ class Quotation extends Model
         }
         if (($pending_count > 0) && ($pending_count == count($vendorQuotationProducts))) {
             return "Pending";
-        } elseif (($approved_count > 0) && ($approved_count <= count($vendorQuotationProducts))) {
+        } elseif (($approved_count == 1)) {
             return "Approved";
         } elseif (($onprogress_count > 0) && ($onprogress_count <= count($vendorQuotationProducts))) {
             return "On Progress";

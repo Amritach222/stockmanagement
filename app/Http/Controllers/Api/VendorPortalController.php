@@ -293,8 +293,6 @@ class VendorPortalController extends Controller
                     $quotation->status = 'Rejected';
                 } elseif ($approveCount > 0) {
                     $quotation->status = 'Partially Approved';
-                } elseif (($rejectCount > 0) && ($approveCount == 0)) {
-                    $quotation->status = 'Partially Accepted';
                 }
             }
             $quotation->save();
@@ -364,12 +362,12 @@ class VendorPortalController extends Controller
                 }
             }
             if (($quotation->status == 'Reviewed') || ($quotation->status == 'Pending')) {
-                if ($approveCount == count($quotationProducts)) {
+                if (($approveCount != 0) && ($approveCount == count($quotationProducts))) {
                     $quotation->status = 'Approved';
-                } elseif ($rejectCount == count($quotationProducts)) {
+                } elseif (($rejectCount != 0) && ($rejectCount == count($quotationProducts))) {
                     $quotation->status = 'Rejected';
-                } else {
-                    $quotation->status = 'Partially Accepted';
+                } elseif ($approveCount > 0) {
+                    $quotation->status = 'Partially Approved';
                 }
             }
             $quotation->save();

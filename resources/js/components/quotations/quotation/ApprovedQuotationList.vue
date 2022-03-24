@@ -2,7 +2,7 @@
     <v-card>
         <v-data-table
             :headers="headers"
-            :items="purchaseHistory"
+            :items="quotationApprovedList"
             sort-by="id"
             show-expand
             :loading=tableLoad
@@ -311,8 +311,8 @@ export default {
             {text: 'Due Date', value: 'due_date'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
-        purchaseHistory: [],
-        filterPurchaseHistory: [],
+        quotationApprovedList: [],
+        filterQuotationApprovedList: [],
         editedIndex: -1,
         editedItem: {
             id: null,
@@ -361,11 +361,11 @@ export default {
             window.open(config.cdnURL + data, `_blank`);
         },
         async loadItems() {
-            let res = await ApiServices.getUserPurchaseProductRequestHistory();
+            let res = await ApiServices.getApprovedQuotationList();
             if (res.success === true) {
                 this.tableLoad = false;
-                this.purchaseHistory = res.data;
-                this.filterPurchaseHistory = res.data;
+                this.quotationApprovedList = res.data;
+                this.filterQuotationApprovedList = res.data;
             }
         },
         async loadDepartments() {
@@ -376,7 +376,7 @@ export default {
         },
         editItem(item) {
             if(item.status === "Pending"){
-                this.editedIndex = this.purchaseHistory.indexOf(item)
+                this.editedIndex = this.quotationApprovedList.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 store.state.purchase.editItem = item;
                 route.replace('/purchase/edit-purchase-request');
@@ -389,7 +389,7 @@ export default {
 
         deleteItem(item) {
             if(item.status === "Pending") {
-                this.editedIndex = this.purchaseHistory.indexOf(item)
+                this.editedIndex = this.quotationApprovedList.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialogDelete = true
             } else {
@@ -402,7 +402,7 @@ export default {
         async deleteItemConfirm() {
             let res = await ApiServices.deleteUserPurchaseRequest(this.editedItem.id);
             if (res.success === true) {
-                this.purchaseHistory.splice(this.editedIndex, 1)
+                this.quotationApprovedList.splice(this.editedIndex, 1)
             }
             this.closeDelete()
         },
@@ -465,8 +465,8 @@ export default {
                 data.append('created_to', this.created_to);
             }
             var ids = [];
-            for (var i = 0; i < this.filterPurchaseHistory.length; i++) {
-                ids.push(this.filterPurchaseHistory[i].id);
+            for (var i = 0; i < this.filterQuotationApprovedList.length; i++) {
+                ids.push(this.filterQuotationApprovedList[i].id);
             }
 
 
@@ -476,7 +476,7 @@ export default {
 
             let res = await ApiServices.purchaseFilter(data);
             if (res.success === true) {
-                this.purchaseHistory = res.data;
+                this.quotationApprovedList = res.data;
             } else {
                 store.state.home.snackbar = true;
                 store.state.home.snackbarText = res.message;
@@ -503,7 +503,7 @@ export default {
                 }
                 let res = await ApiServices.brandEdit(this.editedItem.id, data);
                 if (res.success === true) {
-                    Object.assign(this.purchaseHistory[this.editedIndex], this.editedItem)
+                    Object.assign(this.quotationApprovedList[this.editedIndex], this.editedItem)
                     this.$refs.form.reset();
                     this.close();
                 }
@@ -519,7 +519,7 @@ export default {
                     }
                     let res = await ApiServices.brandCreate(data);
                     if (res.success === true) {
-                        this.purchaseHistory.push(this.editedItem);
+                        this.quotationApprovedList.push(this.editedItem);
                         this.$refs.form.reset();
                         this.close()
                     }

@@ -681,6 +681,9 @@ export default {
     async quotationDelete(id) {
         return await apiCall(DELETE, `api/quotation/quotations/${id}`)
     },
+    async getApprovedQuotationList() {
+        return await apiCall(GET, `api/quotation/quotations/list/approved`)
+    },
 
     async quotationProductIndex() {
         return await apiCall(GET, `api/quotation/quotationProducts`)

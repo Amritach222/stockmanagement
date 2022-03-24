@@ -15,7 +15,7 @@ class AlterStatusInQuotations extends Migration
     public function up()
     {
         Schema::table('quotations', function (Blueprint $table) {
-            DB::statement("ALTER TABLE quotations MODIFY COLUMN status ENUM('Pending','Reviewed','Approved','Rejected','Drafted') default NULL;");
+            DB::statement("ALTER TABLE quotations MODIFY COLUMN status ENUM('Pending','Reviewed','Approved','Partially Approved','Rejected','Drafted') default NULL;");
         });
     }
 
