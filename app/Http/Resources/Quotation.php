@@ -44,6 +44,7 @@ class Quotation extends JsonResource
             $vendor->status = $this->getVendorStatus($vendor->id);
         }
         $is_pending = $this->isPending();
+        $total_count = count($this->quotationProducts);
         return [
             'id' => $this->id,
             'reference_no' => $this->reference_no,
@@ -59,9 +60,11 @@ class Quotation extends JsonResource
             'status' => $this->status,
             'reviewed_by' => $this->reviewed_by,
             'approved_by' => $this->approved_by,
+            'approver' => $this->approver??null,
             'is_pending' => $is_pending,
             'is_from_purchase' => $this->is_from_purchase,
             'link' => $link,
+            'total_item' => $total_count,
             'quotation_products' => $quotationProducts,
             'department' => $department,
             'user' => $user,

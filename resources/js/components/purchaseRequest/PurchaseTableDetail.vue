@@ -6,7 +6,7 @@
                 <td>
                     <button><b>#{{ item.reference_no }}</b></button>
                 </td>
-                <td>{{ item.details }}</td>
+                <td>{{ item.note }}</td>
                 <td>Approved By: {{ item.approved_by }}</td>
             </tr>
             <tr>

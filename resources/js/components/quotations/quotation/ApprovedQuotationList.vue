@@ -56,99 +56,9 @@
                                 v-on="on"
                                 :to="'/purchase/new-purchase-request'"
                             >
-                                Add New Purchase Request
+                                Add New Purchase Order
                             </v-btn>
                         </template>
-                        <v-card>
-                            <v-form ref="form">
-                                <v-card-title>
-                                    <span class="headline">{{ formTitle }}</span>
-                                </v-card-title>
-
-                                <v-card-text>
-                                    <v-container>
-                                        <v-row>
-                                            <v-col>
-                                                <v-text-field
-                                                    v-model="editedItem.name"
-                                                    label="Brand Name"
-                                                    required
-                                                    outlined
-                                                    :rules="rules"
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col v-if="typeof(editedItem.link) === 'string'">
-                                                <v-card width="200"
-                                                        v-on:click="openImage(editedItem.link)">
-                                                    <v-img
-                                                        :src="cdnURL+editedItem.link"
-                                                        height="125"
-                                                        class="grey darken-4"
-                                                    ></v-img>
-                                                    <v-card-title class="title">
-                                                        Logo
-                                                    </v-card-title>
-                                                </v-card>
-                                                <v-file-input
-                                                    v-model="editedItem.image"
-                                                    label="Logo"
-                                                    filled
-                                                    outlined
-                                                    prepend-icon="mdi-camera"
-                                                    accept="image/png,image/jpeg,image/jpg"
-                                                ></v-file-input>
-                                            </v-col>
-                                            <v-col v-else>
-                                                <v-file-input
-                                                    v-model="editedItem.image"
-                                                    label="Logo"
-                                                    filled
-                                                    outlined
-                                                    prepend-icon="mdi-camera"
-                                                    accept="image/png,image/jpeg,image/jpg"
-                                                ></v-file-input>
-                                            </v-col>
-                                        </v-row>
-                                    </v-container>
-                                </v-card-text>
-
-                                <v-card-actions>
-                                    <v-progress-linear
-                                        v-if="progressL"
-                                        indeterminate
-                                        color="green"
-                                    ></v-progress-linear>
-                                    <v-spacer></v-spacer>
-                                    <v-btn
-                                        color="blue darken-1"
-                                        text
-                                        @click="close"
-                                    >
-                                        Cancel
-                                    </v-btn>
-                                    <v-btn
-                                        color="blue darken-1"
-                                        text
-                                        @click="save"
-                                    >
-                                        Save
-                                    </v-btn>
-                                </v-card-actions>
-                            </v-form>
-                        </v-card>
-                    </v-dialog>
-                    <v-dialog v-model="dialogDelete" max-width="500px">
-                        <v-card>
-                            <v-card-title class="text-h6">Are you sure you want to delete this item?</v-card-title>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
-                                <v-spacer></v-spacer>
-                            </v-card-actions>
-                        </v-card>
                     </v-dialog>
                     <v-dialog v-model="dialogFilter" max-width="1000px">
                         <v-card>
@@ -245,29 +155,13 @@
                     </v-dialog>
                 </v-toolbar>
             </template>
-            <template v-slot:item.status="{ item }">
-                <CButton size="sm" :color="getColor(item.status)">
-                    {{ item.status }}
-                </CButton>
-            </template>
-            <template v-slot:item.actions="{ item }">
-                <v-icon
-                    small
-                    class="mr-2"
-                    @click="editItem(item)"
-                >
-                    mdi-pencil
-                </v-icon>
-                <v-icon
-                    small
-                    @click="deleteItem(item)"
-                >
-                    mdi-delete
-                </v-icon>
+            <template v-slot:item.department_id="{ item }">
+               <p v-if="item.department_id">{{ item.department.name }}</p>
+               <p v-else>---</p>
             </template>
             <template v-slot:expanded-item="{ headers, item }">
                 <td :colspan="headers.length">
-                    <PurchaseTableDetail :item="item"></PurchaseTableDetail>
+                    <QuotationTableDetail :item="item"></QuotationTableDetail>
                 </td>
             </template>
             <template v-slot:no-data>
@@ -280,13 +174,13 @@
 <script>
 import config from "../../../config";
 import ApiServices from "../../../services/ApiServices";
-import PurchaseTableDetail from "../../purchaseRequest/PurchaseTableDetail";
+import QuotationTableDetail from "./QuotationTableDetail";
 import store from "../../../store";
 import route from "../../../router";
 
 export default {
     name: "ApprovedQuotationList",
-    components: {PurchaseTableDetail},
+    components: {QuotationTableDetail},
     data: () => ({
         cdnURL: config.cdnURL,
         search: '',
@@ -304,12 +198,10 @@ export default {
         dialogFilter: false,
         headers: [
             {text: 'Reference No', align: 'start', sortable: false, value: 'reference_no'},
-            {text: 'Items', value: 'purchase_products_shortcode'},
             {text: 'Item Count', value: 'total_item'},
-            {text: 'Department', value: 'department_name'},
-            {text: 'Status', value: 'status'},
+            {text: 'Department', value: 'department_id'},
             {text: 'Due Date', value: 'due_date'},
-            {text: 'Actions', value: 'actions', sortable: false},
+            {text: 'Desired Delivery Date', value: 'desired_delivery_date'},
         ],
         quotationApprovedList: [],
         filterQuotationApprovedList: [],

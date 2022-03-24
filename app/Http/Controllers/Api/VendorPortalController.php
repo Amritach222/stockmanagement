@@ -277,6 +277,10 @@ class VendorPortalController extends Controller
             $quotation = Quotation::findOrFail($vendorQuotation->quotation_id);
             $quotationProducts = QuotationProduct::collection($quotation->quotationProducts);
 
+            if ($request->status == 'Approved') {
+                $quotation->approved_by = auth()->user()->id;
+            }
+
             $approveCount = 0;
             $rejectCount = 0;
             foreach ($quotationProducts as $quoProduct) {
@@ -351,6 +355,10 @@ class VendorPortalController extends Controller
 
             $quotation = Quotation::findOrFail($vendorQuotation->quotation_id);
             $quotationProducts = QuotationProduct::collection($quotation->quotationProducts);
+
+            if ($request->status == 'Approved') {
+                $quotation->approved_by = auth()->user()->id;
+            }
 
             $approveCount = 0;
             $rejectCount = 0;
