@@ -283,11 +283,11 @@
                             mdi-delete
                         </v-icon>
                     </template>
-<!--                    <template v-slot:expanded-item="{ headers, item }" class="mb-3">-->
-<!--                        <td :colspan="headers.length">-->
-<!--                            <PurchaseTableDetail :item="item" :triggerSelect="triggerSelect"></PurchaseTableDetail>-->
-<!--                        </td>-->
-<!--                    </template>-->
+                    <template v-slot:expanded-item="{ headers, item }" class="mb-3">
+                        <td :colspan="headers.length">
+                            <PurchaseTableDetail :item="item" :triggerSelect="triggerSelect"></PurchaseTableDetail>
+                        </td>
+                    </template>
                     <template v-slot:no-data>
                         <div>No Data</div>
                     </template>
@@ -317,16 +317,16 @@
 
     import config from "../../config";
     import ApiServices from "../../services/ApiServices";
-    import PurchaseTableDetail from "./PurchaseTableDetail";
     import store from "../../store";
     import route from "../../router";
 import ApprovalList from "./adminStore/ApprovalList";
 import AdminPending from "./adminStore/AdminPending";
 import AdminAccepted from "./adminStore/AdminAccepted";
+import PurchaseTableDetail from "./PurchaseTableDetail";
 
 export default {
     name: "PurchaseRequestProductsDetailsAdmin",
-    components: {AdminAccepted, AdminPending, ApprovalList},
+    components: {AdminAccepted, AdminPending, ApprovalList, PurchaseTableDetail},
     data: () => ({
         cdnURL: config.cdnURL,
         search: '',

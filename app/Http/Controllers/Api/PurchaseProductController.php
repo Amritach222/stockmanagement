@@ -19,7 +19,7 @@ class PurchaseProductController extends Controller
     public function __construct()
     {
         parent::generateAllMiddlewareByPermission('purchaseProducts');
-        $this->middleware(['role:' . 'Admin|Store Manager'])->only(['changeStatusPr']);
+        $this->middleware(['role: Admin|Store Manager'])->only(['changeStatusPr']);
     }
 
     public function changeStatusPr($id, PurchaseProductRequest $request)

@@ -7,7 +7,8 @@
                     <button><b>#{{ item.reference_no }}</b></button>
                 </td>
                 <td>{{ item.details }}</td>
-                <td>Approved By: {{ item.approver.name }}</td>
+                <td v-if="item.approved_by">Approved By: {{ item.approver.name }}</td>
+                <td v-else>Approved By: ---</td>
             </tr>
             <tr>
                 <td>Line Items: {{ item.total_item }}</td>
@@ -16,7 +17,7 @@
             </tr>
             <tr>
                 <td>File link:
-                    <button v-if="item.file_link !== 'Not Found'" v-on:click="openImage(item.file_link)">
+                    <button v-if="item.link !== 'Not Found'" v-on:click="openImage(item.link)">
                         Click to Open
                     </button>
                     <button v-else>No file</button>
@@ -35,7 +36,7 @@
     import QuotationProductDetails from "./QuotationProductDetails";
 
     export default {
-        name: "PurchaseTableDetail",
+        name: "QuotationTableDetail",
         components: {QuotationProductDetails},
         props: ['item','triggerSelect'],
         data: () => ({
