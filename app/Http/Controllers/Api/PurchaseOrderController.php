@@ -35,7 +35,7 @@ class PurchaseOrderController extends Controller
         $data['data'] = [];
         try {
             $data['success'] = true;
-            $data['data'] = PurchaseOrderResource::collection(Purchase::all());
+            $data['data'] = PurchaseOrderResource::collection(PurchaseOrder::all());
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }

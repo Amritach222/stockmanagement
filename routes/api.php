@@ -208,6 +208,18 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('purchaseProducts/ad-change-status/{id}', [\App\Http\Controllers\Api\PurchaseProductController::class, 'changeStatusPr']);
     });
 
+    Route::group(['prefix' => '/purchaseOrder', 'middleware' => 'auth:api'], function () {
+        Route::apiResource('purchaseOrders', \App\Http\Controllers\Api\PurchaseOrderController::class);
+        Route::post('purchaseOrders/{id}', [\App\Http\Controllers\Api\PurchaseOrderController::class, 'update']);
+//        Route::apiResource('purchaseOrderProducts', \App\Http\Controllers\Api\PurchaseOrderProductController::class);
+//        Route::post('purchaseProducts/{id}', [\App\Http\Controllers\Api\PurchaseProductController::class, 'update']);
+//        Route::get('user-history', [\App\Http\Controllers\Api\PurchaseController::class, 'userPurchaseHistory']);
+//        Route::get('ad-purchase-list', [\App\Http\Controllers\Api\PurchaseController::class, 'adminPurchaseLists']);
+//        Route::get('dh-purchase-list', [\App\Http\Controllers\Api\PurchaseController::class, 'departmentHeadPurchaseLists']);
+//        Route::post('purchaseProducts/change-status/{id}', [\App\Http\Controllers\Api\PurchaseController::class, 'changeStatusOfPurchaseListsProducts']);
+//        Route::post('purchaseProducts/ad-change-status/{id}', [\App\Http\Controllers\Api\PurchaseProductController::class, 'changeStatusPr']);
+    });
+
     Route::apiResource('transfers', \App\Http\Controllers\Api\TransferController::class);
     Route::post('transfers/{id}', [\App\Http\Controllers\Api\TransferController::class, 'update']);
     Route::apiResource('returnProducts', \App\Http\Controllers\Api\ReturnProductController::class);

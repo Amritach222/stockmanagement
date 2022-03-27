@@ -733,6 +733,22 @@ export default {
         return await apiCall(DELETE, `api/quotation/vendorQuotationProducts/${id}`)
     },
 
+    async purchaseOrderIndex() {
+        return await apiCall(GET, `api/purchaseOrder/purchaseOrders`)
+    },
+    async purchaseOrderCreate(data) {
+        return await apiCall(POST, `api/purchaseOrder/purchaseOrders`, data)
+    },
+    async purchaseOrderShow(id) {
+        return await apiCall(GET, `api/purchaseOrder/purchaseOrders/${id}`)
+    },
+    async purchaseOrderEdit(id, data) {
+        return await apiCall(POST, `api/purchaseOrder/purchaseOrders/${id}`, data)
+    },
+    async purchaseOrderDelete(id) {
+        return await apiCall(DELETE, `api/purchaseOrder/purchaseOrders/${id}`)
+    },
+
     async createVariant(data) {
         return await apiCall(POST, `api/create-variants`, data)
     },

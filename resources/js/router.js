@@ -147,6 +147,11 @@ import QuotationShow from './components/quotations/quotation/Show'
 import VendorProduct from './components/quotations/quotation/VendorProduct'
 import ApprovedQuotationList from './components/quotations/quotation/ApprovedQuotationList'
 
+import PurchaseOrderIndex from './components/purchaseOrder/Index'
+import PurchaseOrderCreate from './components/purchaseOrder/Create'
+import PurchaseOrderEdit from './components/purchaseOrder/Edit'
+import PurchaseOrderShow from './components/purchaseOrder/Show'
+
 import RoleIndex from './components/Settings/role/Index'
 import RolePermission from './components/Settings/role/Permissions'
 
@@ -1414,6 +1419,43 @@ export default new Router({
             path: '/quotations/vendor/:id/:vendor',
             name: i18n.t('vendor') + ' ' + i18n.t('quotation'),
             component: VendorProduct,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/purchaseOrders',
+            name: i18n.t('purchase') + ' ' + i18n.t('order'),
+            component: PurchaseOrderIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchaseOrders/create',
+            name: 'Purchase Order Create',
+            component: PurchaseOrderCreate,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchaseOrders/edit/:id',
+            name: 'Purchase Order Edit',
+            component: PurchaseOrderEdit,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchaseOrders/show/:id',
+            name: 'Purchase Order Show',
+            component: PurchaseOrderShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
