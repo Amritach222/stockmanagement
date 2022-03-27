@@ -58,7 +58,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
-                                :to="'/purchase/new-purchase-request'"
+                                v-on:click="sendToPurchaseOrder"
                             >
                                 Add New Purchase Order
                             </v-btn>
@@ -269,6 +269,13 @@ export default {
             if (res.success === true) {
                 this.departments = res.data;
             }
+        },
+        sendToPurchaseOrder(){
+            this.prProducts = store.state.purchase.selectedPurchaseRequestedProducts;
+            this.triggerSelect = !this.triggerSelect;
+            route.replace('/purchaseOrders/create?create=po');
+        },
+        sendToQuotation(){
         },
         editItem(item) {
             if(item.status === "Pending"){
