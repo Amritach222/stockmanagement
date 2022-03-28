@@ -32,94 +32,105 @@
                                                     :rules="rules"
                                                 />
                                             </v-col>
-                                            <v-col md="4">
-                                                <v-menu
-                                                    ref="menu1"
-                                                    v-model="menu1"
-                                                    :close-on-content-click="false"
-                                                    transition="scale-transition"
-                                                    offset-y
-                                                    max-width="290px"
-                                                    min-width="auto"
-                                                >
-                                                    <template v-slot:activator="{ on, attrs }">
-                                                        <v-text-field
-                                                            v-model="due_date"
-                                                            :label="$t('due') + ' ' + $t('date')"
-                                                            persistent-hint
-                                                            prepend-icon="mdi-calendar"
-                                                            v-bind="attrs"
-                                                            v-on="on"
-                                                        ></v-text-field>
-                                                    </template>
-                                                    <v-date-picker
-                                                        v-model="due_date"
-                                                        no-title
-                                                        @input="menu1 = false"
-                                                        v-on:change="checkDate('due_date',due_date)"
-                                                    ></v-date-picker>
-                                                </v-menu>
-                                                <!--                                                <v-text-field-->
-                                                <!--                                                    type="date"-->
-                                                <!--                                                    v-model="due_date"-->
-                                                <!--                                                    prepend-icon="mdi-alarm-check"-->
-                                                <!--                                                    :label="$t('due') + ' ' + $t('date')"-->
-                                                <!--                                                    placeholder="Select due date..."-->
-                                                <!--                                                    required-->
-                                                <!--                                                    :rules="rules"-->
-                                                <!--                                                    solo-->
-                                                <!--                                                    v-on:change="checkDate('due_date',due_date)"-->
-                                                <!--                                                />-->
-                                                <p v-if="dueDateValidation" class="date-validation">Please select a due
-                                                    date after the date of today.</p>
-                                            </v-col>
-                                            <v-col md="4">
-                                                <v-menu
-                                                    ref="menu2"
-                                                    v-model="menu2"
-                                                    :close-on-content-click="false"
-                                                    transition="scale-transition"
-                                                    offset-y
-                                                    max-width="290px"
-                                                    min-width="auto"
-                                                >
-                                                    <template v-slot:activator="{ on, attrs }">
-                                                        <v-text-field
-                                                            v-model="desired_delivery_date"
-                                                            :label="$t('desired') + ' ' + $t('delivery') + ' ' + $t('date')"
-                                                            persistent-hint
-                                                            prepend-icon="mdi-calendar"
-                                                            v-bind="attrs"
-                                                            v-on="on"
-                                                        ></v-text-field>
-                                                    </template>
-                                                    <v-date-picker
-                                                        v-model="desired_delivery_date"
-                                                        no-title
-                                                        @input="menu2 = false"
-                                                        v-on:change="checkDate('desired_delivery_date',desired_delivery_date)"
-                                                    ></v-date-picker>
-                                                </v-menu>
-                                                <!--                                                <v-text-field-->
-                                                <!--                                                    type="date"-->
-                                                <!--                                                    v-model="desired_delivery_date"-->
-                                                <!--                                                    prepend-icon="mdi-briefcase-variant"-->
-                                                <!--                                                    :label="$t('desired') + ' ' + $t('delivery') + ' ' + $t('date')"-->
-                                                <!--                                                    placeholder="Select due date..."-->
-                                                <!--                                                    required-->
-                                                <!--                                                    :rules="rules"-->
-                                                <!--                                                    solo-->
-                                                <!--                                                    v-on:change="checkDate('delivery_date',desired_delivery_date)"-->
-                                                <!--                                                />-->
-                                                <p v-if="deliveryDateValidation" class="date-validation">Please select a
-                                                    desired delivery date after the date of today.</p>
-                                            </v-col>
+<!--                                            <v-col md="4">-->
+<!--                                                <v-menu-->
+<!--                                                    ref="menu1"-->
+<!--                                                    v-model="menu1"-->
+<!--                                                    :close-on-content-click="false"-->
+<!--                                                    transition="scale-transition"-->
+<!--                                                    offset-y-->
+<!--                                                    max-width="290px"-->
+<!--                                                    min-width="auto"-->
+<!--                                                >-->
+<!--                                                    <template v-slot:activator="{ on, attrs }">-->
+<!--                                                        <v-text-field-->
+<!--                                                            v-model="due_date"-->
+<!--                                                            :label="$t('due') + ' ' + $t('date')"-->
+<!--                                                            persistent-hint-->
+<!--                                                            prepend-icon="mdi-calendar"-->
+<!--                                                            v-bind="attrs"-->
+<!--                                                            v-on="on"-->
+<!--                                                        ></v-text-field>-->
+<!--                                                    </template>-->
+<!--                                                    <v-date-picker-->
+<!--                                                        v-model="due_date"-->
+<!--                                                        no-title-->
+<!--                                                        @input="menu1 = false"-->
+<!--                                                        v-on:change="checkDate('due_date',due_date)"-->
+<!--                                                    ></v-date-picker>-->
+<!--                                                </v-menu>-->
+<!--                                                &lt;!&ndash;                                                <v-text-field&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    type="date"&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    v-model="due_date"&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    prepend-icon="mdi-alarm-check"&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    :label="$t('due') + ' ' + $t('date')"&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    placeholder="Select due date..."&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    required&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    :rules="rules"&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    solo&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    v-on:change="checkDate('due_date',due_date)"&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                />&ndash;&gt;-->
+<!--                                                <p v-if="dueDateValidation" class="date-validation">Please select a due-->
+<!--                                                    date after the date of today.</p>-->
+<!--                                            </v-col>-->
+<!--                                            <v-col md="4">-->
+<!--                                                <v-menu-->
+<!--                                                    ref="menu2"-->
+<!--                                                    v-model="menu2"-->
+<!--                                                    :close-on-content-click="false"-->
+<!--                                                    transition="scale-transition"-->
+<!--                                                    offset-y-->
+<!--                                                    max-width="290px"-->
+<!--                                                    min-width="auto"-->
+<!--                                                >-->
+<!--                                                    <template v-slot:activator="{ on, attrs }">-->
+<!--                                                        <v-text-field-->
+<!--                                                            v-model="desired_delivery_date"-->
+<!--                                                            :label="$t('desired') + ' ' + $t('delivery') + ' ' + $t('date')"-->
+<!--                                                            persistent-hint-->
+<!--                                                            prepend-icon="mdi-calendar"-->
+<!--                                                            v-bind="attrs"-->
+<!--                                                            v-on="on"-->
+<!--                                                        ></v-text-field>-->
+<!--                                                    </template>-->
+<!--                                                    <v-date-picker-->
+<!--                                                        v-model="desired_delivery_date"-->
+<!--                                                        no-title-->
+<!--                                                        @input="menu2 = false"-->
+<!--                                                        v-on:change="checkDate('desired_delivery_date',desired_delivery_date)"-->
+<!--                                                    ></v-date-picker>-->
+<!--                                                </v-menu>-->
+<!--                                                &lt;!&ndash;                                                <v-text-field&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    type="date"&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    v-model="desired_delivery_date"&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    prepend-icon="mdi-briefcase-variant"&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    :label="$t('desired') + ' ' + $t('delivery') + ' ' + $t('date')"&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    placeholder="Select due date..."&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    required&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    :rules="rules"&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    solo&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    v-on:change="checkDate('delivery_date',desired_delivery_date)"&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                />&ndash;&gt;-->
+<!--                                                <p v-if="deliveryDateValidation" class="date-validation">Please select a-->
+<!--                                                    desired delivery date after the date of today.</p>-->
+<!--                                            </v-col>-->
                                             <v-col md="4">
                                                 <v-text-field
                                                     v-model="requested_name"
                                                     prepend-icon="mdi-account"
                                                     :label="$t('requested') + ' ' + $t('name')"
                                                     placeholder="Enter requested user name..."
+                                                    required
+                                                    persistent-hint
+                                                    :rules="rules"
+                                                />
+                                            </v-col>
+                                            <v-col md="4">
+                                                <v-text-field
+                                                    v-model="location"
+                                                    prepend-icon="mdi-account"
+                                                    label="Location"
+                                                    placeholder="Enter location..."
                                                     required
                                                     persistent-hint
                                                     :rules="rules"
@@ -138,10 +149,10 @@
                                         </v-row>
 
                                         <v-textarea
-                                            v-model="note"
+                                            v-model="description"
                                             type="text"
-                                            :label="$t('note')"
-                                            placeholder="Enter quotation note..."
+                                            :label="$t('description')"
+                                            placeholder="Enter description..."
                                             solo
                                         />
                                     </v-form>
@@ -613,11 +624,11 @@ export default {
         tableLoad: false,
         hasVariants: false,
         department_id: '',
-        due_date: '',
-        desired_delivery_date: '',
+        requester: '',
+        location: '',
         requested_name: '',
         file: [],
-        note: '',
+        description: '',
         departments: [],
         productCount: 0,
         editedIndex: -1,
@@ -664,8 +675,9 @@ export default {
         this.loadUserName();
         this.loadVendors();
         this.loadUnits();
-        if (this.$route.query.create === 'pr') {
+        if (this.$route.query.create === 'po') {
             let selectedProducts = store.state.purchase.selectedPurchaseRequestedProducts;
+            console.log(selectedProducts)
             if (Object.keys(selectedProducts).length > 0) {
                 let productData = new FormData();
                 productData.append('status', 'Approved');

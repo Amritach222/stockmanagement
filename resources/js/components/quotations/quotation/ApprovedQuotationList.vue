@@ -160,8 +160,8 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.department_id="{ item }">
-               <p v-if="item.department_id">{{ item.department.name }}</p>
-               <p v-else>---</p>
+                <p v-if="item.department_id">{{ item.department.name }}</p>
+                <p v-else>---</p>
             </template>
             <template v-slot:expanded-item="{ headers, item }">
                 <td :colspan="headers.length">
@@ -223,7 +223,8 @@ export default {
         rules: [
             value => !!value || 'Required.',
         ],
-        tableLoad: true
+        tableLoad: true,
+        triggerSelect: false
     }),
 
     computed: {
@@ -238,6 +239,9 @@ export default {
         },
         dialogDelete(val) {
             val || this.closeDelete()
+        },
+        triggerSelectProduct: async function (newVal, oldVal) {
+            let res = await store.dispatch('purchase/addSelectedProducts', this.selected);
         },
     },
 
@@ -270,15 +274,16 @@ export default {
                 this.departments = res.data;
             }
         },
-        sendToPurchaseOrder(){
-            this.prProducts = store.state.purchase.selectedPurchaseRequestedProducts;
+        sendToPurchaseOrder() {
             this.triggerSelect = !this.triggerSelect;
-            route.replace('/purchaseOrders/create?create=po');
+            this.prProducts = store.state.purchase.selectedPurchaseRequestedProducts;
+            console.log(this.prProducts);
+            // route.replace('/purchaseOrders/create?create=po');
         },
-        sendToQuotation(){
+        sendToQuotation() {
         },
         editItem(item) {
-            if(item.status === "Pending"){
+            if (item.status === "Pending") {
                 this.editedIndex = this.quotationApprovedList.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 store.state.purchase.editItem = item;
@@ -291,7 +296,7 @@ export default {
         },
 
         deleteItem(item) {
-            if(item.status === "Pending") {
+            if (item.status === "Pending") {
                 this.editedIndex = this.quotationApprovedList.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialogDelete = true
@@ -348,7 +353,7 @@ export default {
                 data.append('status', JSON.stringify(this.status));
             }
             let userData = localStorage.getItem('userData');
-            if(userData !== ''){
+            if (userData !== '') {
                 userData = JSON.parse(userData);
                 this.department_ids.push(userData.department_id);
             }
