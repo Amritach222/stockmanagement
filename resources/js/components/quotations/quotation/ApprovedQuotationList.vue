@@ -34,18 +34,18 @@
                                 max-width="100px"
                             ></v-text-field>
                         </v-col>
-                        <v-col
-                            cols="12"
-                            sm="3"
-                            md="3"
-                            lg="2"
-                        >
-                            <v-card>
-                                <v-card-actions>
-                                    <v-btn color="blue darken-1" text @click="openFilter">Filter</v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-col>
+<!--                        <v-col-->
+<!--                            cols="12"-->
+<!--                            sm="3"-->
+<!--                            md="3"-->
+<!--                            lg="2"-->
+<!--                        >-->
+<!--                            <v-card>-->
+<!--                                <v-card-actions>-->
+<!--                                    <v-btn color="blue darken-1" text @click="openFilter">Filter</v-btn>-->
+<!--                                </v-card-actions>-->
+<!--                            </v-card>-->
+<!--                        </v-col>-->
                     </v-row>
                     <v-dialog
                         v-model="dialog"
@@ -165,7 +165,7 @@
             </template>
             <template v-slot:expanded-item="{ headers, item }">
                 <td :colspan="headers.length">
-                    <QuotationTableDetail :item="item"></QuotationTableDetail>
+                    <QuotationTableDetail :item="item" ref='quotationTableDetail'></QuotationTableDetail>
                 </td>
             </template>
             <template v-slot:no-data>
@@ -240,9 +240,6 @@ export default {
         dialogDelete(val) {
             val || this.closeDelete()
         },
-        triggerSelectProduct: async function (newVal, oldVal) {
-            let res = await store.dispatch('purchase/addSelectedProducts', this.selected);
-        },
     },
 
     async created() {
@@ -275,12 +272,7 @@ export default {
             }
         },
         sendToPurchaseOrder() {
-            this.triggerSelect = !this.triggerSelect;
-            this.prProducts = store.state.purchase.selectedPurchaseRequestedProducts;
-            console.log(this.prProducts);
-            // route.replace('/purchaseOrders/create?create=po');
-        },
-        sendToQuotation() {
+            this.$refs.quotationTableDetail.sendQP();
         },
         editItem(item) {
             if (item.status === "Pending") {

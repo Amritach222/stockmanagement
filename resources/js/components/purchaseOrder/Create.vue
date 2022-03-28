@@ -165,7 +165,7 @@
                                         </v-card-title>
                                         <v-data-table
                                             :headers="headers"
-                                            :items="quoProducts"
+                                            :items="poProducts"
                                             sort-by="item_name"
                                             loading
                                             loading-text="Loading... Please wait..."
@@ -203,6 +203,7 @@
                                                                 class="mb-2"
                                                                 v-bind="attrs"
                                                                 v-on="on"
+                                                                v-if="fromScratch"
                                                             >
                                                                 {{ $t('button.add_new_product') }}
                                                             </v-btn>
@@ -218,7 +219,7 @@
                                                                         <v-row>
                                                                             <v-col>
                                                                                 <v-select
-                                                                                    v-model="addQuoProduct.product_id"
+                                                                                    v-model="addPoProduct.product_id"
                                                                                     :label="$t('product')"
                                                                                     :items="products"
                                                                                     item-text="name"
@@ -226,11 +227,11 @@
                                                                                     required
                                                                                     outlined
                                                                                     :rules="rules"
-                                                                                    v-on:change="getVariants(addQuoProduct.product_id)"
+                                                                                    v-on:change="getVariants(addPoProduct.product_id)"
                                                                                 ></v-select>
                                                                                 <div v-if="hasVariants">
                                                                                     <v-select
-                                                                                        v-model="addQuoProduct.product_variant_id"
+                                                                                        v-model="addPoProduct.product_variant_id"
                                                                                         :label="$t('product') +' '+ $t('variant')"
                                                                                         :items="variants"
                                                                                         item-value="id"
@@ -239,14 +240,14 @@
                                                                                     ></v-select>
                                                                                 </div>
                                                                                 <v-text-field
-                                                                                    v-model="addQuoProduct.quantity"
+                                                                                    v-model="addPoProduct.quantity"
                                                                                     :label="$t('quantity')"
                                                                                     type="number"
                                                                                     outlined
                                                                                 ></v-text-field>
 
                                                                                 <v-select
-                                                                                    v-model="addQuoProduct.unit_id"
+                                                                                    v-model="addPoProduct.unit_id"
                                                                                     :label="$t('unit')"
                                                                                     :items="units"
                                                                                     item-text="name"
@@ -340,7 +341,7 @@
                                         </v-card-title>
                                         <v-data-table
                                             :headers="headersV"
-                                            :items="quoVendors"
+                                            :items="poVendors"
                                             sort-by="name"
                                             loading
                                             loading-text="Loading... Please wait..."
@@ -379,6 +380,7 @@
                                                                 class="mb-2"
                                                                 v-bind="attrs"
                                                                 v-on="on"
+                                                                v-if="fromScratch"
                                                                 @click="openDialogV"
                                                             >
                                                                 {{ $t('button.add_new_vendor') }}
@@ -512,7 +514,7 @@
                                                 item-key="name"
                                                 class="elevation-1"
                                                 :headers="headersSV"
-                                                :items="quoVendors"
+                                                :items="poVendors"
                                                 sort-by="id"
                                                 :loading="tableLoad"
                                                 loading-text="Loading... Please wait..."
@@ -632,9 +634,9 @@ export default {
         departments: [],
         productCount: 0,
         editedIndex: -1,
-        quoProducts: [],
+        poProducts: [],
         vendors: [],
-        quoVendors: [],
+        poVendors: [],
         products: [],
         units: [],
         selectVendors: [],
@@ -644,13 +646,14 @@ export default {
         selected: [],
         deleteProduct: [],
         vendorCard: false,
+        fromScratch:true,
         successCount: 0,
-        addQuoProduct: {
+        addPoProduct: {
             product_id: '',
             product_variant_id: '',
             quantity: '',
         },
-        productQuo: {
+        productPo: {
             product_id: '',
             product_variant_id: '',
             quantity: '',
@@ -676,16 +679,14 @@ export default {
         this.loadVendors();
         this.loadUnits();
         if (this.$route.query.create === 'po') {
+            this.fromScratch = false;
             let selectedProducts = store.state.purchase.selectedPurchaseRequestedProducts;
             console.log(selectedProducts)
             if (Object.keys(selectedProducts).length > 0) {
                 let productData = new FormData();
                 productData.append('status', 'Approved');
                 for (const singleData of selectedProducts) {
-                    let res = await ApiServices.changePurchaseProductStatusRequestAd(singleData.id, productData);
-                    if (res.success === true) {
                         await this.addPrProducts(singleData);
-                    }
                 }
                 this.vendorCard = true;
             }
@@ -708,17 +709,25 @@ export default {
                         unit = this.units[i].name;
                     }
                 }
-                this.quoProducts.push({
+                this.poProducts.push({
                     'product_id': product.product_id,
                     'product_name': res.data.name,
                     'product_variant_id': product.product_variant_id,
                     'product_variant': varName,
                     'quantity': product.quantity,
-                    'shipping_cost': 0,
+                    'price':product.price,
+                    'shipping_cost': product.shipping_cost,
                     'unit_id': product.unit_id,
                     'unit': unit,
-                    'purchase_product_id': product.id,
+                    'quotation_product_id': product.id,
                 });
+            }
+            for (var j=0; j<this.vendors.length; j++){
+                if(this.vendors[j].id === product.vendor_id){
+                    if(!(this.poVendors.indexOf(this.vendors[j]) >= 0)){
+                        this.poVendors.push(this.vendors[j]);
+                    }
+                }
             }
         },
         async loadDepartments() {
@@ -766,32 +775,32 @@ export default {
         },
 
         editItem(item) {
-            this.editedIndex = this.quoProducts.indexOf(item)
-            this.addQuoProduct = Object.assign({}, item)
+            this.editedIndex = this.poProducts.indexOf(item)
+            this.addPoProduct = Object.assign({}, item)
             this.dialog = true
         },
 
         deleteItem(item) {
-            this.editedIndex = this.quoProducts.indexOf(item)
-            this.addQuoProduct = Object.assign({}, item)
+            this.editedIndex = this.poProducts.indexOf(item)
+            this.addPoProduct = Object.assign({}, item)
             this.dialogDelete = true
         },
 
         deleteVItem(item) {
-            this.editedIndex = this.quoVendors.indexOf(item)
+            this.editedIndex = this.poVendors.indexOf(item)
             this.dialogVDelete = true
         },
 
         async deleteItemConfirm() {
-            this.deleteProduct = this.quoProducts[this.editedIndex];
-            this.quoProducts.splice(this.editedIndex, 1)
+            this.deleteProduct = this.poProducts[this.editedIndex];
+            this.poProducts.splice(this.editedIndex, 1)
             let ven = await this.loadProductVendors();
             // let res = await this.deleteProductVendor();
             this.closeDelete()
         },
 
         async deleteVConfirm() {
-            this.quoVendors.splice(this.editedIndex, 1)
+            this.poVendors.splice(this.editedIndex, 1)
             this.closeVDelete()
         },
 
@@ -811,14 +820,14 @@ export default {
         // },
 
         async setSelectedVendors() {
-            this.selectedVendors = Object.assign({}, this.quoVendors);
+            this.selectedVendors = Object.assign({}, this.poVendors);
         },
 
         close() {
             this.progressL = false;
             this.dialog = false;
             this.$nextTick(() => {
-                this.addQuoProduct = Object.assign({}, this.defaultItem)
+                this.addPoProduct = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             });
             this.loadItems();
@@ -832,7 +841,7 @@ export default {
         closeDelete() {
             this.dialogDelete = false
             this.$nextTick(() => {
-                this.addQuoProduct = Object.assign({}, this.defaultItem)
+                this.addPoProduct = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             })
         },
@@ -855,9 +864,9 @@ export default {
         },
 
         async loadProductVendors() {
-            if (this.quoProducts.length > 0) {
-                for (let i = 0; i < this.quoProducts.length; i++) {
-                    let res = await ApiServices.vendorProductIds('vendor', this.quoProducts[i].product_id);
+            if (this.poProducts.length > 0) {
+                for (let i = 0; i < this.poProducts.length; i++) {
+                    let res = await ApiServices.vendorProductIds('vendor', this.poProducts[i].product_id);
                     if (res.success === true) {
                         this.vendor_products = res.data;
                         for (let j = 0; j < this.vendors.length; j++) {
@@ -876,12 +885,12 @@ export default {
             } else {
                 this.vendorCard = false;
                 this.selectVendors = [];
-                this.quoVendors = [];
+                this.poVendors = [];
             }
         },
 
         async addVendor() {
-            this.quoVendors = this.selected;
+            this.poVendors = this.selected;
             this.selected = [];
             this.dialogV = false;
         },
@@ -890,41 +899,41 @@ export default {
             var varName = '---';
             var varId = '';
             var unit = '';
-            let res = await ApiServices.productShow(this.addQuoProduct.product_id);
-            if (this.addQuoProduct.product_variant_id) {
-                let rtn = await ApiServices.productVariantShow(this.addQuoProduct.product_variant_id);
+            let res = await ApiServices.productShow(this.addPoProduct.product_id);
+            if (this.addPoProduct.product_variant_id) {
+                let rtn = await ApiServices.productVariantShow(this.addPoProduct.product_variant_id);
                 varName = rtn.data.name;
                 varId = rtn.data.id;
             }
             for (var i = 0; i < this.units.length; i++) {
-                if (this.addQuoProduct.unit_id === this.units[i].id) {
+                if (this.addPoProduct.unit_id === this.units[i].id) {
                     unit = this.units[i].name;
                 }
             }
             if (this.editedIndex > -1) {
-                Object.assign(this.quoProducts[this.editedIndex], {
-                    'product_id': this.addQuoProduct.product_id,
+                Object.assign(this.poProducts[this.editedIndex], {
+                    'product_id': this.addPoProduct.product_id,
                     'product_name': res.data.name,
                     'product_variant': varName,
                     'product_variant_id': varId,
                     'unit': unit,
-                    'unit_id': this.addQuoProduct.unit_id,
-                    'quantity': this.addQuoProduct.quantity,
+                    'unit_id': this.addPoProduct.unit_id,
+                    'quantity': this.addPoProduct.quantity,
                     // 'shipping_cost': this.addQuoProduct.shipping_cost,
                 })
             } else {
-                this.quoProducts.push({
-                    'product_id': this.addQuoProduct.product_id,
+                this.poProducts.push({
+                    'product_id': this.addPoProduct.product_id,
                     'product_name': res.data.name,
                     'product_variant_id': varId,
                     'product_variant': varName,
                     'unit': unit,
-                    'unit_id': this.addQuoProduct.unit_id,
-                    'quantity': this.addQuoProduct.quantity,
+                    'unit_id': this.addPoProduct.unit_id,
+                    'quantity': this.addPoProduct.quantity,
                     // 'shipping_cost': this.addQuoProduct.shipping_cost,
                 });
             }
-            if (this.quoProducts.length > 0) {
+            if (this.poProducts.length > 0) {
                 this.vendorCard = true;
             }
             this.$refs.form.reset();
@@ -953,7 +962,7 @@ export default {
         },
 
         async confirmCreate() {
-            if (this.quoVendors.length > 0) {
+            if (this.poVendors.length > 0) {
                 this.validate();
                 this.checkDate('due_date', this.due_date);
                 this.checkDate('delivery_date', this.desired_delivery_date);
@@ -970,65 +979,64 @@ export default {
         async create() {
             this.dialogVConfirm = false;
             this.validate();
-            this.checkDate('due_date', this.due_date);
-            this.checkDate('delivery_date', this.desired_delivery_date);
-            if ((this.deliveryDateValidation === false) && (this.dueDateValidation === false)) {
                 if (this.validated) {
                     this.createProgress = true;
                     const data = new FormData();
-                    data.append('note', this.note);
-                    data.append('department_id', this.department_id);
-                    data.append('due_date', this.due_date);
-                    data.append('desired_delivery_date', this.desired_delivery_date);
-                    data.append('requested_name', this.requested_name);
+                    data.append('description', this.description);
+                    data.append('dept_id', this.department_id);
+                    data.append('location', this.location);
+                    // data.append('desired_delivery_date', this.desired_delivery_date);
+                    data.append('requester', this.requested_name);
 
-                    if (this.$route.query.create === 'pr') {
-                        data.append('is_from_purchase', 1);
+                    if (this.$route.query.create === 'po') {
+                        data.append('is_from_quotation', 1);
                     }
 
                     if (typeof this.file.name == 'string') {
                         data.append('file', this.file);
                     }
 
-                    let res = await ApiServices.quotationCreate(data);
+                    data.append('products', JSON.stringify(this.poProducts));
+                    data.append('vendors', JSON.stringify(this.poVendors));
+                    console.log(this.poProducts)
+
+                    let res = await ApiServices.purchaseOrderCreate(data);
                     this.createProgress = false;
                     if (res.success === true) {
-                        if (this.quoProducts.length > 0) {
-                            await this.createProduct(res.data.id);
-                            if (this.quoProducts.length === parseInt(this.successCount)) {
-                                await this.createProductVendor(res.data.id);
-                            }
-                        } else {
-                            route.replace('/quotations/');
-                        }
+                        // if (this.poProducts.length > 0) {
+                        //     await this.createProduct(res.data.id);
+                        //     // if (this.poProducts.length === parseInt(this.successCount)) {
+                        //     //     await this.createProductVendor(res.data.id);
+                        //     // }
+                        // } else {
+                            route.replace('/purchaseOrders/');
+                        // }
                     } else {
                         store.state.home.snackbar = true;
                         store.state.home.snackbarText = res.message;
                         store.state.home.snackbarColor = 'red';
                     }
-                }
             }
         },
 
         async createProduct(id) {
-            for (var i = 0; i < this.quoProducts.length; i++) {
+            for (var i = 0; i < this.poProducts.length; i++) {
                 let productData = new FormData();
-                productData.append('product_id', parseInt(this.quoProducts[i].product_id));
-                productData.append('quantity', parseInt(this.quoProducts[i].quantity));
+                productData.append('product_id', parseInt(this.poProducts[i].product_id));
+                productData.append('quantity', parseInt(this.poProducts[i].quantity));
                 productData.append('quotation_id', parseInt(id));
-                if ((this.quoProducts[i].product_variant_id !== '') && (typeof (parseInt(this.quoProducts[i].product_variant_id) === 'integer')) && (this.quoProducts[i].product_variant_id !== null)) {
-                    console.log(this.quoProducts[i].product_variant_id)
-                    productData.append('product_variant_id', parseInt(this.quoProducts[i].product_variant_id));
+                if ((this.poProducts[i].product_variant_id !== '') && (typeof (parseInt(this.poProducts[i].product_variant_id) === 'integer')) && (this.poProducts[i].product_variant_id !== null)) {
+                    productData.append('product_variant_id', parseInt(this.poProducts[i].product_variant_id));
                 }
-                if ((this.quoProducts[i].unit_id !== '') && (typeof (parseInt(this.quoProducts[i].unit_id) === 'integer')) && (this.quoProducts[i].unit_id !== null)) {
-                    productData.append('unit_id', parseInt(this.quoProducts[i].unit_id));
+                if ((this.poProducts[i].unit_id !== '') && (typeof (parseInt(this.poProducts[i].unit_id) === 'integer')) && (this.poProducts[i].unit_id !== null)) {
+                    productData.append('unit_id', parseInt(this.poProducts[i].unit_id));
                 }
-                if (this.$route.query.create === 'pr') {
-                    if ((this.quoProducts[i].purchase_product_id) && (this.quoProducts[i].purchase_product_id !== '') && (typeof (parseInt(this.quoProducts[i].purchase_product_id) === 'integer')) && (this.quoProducts[i].purchase_product_id !== null)) {
-                        productData.append('purchase_product_id', parseInt(this.quoProducts[i].purchase_product_id));
+                if (this.$route.query.create === 'po') {
+                    if ((this.poProducts[i].quotation_product_id) && (this.poProducts[i].quotation_product_id !== '') && (typeof (parseInt(this.poProducts[i].quotation_product_id) === 'integer')) && (this.poProducts[i].quotation_product_id !== null)) {
+                        productData.append('quotation_product_id', parseInt(this.poProducts[i].quotation_product_id));
                     }
                 }
-                let res = await ApiServices.quotationProductCreate(productData);
+                let res = await ApiServices.purchaseOrderCreate(productData);
                 if (res.success === true) {
                     this.successCount = parseInt(this.successCount) + 1;
                 } else {
@@ -1040,25 +1048,25 @@ export default {
             // route.replace('/quotations/');
         },
 
-        async createProductVendor(id) {
-            let data = new FormData();
-            data.append('quotation_id', parseInt(id));
-            data.append('products', JSON.stringify(this.quoProducts));
-            data.append('vendors', JSON.stringify(this.quoVendors));
-            let res = await ApiServices.vendorQuotationCreate(data);
-            if (res.success === true) {
-                if(res.message !== null){
-                    store.state.home.snackbar = true;
-                    store.state.home.snackbarText = res.message;
-                    store.state.home.snackbarColor = 'red';
-                }
-                route.replace('/quotations/')
-            } else {
-                store.state.home.snackbar = true;
-                store.state.home.snackbarText = res.message;
-                store.state.home.snackbarColor = 'red';
-            }
-        },
+        // async createProductVendor(id) {
+        //     let data = new FormData();
+        //     data.append('quotation_id', parseInt(id));
+        //     data.append('products', JSON.stringify(this.quoProducts));
+        //     data.append('vendors', JSON.stringify(this.quoVendors));
+        //     let res = await ApiServices.vendorQuotationCreate(data);
+        //     if (res.success === true) {
+        //         if(res.message !== null){
+        //             store.state.home.snackbar = true;
+        //             store.state.home.snackbarText = res.message;
+        //             store.state.home.snackbarColor = 'red';
+        //         }
+        //         route.replace('/quotations/')
+        //     } else {
+        //         store.state.home.snackbar = true;
+        //         store.state.home.snackbarText = res.message;
+        //         store.state.home.snackbarColor = 'red';
+        //     }
+        // },
 
         validate() {
             if (this.department_id === '') {

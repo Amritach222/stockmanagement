@@ -18,6 +18,7 @@ use App\Models\PurchaseProduct;
 use App\Models\QuotationProduct;
 use App\Models\User;
 use App\Models\Vendor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Samundra\File\SamundraFileHelper;
 
@@ -91,20 +92,22 @@ class PurchaseOrderController extends Controller
                 $newFile->save();
                 $values['file_id'] = $newFile->id;
             }
-            $reqVendorIds = json_decode($request->vendor_ids);
-            $reqQuotationProductIds = json_decode($request->quotation_product_ids);
-            foreach ($reqVendorIds as $vendorId) {
-                $vendor = Vendor::findOrFail($vendorId);
+            $reqVendors = json_decode($request->vendors);
+            $reqQuotationProducts = json_decode($request->products);
+            foreach ($reqVendors as $reqVendor) {
+                $vendor = Vendor::findOrFail($reqVendor->id);
                 $values['supplier'] = $vendor->company_name;
                 $values['vendor_id'] = $vendor->id;
+                $values['reference'] = '-';
+                $values['date_of_order'] = Carbon::now();
                 $purchaseOrder = new PurchaseOrder($values);
                 $purchaseOrder->save();
                 $ref = ReferenceNoGenerator::referenceNo();
-                $purchaseOrder->reference = 'PO-0' . $ref . $purchaseOrder->id;
+                $purchaseOrder->reference = 'PO-0' . $ref . '-' . $purchaseOrder->id;
                 $purchaseOrder->save();
-                foreach ($reqQuotationProductIds as $id){
-                    $quotationProduct = QuotationProduct::findOrFail($id);
-                    if($quotationProduct->vendor_id == $vendor->id){
+                foreach ($reqQuotationProducts as $reqQuotationProduct) {
+                    $quotationProduct = QuotationProduct::findOrFail($reqQuotationProduct->quotation_product_id);
+                    if ($quotationProduct->vendor_id == $vendor->id) {
                         $purchaseOrderProduct = new PurchaseOrderProduct();
                         $purchaseOrderProduct->purchase_order_id = $purchaseOrder->id;
                         $purchaseOrderProduct->quotation_product_id = $quotationProduct->id;
