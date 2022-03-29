@@ -32,88 +32,88 @@
                                                     :rules="rules"
                                                 />
                                             </v-col>
-<!--                                            <v-col md="4">-->
-<!--                                                <v-menu-->
-<!--                                                    ref="menu1"-->
-<!--                                                    v-model="menu1"-->
-<!--                                                    :close-on-content-click="false"-->
-<!--                                                    transition="scale-transition"-->
-<!--                                                    offset-y-->
-<!--                                                    max-width="290px"-->
-<!--                                                    min-width="auto"-->
-<!--                                                >-->
-<!--                                                    <template v-slot:activator="{ on, attrs }">-->
-<!--                                                        <v-text-field-->
-<!--                                                            v-model="due_date"-->
-<!--                                                            :label="$t('due') + ' ' + $t('date')"-->
-<!--                                                            persistent-hint-->
-<!--                                                            prepend-icon="mdi-calendar"-->
-<!--                                                            v-bind="attrs"-->
-<!--                                                            v-on="on"-->
-<!--                                                        ></v-text-field>-->
-<!--                                                    </template>-->
-<!--                                                    <v-date-picker-->
-<!--                                                        v-model="due_date"-->
-<!--                                                        no-title-->
-<!--                                                        @input="menu1 = false"-->
-<!--                                                        v-on:change="checkDate('due_date',due_date)"-->
-<!--                                                    ></v-date-picker>-->
-<!--                                                </v-menu>-->
-<!--                                                &lt;!&ndash;                                                <v-text-field&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    type="date"&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    v-model="due_date"&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    prepend-icon="mdi-alarm-check"&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    :label="$t('due') + ' ' + $t('date')"&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    placeholder="Select due date..."&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    required&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    :rules="rules"&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    solo&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    v-on:change="checkDate('due_date',due_date)"&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                />&ndash;&gt;-->
-<!--                                                <p v-if="dueDateValidation" class="date-validation">Please select a due-->
-<!--                                                    date after the date of today.</p>-->
-<!--                                            </v-col>-->
-<!--                                            <v-col md="4">-->
-<!--                                                <v-menu-->
-<!--                                                    ref="menu2"-->
-<!--                                                    v-model="menu2"-->
-<!--                                                    :close-on-content-click="false"-->
-<!--                                                    transition="scale-transition"-->
-<!--                                                    offset-y-->
-<!--                                                    max-width="290px"-->
-<!--                                                    min-width="auto"-->
-<!--                                                >-->
-<!--                                                    <template v-slot:activator="{ on, attrs }">-->
-<!--                                                        <v-text-field-->
-<!--                                                            v-model="desired_delivery_date"-->
-<!--                                                            :label="$t('desired') + ' ' + $t('delivery') + ' ' + $t('date')"-->
-<!--                                                            persistent-hint-->
-<!--                                                            prepend-icon="mdi-calendar"-->
-<!--                                                            v-bind="attrs"-->
-<!--                                                            v-on="on"-->
-<!--                                                        ></v-text-field>-->
-<!--                                                    </template>-->
-<!--                                                    <v-date-picker-->
-<!--                                                        v-model="desired_delivery_date"-->
-<!--                                                        no-title-->
-<!--                                                        @input="menu2 = false"-->
-<!--                                                        v-on:change="checkDate('desired_delivery_date',desired_delivery_date)"-->
-<!--                                                    ></v-date-picker>-->
-<!--                                                </v-menu>-->
-<!--                                                &lt;!&ndash;                                                <v-text-field&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    type="date"&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    v-model="desired_delivery_date"&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    prepend-icon="mdi-briefcase-variant"&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    :label="$t('desired') + ' ' + $t('delivery') + ' ' + $t('date')"&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    placeholder="Select due date..."&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    required&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    :rules="rules"&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    solo&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    v-on:change="checkDate('delivery_date',desired_delivery_date)"&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                />&ndash;&gt;-->
-<!--                                                <p v-if="deliveryDateValidation" class="date-validation">Please select a-->
-<!--                                                    desired delivery date after the date of today.</p>-->
-<!--                                            </v-col>-->
+                                            <!--                                            <v-col md="4">-->
+                                            <!--                                                <v-menu-->
+                                            <!--                                                    ref="menu1"-->
+                                            <!--                                                    v-model="menu1"-->
+                                            <!--                                                    :close-on-content-click="false"-->
+                                            <!--                                                    transition="scale-transition"-->
+                                            <!--                                                    offset-y-->
+                                            <!--                                                    max-width="290px"-->
+                                            <!--                                                    min-width="auto"-->
+                                            <!--                                                >-->
+                                            <!--                                                    <template v-slot:activator="{ on, attrs }">-->
+                                            <!--                                                        <v-text-field-->
+                                            <!--                                                            v-model="due_date"-->
+                                            <!--                                                            :label="$t('due') + ' ' + $t('date')"-->
+                                            <!--                                                            persistent-hint-->
+                                            <!--                                                            prepend-icon="mdi-calendar"-->
+                                            <!--                                                            v-bind="attrs"-->
+                                            <!--                                                            v-on="on"-->
+                                            <!--                                                        ></v-text-field>-->
+                                            <!--                                                    </template>-->
+                                            <!--                                                    <v-date-picker-->
+                                            <!--                                                        v-model="due_date"-->
+                                            <!--                                                        no-title-->
+                                            <!--                                                        @input="menu1 = false"-->
+                                            <!--                                                        v-on:change="checkDate('due_date',due_date)"-->
+                                            <!--                                                    ></v-date-picker>-->
+                                            <!--                                                </v-menu>-->
+                                            <!--                                                &lt;!&ndash;                                                <v-text-field&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    type="date"&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    v-model="due_date"&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    prepend-icon="mdi-alarm-check"&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    :label="$t('due') + ' ' + $t('date')"&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    placeholder="Select due date..."&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    required&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    :rules="rules"&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    solo&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    v-on:change="checkDate('due_date',due_date)"&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                />&ndash;&gt;-->
+                                            <!--                                                <p v-if="dueDateValidation" class="date-validation">Please select a due-->
+                                            <!--                                                    date after the date of today.</p>-->
+                                            <!--                                            </v-col>-->
+                                            <!--                                            <v-col md="4">-->
+                                            <!--                                                <v-menu-->
+                                            <!--                                                    ref="menu2"-->
+                                            <!--                                                    v-model="menu2"-->
+                                            <!--                                                    :close-on-content-click="false"-->
+                                            <!--                                                    transition="scale-transition"-->
+                                            <!--                                                    offset-y-->
+                                            <!--                                                    max-width="290px"-->
+                                            <!--                                                    min-width="auto"-->
+                                            <!--                                                >-->
+                                            <!--                                                    <template v-slot:activator="{ on, attrs }">-->
+                                            <!--                                                        <v-text-field-->
+                                            <!--                                                            v-model="desired_delivery_date"-->
+                                            <!--                                                            :label="$t('desired') + ' ' + $t('delivery') + ' ' + $t('date')"-->
+                                            <!--                                                            persistent-hint-->
+                                            <!--                                                            prepend-icon="mdi-calendar"-->
+                                            <!--                                                            v-bind="attrs"-->
+                                            <!--                                                            v-on="on"-->
+                                            <!--                                                        ></v-text-field>-->
+                                            <!--                                                    </template>-->
+                                            <!--                                                    <v-date-picker-->
+                                            <!--                                                        v-model="desired_delivery_date"-->
+                                            <!--                                                        no-title-->
+                                            <!--                                                        @input="menu2 = false"-->
+                                            <!--                                                        v-on:change="checkDate('desired_delivery_date',desired_delivery_date)"-->
+                                            <!--                                                    ></v-date-picker>-->
+                                            <!--                                                </v-menu>-->
+                                            <!--                                                &lt;!&ndash;                                                <v-text-field&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    type="date"&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    v-model="desired_delivery_date"&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    prepend-icon="mdi-briefcase-variant"&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    :label="$t('desired') + ' ' + $t('delivery') + ' ' + $t('date')"&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    placeholder="Select due date..."&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    required&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    :rules="rules"&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    solo&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                    v-on:change="checkDate('delivery_date',desired_delivery_date)"&ndash;&gt;-->
+                                            <!--                                                &lt;!&ndash;                                                />&ndash;&gt;-->
+                                            <!--                                                <p v-if="deliveryDateValidation" class="date-validation">Please select a-->
+                                            <!--                                                    desired delivery date after the date of today.</p>-->
+                                            <!--                                            </v-col>-->
                                             <v-col md="4">
                                                 <v-text-field
                                                     v-model="requested_name"
@@ -239,6 +239,16 @@
                                                                                         outlined
                                                                                     ></v-select>
                                                                                 </div>
+                                                                                <div v-if="hasVendors">
+                                                                                    <v-select
+                                                                                        v-model="addPoProduct.vendor_id"
+                                                                                        :label="$t('vendor')"
+                                                                                        :items="selectVendors"
+                                                                                        item-value="id"
+                                                                                        item-text="name"
+                                                                                        outlined
+                                                                                    ></v-select>
+                                                                                </div>
                                                                                 <v-text-field
                                                                                     v-model="addPoProduct.quantity"
                                                                                     :label="$t('quantity')"
@@ -256,12 +266,12 @@
                                                                                     outlined
                                                                                     :rules="rules"
                                                                                 ></v-select>
-                                                                                <!--                                                                                <v-text-field-->
-                                                                                <!--                                                                                    v-model="addQuoProduct.shipping_cost"-->
-                                                                                <!--                                                                                    :label="$t('shipping_cost')"-->
-                                                                                <!--                                                                                    type="number"-->
-                                                                                <!--                                                                                    outlined-->
-                                                                                <!--                                                                                ></v-text-field>-->
+                                                                                <v-text-field
+                                                                                    v-model="addPoProduct.shipping_cost"
+                                                                                    :label="$t('shipping_cost')"
+                                                                                    type="number"
+                                                                                    outlined
+                                                                                ></v-text-field>
                                                                             </v-col>
                                                                         </v-row>
                                                                     </v-container>
@@ -312,6 +322,9 @@
                                                     </v-dialog>
                                                 </v-toolbar>
                                             </template>
+                                            <template v-slot:item.vendor="{ item }">
+                                                <p>{{ item.vendor.name }}</p>
+                                            </template>
                                             <template v-slot:item.actions="{ item }">
                                                 <v-icon
                                                     small
@@ -333,228 +346,9 @@
                                         </v-data-table>
                                     </v-card>
 
-                                    <hr>
-                                    <v-card flat v-if="vendorCard">
-                                        <v-card-title>
-                                            {{ $t('vendors') }}
-                                            <v-spacer></v-spacer>
-                                        </v-card-title>
-                                        <v-data-table
-                                            :headers="headersV"
-                                            :items="poVendors"
-                                            sort-by="name"
-                                            loading
-                                            loading-text="Loading... Please wait..."
-                                            :search="searchV"
-                                        >
-                                            <template v-slot:top>
-                                                <v-toolbar
-                                                    flat
-                                                >
-                                                    <v-row>
-                                                        <v-col
-                                                            cols="12"
-                                                            sm="4"
-                                                            md="6"
-                                                            lg="8"
-                                                        >
-                                                            <v-text-field
-                                                                v-model="searchV"
-                                                                append-icon="mdi-magnify"
-                                                                :label="$t('search')"
-                                                                solo
-                                                                hide-details
-                                                                max-width="100px"
-                                                            ></v-text-field>
-                                                        </v-col>
-                                                    </v-row>
-                                                    <v-dialog
-                                                        v-model="dialogV"
-                                                        max-width="850px"
-                                                        max-height="450px"
-                                                    >
-                                                        <template v-slot:activator="{ on, attrs }">
-                                                            <v-btn
-                                                                color="green"
-                                                                dark
-                                                                class="mb-2"
-                                                                v-bind="attrs"
-                                                                v-on="on"
-                                                                v-if="fromScratch"
-                                                                @click="openDialogV"
-                                                            >
-                                                                {{ $t('button.add_new_vendor') }}
-                                                            </v-btn>
-                                                        </template>
-                                                        <v-card>
-                                                            <v-card-title>
-                                                                {{ $t('vendors') }}
-                                                                <v-spacer></v-spacer>
-                                                            </v-card-title>
-                                                            <v-data-table
-                                                                v-model="selected"
-                                                                :single-select="singleSelect"
-                                                                item-key="name"
-                                                                show-select
-                                                                class="elevation-1"
-                                                                :headers="headersSV"
-                                                                :items="selectVendors"
-                                                                sort-by="id"
-                                                                :loading="tableLoad"
-                                                                loading-text="Loading... Please wait..."
-                                                                :search="searchSV"
-                                                            >
-                                                                <template v-slot:top>
-                                                                    <v-toolbar
-                                                                        flat
-                                                                    >
-                                                                        <v-row>
-                                                                            <v-col
-                                                                                cols="12"
-                                                                                sm="2"
-                                                                                md="3"
-                                                                                lg="4"
-                                                                            >
-                                                                                <v-switch
-                                                                                    v-model="singleSelect"
-                                                                                    label="Single select"
-                                                                                    class="pa-3"
-                                                                                ></v-switch>
-                                                                            </v-col>
-                                                                            <v-col
-                                                                                cols="12"
-                                                                                sm="4"
-                                                                                md="6"
-                                                                                lg="8"
-                                                                            >
-                                                                                <v-text-field
-                                                                                    v-model="searchSV"
-                                                                                    append-icon="mdi-magnify"
-                                                                                    :label="$t('search')"
-                                                                                    solo
-                                                                                    hide-details
-                                                                                    max-width="100px"
-                                                                                ></v-text-field>
-                                                                            </v-col>
-                                                                        </v-row>
-                                                                    </v-toolbar>
-                                                                </template>
-                                                                <template v-slot:no-data>
-                                                                    <div>No Data</div>
-                                                                </template>
-                                                            </v-data-table>
-                                                            <v-row class="m-4 d-flex justify-content-end">
-                                                                <v-card-actions>
-                                                                    <v-btn
-                                                                        color="blue darken-1"
-                                                                        class="btn btn-danger card-btn"
-                                                                        text
-                                                                        @click="closeV"
-                                                                    >
-                                                                        {{ $t('button.cancel') }}
-                                                                    </v-btn>
-                                                                    <v-btn
-                                                                        color="blue darken-1"
-                                                                        class="btn btn-primary card-btn"
-                                                                        text
-                                                                        @click="addVendor"
-                                                                    >
-                                                                        {{ $t('button.submit') }}
-                                                                    </v-btn>
-                                                                </v-card-actions>
-                                                            </v-row>
-                                                        </v-card>
-                                                    </v-dialog>
-                                                    <v-dialog v-model="dialogVDelete" max-width="500px">
-                                                        <v-card>
-                                                            <v-card-title class="text-h6">
-                                                                {{ $t('message.delete') }}
-                                                            </v-card-title>
-                                                            <v-card-actions>
-                                                                <v-spacer></v-spacer>
-                                                                <v-btn color="blue darken-1" text @click="closeVDelete">
-                                                                    {{ $t('button.cancel') }}
-                                                                </v-btn>
-                                                                <v-btn color="blue darken-1" text
-                                                                       @click="deleteVConfirm">
-                                                                    {{ $t('button.submit') }}
-                                                                </v-btn>
-                                                                <v-spacer></v-spacer>
-                                                            </v-card-actions>
-                                                        </v-card>
-                                                    </v-dialog>
-                                                </v-toolbar>
-                                            </template>
-                                            <template v-slot:item.actions="{ item }">
-                                                <v-icon
-                                                    small
-                                                    @click="deleteVItem(item)"
-                                                >
-                                                    mdi-delete
-                                                </v-icon>
-                                            </template>
-                                            <template v-slot:no-data>
-                                                <div>No Data</div>
-                                            </template>
-                                        </v-data-table>
-                                    </v-card>
-
-                                    <v-dialog
-                                        v-model="dialogVConfirm"
-                                        max-width="850px"
-                                        max-height="450px"
-                                    >
-                                        <v-card>
-                                            <v-card-title>
-                                                Do you want to send you quotation to these vendors?
-                                                <v-spacer></v-spacer>
-                                            </v-card-title>
-                                            <v-data-table
-                                                v-model="selected"
-                                                item-key="name"
-                                                class="elevation-1"
-                                                :headers="headersSV"
-                                                :items="poVendors"
-                                                sort-by="id"
-                                                :loading="tableLoad"
-                                                loading-text="Loading... Please wait..."
-                                                :search="searchSV"
-                                            >
-                                                <template v-slot:top>
-                                                    <v-toolbar
-                                                        flat
-                                                    >
-                                                    </v-toolbar>
-                                                </template>
-                                                <template v-slot:no-data>
-                                                    <div>No Data</div>
-                                                </template>
-                                            </v-data-table>
-                                            <v-row class="m-4 d-flex justify-content-end">
-                                                <v-card-actions>
-                                                    <v-btn
-                                                        color="blue darken-1"
-                                                        class="btn btn-danger card-btn"
-                                                        text
-                                                        @click="closeVConfirm"
-                                                    >
-                                                        {{ $t('button.cancel') }}
-                                                    </v-btn>
-                                                    <v-btn
-                                                        color="blue darken-1"
-                                                        class="btn btn-primary card-btn"
-                                                        text
-                                                        @click="create"
-                                                    >
-                                                        {{ $t('button.submit') }}
-                                                    </v-btn>
-                                                </v-card-actions>
-                                            </v-row>
-                                        </v-card>
-                                    </v-dialog>
 
                                     <CCardFooter>
-                                        <CButton type="submit" size="sm" color="primary" @click="confirmCreate">
+                                        <CButton type="submit" size="sm" color="primary" @click="create">
                                             <CIcon name="cil-check-circle"/>
                                             {{ $t('button.submit') }}
                                         </CButton>
@@ -605,26 +399,19 @@ export default {
         headers: [
             {text: i18n.t('product'), value: 'product_name'},
             {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant'},
+            {text: i18n.t('vendor'), value: 'vendor'},
+            {text: i18n.t('price'), value: 'price'},
             {text: i18n.t('quantity'), value: 'quantity'},
             {text: i18n.t('unit'), value: 'unit'},
+            {text: i18n.t('total'), value: 'total'},
+            {text: i18n.t('shipping_cost'), value: 'shipping_cost'},
+            {text: i18n.t('grand') + ' ' + i18n.t('total'), value: 'grand_total'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
-        ],
-        headersV: [
-            {text: i18n.t('name'), value: 'name'},
-            {text: i18n.t('email'), value: 'email'},
-            {text: i18n.t('company_name'), value: 'company_name'},
-            {text: i18n.t('mobile'), value: 'mobile'},
-            {text: i18n.t('actions'), value: 'actions', sortable: false},
-        ],
-        headersSV: [
-            {text: i18n.t('name'), value: 'name'},
-            {text: i18n.t('email'), value: 'email'},
-            {text: i18n.t('company_name'), value: 'company_name'},
-            {text: i18n.t('mobile'), value: 'mobile'},
         ],
         quotations: [],
         tableLoad: false,
         hasVariants: false,
+        hasVendors: false,
         department_id: '',
         requester: '',
         location: '',
@@ -646,17 +433,25 @@ export default {
         selected: [],
         deleteProduct: [],
         vendorCard: false,
-        fromScratch:true,
+        fromScratch: true,
         successCount: 0,
         addPoProduct: {
             product_id: '',
             product_variant_id: '',
             quantity: '',
+            unit_id: '',
+            vendor_id: '',
+            vendor: '',
+            shipping_cost: '',
         },
         productPo: {
             product_id: '',
             product_variant_id: '',
             quantity: '',
+            unit_id: '',
+            vendor_id: '',
+            vendor: '',
+            shipping_cost: '',
         },
         error: {
             department_id: '',
@@ -686,7 +481,7 @@ export default {
                 let productData = new FormData();
                 productData.append('status', 'Approved');
                 for (const singleData of selectedProducts) {
-                        await this.addPrProducts(singleData);
+                    await this.addPrProducts(singleData);
                 }
                 this.vendorCard = true;
             }
@@ -715,16 +510,20 @@ export default {
                     'product_variant_id': product.product_variant_id,
                     'product_variant': varName,
                     'quantity': product.quantity,
-                    'price':product.price,
+                    'price': product.price,
+                    'total': product.total,
                     'shipping_cost': product.shipping_cost,
                     'unit_id': product.unit_id,
                     'unit': unit,
+                    'grand_total': product.grand_total,
                     'quotation_product_id': product.id,
+                    'vendor_id': product.vendor_id,
+                    'vendor': product.vendor
                 });
             }
-            for (var j=0; j<this.vendors.length; j++){
-                if(this.vendors[j].id === product.vendor_id){
-                    if(!(this.poVendors.indexOf(this.vendors[j]) >= 0)){
+            for (var j = 0; j < this.vendors.length; j++) {
+                if (this.vendors[j].id === product.vendor_id) {
+                    if (!(this.poVendors.indexOf(this.vendors[j]) >= 0)) {
                         this.poVendors.push(this.vendors[j]);
                     }
                 }
@@ -772,6 +571,7 @@ export default {
                 }
                 this.variants = res.data.product_variants;
             }
+            this.loadProductVendors(product);
         },
 
         editItem(item) {
@@ -795,7 +595,6 @@ export default {
             this.deleteProduct = this.poProducts[this.editedIndex];
             this.poProducts.splice(this.editedIndex, 1)
             let ven = await this.loadProductVendors();
-            // let res = await this.deleteProductVendor();
             this.closeDelete()
         },
 
@@ -803,21 +602,6 @@ export default {
             this.poVendors.splice(this.editedIndex, 1)
             this.closeVDelete()
         },
-
-        // async deleteProductVendor() {
-        //     let vendors = [];
-        //     console.log('after', vendors)
-        //     for (let j = 0; j < this.quoVendors.length; j++) {
-        //         for (let k = 0; k < this.selectVendors.length; k++) {
-        //             if (this.quoVendors[j].id === this.selectVendors[k].id) {
-        //                 if (!(vendors.indexOf(this.quoVendors[j]) >= 0)) {
-        //                     vendors.push(this.quoVendors[j]);
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     this.quoVendors = vendors;
-        // },
 
         async setSelectedVendors() {
             this.selectedVendors = Object.assign({}, this.poVendors);
@@ -863,29 +647,22 @@ export default {
             let res = await this.loadProductVendors();
         },
 
-        async loadProductVendors() {
-            if (this.poProducts.length > 0) {
-                for (let i = 0; i < this.poProducts.length; i++) {
-                    let res = await ApiServices.vendorProductIds('vendor', this.poProducts[i].product_id);
-                    if (res.success === true) {
-                        this.vendor_products = res.data;
-                        for (let j = 0; j < this.vendors.length; j++) {
-                            for (let k = 0; k < this.vendor_products.length; k++) {
-                                if (this.vendors[j].id === this.vendor_products[k].vendor_id) {
-                                    if (!(this.selectVendors.indexOf(this.vendors[j]) >= 0)) {
-                                        if (this.vendor_products[k].status === 'Verified') {
-                                            this.selectVendors.push(this.vendors[j]);
-                                        }
-                                    }
+        async loadProductVendors(product_id) {
+            this.hasVendors = true;
+            let res = await ApiServices.vendorProductIds('vendor', product_id);
+            if (res.success === true) {
+                this.vendor_products = res.data;
+                for (let j = 0; j < this.vendors.length; j++) {
+                    for (let k = 0; k < this.vendor_products.length; k++) {
+                        if (this.vendors[j].id === this.vendor_products[k].vendor_id) {
+                            if (!(this.selectVendors.indexOf(this.vendors[j]) >= 0)) {
+                                if (this.vendor_products[k].status === 'Verified') {
+                                    this.selectVendors.push(this.vendors[j]);
                                 }
                             }
                         }
                     }
                 }
-            } else {
-                this.vendorCard = false;
-                this.selectVendors = [];
-                this.poVendors = [];
             }
         },
 
@@ -899,6 +676,11 @@ export default {
             var varName = '---';
             var varId = '';
             var unit = '';
+            var vendor = '--';
+            var shipping_cost = 0;
+            if (this.addPoProduct.shipping_cost !== null) {
+                shipping_cost = this.addPoProduct.shipping_cost;
+            }
             let res = await ApiServices.productShow(this.addPoProduct.product_id);
             if (this.addPoProduct.product_variant_id) {
                 let rtn = await ApiServices.productVariantShow(this.addPoProduct.product_variant_id);
@@ -910,6 +692,16 @@ export default {
                     unit = this.units[i].name;
                 }
             }
+            for (var i = 0; i < this.vendors.length; i++) {
+                if (this.addPoProduct.vendor_id === this.vendors[i].id) {
+                    vendor = this.vendors[i];
+                    if(!(this.poVendors.indexOf(this.vendors[i]) >=0)){
+                        this.poVendors.push(this.vendors[i])
+                    }
+                }
+            }
+            var total = parseInt(res.data.cost_price) * parseInt(this.addPoProduct.quantity);
+            var grand_total = parseInt(total) + parseInt(shipping_cost);
             if (this.editedIndex > -1) {
                 Object.assign(this.poProducts[this.editedIndex], {
                     'product_id': this.addPoProduct.product_id,
@@ -919,7 +711,12 @@ export default {
                     'unit': unit,
                     'unit_id': this.addPoProduct.unit_id,
                     'quantity': this.addPoProduct.quantity,
-                    // 'shipping_cost': this.addQuoProduct.shipping_cost,
+                    'price': res.data.cost_price,
+                    'total': total,
+                    'vendor_id': this.addPoProduct.vendor_id,
+                    'vendor': vendor,
+                    'shipping_cost': shipping_cost,
+                    'grand_total': grand_total,
                 })
             } else {
                 this.poProducts.push({
@@ -930,143 +727,53 @@ export default {
                     'unit': unit,
                     'unit_id': this.addPoProduct.unit_id,
                     'quantity': this.addPoProduct.quantity,
-                    // 'shipping_cost': this.addQuoProduct.shipping_cost,
+                    'price': res.data.cost_price,
+                    'total': total,
+                    'vendor_id': this.addPoProduct.vendor_id,
+                    'vendor': vendor,
+                    'shipping_cost': shipping_cost,
+                    'grand_total': grand_total,
                 });
-            }
-            if (this.poProducts.length > 0) {
-                this.vendorCard = true;
             }
             this.$refs.form.reset();
             this.close()
         },
 
-        async checkDate(type, date) {
-            var currDate = new Date().toISOString().slice(0, 10);
-            var inpDate1 = date.replace('-', '');
-            var inpDate2 = inpDate1.replace('-', '');
-            var currDateReplace1 = currDate.replace('-', '');
-            var currDateReplace2 = currDateReplace1.replace('-', '');
-            if (currDateReplace2 > inpDate2) {
-                if (type === 'due_date') {
-                    this.dueDateValidation = true;
-                } else {
-                    this.deliveryDateValidation = true;
-                }
-            } else {
-                if (type === 'due_date') {
-                    this.dueDateValidation = false;
-                } else {
-                    this.deliveryDateValidation = false;
-                }
-            }
-        },
-
-        async confirmCreate() {
-            if (this.poVendors.length > 0) {
-                this.validate();
-                this.checkDate('due_date', this.due_date);
-                this.checkDate('delivery_date', this.desired_delivery_date);
-                if ((this.deliveryDateValidation === false) && (this.dueDateValidation === false)) {
-                    if (this.validated) {
-                        this.dialogVConfirm = true;
-                    }
-                }
-            } else {
-                this.create();
-            }
-        },
-
         async create() {
             this.dialogVConfirm = false;
             this.validate();
-                if (this.validated) {
-                    this.createProgress = true;
-                    const data = new FormData();
-                    data.append('description', this.description);
-                    data.append('dept_id', this.department_id);
-                    data.append('location', this.location);
-                    // data.append('desired_delivery_date', this.desired_delivery_date);
-                    data.append('requester', this.requested_name);
+            if (this.validated) {
+                this.createProgress = true;
+                const data = new FormData();
+                data.append('description', this.description);
+                data.append('dept_id', this.department_id);
+                data.append('location', this.location);
+                // data.append('desired_delivery_date', this.desired_delivery_date);
+                data.append('requester', this.requested_name);
 
-                    if (this.$route.query.create === 'po') {
-                        data.append('is_from_quotation', 1);
-                    }
-
-                    if (typeof this.file.name == 'string') {
-                        data.append('file', this.file);
-                    }
-
-                    data.append('products', JSON.stringify(this.poProducts));
-                    data.append('vendors', JSON.stringify(this.poVendors));
-                    console.log(this.poProducts)
-
-                    let res = await ApiServices.purchaseOrderCreate(data);
-                    this.createProgress = false;
-                    if (res.success === true) {
-                        // if (this.poProducts.length > 0) {
-                        //     await this.createProduct(res.data.id);
-                        //     // if (this.poProducts.length === parseInt(this.successCount)) {
-                        //     //     await this.createProductVendor(res.data.id);
-                        //     // }
-                        // } else {
-                            route.replace('/purchaseOrders/');
-                        // }
-                    } else {
-                        store.state.home.snackbar = true;
-                        store.state.home.snackbarText = res.message;
-                        store.state.home.snackbarColor = 'red';
-                    }
-            }
-        },
-
-        async createProduct(id) {
-            for (var i = 0; i < this.poProducts.length; i++) {
-                let productData = new FormData();
-                productData.append('product_id', parseInt(this.poProducts[i].product_id));
-                productData.append('quantity', parseInt(this.poProducts[i].quantity));
-                productData.append('quotation_id', parseInt(id));
-                if ((this.poProducts[i].product_variant_id !== '') && (typeof (parseInt(this.poProducts[i].product_variant_id) === 'integer')) && (this.poProducts[i].product_variant_id !== null)) {
-                    productData.append('product_variant_id', parseInt(this.poProducts[i].product_variant_id));
-                }
-                if ((this.poProducts[i].unit_id !== '') && (typeof (parseInt(this.poProducts[i].unit_id) === 'integer')) && (this.poProducts[i].unit_id !== null)) {
-                    productData.append('unit_id', parseInt(this.poProducts[i].unit_id));
-                }
                 if (this.$route.query.create === 'po') {
-                    if ((this.poProducts[i].quotation_product_id) && (this.poProducts[i].quotation_product_id !== '') && (typeof (parseInt(this.poProducts[i].quotation_product_id) === 'integer')) && (this.poProducts[i].quotation_product_id !== null)) {
-                        productData.append('quotation_product_id', parseInt(this.poProducts[i].quotation_product_id));
-                    }
+                    data.append('is_from_quotation', true);
                 }
-                let res = await ApiServices.purchaseOrderCreate(productData);
+
+                if (typeof this.file.name == 'string') {
+                    data.append('file', this.file);
+                }
+
+                data.append('products', JSON.stringify(this.poProducts));
+                data.append('vendors', JSON.stringify(this.poVendors));
+                console.log(this.poProducts)
+
+                let res = await ApiServices.purchaseOrderCreate(data);
+                this.createProgress = false;
                 if (res.success === true) {
-                    this.successCount = parseInt(this.successCount) + 1;
+                    route.replace('/purchaseOrders/');
                 } else {
                     store.state.home.snackbar = true;
                     store.state.home.snackbarText = res.message;
                     store.state.home.snackbarColor = 'red';
                 }
             }
-            // route.replace('/quotations/');
         },
-
-        // async createProductVendor(id) {
-        //     let data = new FormData();
-        //     data.append('quotation_id', parseInt(id));
-        //     data.append('products', JSON.stringify(this.quoProducts));
-        //     data.append('vendors', JSON.stringify(this.quoVendors));
-        //     let res = await ApiServices.vendorQuotationCreate(data);
-        //     if (res.success === true) {
-        //         if(res.message !== null){
-        //             store.state.home.snackbar = true;
-        //             store.state.home.snackbarText = res.message;
-        //             store.state.home.snackbarColor = 'red';
-        //         }
-        //         route.replace('/quotations/')
-        //     } else {
-        //         store.state.home.snackbar = true;
-        //         store.state.home.snackbarText = res.message;
-        //         store.state.home.snackbarColor = 'red';
-        //     }
-        // },
 
         validate() {
             if (this.department_id === '') {
