@@ -256,5 +256,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::apiResource('freezeBudgets', \App\Http\Controllers\Api\FreezeBudgetController::class);
         Route::post('freezeBudgets/{id}', [\App\Http\Controllers\Api\FreezeBudgetController::class, 'update']);
     });
+    Route::group(['prefix' => '/notification'], function () {
+        Route::post('register/session', [\App\Http\Controllers\Api\NotificationController::class, 'registerLiveNotificationDevice']);
+    });
 });
 

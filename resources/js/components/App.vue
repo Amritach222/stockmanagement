@@ -66,6 +66,16 @@
                 store.state.auth.isLoggedIn = true;
                 store.state.auth.auth_token = accessToken;
             }
+            Echo.join(`chat`)
+                .here((users) => {
+                    //
+                })
+                .joining((user) => {
+                    console.log(user.name);
+                })
+                .leaving((user) => {
+                    console.log(user.name);
+                });
         },
         methods: {
             async logoutUser() {

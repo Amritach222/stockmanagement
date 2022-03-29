@@ -121,4 +121,9 @@ class NotificationController extends Controller
         }
         return $data;
     }
+
+    public function registerLiveNotificationDevice(Request $request){
+        dd($request->socket_id);
+        return \auth()->user()->id;
+    }
 }
