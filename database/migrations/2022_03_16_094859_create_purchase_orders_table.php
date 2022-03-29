@@ -16,20 +16,20 @@ class CreatePurchaseOrdersTable extends Migration
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->id();
             $table->string('reference');
-            $table->date('date_of_order');
-            $table->date('shipping_date');
+            $table->date('date_of_order')->nullable();
+            $table->date('shipping_date')->nullable();
             $table->string('requester');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('supplier');
-            $table->unsignedBigInteger('vendor_id');
-            $table->string('location');
-            $table->unsignedBigInteger('dept_id');
+            $table->string('supplier')->nullable();
+            $table->unsignedBigInteger('vendor_id')->nullable();
+            $table->string('location')->nullable();
+            $table->unsignedBigInteger('dept_id')->nullable();
             $table->enum('status', array('Draft', 'Pending', 'Approved', 'Not Sent', 'Sent', 'Message Received',
                 'In Revision', 'Matching', 'Rejected', 'Stopped', 'Cancelled', 'Partly Received', 'Paid/Not Paid',
                 'Completed'))->default('Draft');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->integer('file_id')->unsigned()->nullable();
-            $table->float('total');
+            $table->float('total')->nullable();
             $table->timestamps();
         });
     }

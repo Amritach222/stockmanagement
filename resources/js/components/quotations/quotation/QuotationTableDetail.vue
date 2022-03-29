@@ -27,7 +27,7 @@
             </tr>
             </tbody>
         </table>
-        <QuotationProductDetails :details="item.quotation_products" :triggerSelectProduct="triggerSelectProduct"></QuotationProductDetails>
+        <QuotationProductDetails :details="item.quotation_products" ref="quotationProductDetails"></QuotationProductDetails>
     </div>
 </template>
 
@@ -51,6 +51,9 @@
         methods: {
             openImage(data) {
                 window.open(this.cdnURL + data, `_blank`);
+            },
+            sendQP(){
+              this.$refs.quotationProductDetails.sendQPtoPO();
             },
             getColor(status) {
                 if (status === 'Pending') return 'warning'

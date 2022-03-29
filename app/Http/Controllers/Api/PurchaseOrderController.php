@@ -18,6 +18,7 @@ use App\Models\PurchaseProduct;
 use App\Models\QuotationProduct;
 use App\Models\User;
 use App\Models\Vendor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Samundra\File\SamundraFileHelper;
 
@@ -91,33 +92,56 @@ class PurchaseOrderController extends Controller
                 $newFile->save();
                 $values['file_id'] = $newFile->id;
             }
-            $reqVendorIds = json_decode($request->vendor_ids);
-            $reqQuotationProductIds = json_decode($request->quotation_product_ids);
-            foreach ($reqVendorIds as $vendorId) {
-                $vendor = Vendor::findOrFail($vendorId);
+            $reqVendors = json_decode($request->vendors);
+            $reqProducts = json_decode($request->products);
+            foreach ($reqVendors as $reqVendor) {
+                $vendor = Vendor::findOrFail($reqVendor->id);
                 $values['supplier'] = $vendor->company_name;
                 $values['vendor_id'] = $vendor->id;
+                $values['reference'] = '-';
+                $values['date_of_order'] = Carbon::now();
                 $purchaseOrder = new PurchaseOrder($values);
                 $purchaseOrder->save();
                 $ref = ReferenceNoGenerator::referenceNo();
-                $purchaseOrder->reference = 'PO-0' . $ref . $purchaseOrder->id;
+                $purchaseOrder->reference = 'PO-0' . $ref . '-' . $purchaseOrder->id;
                 $purchaseOrder->save();
-                foreach ($reqQuotationProductIds as $id){
-                    $quotationProduct = QuotationProduct::findOrFail($id);
-                    if($quotationProduct->vendor_id == $vendor->id){
-                        $purchaseOrderProduct = new PurchaseOrderProduct();
-                        $purchaseOrderProduct->purchase_order_id = $purchaseOrder->id;
-                        $purchaseOrderProduct->quotation_product_id = $quotationProduct->id;
-                        $purchaseOrderProduct->product_id = $quotationProduct->product_id;
-                        $purchaseOrderProduct->product_variant_id = $quotationProduct->product_variant_id;
-                        $purchaseOrderProduct->quantity = $quotationProduct->quantity;
-                        $purchaseOrderProduct->price = $quotationProduct->price;
-                        $purchaseOrderProduct->total = $quotationProduct->total;
-                        $purchaseOrderProduct->unit_id = $quotationProduct->unit_id;
-                        $purchaseOrderProduct->tax_id = $quotationProduct->tax_id;
-                        $purchaseOrderProduct->shipping_cost = $quotationProduct->shipping_cost;
-                        $purchaseOrderProduct->grand_total = $quotationProduct->grand_total;
-                        $purchaseOrderProduct->save();
+                if($request->is_from_quotation === true) {
+                    foreach ($reqProducts as $reqProduct) {
+                        $quotationProduct = QuotationProduct::findOrFail($reqProduct->quotation_product_id);
+                        if ($quotationProduct->vendor_id == $vendor->id) {
+                            $purchaseOrderProduct = new PurchaseOrderProduct();
+                            $purchaseOrderProduct->purchase_order_id = $purchaseOrder->id;
+                            $purchaseOrderProduct->quotation_product_id = $quotationProduct->id;
+                            $purchaseOrderProduct->product_id = $quotationProduct->product_id;
+                            $purchaseOrderProduct->product_variant_id = $quotationProduct->product_variant_id;
+                            $purchaseOrderProduct->quantity = $quotationProduct->quantity;
+                            $purchaseOrderProduct->price = $quotationProduct->price;
+                            $purchaseOrderProduct->total = $quotationProduct->total;
+                            $purchaseOrderProduct->unit_id = $quotationProduct->unit_id;
+                            $purchaseOrderProduct->tax_id = $quotationProduct->tax_id;
+                            $purchaseOrderProduct->shipping_cost = $quotationProduct->shipping_cost;
+                            $purchaseOrderProduct->grand_total = $quotationProduct->grand_total;
+                            $purchaseOrderProduct->save();
+                        }
+                    }
+                }else{
+                    foreach ($reqProducts as $reqProduct) {
+                        if ($reqProduct->vendor_id == $vendor->id) {
+                            $purchaseOrderProduct = new PurchaseOrderProduct();
+                            $purchaseOrderProduct->purchase_order_id = $purchaseOrder->id;
+                            $purchaseOrderProduct->product_id = $reqProduct->product_id;
+                            if($reqProduct->product_variant_id != null) {
+                                $purchaseOrderProduct->product_variant_id = $reqProduct->product_variant_id;
+                            }
+                            $purchaseOrderProduct->quantity = $reqProduct->quantity;
+                            $purchaseOrderProduct->price = $reqProduct->price;
+                            $purchaseOrderProduct->total = $reqProduct->total;
+                            $purchaseOrderProduct->unit_id = $reqProduct->unit_id;
+//                            $purchaseOrderProduct->tax_id = $reqProduct->tax_id;
+                            $purchaseOrderProduct->shipping_cost = $reqProduct->shipping_cost;
+                            $purchaseOrderProduct->grand_total = $reqProduct->grand_total;
+                            $purchaseOrderProduct->save();
+                        }
                     }
                 }
             }

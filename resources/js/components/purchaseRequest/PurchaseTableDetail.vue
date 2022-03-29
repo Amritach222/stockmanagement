@@ -22,7 +22,7 @@
                     <button v-else>No file</button>
                 </td>
                 <td>Department: {{ item.department_name }}</td>
-                <td>Seen Status: {{ item.seen_status }}</td>
+                <td>Delivery Status: <CButton size="sm" :color="getColor(item.status)">{{ item.delivery_status }}</CButton></td>
             </tr>
             </tbody>
         </table>

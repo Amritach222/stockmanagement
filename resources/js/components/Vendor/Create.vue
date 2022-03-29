@@ -500,23 +500,23 @@ export default {
         getCityName(item) {
             if (item.city !== null) return JSON.parse(item.city).name;
         },
-        async getStates(country) {
-            this.state = stateList.filter(function (value, index) {
-                return value.country_id === country.id;
-            })
-        },
-        async getCities(state) {
-            this.city = cityList.filter(function (value, index) {
-                return value.state_id === state.id
-            })
-        },
-        async loadCategories() {
-            let res = await ApiServices.categoryIndex();
-            if (res.success === true) {
-                this.tableLoad = false;
-                this.categories = res.data;
-            }
-        },
+        // async getStates(country) {
+        //     this.state = stateList.filter(function (value, index) {
+        //         return value.country_id === country.id;
+        //     })
+        // },
+        // async getCities(state) {
+        //     this.city = cityList.filter(function (value, index) {
+        //         return value.state_id === state.id
+        //     })
+        // },
+        // async loadCategories() {
+        //     let res = await ApiServices.categoryIndex();
+        //     if (res.success === true) {
+        //         this.tableLoad = false;
+        //         this.categories = res.data;
+        //     }
+        // },
         async save() {
             this.$refs.form.validate();
             this.progressL = true;

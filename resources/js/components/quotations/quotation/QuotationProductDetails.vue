@@ -110,9 +110,7 @@
             ]
         }),
         watch: {
-            triggerSelectProduct: async function (newVal, oldVal) {
-                let res = await store.dispatch('purchase/addSelectedProducts', this.selected);
-            }
+
         },
         computed: {
             formTitle() {
@@ -130,6 +128,10 @@
                 if (status === 'Pending') return 'warning'
                 else if (status === 'Rejected') return 'danger'
                 else return 'success'
+            },
+            async sendQPtoPO () {
+                let res = await store.dispatch('purchase/addSelectedProducts', this.selected);
+                route.replace('/purchaseOrders/create?create=po');
             },
             async saveDat(item) {
                 let productData = new FormData();

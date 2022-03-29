@@ -25,6 +25,10 @@ class QuotationProduct extends JsonResource
             $purchaseProduct = \App\Models\PurchaseProduct::findOrFail($this->purchase_product_id);
             $purchase = new Purchase(\App\Models\Purchase::findOrFail($purchaseProduct->purchase_id));
         }
+        $vendor = null;
+        if ($this->vendor_id !== null) {
+            $vendor = new Vendor(\App\Models\Vendor::findOrFail($this->vendor_id));
+        }
         $total = $this->price * $this->quantity;
         return [
             'id' => $this->id,
@@ -48,6 +52,7 @@ class QuotationProduct extends JsonResource
             'unit' => $unit,
             'status' => $status,
             'purchase' => $purchase,
+            'vendor' => $vendor,
         ];
     }
 }

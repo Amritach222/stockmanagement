@@ -212,11 +212,14 @@
                     No files added.
                 </p>
             </template>
-            <template v-slot:item.department_id="{ item }">
+            <template v-slot:item.dept_id="{ item }">
                 {{ item.department.name }}
             </template>
             <template v-slot:item.status="{ item }">
-                <CButton size="sm" color="secondary" v-if="item.status === 'Pending'">
+                <CButton size="sm" color="secondary" v-if="item.status === 'Draft'">
+                    {{ item.status }}
+                </CButton>
+                <CButton size="sm" color="secondary" v-else-if="item.status === 'Pending'">
                     {{ item.status }}
                 </CButton>
                 <CButton size="sm" color="warning" v-else-if="item.status === 'Reviewed'">
@@ -226,6 +229,9 @@
                     {{ item.status }}
                 </CButton>
                 <CButton size="sm" color="danger" v-else-if="item.status === 'Rejected'">
+                    {{ item.status }}
+                </CButton>
+                <CButton size="sm" color="warning" v-else>
                     {{ item.status }}
                 </CButton>
             </template>
@@ -243,7 +249,6 @@
                 <v-icon
                     small
                     @click="deleteItem(item)"
-                    v-if="$can('quotations.delete') && (item.status === 'Pending')"
                 >
                     mdi-delete
                 </v-icon>
@@ -281,11 +286,12 @@ export default {
         dialogDelete: false,
         dialogFilter: false,
         headers: [
-            {text: 'Reference No.', value: 'reference_no'},
-            {text: 'Department', value: 'department_id'},
+            {text: 'Reference No.', value: 'reference'},
+            {text: 'Department', value: 'dept_id'},
             // {text: 'File', value: 'link', sortable: false},
-            {text: 'Desired Delivery Date', value: 'desired_delivery_date_format', sortable: true},
-            {text: 'Due Date', value: 'due_date_format', sortable: true},
+            {text: 'Date Of Order', value: 'date_of_order', sortable: true},
+            {text: 'Requester', value: 'requester', sortable: true},
+            {text: 'Supplier', value: 'supplier', sortable: true},
             {text: 'Status', value: 'status', sortable: true},
             {text: 'Actions', value: 'actions', sortable: false},
         ],

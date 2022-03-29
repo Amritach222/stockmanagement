@@ -34,18 +34,18 @@
                                 max-width="100px"
                             ></v-text-field>
                         </v-col>
-                        <v-col
-                            cols="12"
-                            sm="3"
-                            md="3"
-                            lg="2"
-                        >
-                            <v-card>
-                                <v-card-actions>
-                                    <v-btn color="blue darken-1" text @click="openFilter">Filter</v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-col>
+<!--                        <v-col-->
+<!--                            cols="12"-->
+<!--                            sm="3"-->
+<!--                            md="3"-->
+<!--                            lg="2"-->
+<!--                        >-->
+<!--                            <v-card>-->
+<!--                                <v-card-actions>-->
+<!--                                    <v-btn color="blue darken-1" text @click="openFilter">Filter</v-btn>-->
+<!--                                </v-card-actions>-->
+<!--                            </v-card>-->
+<!--                        </v-col>-->
                     </v-row>
                     <v-dialog
                         v-model="dialog"
@@ -160,12 +160,12 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.department_id="{ item }">
-               <p v-if="item.department_id">{{ item.department.name }}</p>
-               <p v-else>---</p>
+                <p v-if="item.department_id">{{ item.department.name }}</p>
+                <p v-else>---</p>
             </template>
             <template v-slot:expanded-item="{ headers, item }">
                 <td :colspan="headers.length">
-                    <QuotationTableDetail :item="item"></QuotationTableDetail>
+                    <QuotationTableDetail :item="item" ref='quotationTableDetail'></QuotationTableDetail>
                 </td>
             </template>
             <template v-slot:no-data>
@@ -223,7 +223,8 @@ export default {
         rules: [
             value => !!value || 'Required.',
         ],
-        tableLoad: true
+        tableLoad: true,
+        triggerSelect: false
     }),
 
     computed: {
@@ -270,15 +271,11 @@ export default {
                 this.departments = res.data;
             }
         },
-        sendToPurchaseOrder(){
-            this.prProducts = store.state.purchase.selectedPurchaseRequestedProducts;
-            this.triggerSelect = !this.triggerSelect;
-            route.replace('/purchaseOrders/create?create=po');
-        },
-        sendToQuotation(){
+        sendToPurchaseOrder() {
+            this.$refs.quotationTableDetail.sendQP();
         },
         editItem(item) {
-            if(item.status === "Pending"){
+            if (item.status === "Pending") {
                 this.editedIndex = this.quotationApprovedList.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 store.state.purchase.editItem = item;
@@ -291,7 +288,7 @@ export default {
         },
 
         deleteItem(item) {
-            if(item.status === "Pending") {
+            if (item.status === "Pending") {
                 this.editedIndex = this.quotationApprovedList.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialogDelete = true
@@ -348,7 +345,7 @@ export default {
                 data.append('status', JSON.stringify(this.status));
             }
             let userData = localStorage.getItem('userData');
-            if(userData !== ''){
+            if (userData !== '') {
                 userData = JSON.parse(userData);
                 this.department_ids.push(userData.department_id);
             }
