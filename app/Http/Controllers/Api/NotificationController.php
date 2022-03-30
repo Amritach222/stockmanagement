@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\NotificationsHelper;
 use App\Http\Controllers\Controller;
+use App\Models\LiveNotificationRegister;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
@@ -122,8 +123,24 @@ class NotificationController extends Controller
         return $data;
     }
 
-    public function registerLiveNotificationDevice(Request $request){
-        dd($request->socket_id);
-        return \auth()->user()->id;
+    public function registerLiveNotificationDevice(Request $request)
+    {
+        $user_id = \auth()->user()->id;
+        $register_user = new LiveNotificationRegister();
+        $register_user->user_id = $user_id;
+        $register_user->socket_id = $request->socket_id;
+        $register_user->channel_name = $request->channel_name;
+        $register_user->save();
+        $count_value = LiveNotificationRegister::where('user_id', $user_id)->count();
+        if ($count_value >= 6) {
+            $count_value = LiveNotificationRegister::where('user_id', $user_id)->orderBy('id')
+                ->limit(1)
+                ->delete();
+        }
+        return ['success'=> true, 'message'=>'Connected'];
+    }
+
+    public function sendNotification(){
+        Broadcast::channel('orders.{order}', OrderChannel::class);
     }
 }

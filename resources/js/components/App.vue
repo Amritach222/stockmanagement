@@ -47,9 +47,15 @@
             let isLoggedIn = localStorage.getItem('isLoggedIn');
             let accessToken = localStorage.getItem('access_token');
             if (isLoggedIn === 'true' || isLoggedIn === true) {
+                let userData = localStorage.getItem('userData');
+                userData =  JSON.parse(userData);
                 this.loginState = true;
                 store.state.auth.isLoggedIn = true;
                 store.state.auth.auth_token = accessToken;
+                Echo.channel(`user.${userData.id}`)
+                    .listen('notification', (e) => {
+                        console.log('notification received',e);
+                    });
             }
         },
         watch: {
@@ -66,16 +72,6 @@
                 store.state.auth.isLoggedIn = true;
                 store.state.auth.auth_token = accessToken;
             }
-            Echo.join(`chat`)
-                .here((users) => {
-                    //
-                })
-                .joining((user) => {
-                    console.log(user.name);
-                })
-                .leaving((user) => {
-                    console.log(user.name);
-                });
         },
         methods: {
             async logoutUser() {
