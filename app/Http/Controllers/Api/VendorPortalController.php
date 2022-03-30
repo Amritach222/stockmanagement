@@ -10,6 +10,7 @@ use App\Listeners\QuotationStatusChangeListener;
 use App\Models\File;
 use App\Models\Product;
 use App\Http\Resources\Product as ProductResource;
+use App\Models\PurchaseOrder;
 use App\Models\Quotation;
 use App\Models\Tax;
 use App\Models\User;
@@ -407,6 +408,68 @@ class VendorPortalController extends Controller
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
+        }
+        return $data;
+    }
+
+    public function getPurchaseOrderList()
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $user = User::findOrFail(auth()->user()->id);
+            if ($user->hasRole('Vendor')) {
+                $purchaseOrders = PurchaseOrder::where('vendor_id', $user->vendor->id)->get();
+            } else {
+                abort(403);
+            }
+            $data['data'] = \App\Http\Resources\PurchaseOrder::collection($purchaseOrders);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred';
+        }
+        return $data;
+    }
+
+    public function purchaseOrderShow($id)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $user = User::findOrFail(auth()->user()->id);
+            if ($user->hasRole('Vendor')) {
+                $purchaseOrder = PurchaseOrder::where('vendor_id', $user->vendor->id)->where('id', $id)->firstOrFail();
+            } else {
+                abort(403);
+            }
+            $data['data'] = new \App\Http\Resources\PurchaseOrder($purchaseOrder);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred';
+        }
+        return $data;
+    }
+
+    public function purchaseOrderUpdate($id, Request $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $user = User::findOrFail(auth()->user()->id);
+            if ($user->hasRole('Vendor')) {
+                $purchaseOrder = PurchaseOrder::where('vendor_id', $user->vendor->id)->where('id', $id)->firstOrFail();
+            } else {
+                abort(403);
+            }
+            $values = $request->all();
+            $purchaseOrder->update($values);
+            $data['data'] = new \App\Http\Resources\PurchaseOrder($purchaseOrder);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred';
         }
         return $data;
     }

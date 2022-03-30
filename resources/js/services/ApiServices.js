@@ -749,6 +749,16 @@ export default {
         return await apiCall(DELETE, `api/purchaseOrder/purchaseOrders/${id}`)
     },
 
+    async vendorPurchaseOrderList() {
+        return await apiCall(GET, `api/vendor/purchase-order-list`)
+    },
+    async vendorPurchaseOrderShow(id) {
+        return await apiCall(GET, `api/vendor/purchase-order/${id}`)
+    },
+    async vendorPurchaseOrderEdit(id, data) {
+        return await apiCall(POST, `api/vendor/purchase-order/edit/${id}`, data)
+    },
+
     async createVariant(data) {
         return await apiCall(POST, `api/create-variants`, data)
     },

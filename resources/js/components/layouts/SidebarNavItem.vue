@@ -58,6 +58,18 @@
                 </v-list-item-title>
             </v-list-item>
 
+            <v-list-item v-if="$is('Vendor')">
+                <v-list-item-icon class="mr-2">
+                    <v-icon>mdi-cart</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>
+                            <router-link
+                                :to="'/vendor/purchase-orders'">
+                                {{ $t('new') + ' ' + $t('purchase') + ' ' + $t('order') }}
+                            </router-link>
+                </v-list-item-title>
+            </v-list-item>
+
             <v-list-group
                 v-if="(($can('budgets') || $can('budgetRequests')) || ((($can('budgetLimits') || ($can('budgets')) || ($can('freezeBudgets'))))))">
                 <template v-slot:activator>

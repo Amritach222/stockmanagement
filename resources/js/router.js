@@ -152,6 +152,10 @@ import PurchaseOrderCreate from './components/purchaseOrder/Create'
 import PurchaseOrderEdit from './components/purchaseOrder/Edit'
 import PurchaseOrderShow from './components/purchaseOrder/Show'
 
+import VendorPurchaseOrderIndex from './components/Vendor/purchaseOrder/Index'
+import VendorPurchaseOrderEdit from './components/Vendor/purchaseOrder/Edit'
+import VendorPurchaseOrderShow from './components/Vendor/purchaseOrder/Show'
+
 import RoleIndex from './components/Settings/role/Index'
 import RolePermission from './components/Settings/role/Permissions'
 
@@ -1456,6 +1460,34 @@ export default new Router({
             path: '/purchaseOrders/show/:id',
             name: 'Purchase Order Show',
             component: PurchaseOrderShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/vendor/purchase-orders',
+            name: i18n.t('purchase') + ' ' + i18n.t('order'),
+            component: VendorPurchaseOrderIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/purchase-order/edit/:id',
+            name: 'Purchase Order Edit',
+            component: VendorPurchaseOrderEdit,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/purchase-order/show/:id',
+            name: 'Purchase Order Show',
+            component: VendorPurchaseOrderShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

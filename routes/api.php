@@ -47,6 +47,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('product-list', [\App\Http\Controllers\Api\VendorPortalController::class, 'productList']);
         Route::get('all-products', [\App\Http\Controllers\Api\VendorPortalController::class, 'allProducts']);
         Route::get('pending-quotation-count', [\App\Http\Controllers\Api\VendorPortalController::class, 'getPendingQuotationCount']);
+        Route::get('purchase-order-list', [\App\Http\Controllers\Api\VendorPortalController::class, 'getPurchaseOrderList']);
+        Route::get('purchase-order/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'purchaseOrderShow']);
+        Route::post('purchase-order/edit/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'purchaseOrderUpdate']);
     });
 
     Route::group(['prefix' => '/filter'], function () {
@@ -86,6 +89,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('unit-categories', [\App\Http\Controllers\Api\ListController::class, 'unitCategoryList']);
         Route::get('users', [\App\Http\Controllers\Api\ListController::class, 'userList']);
         Route::get('vendors', [\App\Http\Controllers\Api\ListController::class, 'vendorList']);
+        Route::get('purchase-orders', [\App\Http\Controllers\Api\ListController::class, 'purchaseOrderList']);
     });
 
     Route::apiResource('roles', \App\Http\Controllers\Api\RoleController::class);
