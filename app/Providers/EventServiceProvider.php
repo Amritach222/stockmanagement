@@ -4,11 +4,13 @@ namespace App\Providers;
 
 use App\Events\ActivityLogEvent;
 use App\Events\PasswordResetEvent;
+use App\Events\POVendorEvent;
 use App\Events\QuotationCreateEvent;
 use App\Events\QuotationStatusChangeEvent;
 use App\Events\VendorAssignQuoEvent;
 use App\Listeners\ActivityLogListener;
 use App\Listeners\PasswordResetListener;
+use App\Listeners\POVendorListener;
 use App\Listeners\QuotationCreateListener;
 use App\Listeners\QuotationStatusChangeListener;
 use App\Listeners\VendorAssignQuoListener;
@@ -39,6 +41,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         QuotationStatusChangeEvent::class => [
             QuotationStatusChangeListener::class,
+        ],
+        POVendorEvent::class => [
+            POVendorListener::class,
         ],
     ];
 

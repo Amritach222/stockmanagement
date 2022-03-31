@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
+use App\Events\POVendorEvent;
 use App\Helpers\ReferenceNoGenerator;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PurchaseOrderRequest;
@@ -144,6 +145,7 @@ class PurchaseOrderController extends Controller
                         }
                     }
                 }
+                event(new POVendorEvent($purchaseOrder,'Create'));
             }
             event(new ActivityLogEvent('Add', 'PurchaseOrder', $purchaseOrder->id));
             $data['message'] = "Purchase Order added successfully.";
