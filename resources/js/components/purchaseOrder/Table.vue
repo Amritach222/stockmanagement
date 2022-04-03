@@ -141,7 +141,7 @@
                                     </v-row>
                                     <v-row>
                                         <v-col md="12">
-                                            Desired Delivery Date
+                                            Shipping Date
                                         </v-col>
                                         <v-col md="4">
                                             <v-text-field
@@ -402,7 +402,7 @@ export default {
                 data.append('created_to', this.created_to);
             }
 
-            let res = await ApiServices.quotationFilter(data);
+            let res = await ApiServices.purchaseOrderFilter(data);
             if (res.success === true) {
                 this.purchaseOrders = res.data;
             } else {

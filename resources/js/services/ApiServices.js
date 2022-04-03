@@ -863,6 +863,9 @@ export default {
     async purchaseFilter(data) {
         return await apiCall(POST, `api/filter/purchases`, data)
     },
+    async purchaseOrderFilter(data) {
+        return await apiCall(POST, `api/filter/purchase-orders`, data)
+    },
 
     async addPurchaseRequest(data) {
         const config = {

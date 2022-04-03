@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['prefix' => '/filter'], function () {
         Route::post('quotations', [\App\Http\Controllers\Api\FilterController::class, 'quotation']);
         Route::post('purchases', [\App\Http\Controllers\Api\FilterController::class, 'purchase']);
+        Route::post('purchase-orders', [\App\Http\Controllers\Api\FilterController::class, 'purchaseOrder']);
     });
 
     Route::group(['prefix' => '/list'], function () {
