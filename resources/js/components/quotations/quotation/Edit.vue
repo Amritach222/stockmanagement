@@ -696,6 +696,10 @@
                                             <CIcon name="cil-check-circle"/>
                                             {{ $t('button.submit') }}
                                         </CButton>
+                                        <CButton size="sm" color="warning" @click="sendQPtoPO">
+                                            <CIcon name="cil-check-circle"/>
+                                            Create PO
+                                        </CButton>
                                         <CButton :to="'/quotations'" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
                                             Cancel
@@ -830,6 +834,10 @@ export default {
     methods: {
         openImage(data) {
             window.open(config.cdnURL + data, `_blank`);
+        },
+        async sendQPtoPO () {
+            let res = await store.dispatch('purchase/addSelectedProducts', this.quoProducts);
+            route.replace('/purchaseOrders/create?create=po');
         },
         async loadDepartments() {
             let res = await ApiServices.departmentList();
