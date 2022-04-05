@@ -20,10 +20,10 @@ class POVendorEvent
      *
      * @return void
      */
-    public function __construct(PurchaseOrder $purchaseOrder, $type)
+    public function __construct(PurchaseOrder $purchaseOrder, $status)
     {
         $this->purchaseOrder = $purchaseOrder;
-        $this->type = $type;
+        $this->status = $status;
     }
 
     /**

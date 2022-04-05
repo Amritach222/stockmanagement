@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use function url;
 
-class POVendorNotification extends Notification
+class POStatusChangeNotification extends Notification
 {
     use Queueable;
 
@@ -44,10 +44,9 @@ class POVendorNotification extends Notification
     {
         return (new MailMessage)
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('New Purchase Order')
-            ->greeting('Hello ' . $this->purchaseOrder->vendor->name)
-            ->line('New Purchase Order has been assigned to you. Purchase Order no. ' . $this->purchaseOrder->reference . '.')
-//
+            ->subject('PO Status Change')
+            ->greeting('Hello ' . $this->purchaseOrder->user->name)
+            ->line('Purchase Order no. ' . $this->purchaseOrder->reference . ' has been ' . $this->status . ' from vendor ' . $this->purchaseOrder->vendor->name . '.')
             ->line('Thank you for using our application!');
     }
 

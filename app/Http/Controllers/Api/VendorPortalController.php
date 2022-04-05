@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\POVendorEvent;
 use App\Events\QuotationStatusChangeEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\QuotationProduct;
@@ -466,10 +467,12 @@ class VendorPortalController extends Controller
             }
             $values = $request->all();
             $purchaseOrder->update($values);
+            event(new POVendorEvent($purchaseOrder, $request->status));
             $data['data'] = new \App\Http\Resources\PurchaseOrder($purchaseOrder);
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred';
+            $data['data'] = $e;
         }
         return $data;
     }
