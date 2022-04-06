@@ -25,8 +25,8 @@ class CreatePurchaseOrdersTable extends Migration
             $table->string('location')->nullable();
             $table->unsignedBigInteger('dept_id')->nullable();
             $table->enum('status', array('Draft', 'Pending', 'Approved', 'Not Sent', 'Sent', 'Message Received',
-                'In Revision', 'Matching', 'Rejected', 'Stopped', 'Cancelled', 'Partly Received', 'Paid/Not Paid',
-                'Completed'))->default('Draft');
+                'In Revision', 'Matching', 'Rejected', 'Stopped', 'Cancelled', 'Received', 'Paid/Not Paid',
+                'Completed'))->default('Pending');
             $table->longText('description')->nullable();
             $table->integer('file_id')->unsigned()->nullable();
             $table->float('total')->nullable();

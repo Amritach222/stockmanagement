@@ -358,11 +358,67 @@
                                         </v-data-table>
                                     </v-card>
 
+                                    <v-dialog
+                                        v-model="dialogVConfirm"
+                                        max-width="850px"
+                                        max-height="450px"
+                                    >
+                                        <v-card>
+                                            <v-card-title>
+                                               Check The Product List
+                                                <v-spacer></v-spacer>
+                                            </v-card-title>
+                                            <v-data-table
+                                                item-key="name"
+                                                class="elevation-1"
+                                                :headers="headers"
+                                                :items="poProducts"
+                                                sort-by="id"
+                                                :loading="tableLoad"
+                                                loading-text="Loading... Please wait..."
+                                                :search="searchSV"
+                                            >
+                                                <template v-slot:top>
+                                                    <v-toolbar
+                                                        flat
+                                                    >
+                                                    </v-toolbar>
+                                                </template>
+                                                <template v-slot:no-data>
+                                                    <div>No Data</div>
+                                                </template>
+                                            </v-data-table>
+                                            <v-row class="m-4 d-flex justify-content-end">
+                                                <v-card-actions>
+                                                    <v-btn
+                                                        color="blue darken-1"
+                                                        class="btn btn-danger card-btn"
+                                                        text
+                                                        @click="closeVConfirm"
+                                                    >
+                                                        {{ $t('button.cancel') }}
+                                                    </v-btn>
+                                                    <v-btn
+                                                        color="blue darken-1"
+                                                        class="btn btn-primary card-btn"
+                                                        text
+                                                        @click="edit"
+                                                    >
+                                                        {{ $t('button.submit') }}
+                                                    </v-btn>
+                                                </v-card-actions>
+                                            </v-row>
+                                        </v-card>
+                                    </v-dialog>
 
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit">
                                             <CIcon name="cil-check-circle"/>
                                             {{ $t('button.submit') }}
+                                        </CButton>
+                                        <CButton size="sm" color="warning" @click="statusChange" v-if="editedItem.status === 'Sent'">
+                                            <CIcon name="cil-check-circle"/>
+                                            {{ $t('button.receive') }}
                                         </CButton>
                                         <CButton :to="'/purchaseOrders'" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
