@@ -70,7 +70,7 @@
                 if (res1.success === true) {
                     this.quotationCount = res1.data;
                 }
-                let res2 = await ApiServices.getUnreadCount('Purchase');
+                let res2 = await ApiServices.getUnreadCount('PO');
                 if (res2.success === true) {
                     this.purchaseCount = res2.data;
                 }

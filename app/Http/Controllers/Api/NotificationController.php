@@ -80,7 +80,7 @@ class NotificationController extends Controller
 //        return $data;
 //    }
 //
-    public function unreadCount($type = null)
+    public function unreadCount($type)
     {
         $data['success'] = true;
         $data['message'] = '';

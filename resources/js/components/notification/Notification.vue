@@ -174,7 +174,7 @@
                 if (this.$route.params.type === 'quotation') {
                     type = 'Quotation';
                 } else {
-                    type = 'Purchase';
+                    type = 'PO';
                 }
                 let res = await ApiServices.getNotifications(type);
                 if (res.success === true) {

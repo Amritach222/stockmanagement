@@ -35,6 +35,20 @@ class NotificationsHelper
                 $data['link'] = "/vendor/product-request/edit/" . $notification->data['vendorQuotationProduct']['vendor_quotation']['id'] . "/" . $notification->data['vendorQuotationProduct']['id'];
                 $data['notification'] = $notification;
                 break;
+            case "App\Notifications\PO\POStatusChangeNotification";
+                $first = "PO no. " . $notification->data['purchaseOrder']['reference'];
+                $second = $notification->data['status'] == "Review" ? " is sent for Review." : " is " . $notification->data['status'] . ".";
+                $data['title'] = $first . $second;
+                $data['link'] = "/purchaseOrders/edit/" . $notification->data['purchaseOrder']['id'];
+                $data['notification'] = $notification;
+                break;
+            case "App\Notifications\PO\POVendorNotification";
+                $first = "PO no. " . $notification->data['purchaseOrder']['reference'];
+                $second = "has been sent to you.";
+                $data['title'] = $first . $second;
+                $data['link'] = "/vendor/purchase-order/edit/" . $notification->data['purchaseOrder']['id'];
+                $data['notification'] = $notification;
+                break;
             default:
                 break;
         }
