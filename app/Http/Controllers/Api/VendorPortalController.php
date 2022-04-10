@@ -19,6 +19,7 @@ use App\Models\Vendor;
 use App\Models\VendorProduct;
 use App\Models\VendorQuotation;
 use App\Models\VendorQuotationProduct;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Samundra\File\SamundraFileHelper;
 
@@ -466,6 +467,9 @@ class VendorPortalController extends Controller
                 abort(403);
             }
             $values = $request->all();
+            if ($request->status == 'Sent') {
+                $values['shipping_date'] = Carbon::now();
+            }
             $purchaseOrder->update($values);
             event(new POVendorEvent($purchaseOrder, $request->status));
             $data['data'] = new \App\Http\Resources\PurchaseOrder($purchaseOrder);

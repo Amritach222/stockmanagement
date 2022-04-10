@@ -365,13 +365,13 @@
                                     >
                                         <v-card>
                                             <v-card-title>
-                                               Check The Product List
+                                                Check The Product List
                                                 <v-spacer></v-spacer>
                                             </v-card-title>
                                             <v-data-table
                                                 item-key="name"
                                                 class="elevation-1"
-                                                :headers="headers"
+                                                :headers="headersP"
                                                 :items="poProducts"
                                                 sort-by="id"
                                                 :loading="tableLoad"
@@ -383,6 +383,15 @@
                                                         flat
                                                     >
                                                     </v-toolbar>
+                                                </template>
+                                                <template v-slot:item.product_id="{ item }">
+                                                    <p v-if="item.product_id" class="mt-3">{{ item.product.name }}</p>
+                                                </template>
+                                                <template v-slot:item.product_variant_id="{ item }">
+                                                    <p v-if="item.product_variant_id" class="mt-3">{{
+                                                            item.product_variant.name
+                                                        }}</p>
+                                                    <p v-else class="mt-3">---</p>
                                                 </template>
                                                 <template v-slot:no-data>
                                                     <div>No Data</div>
@@ -402,7 +411,7 @@
                                                         color="blue darken-1"
                                                         class="btn btn-primary card-btn"
                                                         text
-                                                        @click="edit"
+                                                        @click="receivedProduct"
                                                     >
                                                         {{ $t('button.submit') }}
                                                     </v-btn>
@@ -412,13 +421,16 @@
                                     </v-dialog>
 
                                     <CCardFooter>
-                                        <CButton type="submit" size="sm" color="primary" @click="edit">
+                                        <CButton type="submit" size="sm" color="primary" @click="edit"
+                                                 v-if="editedItem.status !== 'Sent'">
                                             <CIcon name="cil-check-circle"/>
                                             {{ $t('button.submit') }}
                                         </CButton>
-                                        <CButton size="sm" color="warning" @click="statusChange" v-if="editedItem.status === 'Sent'">
+                                        <CButton size="sm" color="warning" @click="statusChange"
+                                                 v-if="editedItem.status === 'Sent'">
                                             <CIcon name="cil-check-circle"/>
-                                            {{ $t('button.receive') }}
+                                            <!--                                            {{ $t('button.receive') }}-->
+                                            Receive
                                         </CButton>
                                         <CButton :to="'/purchaseOrders'" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
@@ -476,11 +488,18 @@ export default {
             {text: i18n.t('grand_total'), value: 'grand_total'},
             // {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
+        headersP: [
+            {text: i18n.t('product'), value: 'product_id'},
+            {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant_id'},
+            {text: i18n.t('quantity'), value: 'quantity'},
+            {text: i18n.t('received') + ' ' + i18n.t('quantity'), value: 'received_quantity'},
+        ],
         quotations: [],
         tableLoad: false,
         productCount: 0,
         editedIndex: -1,
         poProducts: [],
+        editPoProducts: [],
         products: [],
         vendors: [],
         units: [],
@@ -558,6 +577,7 @@ export default {
             if (res.success === true) {
                 this.editedItem = res.data;
                 this.poProducts = res.data.purchase_order_products;
+                this.editPoProducts = res.data.purchase_order_products;
                 this.poVendors = res.data.vendor;
                 if (res.data.is_from_purchase === 1) {
                     this.headers.unshift({
@@ -626,6 +646,10 @@ export default {
                     }
                 }
             }
+        },
+
+        statusChange() {
+            this.dialogVConfirm = true;
         },
 
         editItem(item) {
@@ -734,7 +758,7 @@ export default {
                     data.append('products', JSON.stringify(this.poProducts));
                     data.append('vendors', JSON.stringify(this.newPoVendors));
 
-                    let res = await ApiServices.quotationEdit(this.editedItem.id, data);
+                    let res = await ApiServices.purchaseOrderEdit(this.editedItem.id, data);
                     this.changeProgress = false;
                     if (res.success === true) {
                         route.replace('/quotations/');
@@ -743,42 +767,14 @@ export default {
             }
         },
 
-        async editQuoProduct() {
-            this.productValidate();
-            if (this.validated) {
-                if (this.editedIndex > -1) {
-                    //edit goes here
-                    this.progressL = true;
-                    const data = new FormData();
-                    data.append('product_id', this.addPoProduct.product_id);
-                    if (this.addQuoProduct.product_variant_id !== null && this.addPoProduct.product_variant_id !== '') {
-                        data.append('product_variant_id', this.addPoProduct.product_variant_id);
-                    }
-                    data.append('quantity', this.addPoProduct.quantity);
-                    data.append('shipping_cost', this.addPoProduct.shipping_cost);
-                    let res = await ApiServices.quotationProductEdit(this.addPoProduct.id, data);
-                    if (res.success === true) {
-                        Object.assign(this.poProducts[this.editedIndex], res.data)
-                        this.$refs.form.reset();
-                        this.close();
-                    }
-                } else {
-                    //add new
-                    this.progressL = true;
-                    const data = new FormData();
-                    data.append('product_id', this.addPoProduct.product_id);
-                    if (this.addQuoProduct.product_variant_id !== null && this.addPoProduct.product_variant_id !== '') {
-                        data.append('product_variant_id', this.addPoProduct.product_variant_id);
-                    }
-                    data.append('quantity', this.addPoProduct.quantity);
-                    data.append('shipping_cost', this.addPoProduct.shipping_cost);
-                    data.append('quotation_id', this.editedItem.id);
-                    let res = await ApiServices.quotationProductCreate(data);
-                    if (res.success === true) {
-                        this.poProducts.push(res.data);
-                        this.$refs.form.reset();
-                        this.close()
-                    }
+        async receivedProduct() {
+            for (var i = 0; i < this.editPoProducts.length; i++) {
+                this.progressL = true;
+                const data = new FormData();
+                data.append('received_quantity', this.editPoProducts[i].received_quantity);
+                let res = await ApiServices.purchaseOrderProudctEdit(this.editPoProducts[i].id, data);
+                if (res.success === true) {
+                    this.editPoProducts[i] = res.data;
                 }
             }
         },

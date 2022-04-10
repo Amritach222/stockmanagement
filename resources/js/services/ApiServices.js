@@ -749,6 +749,10 @@ export default {
         return await apiCall(DELETE, `api/purchaseOrder/purchaseOrders/${id}`)
     },
 
+    async purchaseOrderProudctEdit(id, data) {
+        return await apiCall(POST, `api/purchaseOrder/purchaseOrderProducts/${id}`, data)
+    },
+
     async vendorPurchaseOrderList() {
         return await apiCall(GET, `api/vendor/purchase-order-list`)
     },

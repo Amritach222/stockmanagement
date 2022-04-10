@@ -106,7 +106,7 @@ class PurchaseOrderController extends Controller
                 $ref = ReferenceNoGenerator::referenceNo();
                 $purchaseOrder->reference = 'PO-0' . $ref . '-' . $purchaseOrder->id;
                 $purchaseOrder->save();
-                if($request->is_from_quotation === true) {
+                if ($request->is_from_quotation === true) {
                     foreach ($reqProducts as $reqProduct) {
                         $quotationProduct = QuotationProduct::findOrFail($reqProduct->quotation_product_id);
                         if ($quotationProduct->vendor_id == $vendor->id) {
@@ -125,13 +125,13 @@ class PurchaseOrderController extends Controller
                             $purchaseOrderProduct->save();
                         }
                     }
-                }else{
+                } else {
                     foreach ($reqProducts as $reqProduct) {
                         if ($reqProduct->vendor_id == $vendor->id) {
                             $purchaseOrderProduct = new PurchaseOrderProduct();
                             $purchaseOrderProduct->purchase_order_id = $purchaseOrder->id;
                             $purchaseOrderProduct->product_id = $reqProduct->product_id;
-                            if($reqProduct->product_variant_id != null) {
+                            if ($reqProduct->product_variant_id != null) {
                                 $purchaseOrderProduct->product_variant_id = $reqProduct->product_variant_id;
                             }
                             $purchaseOrderProduct->quantity = $reqProduct->quantity;
@@ -145,7 +145,7 @@ class PurchaseOrderController extends Controller
                         }
                     }
                 }
-                event(new POVendorEvent($purchaseOrder,'Create'));
+                event(new POVendorEvent($purchaseOrder, 'Create'));
             }
             event(new ActivityLogEvent('Add', 'PurchaseOrder', $purchaseOrder->id));
             $data['message'] = "Purchase Order added successfully.";
@@ -211,6 +211,24 @@ class PurchaseOrderController extends Controller
             $data['message'] = "Deleted successfully.";
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+
+    public function productUpdate($id, Request $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $purchaseOrderProduct = PurchaseOrderProduct::findOrFail($id);
+            $values = $request->all();
+            $purchaseOrderProduct->update($values);
+            $data['message'] = 'Purchase Order Product Update successfully';
+            $data['data'] = PurchaseOrderProductResource::collection($purchaseOrderProduct);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
         }
         return $data;
     }

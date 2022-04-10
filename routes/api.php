@@ -216,6 +216,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['prefix' => '/purchaseOrder', 'middleware' => 'auth:api'], function () {
         Route::apiResource('purchaseOrders', \App\Http\Controllers\Api\PurchaseOrderController::class);
         Route::post('purchaseOrders/{id}', [\App\Http\Controllers\Api\PurchaseOrderController::class, 'update']);
+        Route::post('purchaseOrderProducts/{id}', [\App\Http\Controllers\Api\PurchaseOrderController::class, 'productUpdate']);
 //        Route::apiResource('purchaseOrderProducts', \App\Http\Controllers\Api\PurchaseOrderProductController::class);
 //        Route::post('purchaseProducts/{id}', [\App\Http\Controllers\Api\PurchaseProductController::class, 'update']);
 //        Route::get('user-history', [\App\Http\Controllers\Api\PurchaseController::class, 'userPurchaseHistory']);

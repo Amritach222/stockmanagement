@@ -41,6 +41,7 @@ class PurchaseOrderProduct extends JsonResource
             'product_variant_id' => $this->product_variant_id,
             'price' => $this->price,
             'quantity' => $this->quantity,
+            'received_quantity' => $this->received_quantity,
             'total' => $this->total,
             'unit_id' => $this->unit_id,
             'tax_id' => $this->tax_id,
