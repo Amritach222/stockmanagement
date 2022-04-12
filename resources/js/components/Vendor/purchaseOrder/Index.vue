@@ -87,6 +87,11 @@
                         Accepted
                     </CButton>
                 </div>
+                <div v-else>
+                    <CButton size="sm" class="m-1" color="warning">
+                        {{ item.status }}
+                    </CButton>
+                </div>
             </template>
             <template v-slot:item.actions="{ item }">
                 <CRow>
@@ -145,7 +150,7 @@ export default {
             {text: i18n.t('reference'), value: 'reference'},
             {text: i18n.t('date') + ' ' + i18n.t('of') + ' ' + i18n.t('order'), value: 'date_of_order'},
             {text: i18n.t('location'), value: 'location'},
-            // {text: i18n.t('status'), value: 'status'},
+            {text: i18n.t('status'), value: 'status'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         activePassive: [

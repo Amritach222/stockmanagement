@@ -12,6 +12,8 @@ use App\Http\Requests\PurchaseRequest;
 use App\Http\Resources\PurchaseOrder as PurchaseOrderResource;
 use App\Http\Resources\PurchaseOrderProduct as PurchaseOrderProductResource;
 use App\Models\File;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\Purchase;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderProduct;
@@ -224,11 +226,20 @@ class PurchaseOrderController extends Controller
             $purchaseOrderProduct = PurchaseOrderProduct::findOrFail($id);
             $values = $request->all();
             $purchaseOrderProduct->update($values);
+            $product = Product::findOrFail($purchaseOrderProduct->product_id);
+            $product->cost_price = $purchaseOrderProduct->price;
+            if ($purchaseOrderProduct->product_variant_id != null) {
+                $product = ProductVariant::findOrFail($purchaseOrderProduct->product_variant_id);
+                $product->price = $purchaseOrderProduct->price;
+            }
+            $product->quantity = $product->quantity + $purchaseOrderProduct->received_quantity;
+            $product->save();
             $data['message'] = 'Purchase Order Product Update successfully';
             $data['data'] = PurchaseOrderProductResource::collection($purchaseOrderProduct);
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
         }
         return $data;
     }

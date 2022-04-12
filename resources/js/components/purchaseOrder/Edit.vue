@@ -393,6 +393,12 @@
                                                         }}</p>
                                                     <p v-else class="mt-3">---</p>
                                                 </template>
+                                                <template v-slot:item.received_quantity="{ item }">
+                                                    <v-text-field
+                                                        v-model="item.received_quantity"
+                                                        type="number"
+                                                    ></v-text-field>
+                                                </template>
                                                 <template v-slot:no-data>
                                                     <div>No Data</div>
                                                 </template>
@@ -480,6 +486,7 @@ export default {
             {text: i18n.t('product'), value: 'product_id'},
             {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant_id'},
             {text: i18n.t('quantity'), value: 'quantity'},
+            {text: i18n.t('received') + ' ' + i18n.t('quantity'), value: 'received_quantity'},
             {text: i18n.t('price'), value: 'price'},
             {text: i18n.t('total'), value: 'total'},
             {text: i18n.t('tax'), value: 'tax_id'},
