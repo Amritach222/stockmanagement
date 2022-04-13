@@ -129,104 +129,6 @@
                                                             ></v-text-field>
                                                         </v-col>
                                                     </v-row>
-                                                    <v-dialog
-                                                        v-model="dialog"
-                                                        max-width="600px"
-                                                    >
-                                                        <v-card>
-                                                            <v-form ref="form">
-                                                                <v-card-title>
-                                                                    <span class="headline">{{ formTitle }}</span>
-                                                                </v-card-title>
-
-                                                                <v-card-text>
-                                                                    <v-container>
-                                                                        <v-row>
-                                                                            <v-col>
-                                                                                <v-select
-                                                                                    v-model="addPoProduct.product_id"
-                                                                                    :label="$t('product')"
-                                                                                    :items="products"
-                                                                                    item-text="name"
-                                                                                    item-value="id"
-                                                                                    required
-                                                                                    outlined
-                                                                                    :rules="rules"
-                                                                                    v-on:change="getVariants(addPoProduct.product_id)"
-                                                                                ></v-select>
-                                                                                <div v-if="hasVariants">
-                                                                                    <v-select
-                                                                                        v-model="addPoProduct.product_variant_id"
-                                                                                        :label="$t('product') +' '+ $t('variant')"
-                                                                                        :items="variants"
-                                                                                        item-value="id"
-                                                                                        item-text="name"
-                                                                                        outlined
-                                                                                    ></v-select>
-                                                                                </div>
-                                                                                <div v-if="hasVendors">
-                                                                                    <v-select
-                                                                                        v-model="addPoProduct.vendor_id"
-                                                                                        :label="$t('vendor')"
-                                                                                        :items="selectVendors"
-                                                                                        item-value="id"
-                                                                                        item-text="name"
-                                                                                        outlined
-                                                                                    ></v-select>
-                                                                                </div>
-                                                                                <v-text-field
-                                                                                    v-model="addPoProduct.quantity"
-                                                                                    :label="$t('quantity')"
-                                                                                    type="number"
-                                                                                    outlined
-                                                                                ></v-text-field>
-
-                                                                                <v-select
-                                                                                    v-model="addPoProduct.unit_id"
-                                                                                    :label="$t('unit')"
-                                                                                    :items="units"
-                                                                                    item-text="name"
-                                                                                    item-value="id"
-                                                                                    required
-                                                                                    outlined
-                                                                                    :rules="rules"
-                                                                                ></v-select>
-                                                                                <v-text-field
-                                                                                    v-model="addPoProduct.shipping_cost"
-                                                                                    :label="$t('shipping_cost')"
-                                                                                    type="number"
-                                                                                    outlined
-                                                                                ></v-text-field>
-                                                                            </v-col>
-                                                                        </v-row>
-                                                                    </v-container>
-                                                                </v-card-text>
-
-                                                                <v-card-actions>
-                                                                    <v-progress-linear
-                                                                        v-if="progressL"
-                                                                        indeterminate
-                                                                        color="green"
-                                                                    ></v-progress-linear>
-                                                                    <v-spacer></v-spacer>
-                                                                    <v-btn
-                                                                        color="blue darken-1"
-                                                                        text
-                                                                        @click="close"
-                                                                    >
-                                                                        {{ $t('button.cancel') }}
-                                                                    </v-btn>
-                                                                    <v-btn
-                                                                        color="blue darken-1"
-                                                                        text
-                                                                        @click="editQuoProduct"
-                                                                    >
-                                                                        {{ $t('button.submit') }}
-                                                                    </v-btn>
-                                                                </v-card-actions>
-                                                            </v-form>
-                                                        </v-card>
-                                                    </v-dialog>
                                                     <v-dialog v-model="dialogDelete" max-width="500px">
                                                         <v-card>
                                                             <v-card-title class="text-h6">
@@ -358,74 +260,6 @@
                                         </v-data-table>
                                     </v-card>
 
-                                    <v-dialog
-                                        v-model="dialogVConfirm"
-                                        max-width="850px"
-                                        max-height="450px"
-                                    >
-                                        <v-card>
-                                            <v-card-title>
-                                                Check The Product List
-                                                <v-spacer></v-spacer>
-                                            </v-card-title>
-                                            <v-data-table
-                                                item-key="name"
-                                                class="elevation-1"
-                                                :headers="headersP"
-                                                :items="poProducts"
-                                                sort-by="id"
-                                                :loading="tableLoad"
-                                                loading-text="Loading... Please wait..."
-                                                :search="searchSV"
-                                            >
-                                                <template v-slot:top>
-                                                    <v-toolbar
-                                                        flat
-                                                    >
-                                                    </v-toolbar>
-                                                </template>
-                                                <template v-slot:item.product_id="{ item }">
-                                                    <p v-if="item.product_id" class="mt-3">{{ item.product.name }}</p>
-                                                </template>
-                                                <template v-slot:item.product_variant_id="{ item }">
-                                                    <p v-if="item.product_variant_id" class="mt-3">{{
-                                                            item.product_variant.name
-                                                        }}</p>
-                                                    <p v-else class="mt-3">---</p>
-                                                </template>
-                                                <template v-slot:item.received_quantity="{ item }">
-                                                    <v-text-field
-                                                        v-model="item.received_quantity"
-                                                        type="number"
-                                                    ></v-text-field>
-                                                </template>
-                                                <template v-slot:no-data>
-                                                    <div>No Data</div>
-                                                </template>
-                                            </v-data-table>
-                                            <v-row class="m-4 d-flex justify-content-end">
-                                                <v-card-actions>
-                                                    <v-btn
-                                                        color="blue darken-1"
-                                                        class="btn btn-danger card-btn"
-                                                        text
-                                                        @click="closeVConfirm"
-                                                    >
-                                                        {{ $t('button.cancel') }}
-                                                    </v-btn>
-                                                    <v-btn
-                                                        color="blue darken-1"
-                                                        class="btn btn-primary card-btn"
-                                                        text
-                                                        @click="receivedProduct"
-                                                    >
-                                                        {{ $t('button.submit') }}
-                                                    </v-btn>
-                                                </v-card-actions>
-                                            </v-row>
-                                        </v-card>
-                                    </v-dialog>
-
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit"
                                                  v-if="editedItem.status !== 'Sent'">
@@ -446,6 +280,109 @@
                                 </CForm>
                             </CCardBody>
                         </CCard>
+
+
+
+                        <v-dialog
+                            v-model="dialogVConfirm"
+                            max-width="850px"
+                            max-height="450px"
+                        >
+                            <v-card>
+                                <v-card-title>
+                                    Check The Product List
+                                    <v-spacer></v-spacer>
+                                </v-card-title>
+                                <v-data-table
+                                    item-key="name"
+                                    class="elevation-1"
+                                    :headers="headersP"
+                                    :items="poProducts"
+                                    sort-by="id"
+                                    :loading="tableLoad"
+                                    loading-text="Loading... Please wait..."
+                                    :search="searchSV"
+                                >
+                                    <template v-slot:top>
+                                        <v-toolbar
+                                            flat
+                                        >
+                                        </v-toolbar>
+                                    </template>
+                                    <template v-slot:item.product_id="{ item }">
+                                        <p v-if="item.product_id" class="mt-3">{{ item.product.name }}</p>
+                                    </template>
+                                    <template v-slot:item.product_variant_id="{ item }">
+                                        <p v-if="item.product_variant_id" class="mt-3">{{
+                                                item.product_variant.name
+                                            }}</p>
+                                        <p v-else class="mt-3">---</p>
+                                    </template>
+                                    <template v-slot:item.received_quantity="{ item }">
+                                        <v-text-field
+                                            v-model="item.received_quantity"
+                                            type="number"
+                                        ></v-text-field>
+                                    </template>
+                                    <template v-slot:no-data>
+                                        <div>No Data</div>
+                                    </template>
+                                </v-data-table>
+                                <v-row class="m-4 d-flex justify-content-end">
+                                    <v-card-actions>
+                                        <v-btn
+                                            color="blue darken-1"
+                                            class="btn btn-danger card-btn"
+                                            text
+                                            @click="closeVConfirm"
+                                        >
+                                            {{ $t('button.cancel') }}
+                                        </v-btn>
+                                        <v-btn
+                                            color="blue darken-1"
+                                            class="btn btn-primary card-btn"
+                                            text
+                                            @click="checkBOconfirm"
+                                        >
+                                            {{ $t('button.submit') }}
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-row>
+                            </v-card>
+                        </v-dialog>
+
+                        <v-dialog
+                            v-model="dialogBOConfirm"
+                            max-width="850px"
+                            max-height="450px"
+                        >
+                            <v-card>
+                                <v-card-title>
+                                    Do you want to create back order for remaining products?
+                                    <v-spacer></v-spacer>
+                                </v-card-title>
+                                <v-row class="m-4 d-flex justify-content-end">
+                                    <v-card-actions>
+                                        <v-btn
+                                            color="blue darken-1"
+                                            class="btn btn-danger card-btn"
+                                            text
+                                            @click="closeBOConfirm"
+                                        >
+                                            No
+                                        </v-btn>
+                                        <v-btn
+                                            color="blue darken-1"
+                                            class="btn btn-primary card-btn"
+                                            text
+                                            @click="confirmBO"
+                                        >
+                                            Yes
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-row>
+                            </v-card>
+                        </v-dialog>
                     </CCardGroup>
                 </CCol>
             </CRow>
@@ -478,10 +415,12 @@ export default {
         dialogV: false,
         dialogVDelete: false,
         dialogVConfirm: false,
+        dialogBOConfirm: false,
         dueDateValidation: false,
         deliveryDateValidation: false,
         menu1: false,
         menu2: false,
+        createBO: false,
         headers: [
             {text: i18n.t('product'), value: 'product_id'},
             {text: i18n.t('product') + ' ' + i18n.t('variant'), value: 'product_variant_id'},
@@ -723,6 +662,32 @@ export default {
             })
         },
 
+        closeBOConfirm() {
+            this.dialogBOConfirm = false
+            this.createBO = false;
+            this.receivedProduct();
+        },
+
+        async confirmBO() {
+            this.dialogBOConfirm = false;
+            this.createBO = true;
+            this.receivedProduct();
+        },
+
+        async checkBOconfirm() {
+            var unmatchCount = 0;
+            for (var i = 0; i < this.editPoProducts.length; i++) {
+                if (this.editPoProducts[i].quantity !== this.editPoProducts[i].received_quantity) {
+                    unmatchCount = unmatchCount + 1;
+                }
+            }
+            if(unmatchCount > 0){
+                this.dialogBOConfirm=true;
+            }else{
+                this.receivedProduct();
+            }
+        },
+
         async openDialogV() {
             this.selected = this.newPoVendors;
             this.dialogV = true;
@@ -782,6 +747,24 @@ export default {
                 let res = await ApiServices.purchaseOrderProudctEdit(this.editPoProducts[i].id, data);
                 if (res.success === true) {
                     this.editPoProducts[i] = res.data;
+                    this.dialogVConfirm = false;
+                    store.state.home.snackbar = true;
+                    store.state.home.snackbarText = "Received product quantity update successfully.";
+                    store.state.home.snackbarColor = 'green';
+
+                    const statusData = new FormData();
+                    data.append('status', 'Received');
+                    let res = await ApiServices.purchaseOrderStatusUpdate(this.editedItem.id, data);
+                    if (this.createBO === true){
+                            let res = await ApiServices.purchaseOrderCreateBO(this.editedItem.id);
+                            store.state.home.snackbar = true;
+                            store.state.home.snackbarText = "Back Order Created Successfully.";
+                            store.state.home.snackbarColor = 'green';
+                    }
+                }else{
+                    store.state.home.snackbar = true;
+                    store.state.home.snackbarText = res.message;
+                    store.state.home.snackbarColor = 'red';
                 }
             }
         },

@@ -748,8 +748,14 @@ export default {
     async purchaseOrderDelete(id) {
         return await apiCall(DELETE, `api/purchaseOrder/purchaseOrders/${id}`)
     },
+    async purchaseOrderStatusUpdate(id, data) {
+        return await apiCall(POST, `api/purchaseOrder/status-update/${id}`,data)
+    },
+    async purchaseOrderCreateBO(id) {
+        return await apiCall(POST, `api/purchaseOrder/create-back-order/${id}`)
+    },
 
-    async purchaseOrderProudctEdit(id, data) {
+    async purchaseOrderProductEdit(id, data) {
         return await apiCall(POST, `api/purchaseOrder/purchaseOrderProducts/${id}`, data)
     },
 

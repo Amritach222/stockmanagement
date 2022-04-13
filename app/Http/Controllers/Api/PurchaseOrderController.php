@@ -228,17 +228,54 @@ class PurchaseOrderController extends Controller
             $purchaseOrderProduct->update($values);
             $product = Product::findOrFail($purchaseOrderProduct->product_id);
             $product->cost_price = $purchaseOrderProduct->price;
+            $product->stock = $product->stock + $purchaseOrderProduct->received_quantity;
             if ($purchaseOrderProduct->product_variant_id != null) {
                 $product = ProductVariant::findOrFail($purchaseOrderProduct->product_variant_id);
                 $product->price = $purchaseOrderProduct->price;
+                $product->quantity = $product->quantity + $purchaseOrderProduct->received_quantity;
             }
-            $product->quantity = $product->quantity + $purchaseOrderProduct->received_quantity;
             $product->save();
             $data['message'] = 'Purchase Order Product Update successfully';
             $data['data'] = PurchaseOrderProductResource::collection($purchaseOrderProduct);
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
+        }
+        return $data;
+    }
+
+    public function statusUpdate($id, Request $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $purchaseOrder = PurchaseOrder::findOrFail($id);
+            $values = $request->all();
+            $purchaseOrder->update($values);
+            event(new POVendorEvent($purchaseOrder, $request->status));
+            $data['data'] = new \App\Http\Resources\PurchaseOrder($purchaseOrder);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred';
+            $data['data'] = $e;
+        }
+        return $data;
+    }
+
+    public function createBackOrder($id)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $purchaseOrder = PurchaseOrder::findOrFail($id);
+
+            $data['data'] = new \App\Http\Resources\PurchaseOrder($purchaseOrder);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred';
             $data['data'] = $e;
         }
         return $data;
