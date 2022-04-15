@@ -740,31 +740,35 @@ export default {
         },
 
         async receivedProduct() {
+            var count = 0;
             for (var i = 0; i < this.editPoProducts.length; i++) {
                 this.progressL = true;
                 const data = new FormData();
                 data.append('received_quantity', this.editPoProducts[i].received_quantity);
-                let res = await ApiServices.purchaseOrderProudctEdit(this.editPoProducts[i].id, data);
+                let res = await ApiServices.purchaseOrderProductEdit(this.editPoProducts[i].id, data);
                 if (res.success === true) {
                     this.editPoProducts[i] = res.data;
                     this.dialogVConfirm = false;
                     store.state.home.snackbar = true;
                     store.state.home.snackbarText = "Received product quantity update successfully.";
                     store.state.home.snackbarColor = 'green';
-
-                    const statusData = new FormData();
-                    data.append('status', 'Received');
-                    let res = await ApiServices.purchaseOrderStatusUpdate(this.editedItem.id, data);
-                    if (this.createBO === true){
-                            let res = await ApiServices.purchaseOrderCreateBO(this.editedItem.id);
-                            store.state.home.snackbar = true;
-                            store.state.home.snackbarText = "Back Order Created Successfully.";
-                            store.state.home.snackbarColor = 'green';
-                    }
                 }else{
+                    count = parseInt(count) + 1;
                     store.state.home.snackbar = true;
                     store.state.home.snackbarText = res.message;
                     store.state.home.snackbarColor = 'red';
+                }
+            }
+
+            if(count === 0) {
+                const statusData = new FormData();
+                data.append('status', 'Received');
+                let res = await ApiServices.purchaseOrderStatusUpdate(this.editedItem.id, data);
+                if (this.createBO === true) {
+                    let res = await ApiServices.purchaseOrderCreateBO(this.editedItem.id);
+                    store.state.home.snackbar = true;
+                    store.state.home.snackbarText = "Back Order Created Successfully.";
+                    store.state.home.snackbarColor = 'green';
                 }
             }
         },

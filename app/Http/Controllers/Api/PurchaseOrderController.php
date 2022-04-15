@@ -236,7 +236,7 @@ class PurchaseOrderController extends Controller
             }
             $product->save();
             $data['message'] = 'Purchase Order Product Update successfully';
-            $data['data'] = PurchaseOrderProductResource::collection($purchaseOrderProduct);
+            $data['data'] = new PurchaseOrderProductResource($purchaseOrderProduct);
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
