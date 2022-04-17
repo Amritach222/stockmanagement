@@ -262,7 +262,7 @@
 
                                     <CCardFooter>
                                         <CButton type="submit" size="sm" color="primary" @click="edit"
-                                                 v-if="editedItem.status !== 'Sent'">
+                                                 v-if="(editedItem.status === 'Pending') || (editedItem.status === 'Draft') ">
                                             <CIcon name="cil-check-circle"/>
                                             {{ $t('button.submit') }}
                                         </CButton>
@@ -274,7 +274,7 @@
                                         </CButton>
                                         <CButton :to="'/purchaseOrders'" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
-                                            Cancel
+                                            Back
                                         </CButton>
                                     </CCardFooter>
                                 </CForm>
@@ -748,10 +748,6 @@ export default {
                 let res = await ApiServices.purchaseOrderProductEdit(this.editPoProducts[i].id, data);
                 if (res.success === true) {
                     this.editPoProducts[i] = res.data;
-                    this.dialogVConfirm = false;
-                    store.state.home.snackbar = true;
-                    store.state.home.snackbarText = "Received product quantity update successfully.";
-                    store.state.home.snackbarColor = 'green';
                 }else{
                     count = parseInt(count) + 1;
                     store.state.home.snackbar = true;
@@ -761,9 +757,13 @@ export default {
             }
 
             if(count === 0) {
+                this.dialogVConfirm = false;
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Received product quantity update successfully.";
+                store.state.home.snackbarColor = 'green';
                 const statusData = new FormData();
-                data.append('status', 'Received');
-                let res = await ApiServices.purchaseOrderStatusUpdate(this.editedItem.id, data);
+                statusData.append('status', 'Received');
+                let res = await ApiServices.purchaseOrderStatusUpdate(this.editedItem.id, statusData);
                 if (this.createBO === true) {
                     let res = await ApiServices.purchaseOrderCreateBO(this.editedItem.id);
                     store.state.home.snackbar = true;

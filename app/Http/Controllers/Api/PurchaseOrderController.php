@@ -108,6 +108,7 @@ class PurchaseOrderController extends Controller
                 $ref = ReferenceNoGenerator::referenceNo();
                 $purchaseOrder->reference = 'PO-0' . $ref . '-' . $purchaseOrder->id;
                 $purchaseOrder->save();
+                $po_total = 0;
                 if ($request->is_from_quotation === true) {
                     foreach ($reqProducts as $reqProduct) {
                         $quotationProduct = QuotationProduct::findOrFail($reqProduct->quotation_product_id);
@@ -125,6 +126,7 @@ class PurchaseOrderController extends Controller
                             $purchaseOrderProduct->shipping_cost = $quotationProduct->shipping_cost;
                             $purchaseOrderProduct->grand_total = $quotationProduct->grand_total;
                             $purchaseOrderProduct->save();
+                            $po_total = $po_total + $purchaseOrderProduct->grand_total;
                         }
                     }
                 } else {
@@ -144,10 +146,13 @@ class PurchaseOrderController extends Controller
                             $purchaseOrderProduct->shipping_cost = $reqProduct->shipping_cost;
                             $purchaseOrderProduct->grand_total = $reqProduct->grand_total;
                             $purchaseOrderProduct->save();
+                            $po_total = $po_total + $purchaseOrderProduct->grand_total;
                         }
                     }
                 }
                 event(new POVendorEvent($purchaseOrder, 'Create'));
+                $purchaseOrder->total = $po_total;
+                $purchaseOrder->save();
             }
             event(new ActivityLogEvent('Add', 'PurchaseOrder', $purchaseOrder->id));
             $data['message'] = "Purchase Order added successfully.";
@@ -235,6 +240,15 @@ class PurchaseOrderController extends Controller
                 $product->quantity = $product->quantity + $purchaseOrderProduct->received_quantity;
             }
             $product->save();
+            if ($purchaseOrderProduct->quantity > $purchaseOrderProduct->received_quantity) {
+                $po_values['total'] = $purchaseOrderProduct->price * $purchaseOrderProduct->received_quantity;
+                if ($purchaseOrderProduct->tax_id != null) {
+                    $po_values['grand_total'] = $po_values['total'] + $purchaseOrderProduct->shipping_cost + $po_values['total'] / 100 * $purchaseOrderProduct->tax->value ?? 0;
+                } else {
+                    $po_values['grand_total'] = $po_values['total'] + $purchaseOrderProduct->shipping_cost;
+                }
+                $purchaseOrderProduct->update($po_values);
+            }
             $data['message'] = 'Purchase Order Product Update successfully';
             $data['data'] = new PurchaseOrderProductResource($purchaseOrderProduct);
         } catch (\Exception $e) {
@@ -271,7 +285,50 @@ class PurchaseOrderController extends Controller
         $data['data'] = [];
         try {
             $purchaseOrder = PurchaseOrder::findOrFail($id);
-
+            $newPurchaseOrder = new PurchaseOrder([
+                'reference' => $purchaseOrder->reference,
+                'date_of_order' => Carbon::now(),
+                'requester' => auth()->user()->name,
+                'user_id' => auth()->user()->id,
+                'supplier' => $purchaseOrder->supplier,
+                'vendor_id' => $purchaseOrder->vendor_id,
+                'location' => $purchaseOrder->location,
+                'dept_id' => $purchaseOrder->dept_id,
+                'file_id' => $purchaseOrder->file_id,
+                'description' => $purchaseOrder->description
+            ]);
+            $newPurchaseOrder->save();
+            $po_total = 0;
+            foreach ($purchaseOrder->purchaseOrderProducts as $product) {
+                if ($product->quantity > $product->received_quantity) {
+                    $quantity = $product->quantity - $product->received_quantity;
+                    $total = $product->price * $quantity;
+                    if ($product->tax_id != null) {
+                        $grand_total = $total + $product->shipping_cost + $total / 100 * $product->tax->value ?? 0;
+                    } else {
+                        $grand_total = $total + $product->shipping_cost;
+                    }
+                    $newPurchaseOrderProduct = new PurchaseOrderProduct([
+                        'purchase_product_id' => $newPurchaseOrder->id,
+                        'quotation_product_id' => $product->quotation_product_id,
+                        'product_id' => $product->product_id,
+                        'product_variant_id' => $product->product_variant_id,
+                        'quantity' => $quantity,
+                        'price' => $product->price,
+                        'total' => $total,
+                        'unit_id' => $product->unit_id,
+                        'tax_id' => $product->tax_id,
+                        'shipping_cost' => $product->shipping_cost,
+                        'grand_total' => $grand_total,
+                    ]);
+                    $newPurchaseOrderProduct->save();
+                    $po_total = $po_total + $grand_total;
+                }
+            }
+            $newPurchaseOrder->total = $po_total;
+            $newPurchaseOrder->save();
+            event(new POVendorEvent($newPurchaseOrder, 'Create'));
+            event(new ActivityLogEvent('Add', 'PurchaseOrder', $newPurchaseOrder->id));
             $data['data'] = new \App\Http\Resources\PurchaseOrder($purchaseOrder);
         } catch (\Exception $e) {
             $data['success'] = false;
