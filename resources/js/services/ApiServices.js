@@ -274,6 +274,9 @@ export default {
     async itemDelete(id) {
         return await apiCall(DELETE, `api/product/item/items/${id}`)
     },
+    async itemUsers(id) {
+        return await apiCall(GET, `api/getItemUsers/${id}`)
+    },
 
     async productAttributeGroupIndex() {
         return await apiCall(GET, `api/product/productAttributeGroups`)

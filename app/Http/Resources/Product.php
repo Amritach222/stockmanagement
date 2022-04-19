@@ -21,6 +21,14 @@ class Product extends JsonResource
             $link = $image->path;
         }
         $variants = ProductVariant::collection($this->productVariants);
+        $unit = null;
+        if($this->unit_id != null){
+            $unit = new Unit(\App\Models\Unit::findOrFail($this->unit_id));
+        }
+        $dis_unit = null;
+        if($this->distribute_unit_id){
+            $dis_unit = new Unit(\App\Models\Unit::findOrFail($this->distribute_unit_id));
+        }
         if($this->vendor_status){
             return [
                 'id' => $this->id,
@@ -45,8 +53,8 @@ class Product extends JsonResource
                 'brand' => $this->brand,
                 'category' => $this->category,
                 'product_variants' => $variants,
-                'unit' => $this->unit,
-                'distribute_unit' => $this->distributeUnit,
+                'unit' => $unit,
+                'distribute_unit' => $dis_unit,
             ];
         }
         return [

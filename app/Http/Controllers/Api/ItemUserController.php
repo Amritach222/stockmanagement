@@ -41,17 +41,18 @@ class ItemUserController extends Controller
             $item = Item::findOrFail($id);
             $itemUsers = $item->users;
             $count = count($itemUsers);
+            $users=[];
             foreach ($itemUsers as $k => $itemUser) {
-                $itemUser->user = $itemUser->user;
-                $itemUser->department = $itemUser->department;
+                $users[$k]['user'] = $itemUser->user;
+                $users[$k]['department'] = $itemUser->department;
                 if ($count == $k + 1) {
-                    $itemUser->time_span = $itemUser->created_at->format('Y-m-d') . ' To Present';
+                    $users[$k]['time_span'] = $itemUser->created_at->format('Y-m-d') . ' To Present';
                 } else {
                     $next = ItemUser::where('id', '>', $itemUser->id)->first();
-                    $itemUser->time_span = $itemUser->created_at->format('Y-m-d') . ' To ' . $next->created_at->format('Y-m-d');
+                    $users[$k]['time_span'] = $itemUser->created_at->format('Y-m-d') . ' To ' . $next->created_at->format('Y-m-d');
                 }
             }
-            $data['data'] = $itemUsers;
+            $data['data'] = $users;
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = "Error occurred.";

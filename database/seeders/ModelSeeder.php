@@ -83,7 +83,7 @@ class ModelSeeder extends Seeder
         $itemU->save();
 
         $itemU = new Unit([
-            'name' => 'Pices',
+            'name' => 'Pieces',
             'short_code' => 'Pcs',
             'category_id' => $itemUC3->id,
             'type' => 'equal',
@@ -183,7 +183,8 @@ class ModelSeeder extends Seeder
             'category_id' => $itemC->id,
             'cost_price' => 1500,
             'stock' => 5,
-            'type' => 'Serviceable'
+            'type' => 'Serviceable',
+            'unit_id' => 3
         ]);
         $itemP->code = CodeGenerator::code();
         $itemP->save();
@@ -192,10 +193,10 @@ class ModelSeeder extends Seeder
             'name' => 'TV',
             'brand_id' => $itemB->id,
             'category_id' => $itemC->id,
-
             'cost_price' => 1500,
             'stock' => 5,
-            'type' => 'Serviceable'
+            'type' => 'Serviceable',
+            'unit_id' => 3,
         ]);
         $itemP->code = CodeGenerator::code();
         $itemP->save();
