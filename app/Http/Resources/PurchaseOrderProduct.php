@@ -14,25 +14,29 @@ class PurchaseOrderProduct extends JsonResource
      */
     public function toArray($request)
     {
-        $quotation_product=null;
-        if($this->quotation_product_id !== null) {
+        $quotation_product = null;
+        if ($this->quotation_product_id !== null) {
             $quotation_product = new QuotationProduct($this->quotationProduct);
         }
-        $product=null;
-        if($this->product_id !== null){
+        $product = null;
+        if ($this->product_id !== null) {
             $product = new Product($this->product);
         }
-        $product_variant=null;
-        if($this->product_variant_id !== null){
+        $product_variant = null;
+        if ($this->product_variant_id !== null) {
             $product_variant = new ProductVariant($this->productVariant);
         }
-        $unit=null;
-        if($this->unit_id !== null){
+        $unit = null;
+        if ($this->unit_id !== null) {
             $unit = new Unit($this->unit);
         }
-        $tax=null;
-        if($this->tax_id !== null){
+        $tax = null;
+        if ($this->tax_id !== null) {
             $tax = new Tax($this->tax);
+        }
+        $quotation_ref = null;
+        if ($this->quotation_product_id != null) {
+            $quotation_ref = $this->quotationProduct->quotation->reference_no;
         }
         return [
             'id' => $this->id,
@@ -43,15 +47,18 @@ class PurchaseOrderProduct extends JsonResource
             'quantity' => $this->quantity,
             'received_quantity' => $this->received_quantity,
             'total' => $this->total,
+            'discount_type' => $this->discount_type,
+            'discount' => $this->discount,
             'unit_id' => $this->unit_id,
             'tax_id' => $this->tax_id,
             'shipping_cost' => $this->shipping_cost,
             'grand_total' => $this->grand_total,
-            'quotation_product'=>$quotation_product,
-            'product'=>$product,
-            'product_variant'=>$product_variant,
-            'unit'=>$unit,
-            'tax'=>$tax,
+            'quotation_ref' => $quotation_ref,
+            'quotation_product' => $quotation_product,
+            'product' => $product,
+            'product_variant' => $product_variant,
+            'unit' => $unit,
+            'tax' => $tax,
         ];
     }
 }

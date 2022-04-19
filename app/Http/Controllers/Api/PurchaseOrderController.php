@@ -109,22 +109,23 @@ class PurchaseOrderController extends Controller
                 $purchaseOrder->reference = 'PO-0' . $ref . '-' . $purchaseOrder->id;
                 $purchaseOrder->save();
                 $po_total = 0;
-                if ($request->is_from_quotation === true) {
+                if ($request->is_from_quotation == 1) {
                     foreach ($reqProducts as $reqProduct) {
-                        $quotationProduct = QuotationProduct::findOrFail($reqProduct->quotation_product_id);
+                        $quotationProduct = new \App\Http\Resources\QuotationProduct(QuotationProduct::findOrFail($reqProduct->quotation_product_id));
                         if ($quotationProduct->vendor_id == $vendor->id) {
-                            $purchaseOrderProduct = new PurchaseOrderProduct();
-                            $purchaseOrderProduct->purchase_order_id = $purchaseOrder->id;
-                            $purchaseOrderProduct->quotation_product_id = $quotationProduct->id;
-                            $purchaseOrderProduct->product_id = $quotationProduct->product_id;
-                            $purchaseOrderProduct->product_variant_id = $quotationProduct->product_variant_id;
-                            $purchaseOrderProduct->quantity = $quotationProduct->quantity;
-                            $purchaseOrderProduct->price = $quotationProduct->price;
-                            $purchaseOrderProduct->total = $quotationProduct->total;
-                            $purchaseOrderProduct->unit_id = $quotationProduct->unit_id;
-                            $purchaseOrderProduct->tax_id = $quotationProduct->tax_id;
-                            $purchaseOrderProduct->shipping_cost = $quotationProduct->shipping_cost;
-                            $purchaseOrderProduct->grand_total = $quotationProduct->grand_total;
+                            $purchaseOrderProduct = new PurchaseOrderProduct([
+                                'purchase_order_id' => $purchaseOrder->id,
+                                'quotation_product_id' => $reqProduct->quotation_product_id,
+                                'product_id' => $quotationProduct->product_id,
+                                'product_variant_id' => $quotationProduct->product_variant_id,
+                                'quantity' => $quotationProduct->quantity,
+                                'price' => $quotationProduct->price,
+                                'total' => $quotationProduct->total,
+                                'unit_id' => $quotationProduct->unit_id,
+                                'tax_id' => $quotationProduct->tax_id,
+                                'shipping_cost' => $quotationProduct->shipping_cost,
+                                'grand_total' => $quotationProduct->grand_total
+                            ]);
                             $purchaseOrderProduct->save();
                             $po_total = $po_total + $purchaseOrderProduct->grand_total;
                         }
@@ -295,7 +296,8 @@ class PurchaseOrderController extends Controller
                 'location' => $purchaseOrder->location,
                 'dept_id' => $purchaseOrder->dept_id,
                 'file_id' => $purchaseOrder->file_id,
-                'description' => $purchaseOrder->description
+                'description' => $purchaseOrder->description,
+                'is_from_quotation' => $purchaseOrder->is_from_quotation
             ]);
             $newPurchaseOrder->save();
             $po_total = 0;
@@ -316,6 +318,8 @@ class PurchaseOrderController extends Controller
                         'quantity' => $quantity,
                         'price' => $product->price,
                         'total' => $total,
+                        'discount_type' => $product->discount_type,
+                        'discount' => $product->discount,
                         'unit_id' => $product->unit_id,
                         'tax_id' => $product->tax_id,
                         'shipping_cost' => $product->shipping_cost,

@@ -158,11 +158,11 @@
                                                     }}</p>
                                                 <p v-else class="mt-3">---</p>
                                             </template>
-                                            <template v-slot:item.purchase_product_id="{ item }">
+                                            <template v-slot:item.quotation_product_id="{ item }">
                                                 <router-link
-                                                    :to="'/purchase/purchase-request/'+item.purchase.id"
-                                                    v-if="item.purchase_product_id" class="mt-3">
-                                                    {{ item.purchase.reference_no }}
+                                                    :to="'/quotations/'+item.quotation_product.quotation_id"
+                                                    v-if="item.quotation_product_id" class="mt-3">
+                                                    {{ item.quotation_ref }}
                                                     <!--                                                </p>-->
                                                 </router-link>
                                                 <p v-else class="mt-3">---</p>
@@ -193,46 +193,6 @@
                                                    v-else-if="item.discount && item.discount_type === 'Percent'">
                                                     {{ item.discount }}%</p>
                                                 <p class="mt-3" v-else>---</p>
-                                            </template>
-                                            <template v-slot:item.status="{ item }">
-                                                <div v-if="item.status === 'On Progress'">
-                                                    <CButton size="sm" color="warning" class="m-1">
-                                                        On Progress
-                                                    </CButton>
-                                                </div>
-                                                <div v-else-if="item.status === 'Pending'">
-                                                    <CButton size="sm" color="secondary" class="m-1">
-                                                        Pending
-                                                    </CButton>
-                                                </div>
-                                                <div v-else-if="item.status === 'Rejected'">
-                                                    <CButton size="sm" class="m-1" color="danger"
-                                                    >
-                                                        Rejected
-                                                    </CButton>
-                                                </div>
-                                                <div v-else-if="item.status === 'Cancelled'">
-                                                    <CButton size="sm" class="m-1" color="danger"
-                                                    >
-                                                        Cancelled
-                                                    </CButton>
-                                                </div>
-                                                <div v-else-if="item.status === 'Approved'">
-                                                    <CButton size="sm" class="m-1" color="success"
-                                                    >
-                                                        Approved
-                                                    </CButton>
-                                                </div>
-                                                <div v-else-if="item.status === 'Accepted'">
-                                                    <CButton size="sm" class="m-1" color="primary">
-                                                        Accepted
-                                                    </CButton>
-                                                </div>
-                                                <div v-else>
-                                                    <CButton size="sm" class="m-1" color="warning">
-                                                        {{ item.status }}
-                                                    </CButton>
-                                                </div>
                                             </template>
                                             <template v-slot:item.actions="{ item }">
                                                 <div v-if="editedItem.is_pending">
@@ -525,9 +485,9 @@ export default {
                 this.poProducts = res.data.purchase_order_products;
                 this.editPoProducts = res.data.purchase_order_products;
                 this.poVendors = res.data.vendor;
-                if (res.data.is_from_purchase === 1) {
+                if (res.data.is_from_quotation === 1) {
                     this.headers.unshift({
-                        text: i18n.t('purchase') + ' ' + i18n.t('request'), value: 'purchase_product_id'
+                        text: i18n.t('quotation'), value: 'quotation_product_id'
                     })
                 }
             }

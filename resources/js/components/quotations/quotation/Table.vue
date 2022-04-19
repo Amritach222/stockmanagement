@@ -220,6 +220,16 @@
             </template>
             <template v-slot:item.actions="{ item }">
                 <router-link
+                    :to="'/quotations/'+item.id"
+                    v-if="$can('quotations.show')"
+                >
+                    <v-icon
+                        small
+                    >
+                        mdi-eye
+                    </v-icon>
+                </router-link>
+                <router-link
                     :to="'/quotations/edit/'+item.id"
                     v-if="$can('quotations.edit')"
                 >

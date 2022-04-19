@@ -18,6 +18,7 @@ class CreatePurchaseOrdersTable extends Migration
             $table->string('reference');
             $table->date('date_of_order')->nullable();
             $table->date('shipping_date')->nullable();
+            $table->date('received_date')->nullable();
             $table->string('requester');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('supplier')->nullable();
@@ -30,6 +31,7 @@ class CreatePurchaseOrdersTable extends Migration
             $table->longText('description')->nullable();
             $table->integer('file_id')->unsigned()->nullable();
             $table->float('total')->nullable();
+            $table->boolean('is_from_quotation')->nullable();
             $table->timestamps();
         });
     }

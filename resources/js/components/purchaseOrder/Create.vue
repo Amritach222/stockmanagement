@@ -495,9 +495,8 @@ export default {
             let res = await ApiServices.productShow(product.product_id);
             if (res.success === true) {
                 if (product.product_variant_id) {
-                    let rtn = await ApiServices.productVariantShow(product.product_variant_id);
-                    varName = rtn.data.name;
-                    varId = rtn.data.id;
+                    varName = product.product_variant.name;
+                    varId = product.product_variant_id;
                 }
                 for (var i = 0; i < this.units.length; i++) {
                     if (product.unit_id === this.units[i].id) {
@@ -506,7 +505,7 @@ export default {
                 }
                 this.poProducts.push({
                     'product_id': product.product_id,
-                    'product_name': res.data.name,
+                    'product_name': product.product.name,
                     'product_variant_id': product.product_variant_id,
                     'product_variant': varName,
                     'quantity': product.quantity,
@@ -695,7 +694,7 @@ export default {
             for (var i = 0; i < this.vendors.length; i++) {
                 if (this.addPoProduct.vendor_id === this.vendors[i].id) {
                     vendor = this.vendors[i];
-                    if(!(this.poVendors.indexOf(this.vendors[i]) >=0)){
+                    if (!(this.poVendors.indexOf(this.vendors[i]) >= 0)) {
                         this.poVendors.push(this.vendors[i])
                     }
                 }
@@ -752,7 +751,9 @@ export default {
                 data.append('requester', this.requested_name);
 
                 if (this.$route.query.create === 'po') {
-                    data.append('is_from_quotation', true);
+                    data.append('is_from_quotation', 1);
+                } else {
+                    data.append('is_from_quotation', 0);
                 }
 
                 if (typeof this.file.name == 'string') {
