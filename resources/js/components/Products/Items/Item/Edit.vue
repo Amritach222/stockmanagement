@@ -205,12 +205,12 @@
                                                     </v-row>
                                                 </v-toolbar>
                                             </template>
-                                            <template v-slot:item.user_id="{ item }">
-                                                <p v-if="item.user_id" class="mt-3">{{ item.user.name }}</p>
+                                            <template v-slot:item.user="{ item }">
+                                                <p v-if="item.user" class="mt-3">{{ item.user.name }}</p>
                                                 <p v-else class="mt-3">---</p>
                                             </template>
-                                            <template v-slot:item.department_id="{ item }">
-                                                <p v-if="item.department_id" class="mt-3">{{ item.department.name }}</p>
+                                            <template v-slot:item.department="{ item }">
+                                                <p v-if="item.department" class="mt-3">{{ item.department.name }}</p>
                                                 <p v-else class="mt-3">---</p>
                                             </template>
                                             <template v-slot:no-data>
@@ -281,8 +281,8 @@ export default {
         unitType: false,
         unit: '',
         headers: [
-            {text: i18n.t('user'), value: 'user_id'},
-            {text: i18n.t('department'), value: 'department_id'},
+            {text: i18n.t('user'), value: 'user'},
+            {text: i18n.t('department'), value: 'department'},
             {text: i18n.t('time_span'), value: 'time_span'},
         ],
         tableLoad: false,
