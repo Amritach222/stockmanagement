@@ -232,6 +232,11 @@
                                             <!--                                            {{ $t('button.receive') }}-->
                                             Receive
                                         </CButton>
+                                        <CButton size="sm" color="warning" @click="createBill"
+                                                 v-if="editedItem.status === 'Received'">
+                                            <CIcon name="cil-check-circle"/>
+                                            Create Bill
+                                        </CButton>
                                         <CButton :to="'/purchaseOrders'" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
                                             Back
@@ -670,6 +675,21 @@ export default {
             this.dialogVConfirm = false
         },
 
+        async createBill(){
+            const data = new FormData();
+            data.append('purchase_order_id', this.editedItem.id);
+            let res = await ApiServices.paymentCreate(data);
+            if (res.success === true) {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = res.message;
+                store.state.home.snackbarColor = 'green';
+            }else{
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = res.message;
+                store.state.home.snackbarColor = 'red';
+            }
+        },
+
         async edit() {
             this.validate();
             let due = await this.checkDate('due_date', this.editedItem.due_date);
@@ -725,10 +745,16 @@ export default {
                 statusData.append('status', 'Received');
                 let res = await ApiServices.purchaseOrderStatusUpdate(this.editedItem.id, statusData);
                 if (this.createBO === true) {
-                    let res = await ApiServices.purchaseOrderCreateBO(this.editedItem.id);
-                    store.state.home.snackbar = true;
-                    store.state.home.snackbarText = "Back Order Created Successfully.";
-                    store.state.home.snackbarColor = 'green';
+                    let rtn = await ApiServices.purchaseOrderCreateBO(this.editedItem.id);
+                    if(rtn.success === true) {
+                        store.state.home.snackbar = true;
+                        store.state.home.snackbarText = "Back Order Created Successfully.";
+                        store.state.home.snackbarColor = 'green';
+                    }else{
+                        store.state.home.snackbar = true;
+                        store.state.home.snackbarText = rtn.message;
+                        store.state.home.snackbarColor = 'red';
+                    }
                 }
             }
         },

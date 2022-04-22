@@ -278,6 +278,19 @@ export default {
         return await apiCall(GET, `api/product/item/getItemUsers/${id}`)
     },
 
+    async paymentCreate(data) {
+        return await apiCall(POST, `api/payment/registerPayments`, data)
+    },
+    async paymentShow(id) {
+        return await apiCall(GET, `api/payment/registerPayments/${id}`)
+    },
+    async paymentEdit(id, data) {
+        return await apiCall(POST, `api/payment/registerPayments/${id}`, data)
+    },
+    async paymentDelete(id) {
+        return await apiCall(DELETE, `api/payment/registerPayments/${id}`)
+    },
+
     async productAttributeGroupIndex() {
         return await apiCall(GET, `api/product/productAttributeGroups`)
     },
