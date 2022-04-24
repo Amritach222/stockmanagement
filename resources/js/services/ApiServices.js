@@ -291,6 +291,19 @@ export default {
         return await apiCall(DELETE, `api/payment/registerPayments/${id}`)
     },
 
+    async invoiceCreate(data) {
+        return await apiCall(POST, `api/payment/invoices`, data)
+    },
+    async invoiceShow(id) {
+        return await apiCall(GET, `api/payment/invoices/${id}`)
+    },
+    async invoiceEdit(id, data) {
+        return await apiCall(POST, `api/payment/invoices/${id}`, data)
+    },
+    async invoiceDelete(id) {
+        return await apiCall(DELETE, `api/payment/invoices/${id}`)
+    },
+
     async productAttributeGroupIndex() {
         return await apiCall(GET, `api/product/productAttributeGroups`)
     },

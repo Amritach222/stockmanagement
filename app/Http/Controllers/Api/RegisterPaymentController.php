@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Events\ActivityLogEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RegisterPaymentResource;
+use App\Models\PurchaseOrder;
 use App\Models\RegisterPayment;
 use Illuminate\Http\Request;
 
@@ -42,7 +43,7 @@ class RegisterPaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -53,7 +54,10 @@ class RegisterPaymentController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
-
+            $po = PurchaseOrder::findOrFail($request->purchase_order_id);
+            $values['total'] = $po->total;
+            $values['grand_total'] = $po->grand_total;
+            $values['due_amount'] = $po->due_amount;
             $regPayment = new RegisterPayment($values);
             $regPayment->save();
             event(new ActivityLogEvent('Add', 'Payment Register', $regPayment->id));
@@ -68,7 +72,7 @@ class RegisterPaymentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\RegisterPayment  $registerPayment
+     * @param \App\Models\RegisterPayment $registerPayment
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -88,7 +92,7 @@ class RegisterPaymentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\RegisterPayment  $registerPayment
+     * @param \App\Models\RegisterPayment $registerPayment
      * @return \Illuminate\Http\Response
      */
     public function edit(RegisterPayment $registerPayment)
@@ -99,8 +103,8 @@ class RegisterPaymentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\RegisterPayment  $registerPayment
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\RegisterPayment $registerPayment
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -126,7 +130,7 @@ class RegisterPaymentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\RegisterPayment  $registerPayment
+     * @param \App\Models\RegisterPayment $registerPayment
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
