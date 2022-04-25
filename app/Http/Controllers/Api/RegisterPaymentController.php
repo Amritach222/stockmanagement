@@ -58,6 +58,7 @@ class RegisterPaymentController extends Controller
             $values['total'] = $po->total;
             $values['grand_total'] = $po->grand_total;
             $values['due_amount'] = $po->due_amount;
+            $values['created_by'] = auth()->user()->id;
             $regPayment = new RegisterPayment($values);
             $regPayment->save();
             event(new ActivityLogEvent('Add', 'Payment Register', $regPayment->id));
@@ -147,6 +148,25 @@ class RegisterPaymentController extends Controller
             $data['message'] = "Deleted successfully.";
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+
+    public function checkIfBillCreated($id)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $po = PurchaseOrder::findOrFail($id);
+            if (count($po->registerPayments) > 0) {
+                $data['data'] = true;
+            } else {
+                $data['data'] = false;
+            }
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
         }
         return $data;
     }

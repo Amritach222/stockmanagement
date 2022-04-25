@@ -290,6 +290,9 @@ export default {
     async paymentDelete(id) {
         return await apiCall(DELETE, `api/payment/registerPayments/${id}`)
     },
+    async checkIfBillCreated(id) {
+        return await apiCall(GET, `api/payment/check-if-bill-created/${id}`)
+    },
 
     async invoiceCreate(data) {
         return await apiCall(POST, `api/payment/invoices`, data)

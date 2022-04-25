@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['prefix' => '/payment'], function () {
         Route::apiResource('registerPayments', \App\Http\Controllers\Api\RegisterPaymentController::class);
         Route::post('registerPayments/{id}', [\App\Http\Controllers\Api\RegisterPaymentController::class, 'update']);
+        Route::get('check-if-bill-created/{id}', [\App\Http\Controllers\Api\RegisterPaymentController::class, 'checkIfBillCreated']);
         Route::apiResource('invoices', \App\Http\Controllers\Api\InvoiceController::class);
         Route::post('invoices/{id}', [\App\Http\Controllers\Api\InvoiceController::class, 'update']);
     });

@@ -6,6 +6,7 @@ use App\Events\ActivityLogEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
+use App\Models\RegisterPayment;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -53,9 +54,12 @@ class InvoiceController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
-
+            $values['issued_by'] = auth()->user()->id;
             $invoice = new Invoice($values);
             $invoice->save();
+            $payment = RegisterPayment::findOrFail($request->payment_id);
+            $payment->due_amount = $payment->due_amount - $invoice->amount;
+            $payment->save();
             event(new ActivityLogEvent('Add', 'Invoice', $invoice->id));
             $data['message'] = "Invoice added successfully.";
             $data['data'] = new InvoiceResource($invoice);
@@ -112,7 +116,6 @@ class InvoiceController extends Controller
             $data['success'] = true;
             $invoice = Invoice::findOrFail($id);
             $values = $request->all();
-
             $invoice->update($values);
             event(new ActivityLogEvent('Edit', 'Invoice', $invoice->id));
             $data['message'] = "Updated successfully.";

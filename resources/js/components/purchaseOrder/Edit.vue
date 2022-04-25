@@ -233,9 +233,15 @@
                                             Receive
                                         </CButton>
                                         <CButton size="sm" color="warning" @click="createBill"
-                                                 v-if="editedItem.status === 'Received'">
+                                                 v-if="((editedItem.status === 'Received') && (hasBill === false))">
                                             <CIcon name="cil-check-circle"/>
                                             Create Bill
+                                        </CButton>
+                                        <CButton size="sm" color="warning"
+                                                 :to="'/purchaseOrders/payment/'+editedItem.id"
+                                                 v-if="hasBill === true">
+                                            <CIcon name="cil-check-circle"/>
+                                            View Bill
                                         </CButton>
                                         <CButton :to="'/purchaseOrders'" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
@@ -245,7 +251,6 @@
                                 </CForm>
                             </CCardBody>
                         </CCard>
-
 
 
                         <v-dialog
@@ -436,6 +441,7 @@ export default {
         variants: [],
         hasVariants: false,
         hasVendors: false,
+        hasBill: false,
         editedItem: {
             id: null,
             dept_id: '',
@@ -465,6 +471,7 @@ export default {
         let item = await this.loadItems();
         let user = await this.loadUserName();
         let vendor = await this.loadVendors();
+        let bill = await this.checkIfBillCreated();
         // this.loadQuoProducts();
     },
     methods: {
@@ -646,9 +653,9 @@ export default {
                     unmatchCount = unmatchCount + 1;
                 }
             }
-            if(unmatchCount > 0){
-                this.dialogBOConfirm=true;
-            }else{
+            if (unmatchCount > 0) {
+                this.dialogBOConfirm = true;
+            } else {
                 this.receivedProduct();
             }
         },
@@ -675,15 +682,31 @@ export default {
             this.dialogVConfirm = false
         },
 
-        async createBill(){
+        async createBill() {
             const data = new FormData();
             data.append('purchase_order_id', this.editedItem.id);
             let res = await ApiServices.paymentCreate(data);
             if (res.success === true) {
+                this.hasBill = true;
                 store.state.home.snackbar = true;
                 store.state.home.snackbarText = res.message;
                 store.state.home.snackbarColor = 'green';
-            }else{
+                route.replace('/purchaseOrders/payment/' + this.editedItem.id);
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = res.message;
+                store.state.home.snackbarColor = 'red';
+            }
+        },
+
+        async checkIfBillCreated() {
+            let res = await ApiServices.checkIfBillCreated(this.editedItem.id);
+            if (res.success === true) {
+                console.log('got here')
+                if (res.data === true) {
+                    this.hasBill = true;
+                }
+            } else {
                 store.state.home.snackbar = true;
                 store.state.home.snackbarText = res.message;
                 store.state.home.snackbarColor = 'red';
@@ -728,7 +751,7 @@ export default {
                 let res = await ApiServices.purchaseOrderProductEdit(this.editPoProducts[i].id, data);
                 if (res.success === true) {
                     this.editPoProducts[i] = res.data;
-                }else{
+                } else {
                     count = parseInt(count) + 1;
                     store.state.home.snackbar = true;
                     store.state.home.snackbarText = res.message;
@@ -736,7 +759,7 @@ export default {
                 }
             }
 
-            if(count === 0) {
+            if (count === 0) {
                 this.dialogVConfirm = false;
                 store.state.home.snackbar = true;
                 store.state.home.snackbarText = "Received product quantity update successfully.";
@@ -746,11 +769,11 @@ export default {
                 let res = await ApiServices.purchaseOrderStatusUpdate(this.editedItem.id, statusData);
                 if (this.createBO === true) {
                     let rtn = await ApiServices.purchaseOrderCreateBO(this.editedItem.id);
-                    if(rtn.success === true) {
+                    if (rtn.success === true) {
                         store.state.home.snackbar = true;
                         store.state.home.snackbarText = "Back Order Created Successfully.";
                         store.state.home.snackbarColor = 'green';
-                    }else{
+                    } else {
                         store.state.home.snackbar = true;
                         store.state.home.snackbarText = rtn.message;
                         store.state.home.snackbarColor = 'red';
