@@ -33,6 +33,10 @@ class PurchaseOrder extends JsonResource
             $link = $image->path;
         }
         $purchaseOrderProducts = PurchaseOrderProduct::collection($this->purchaseOrderProducts);
+        $total = 0;
+        foreach ($this->purchaseOrderProducts as $product) {
+            $total = $total + $product->total;
+        }
         return [
             'id' => $this->id,
             'reference' => $this->reference,
@@ -48,7 +52,8 @@ class PurchaseOrder extends JsonResource
             'status' => $this->status,
             'description' => $this->description,
             'file_id' => $this->file_id,
-            'total' => $this->total,
+            'total' => $total,
+            'grand_total' => $this->total,
             'is_from_quotation' => $this->is_from_quotation,
             'department' => $department,
             'user' => $user,

@@ -54,10 +54,10 @@ class RegisterPaymentController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
-            $po = PurchaseOrder::findOrFail($request->purchase_order_id);
+            $po = new \App\Http\Resources\PurchaseOrder(PurchaseOrder::findOrFail($request->purchase_order_id));
             $values['total'] = $po->total;
             $values['grand_total'] = $po->grand_total;
-            $values['due_amount'] = $po->due_amount;
+            $values['due_amount'] = $po->grand_total;
             $values['created_by'] = auth()->user()->id;
             $regPayment = new RegisterPayment($values);
             $regPayment->save();
@@ -159,10 +159,11 @@ class RegisterPaymentController extends Controller
         $data['data'] = [];
         try {
             $po = PurchaseOrder::findOrFail($id);
-            if (count($po->registerPayments) > 0) {
-                $data['data'] = true;
+            if ($po->registerPayment != null) {
+                $data['data']['count'] = 1;
+                $data['data']['id'] = $po->registerPayment->id;
             } else {
-                $data['data'] = false;
+                $data['data']['count'] = 0;
             }
         } catch (\Exception $e) {
             $data['success'] = false;

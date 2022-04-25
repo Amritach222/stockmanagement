@@ -238,7 +238,7 @@
                                             Create Bill
                                         </CButton>
                                         <CButton size="sm" color="warning"
-                                                 :to="'/purchaseOrders/payment/'+editedItem.id"
+                                                 :to="'/purchaseOrders/payment/'+bill_id"
                                                  v-if="hasBill === true">
                                             <CIcon name="cil-check-circle"/>
                                             View Bill
@@ -442,6 +442,7 @@ export default {
         hasVariants: false,
         hasVendors: false,
         hasBill: false,
+        bill_id: null,
         editedItem: {
             id: null,
             dept_id: '',
@@ -688,10 +689,11 @@ export default {
             let res = await ApiServices.paymentCreate(data);
             if (res.success === true) {
                 this.hasBill = true;
+                this.bill_id = true;
                 store.state.home.snackbar = true;
                 store.state.home.snackbarText = res.message;
                 store.state.home.snackbarColor = 'green';
-                route.replace('/purchaseOrders/payment/' + this.editedItem.id);
+                route.replace('/purchaseOrders/payment/' + res.data.id);
             } else {
                 store.state.home.snackbar = true;
                 store.state.home.snackbarText = res.message;
@@ -702,9 +704,10 @@ export default {
         async checkIfBillCreated() {
             let res = await ApiServices.checkIfBillCreated(this.editedItem.id);
             if (res.success === true) {
-                console.log('got here')
-                if (res.data === true) {
+                if (res.data.count > 0) {
                     this.hasBill = true;
+                    this.bill_id = res.data.id;
+                    console.log(res)
                 }
             } else {
                 store.state.home.snackbar = true;

@@ -36,8 +36,8 @@ class PurchaseOrder extends Model
         return $this->hasMany(PurchaseOrderProduct::class, 'purchase_order_id');
     }
 
-    public function registerPayments()
+    public function registerPayment()
     {
-        return $this->hasMany(RegisterPayment::class, 'purchase_order_id');
+        return $this->hasOne(RegisterPayment::class, 'purchase_order_id');
     }
 }

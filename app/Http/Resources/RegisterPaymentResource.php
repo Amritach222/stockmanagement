@@ -14,6 +14,16 @@ class RegisterPaymentResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'reference_no' => $this->reference_no,
+            'purchase_order_id'=>$this->purchase_order_id,
+            'total'=>$this->total,
+            'discount'=>$this->discount,
+            'tax_id'=>$this->tax_id,
+            'shipping_cost'=>$this->shipping_cost,
+            'grand_total'=>$this->grand_total,
+            'due_amount'=>$this->due_amount,
+        ];
     }
 }

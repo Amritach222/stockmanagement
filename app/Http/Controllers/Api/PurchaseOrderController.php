@@ -230,6 +230,7 @@ class PurchaseOrderController extends Controller
         $data['data'] = [];
         try {
             $purchaseOrderProduct = PurchaseOrderProduct::findOrFail($id);
+            $purchaseOrder = PurchaseOrder::findOrFail($purchaseOrderProduct->purchase_order_id);
             $values = $request->all();
             $purchaseOrderProduct->update($values);
             $product = Product::findOrFail($purchaseOrderProduct->product_id);
@@ -250,6 +251,12 @@ class PurchaseOrderController extends Controller
                 }
                 $purchaseOrderProduct->update($po_values);
             }
+            $total = 0;
+            foreach ($purchaseOrder->purchaseOrderProducts as $product) {
+                $total = $total + $product->grand_total;
+            }
+            $purchaseOrder->total = $total;
+            $purchaseOrder->save();
             $data['message'] = 'Purchase Order Product Update successfully';
             $data['data'] = new PurchaseOrderProductResource($purchaseOrderProduct);
         } catch (\Exception $e) {
