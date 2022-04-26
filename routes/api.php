@@ -106,7 +106,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('users/{id}', [\App\Http\Controllers\Api\UserController::class, 'update']);
     Route::get('get-users/{role}', [\App\Http\Controllers\Api\UserController::class, 'getUsers']);
     Route::post('create-variants', [\App\Http\Controllers\Api\ProductController::class, 'createVariants']);
-    Route::get('logs', [\App\Http\Controllers\Api\logController::class, 'index']);
+    Route::get('logs', [\App\Http\Controllers\Api\LogController::class, 'index']);
     Route::get('get-role-permissions/{name}', [\App\Http\Controllers\Api\PermissionController::class, 'getRolePermissions']);
     Route::get('get-user-permissions/{username}', [\App\Http\Controllers\Api\PermissionController::class, 'getUserPermissions']);
     Route::get('get-vendor-permissions/{username}', [\App\Http\Controllers\Api\PermissionController::class, 'getVendorPermissions']);

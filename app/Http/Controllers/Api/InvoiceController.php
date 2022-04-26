@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
+use App\Helpers\ReferenceNoGenerator;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
@@ -60,6 +61,9 @@ class InvoiceController extends Controller
             $payment = RegisterPayment::findOrFail($request->payment_id);
             $payment->due_amount = $payment->due_amount - $invoice->amount;
             $payment->save();
+            $ref = ReferenceNoGenerator::referenceNo();
+            $invoice->reference_no = 'Inv-0' . $ref . '-' . $invoice->id;
+            $invoice->save();
             event(new ActivityLogEvent('Add', 'Invoice', $invoice->id));
             $data['message'] = "Invoice added successfully.";
             $data['data'] = new InvoiceResource($invoice);

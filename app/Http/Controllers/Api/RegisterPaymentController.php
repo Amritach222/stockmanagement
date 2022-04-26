@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
+use App\Helpers\ReferenceNoGenerator;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RegisterPaymentResource;
 use App\Models\PurchaseOrder;
@@ -60,6 +61,9 @@ class RegisterPaymentController extends Controller
             $values['due_amount'] = $po->grand_total;
             $values['created_by'] = auth()->user()->id;
             $regPayment = new RegisterPayment($values);
+            $regPayment->save();
+            $ref = ReferenceNoGenerator::referenceNo();
+            $regPayment->reference_no = 'Reg-0' . $ref . '-' . $regPayment->id;
             $regPayment->save();
             event(new ActivityLogEvent('Add', 'Payment Register', $regPayment->id));
             $data['message'] = "Payment register added successfully.";
