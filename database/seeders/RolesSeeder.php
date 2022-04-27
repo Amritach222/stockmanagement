@@ -131,7 +131,10 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeKeeper, 'items');
             $this->giveAutoAllPermissions($storeKeeper, 'productVariants');
             $this->giveAutoAllPermissions($storeKeeper, 'productVariantAttributes');
+            $this->giveAutoAllPermissions($storeKeeper, 'purchases');
+            $this->giveAutoAllPermissions($storeKeeper, 'purchaseProducts');
             $this->giveAutoAllPermissions($storeKeeper, 'quotations');
+            $this->giveAutoAllPermissions($storeKeeper, 'quotationProducts');
             $this->giveAutoAllPermissions($storeKeeper, 'unusedProducts');
             $this->giveAutoAllPermissions($storeKeeper, 'transfers');
             $this->giveAutoAllPermissions($storeKeeper, 'returnProducts');

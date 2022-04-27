@@ -18,8 +18,12 @@
                                             <h2>{{ settings.title }}</h2>
                                         </div><!--End Info-->
 
-                                    </div><!--End InvoiceTop-->
+                                        <div class="noprint ml-auto">
+                                            <CButton size="sm" color="success" @click="openInvoice">Register Payment
+                                            </CButton>
+                                        </div><!--End Info-->
 
+                                    </div><!--End InvoiceTop-->
 
                                     <div id="invoice-mid">
                                         <div class="info">
@@ -153,6 +157,62 @@
                                 </div><!--End Invoice-->
                             </div><!-- End Invoice Holder-->
                         </v-card>
+
+                        <v-dialog
+                            v-model="dialogRegPayment"
+                            max-width="850px"
+                            max-height="450px"
+                        >
+                            <v-card>
+                                <v-card-title>
+                                    Register Payment
+                                    <v-spacer></v-spacer>
+                                </v-card-title>
+
+                                <v-card-text>
+                                    <v-container>
+                                        <v-row>
+                                            <v-col>
+                                                <v-select
+                                                    v-model="invoice.payment_type"
+                                                    :label="$t('payment') + ' ' + $t('type')"
+                                                    :items="['Cash','Online Payment']"
+                                                    required
+                                                    outlined
+                                                ></v-select>
+                                                <v-text-field
+                                                    v-model="invoice.amount"
+                                                    :label="$t('amount')"
+                                                    type="number"
+                                                    outlined
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </v-card-text>
+
+                                <v-row class="m-4 d-flex justify-content-end">
+                                    <v-card-actions>
+                                        <v-btn
+                                            color="blue darken-1"
+                                            class="btn btn-danger card-btn"
+                                            text
+                                            @click="closeRegPayment"
+                                        >
+                                            {{ $t('button.cancel') }}
+                                        </v-btn>
+                                        <v-btn
+                                            color="blue darken-1"
+                                            class="btn btn-primary card-btn"
+                                            text
+                                            @click="createInvoice"
+                                        >
+                                            {{ $t('button.submit') }}
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-row>
+                            </v-card>
+                        </v-dialog>
                     </CCardGroup>
                 </CCol>
             </CRow>
@@ -168,11 +228,17 @@ export default {
     name: "PurchaseOrderBill",
     data: () => ({
         cdnURL: config.cdnURL,
+        dialogRegPayment: false,
+        invoice: {
+            amount: '',
+            payment_type: '',
+        },
         editedItem: {
-            id:'',
+            id: '',
         },
         poProducts: [],
         editPoProducts: [],
+        validated: false,
         payment: {
             id: '',
             reference_no: '',
@@ -226,6 +292,43 @@ export default {
                 }
             }
         },
+
+        async openInvoice() {
+            this.dialogRegPayment = true;
+            this.invoice.amount = this.payment.due_amount;
+        },
+
+        async closeRegPayment() {
+            this.dialogRegPayment = false;
+        },
+
+        async createInvoice() {
+            this.validate();
+            if(this.validated === true){
+                const data = new FormData();
+                data.append('amount', this.invoice.amount);
+                data.append('payment_type', this.invoice.payment_type);
+                data.append('payment_id', this.$route.params.id);
+                let res = await ApiServices.invoiceCreate();
+                if (res.success === true) {
+                    this.payment = res.data;
+                    this.dialogRegPayment=false;
+                }
+            }
+        },
+
+        async validate() {
+            if (this.invoice.amount > 0) {
+                this.validated = true;
+            } else {
+                this.validated = false;
+            }
+            if (this.invoice.payment_type !== null) {
+                this.validated = true;
+            } else {
+                this.validated = false;
+            }
+        }
     }
 }
 </script>
@@ -336,5 +439,14 @@ td {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
+
+    .noprint {
+        visibility: hidden;
+    }
+}
+
+.card-btn {
+    color: #fff !important;
+    margin-left: 3px !important;
 }
 </style>

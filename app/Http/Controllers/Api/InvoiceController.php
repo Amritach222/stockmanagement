@@ -6,6 +6,7 @@ use App\Events\ActivityLogEvent;
 use App\Helpers\ReferenceNoGenerator;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\InvoiceResource;
+use App\Http\Resources\RegisterPaymentResource;
 use App\Models\Invoice;
 use App\Models\RegisterPayment;
 use Illuminate\Http\Request;
@@ -66,7 +67,7 @@ class InvoiceController extends Controller
             $invoice->save();
             event(new ActivityLogEvent('Add', 'Invoice', $invoice->id));
             $data['message'] = "Invoice added successfully.";
-            $data['data'] = new InvoiceResource($invoice);
+            $data['data'] = new RegisterPaymentResource($payment);
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }

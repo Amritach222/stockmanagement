@@ -651,6 +651,7 @@ export default {
             var unmatchCount = 0;
             for (var i = 0; i < this.editPoProducts.length; i++) {
                 if (this.editPoProducts[i].quantity !== this.editPoProducts[i].received_quantity) {
+                    console.log(this.editPoProducts[i].received_quantity)
                     unmatchCount = unmatchCount + 1;
                 }
             }

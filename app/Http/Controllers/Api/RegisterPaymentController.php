@@ -55,10 +55,14 @@ class RegisterPaymentController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
-            $po = new \App\Http\Resources\PurchaseOrder(PurchaseOrder::findOrFail($request->purchase_order_id));
-            $values['total'] = $po->total;
-            $values['grand_total'] = $po->grand_total;
-            $values['due_amount'] = $po->grand_total;
+            $po = PurchaseOrder::findOrFail($request->purchase_order_id);
+            $total=0;
+            foreach ($po->purchaseOrderProducts as $product){
+                $total = $total + $product->total;
+            }
+            $values['total'] = $total;
+            $values['grand_total'] = $po->total;
+            $values['due_amount'] = $po->total;
             $values['created_by'] = auth()->user()->id;
             $regPayment = new RegisterPayment($values);
             $regPayment->save();
