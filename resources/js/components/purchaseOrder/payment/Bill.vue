@@ -309,7 +309,7 @@ export default {
                 data.append('amount', this.invoice.amount);
                 data.append('payment_type', this.invoice.payment_type);
                 data.append('payment_id', this.$route.params.id);
-                let res = await ApiServices.invoiceCreate();
+                let res = await ApiServices.invoiceCreate(data);
                 if (res.success === true) {
                     this.payment = res.data;
                     this.dialogRegPayment=false;
