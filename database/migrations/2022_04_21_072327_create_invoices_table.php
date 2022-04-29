@@ -20,7 +20,9 @@ class CreateInvoicesTable extends Migration
             $table->foreign('payment_id')->references('id')->on('register_payments');
             $table->integer('amount')->default(0);
             $table->unsignedBigInteger('issued_by')->nullable();
+            $table->unsignedBigInteger('paid_to')->nullable();
             $table->string('payment_type')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

@@ -21,6 +21,8 @@
                                         <div class="noprint ml-auto">
                                             <CButton size="sm" color="success" @click="openInvoice">Register Payment
                                             </CButton>
+                                            <CButton size="sm" color="warning" :to="'/purchaseOrders/payment/invoices/'+editedItem.id">View Invoices
+                                            </CButton>
                                         </div><!--End Info-->
 
                                     </div><!--End InvoiceTop-->
@@ -186,6 +188,11 @@
                                                     type="number"
                                                     outlined
                                                 ></v-text-field>
+                                                <v-text-field
+                                                    v-model="invoice.description"
+                                                    :label="$t('memo')"
+                                                    outlined
+                                                ></v-text-field>
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -223,6 +230,7 @@
 import config from "../../../config";
 import ApiServices from "../../../services/ApiServices";
 import i18n from "../../../i18n";
+import store from "../../../store";
 
 export default {
     name: "PurchaseOrderBill",
@@ -232,11 +240,13 @@ export default {
         invoice: {
             amount: '',
             payment_type: '',
+            description: '',
         },
         editedItem: {
             id: '',
         },
         poProducts: [],
+        invoices:[],
         editPoProducts: [],
         validated: false,
         payment: {
@@ -271,6 +281,7 @@ export default {
             let res = await ApiServices.paymentShow(this.$route.params.id);
             if (res.success === true) {
                 this.payment = res.data;
+                this.invoices = res.data.invoices;
             }
             let rtn = await ApiServices.purchaseOrderShow(res.data.purchase_order_id);
             if (rtn.success === true) {
@@ -296,23 +307,34 @@ export default {
         async openInvoice() {
             this.dialogRegPayment = true;
             this.invoice.amount = this.payment.due_amount;
+            this.invoice.payment_type = 'Cash';
         },
 
         async closeRegPayment() {
             this.dialogRegPayment = false;
+            this.clearData();
         },
 
         async createInvoice() {
             this.validate();
-            if(this.validated === true){
+            if (this.validated === true) {
                 const data = new FormData();
                 data.append('amount', this.invoice.amount);
                 data.append('payment_type', this.invoice.payment_type);
+                data.append('description', this.invoice.description);
                 data.append('payment_id', this.$route.params.id);
                 let res = await ApiServices.invoiceCreate(data);
                 if (res.success === true) {
                     this.payment = res.data;
-                    this.dialogRegPayment=false;
+                    this.dialogRegPayment = false;
+                    this.clearData();
+                    store.state.home.snackbar = true;
+                    store.state.home.snackbarText = res.message;
+                    store.state.home.snackbarColor = 'green';
+                }else{
+                    store.state.home.snackbar = true;
+                    store.state.home.snackbarText = res.message;
+                    store.state.home.snackbarColor = 'red';
                 }
             }
         },
@@ -328,7 +350,13 @@ export default {
             } else {
                 this.validated = false;
             }
-        }
+        },
+
+        async clearData() {
+            this.invoice.payment_type = '';
+            this.invoice.amount = '';
+            this.invoice.description = '';
+        },
     }
 }
 </script>

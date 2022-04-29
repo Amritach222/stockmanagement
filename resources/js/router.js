@@ -152,6 +152,7 @@ import PurchaseOrderCreate from './components/purchaseOrder/Create'
 import PurchaseOrderEdit from './components/purchaseOrder/Edit'
 import PurchaseOrderShow from './components/purchaseOrder/Show'
 import PurchaseOrderBill from './components/purchaseOrder/payment/Bill'
+import PurchaseOrderInvoice from './components/purchaseOrder/payment/Invoices'
 
 import VendorPurchaseOrderIndex from './components/Vendor/purchaseOrder/Index'
 import VendorPurchaseOrderEdit from './components/Vendor/purchaseOrder/Edit'
@@ -1470,6 +1471,15 @@ export default new Router({
             path: '/purchaseOrders/payment/:id',
             name: 'Purchase Order Bill',
             component: PurchaseOrderBill,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchaseOrders/payment/invoices/:id',
+            name: 'Purchase Order Invoices',
+            component: PurchaseOrderInvoice,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
