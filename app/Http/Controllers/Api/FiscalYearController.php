@@ -43,6 +43,9 @@ class FiscalYearController extends Controller
         try {
             $data['success'] = true;
             $values = $request->all();
+            $from = date('y',strtotime($request->from));
+            $to = date('y',strtotime($request->to));
+            $values['name'] = $from . '/' . $to;
             $fiscalYear = new FiscalYear($values);
             $fiscalYear->save();
             event(new ActivityLogEvent('Add', 'Fiscal Year', $fiscalYear->id));
@@ -121,11 +124,11 @@ class FiscalYearController extends Controller
                 $year->value = $year->id;
                 $year->text = $year->from . ' || ' . $year->to;
             }
-            $data['data']=$years;
-        }catch (\Exception $e){
-            $data['success']=false;
-            $data['message']='Error occurred.';
-            $data['data']=$e;
+            $data['data'] = $years;
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
         }
         return $data;
     }
