@@ -20,4 +20,14 @@ class Unit extends Model
     {
         return $this->belongsTo(UnitCategory::class, 'category_id');
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'unit_id');
+    }
+
+    public function distributeProducts()
+    {
+        return $this->hasMany(Product::class, 'distribute_unit_id');
+    }
 }

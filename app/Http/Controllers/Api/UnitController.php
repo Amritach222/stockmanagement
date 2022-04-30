@@ -158,9 +158,14 @@ class UnitController extends Controller
         try {
             $data['success'] = true;
             $unit = Unit::findOrFail($id);
-            $unit->delete();
-            event(new ActivityLogEvent('Delete', 'Unit', $id));
-            $data['message'] = "Deleted successfully.";
+            if ((count($unit->products) == 0) && (count($unit->distributeProducts) == 0)) {
+                $unit->delete();
+                event(new ActivityLogEvent('Delete', 'Unit', $id));
+                $data['message'] = "Deleted successfully.";
+            } else {
+                $data['success'] = false;
+                $data['message'] = 'This unit is used in product. You cannot delete this product.';
+            }
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
         }
