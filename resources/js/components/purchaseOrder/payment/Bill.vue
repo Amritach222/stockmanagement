@@ -19,6 +19,8 @@
                                         </div><!--End Info-->
 
                                         <div class="noprint ml-auto">
+                                            <CButton size="sm" color="primary" :to="'/purchaseOrders/payment/edit/'+editedItem.id">Edit
+                                            </CButton>
                                             <CButton size="sm" color="success" @click="openInvoice">Register Payment
                                             </CButton>
                                             <CButton size="sm" color="warning" :to="'/purchaseOrders/payment/invoices/'+editedItem.id">View Invoices
@@ -42,7 +44,7 @@
                                             <h2>BILL TO</h2>
                                             <p>{{ vendor.name }}</p>
                                             <p>{{ vendor.company_name }}</p>
-                                            <p>{{ vendor.address }}</p>
+                                            <p>{{ getCityName(vendor) }}</p>
                                             <p>{{ vendor.mobile }}</p>
                                         </div>
 
@@ -277,6 +279,9 @@ export default {
         // this.loadQuoProducts();
     },
     methods: {
+        getCityName(item) {
+            if (item.city !== null) return JSON.parse(item.city).name;
+        },
         async loadData() {
             let res = await ApiServices.paymentShow(this.$route.params.id);
             if (res.success === true) {
