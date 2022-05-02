@@ -29,7 +29,7 @@ class PurchaseOrderController extends Controller
 {
     public function __construct()
     {
-        parent::generateAllMiddlewareByPermission('purchaseOrders');
+        parent::generateAllMiddlewareByPermission('purchases');
     }
 
     public function index()

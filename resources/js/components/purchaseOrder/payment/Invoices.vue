@@ -61,7 +61,7 @@
                                     <tbody>
                                     <tr class="item">
                                         <td class="desc">{{ invoiceData.creation_date }}</td>
-                                        <td class="id num">01/24/2022</td>
+                                        <td class="id num">{{ payment.due_date }}</td>
                                         <td class="qty">S000</td>
                                     </tr>
                                     </tbody>
