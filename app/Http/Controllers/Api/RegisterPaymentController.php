@@ -56,8 +56,8 @@ class RegisterPaymentController extends Controller
             $data['success'] = true;
             $values = $request->all();
             $po = PurchaseOrder::findOrFail($request->purchase_order_id);
-            $total=0;
-            foreach ($po->purchaseOrderProducts as $product){
+            $total = 0;
+            foreach ($po->purchaseOrderProducts as $product) {
                 $total = $total + $product->total;
             }
             $values['total'] = $total;
@@ -93,7 +93,9 @@ class RegisterPaymentController extends Controller
             $data['success'] = true;
             $data['data'] = new RegisterPaymentResource(RegisterPayment::findOrFail($id));
         } catch (\Exception $e) {
-            return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
         }
         return $data;
     }

@@ -708,7 +708,6 @@ export default {
                 if (res.data.count > 0) {
                     this.hasBill = true;
                     this.bill_id = res.data.id;
-                    console.log(res)
                 }
             } else {
                 store.state.home.snackbar = true;

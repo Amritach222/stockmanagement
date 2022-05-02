@@ -19,11 +19,11 @@
                                         </div><!--End Info-->
 
                                         <div class="noprint ml-auto">
-                                            <CButton size="sm" color="primary" :to="'/purchaseOrders/payment/edit/'+editedItem.id">Edit
+                                            <CButton size="sm" color="primary" :to="'/purchaseOrders/payment/edit/'+payment.id">Edit
                                             </CButton>
                                             <CButton size="sm" color="success" @click="openInvoice">Register Payment
                                             </CButton>
-                                            <CButton size="sm" color="warning" :to="'/purchaseOrders/payment/invoices/'+editedItem.id">View Invoices
+                                            <CButton size="sm" color="warning" :to="'/purchaseOrders/payment/invoices/'+payment.id">View Invoices
                                             </CButton>
                                         </div><!--End Info-->
 

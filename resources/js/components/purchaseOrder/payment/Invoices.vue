@@ -203,15 +203,15 @@ export default {
                 this.payment = res.data;
                 this.invoices = res.data.invoices;
                 let due = await this.getInvoiceDueAmount();
-            }
-            let rtn = await ApiServices.purchaseOrderShow(res.data.purchase_order_id);
-            if (rtn.success === true) {
-                this.editedItem = rtn.data;
-                this.poProducts = rtn.data.purchase_order_products;
-            }
-            let ven = await ApiServices.vendorShow(rtn.data.vendor_id);
-            if (ven.success === true) {
-                this.vendor = ven.data;
+                let rtn = await ApiServices.purchaseOrderShow(res.data.purchase_order_id);
+                if (rtn.success === true) {
+                    this.editedItem = rtn.data;
+                    this.poProducts = rtn.data.purchase_order_products;
+                    let ven = await ApiServices.vendorShow(rtn.data.vendor_id);
+                    if (ven.success === true) {
+                        this.vendor = ven.data;
+                    }
+                }
             }
         },
 

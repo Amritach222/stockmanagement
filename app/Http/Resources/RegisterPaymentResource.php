@@ -14,13 +14,13 @@ class RegisterPaymentResource extends JsonResource
      */
     public function toArray($request)
     {
-        $invoices = $this->invoices;
+//        $invoices = $this->invoices;
 //        $due_amount = $this->grand_total;
 //        foreach($invoices as $invoice){
 //            $invoice->due_amount = $due_amount - $invoice->amount;
 //            $due_amount = $invoice->due_amount;
 //        }
-        $invoices = InvoiceResource::collection($invoices);
+        $invoices = InvoiceResource::collection($this->invoices);
         return [
             'id' => $this->id,
             'reference_no' => $this->reference_no,
