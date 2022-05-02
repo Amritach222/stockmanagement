@@ -49,6 +49,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($director, 'returnProducts');
             $this->giveAutoAllPermissions($director, 'purchases');
             $this->giveAutoAllPermissions($director, 'purchaseProducts');
+            $this->giveAutoAllPermissions($director, 'purchaseOrders');
+            $this->giveAutoAllPermissions($director, 'purchaseOrderProducts');
             $this->giveAutoAllPermissions($director, 'purchaseProductsApprovalAdmin');
             $this->giveAutoAllPermissions($director, 'purchaseProductsApprovalDepartmentHead');
             $this->giveAutoAllPermissions($director, 'quotations');
@@ -70,6 +72,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($financeDirector, 'freezeBudgets');
             $this->giveAutoAllPermissions($financeDirector, 'expenseCategories');
             $this->giveAutoAllPermissions($financeDirector, 'expenses');
+            $this->giveAutoAllPermissions($director, 'purchaseOrders');
+            $this->giveAutoAllPermissions($director, 'purchaseOrderProducts');
             $financeDirector->givePermissionTo('budgetRequests.edit');
             $financeDirector->givePermissionTo('budgetRequests');
             $financeDirector->givePermissionTo('settings');
@@ -84,6 +88,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($departmentHead, 'returnProducts');
             $this->giveAutoAllPermissions($departmentHead, 'purchases');
             $this->giveAutoAllPermissions($departmentHead, 'purchaseProducts');
+            $this->giveAutoAllPermissions($director, 'purchaseOrders');
+            $this->giveAutoAllPermissions($director, 'purchaseOrderProducts');
             $this->giveAutoAllPermissions($departmentHead, 'quotations');
             $this->giveAutoAllPermissions($departmentHead, 'quotationProducts');
             $this->giveAutoAllPermissions($departmentHead, 'expenses');
@@ -111,6 +117,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($staff, 'purchaseHistory');
             $this->giveAutoAllPermissions($staff, 'purchases');
             $this->giveAutoAllPermissions($staff, 'purchaseProducts');
+            $this->giveAutoAllPermissions($director, 'purchaseOrders');
+            $this->giveAutoAllPermissions($director, 'purchaseOrderProducts');
             $this->giveAutoAllPermissions($staff, 'productVariants');
             $this->giveAutoAllPermissions($staff, 'productVariantAttributes');
             $this->giveAutoAllPermissions($staff, 'quotations');
@@ -133,6 +141,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeKeeper, 'productVariantAttributes');
             $this->giveAutoAllPermissions($storeKeeper, 'purchases');
             $this->giveAutoAllPermissions($storeKeeper, 'purchaseProducts');
+            $this->giveAutoAllPermissions($director, 'purchaseOrders');
+            $this->giveAutoAllPermissions($director, 'purchaseOrderProducts');
             $this->giveAutoAllPermissions($storeKeeper, 'quotations');
             $this->giveAutoAllPermissions($storeKeeper, 'quotationProducts');
             $this->giveAutoAllPermissions($storeKeeper, 'unusedProducts');
@@ -157,6 +167,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeManager, 'quotationProducts');
             $this->giveAutoAllPermissions($storeManager, 'purchases');
             $this->giveAutoAllPermissions($storeManager, 'purchaseProducts');
+            $this->giveAutoAllPermissions($director, 'purchaseOrders');
+            $this->giveAutoAllPermissions($director, 'purchaseOrderProducts');
             $this->giveAutoAllPermissions($storeManager, 'consumes');
             $storeManager->givePermissionTo('settings');
             $this->giveAutoAllPermissions($storeManager, 'purchaseProductsApprovalAdmin');
