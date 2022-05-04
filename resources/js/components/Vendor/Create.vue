@@ -16,7 +16,7 @@
                             </CCardHeader>
                             <CCardBody>
                                 <CForm>
-                                    <v-form>
+                                    <v-form ref="form">
                                         <v-row>
                                             <v-col md="9">
                                                 <v-row>
@@ -446,6 +446,22 @@ export default {
         this.countries = countryList;
     },
     methods: {
+        async searchPan(pan) {
+            if (pan === '' || pan === undefined) {
+                this.wright = false;
+            } else {
+                this.load = true;
+                let res = await ApiServices.getPanDetails(pan);
+                if (res.data.data === 0) {
+                    this.wright = false;
+                } else {
+                    this.wright = true;
+                    this.editedItem.company_name = res.data.data.panDetails[0].trade_Name_Eng.toUpperCase();
+                    this.editedItem.landline = res.data.data.panDetails[0].telephone;
+                    this.editedItem.mobile = res.data.data.panDetails[0].mobile;
+                }
+            }
+        },
         async loadUsers() {
             let rtn = await ApiServices.userIndex();
             if (rtn.success === true) {
@@ -479,14 +495,54 @@ export default {
             if (name === 'vat_no') {
                 this.error.vat_no = '';
             }
-            if (name === 'company_name') {
-                this.error.company_name = '';
-            }
-            if (name === 'email') {
-                this.error.email = '';
-            }
-            if (name === 'landline') {
-                this.error.landline = '';
+            this.load = false;
+        },
+        getCityName(item) {
+            if (item.city !== null) return JSON.parse(item.city).name;
+        },
+        // async getStates(country) {
+        //     this.state = stateList.filter(function (value, index) {
+        //         return value.country_id === country.id;
+        //     })
+        // },
+        // async getCities(state) {
+        //     this.city = cityList.filter(function (value, index) {
+        //         return value.state_id === state.id
+        //     })
+        // },
+        // async loadCategories() {
+        //     let res = await ApiServices.categoryIndex();
+        //     if (res.success === true) {
+        //         this.tableLoad = false;
+        //         this.categories = res.data;
+        //     }
+        // },
+        async save() {
+            this.$refs.form.validate();
+            this.progressL = true;
+            const data = new FormData();
+            data.append('name', this.editedItem.name);
+            data.append('company_name', this.editedItem.company_name);
+            data.append('vat_no', this.editedItem.vat_no);
+            data.append('email', this.editedItem.email);
+            data.append('landline', this.editedItem.landline);
+            data.append('mobile', this.editedItem.mobile);
+            data.append('country', JSON.stringify(this.editedItem.country));
+            data.append('state', JSON.stringify(this.editedItem.state));
+            data.append('city', JSON.stringify(this.editedItem.city));
+            data.append('postal_code', this.editedItem.postal_code);
+            data.append('category_id', this.editedItem.category_id);
+            data.append('is_active', this.editedItem.is_active);
+            if(this.wright){
+                let res = await ApiServices.vendorCreate(data);
+                if (res.success === true) {
+                    this.$refs.form.reset();
+                    route.replace('/vendors');
+                }
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Pan/Vat Number is not valid";
+                store.state.home.snackbarColor = 'danger';
             }
             if (name === 'mobile') {
                 this.error.mobile = '';
@@ -608,8 +664,10 @@ export default {
                 if (this.is_active !== null && this.is_active !== '') {
                     data.append('is_active', this.is_active);
                 }
-                if (typeof this.image.name == 'string') {
-                    data.append('image', this.image);
+                if (this.image !== []) {
+                    if (typeof this.image.name == 'string') {
+                        data.append('image', this.image);
+                    }
                 }
                 let res = await ApiServices.vendorCreate(data);
                 this.createProgress = false;
@@ -620,29 +678,40 @@ export default {
         },
         validateData() {
             this.$refs.form.validate();
-            if (this.editedItem.name === null) {
+            if (this.name === null) {
                 this.validated = false
-            }if (this.editedItem.company_name === null) {
+            }
+            if (this.company_name === null) {
                 this.validated = false
-            }if (this.editedItem.vat_no === null) {
+            }
+            if (this.vat_no === null) {
                 this.validated = false
-            }if (this.editedItem.email === null) {
+            }
+            if (this.email === null) {
                 this.validated = false
-            }if (this.editedItem.landline === null) {
+            }
+            if (this.landline === null) {
                 this.validated = false
-            }if (this.editedItem.mobile === null) {
+            }
+            if (this.mobile === null) {
                 this.validated = false
-            }if (this.editedItem.country === null) {
+            }
+            if (this.country === null) {
                 this.validated = false
-            }if (this.editedItem.state === null) {
+            }
+            if (this.state === null) {
                 this.validated = false
-            }if (this.editedItem.city === null) {
+            }
+            if (this.city === null) {
                 this.validated = false
-            }if (this.editedItem.postal_code === null) {
+            }
+            if (this.postal_code === null) {
                 this.validated = false
-            }if (this.editedItem.category_id === null) {
+            }
+            if (this.category_id === null) {
                 this.validated = false
-            }if (this.editedItem.is_active === null) {
+            }
+            if (this.is_active === null) {
                 this.validated = false
             } else {
                 this.validated = true

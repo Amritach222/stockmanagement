@@ -33,10 +33,40 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
-
+    Route::get('get-all-notifications', [\App\Http\Controllers\Api\NotificationController::class, 'getAllNotifications']);
+    Route::get('get-notifications/{type}', [\App\Http\Controllers\Api\NotificationController::class, 'getNotifications']);
+    Route::get('get-unread-count/{type}', [\App\Http\Controllers\Api\NotificationController::class, 'unreadCount']);
+    Route::get('redirect-notification/{id}', [\App\Http\Controllers\Api\NotificationController::class, 'redirect']);
     Route::group(['prefix' => '/vendor'], function () {
+        Route::get('get-vendor-data', [\App\Http\Controllers\Api\VendorPortalController::class, 'getVendorData']);
+        Route::get('quotation-list', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationList']);
+        Route::get('quotation/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationShow']);
+        Route::post('quotation/update/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationUpdate']);
+        Route::post('quotation-product-status/update/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationProductStatusUpdate']);
+        Route::post('quotation-status/update/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationStatusUpdate']);
+        Route::post('quotation-product/update/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationProductUpdate']);
         Route::get('product-list', [\App\Http\Controllers\Api\VendorPortalController::class, 'productList']);
         Route::get('all-products', [\App\Http\Controllers\Api\VendorPortalController::class, 'allProducts']);
+        Route::get('pending-quotation-count', [\App\Http\Controllers\Api\VendorPortalController::class, 'getPendingQuotationCount']);
+        Route::get('purchase-order-list', [\App\Http\Controllers\Api\VendorPortalController::class, 'getPurchaseOrderList']);
+        Route::get('purchase-order/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'purchaseOrderShow']);
+        Route::post('purchase-order/edit/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'purchaseOrderUpdate']);
+        Route::get('purchase-order/payment/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'paymentShow']);
+        Route::post('purchase-order/payment-status-update/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'paymentStatusUpdate']);
+    });
+
+    Route::group(['prefix' => '/filter'], function () {
+        Route::post('quotations', [\App\Http\Controllers\Api\FilterController::class, 'quotation']);
+        Route::post('purchases', [\App\Http\Controllers\Api\FilterController::class, 'purchase']);
+        Route::post('purchase-orders', [\App\Http\Controllers\Api\FilterController::class, 'purchaseOrder']);
+    });
+
+    Route::group(['prefix' => '/payment'], function () {
+        Route::apiResource('registerPayments', \App\Http\Controllers\Api\RegisterPaymentController::class);
+        Route::post('registerPayments/{id}', [\App\Http\Controllers\Api\RegisterPaymentController::class, 'update']);
+        Route::get('check-if-bill-created/{id}', [\App\Http\Controllers\Api\RegisterPaymentController::class, 'checkIfBillCreated']);
+        Route::apiResource('invoices', \App\Http\Controllers\Api\InvoiceController::class);
+        Route::post('invoices/{id}', [\App\Http\Controllers\Api\InvoiceController::class, 'update']);
     });
 
     Route::group(['prefix' => '/list'], function () {
@@ -71,6 +101,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('unit-categories', [\App\Http\Controllers\Api\ListController::class, 'unitCategoryList']);
         Route::get('users', [\App\Http\Controllers\Api\ListController::class, 'userList']);
         Route::get('vendors', [\App\Http\Controllers\Api\ListController::class, 'vendorList']);
+        Route::get('purchase-orders', [\App\Http\Controllers\Api\ListController::class, 'purchaseOrderList']);
     });
 
     Route::apiResource('roles', \App\Http\Controllers\Api\RoleController::class);
@@ -78,7 +109,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('users/{id}', [\App\Http\Controllers\Api\UserController::class, 'update']);
     Route::get('get-users/{role}', [\App\Http\Controllers\Api\UserController::class, 'getUsers']);
     Route::post('create-variants', [\App\Http\Controllers\Api\ProductController::class, 'createVariants']);
-    Route::get('logs', [\App\Http\Controllers\Api\logController::class, 'index']);
+    Route::get('logs', [\App\Http\Controllers\Api\LogController::class, 'index']);
     Route::get('get-role-permissions/{name}', [\App\Http\Controllers\Api\PermissionController::class, 'getRolePermissions']);
     Route::get('get-user-permissions/{username}', [\App\Http\Controllers\Api\PermissionController::class, 'getUserPermissions']);
     Route::get('get-vendor-permissions/{username}', [\App\Http\Controllers\Api\PermissionController::class, 'getVendorPermissions']);
@@ -171,10 +202,14 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['prefix' => '/quotation'], function () {
         Route::apiResource('quotations', \App\Http\Controllers\Api\QuotationController::class);
         Route::post('quotations/{id}', [\App\Http\Controllers\Api\QuotationController::class, 'update']);
+        Route::get('quotations/vendor/{id}/{vendor}', [\App\Http\Controllers\Api\VendorQuotationController::class, 'vendorQuotation']);
+        Route::get('quotations/list/approved', [\App\Http\Controllers\Api\QuotationController::class, 'approvedList']);
         Route::apiResource('quotationProducts', \App\Http\Controllers\Api\QuotationProductController::class);
         Route::post('quotationProducts/{id}', [\App\Http\Controllers\Api\QuotationProductController::class, 'update']);
         Route::apiResource('vendorQuotations', \App\Http\Controllers\Api\VendorQuotationController::class);
         Route::post('vendorQuotations/{id}', [\App\Http\Controllers\Api\VendorQuotationController::class, 'update']);
+        Route::apiResource('vendorQuotationProducts', \App\Http\Controllers\Api\VendorQuotationProductController::class);
+        Route::post('vendorQuotationProducts/{id}', [\App\Http\Controllers\Api\VendorQuotationProductController::class, 'update']);
     });
 
     Route::group(['prefix' => '/purchase', 'middleware' => 'auth:api'], function () {
@@ -183,9 +218,25 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::apiResource('purchaseProducts', \App\Http\Controllers\Api\PurchaseProductController::class);
         Route::post('purchaseProducts/{id}', [\App\Http\Controllers\Api\PurchaseProductController::class, 'update']);
         Route::get('user-history', [\App\Http\Controllers\Api\PurchaseController::class, 'userPurchaseHistory']);
-        Route::get('purchase-list', [\App\Http\Controllers\Api\PurchaseController::class, 'adminPurchaseLists']);
+        Route::get('ad-purchase-list', [\App\Http\Controllers\Api\PurchaseController::class, 'adminPurchaseLists']);
         Route::get('dh-purchase-list', [\App\Http\Controllers\Api\PurchaseController::class, 'departmentHeadPurchaseLists']);
         Route::post('purchaseProducts/change-status/{id}', [\App\Http\Controllers\Api\PurchaseController::class, 'changeStatusOfPurchaseListsProducts']);
+        Route::post('purchaseProducts/ad-change-status/{id}', [\App\Http\Controllers\Api\PurchaseProductController::class, 'changeStatusPr']);
+    });
+
+    Route::group(['prefix' => '/purchaseOrder', 'middleware' => 'auth:api'], function () {
+        Route::apiResource('purchaseOrders', \App\Http\Controllers\Api\PurchaseOrderController::class);
+        Route::post('purchaseOrders/{id}', [\App\Http\Controllers\Api\PurchaseOrderController::class, 'update']);
+        Route::post('purchaseOrderProducts/{id}', [\App\Http\Controllers\Api\PurchaseOrderController::class, 'productUpdate']);
+        Route::post('status-update/{id}', [\App\Http\Controllers\Api\PurchaseOrderController::class, 'statusUpdate']);
+        Route::post('create-back-order/{id}', [\App\Http\Controllers\Api\PurchaseOrderController::class, 'createBackOrder']);
+//        Route::apiResource('purchaseOrderProducts', \App\Http\Controllers\Api\PurchaseOrderProductController::class);
+//        Route::post('purchaseProducts/{id}', [\App\Http\Controllers\Api\PurchaseProductController::class, 'update']);
+//        Route::get('user-history', [\App\Http\Controllers\Api\PurchaseController::class, 'userPurchaseHistory']);
+//        Route::get('ad-purchase-list', [\App\Http\Controllers\Api\PurchaseController::class, 'adminPurchaseLists']);
+//        Route::get('dh-purchase-list', [\App\Http\Controllers\Api\PurchaseController::class, 'departmentHeadPurchaseLists']);
+//        Route::post('purchaseProducts/change-status/{id}', [\App\Http\Controllers\Api\PurchaseController::class, 'changeStatusOfPurchaseListsProducts']);
+//        Route::post('purchaseProducts/ad-change-status/{id}', [\App\Http\Controllers\Api\PurchaseProductController::class, 'changeStatusPr']);
     });
 
     Route::apiResource('transfers', \App\Http\Controllers\Api\TransferController::class);
@@ -201,6 +252,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('vendorProducts', \App\Http\Controllers\Api\VendorProductController::class);
     Route::get('vendorProductIds/{type}/{id}', [\App\Http\Controllers\Api\VendorProductController::class, 'index']);
     Route::post('vendorProducts/{id}', [\App\Http\Controllers\Api\VendorProductController::class, 'update']);
+    Route::post('vendorProduct/status-update/{id}', [\App\Http\Controllers\Api\VendorProductController::class, 'statusUpdate']);
 
     Route::group(['prefix' => '/budget'], function () {
         Route::apiResource('budgets', \App\Http\Controllers\Api\BudgetController::class);
@@ -222,6 +274,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('budgetExtends/{id}', [\App\Http\Controllers\Api\BudgetExtendController::class, 'update']);
         Route::apiResource('freezeBudgets', \App\Http\Controllers\Api\FreezeBudgetController::class);
         Route::post('freezeBudgets/{id}', [\App\Http\Controllers\Api\FreezeBudgetController::class, 'update']);
+    });
+    Route::group(['prefix' => '/notification'], function () {
+        Route::post('register/session', [\App\Http\Controllers\Api\NotificationController::class, 'registerLiveNotificationDevice']);
     });
 });
 

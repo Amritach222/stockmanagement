@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
 use App\Helpers\DateConverter;
+use App\Helpers\ReferenceNoGenerator;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\QuotationRequest;
 use App\Http\Resources\Quotation as QuotationResource;
@@ -52,25 +53,7 @@ class QuotationController extends Controller
             $data['success'] = true;
             $values = $request->all();
             $values['user_id'] = auth()->user()->id;
-            $currentDate = Carbon::now();
-            $convertDate = new DateConverter();
-            $nepDate = $convertDate->eng_to_nep($currentDate->format('Y'), $currentDate->format('m'), $currentDate->format('d'));
-            $setting = Setting::findOrFail(1);
-            if ($setting->fiscal_year_id) {
-                $fiscalYear = $setting->fiscalYear;
-                $fromDate = $fiscalYear->from;
-                $toDate = $fiscalYear->to;
-                $fromNepDate = $convertDate->eng_to_nep(Carbon::parse($fromDate)->format('Y'), Carbon::parse($fromDate)->format('m'), Carbon::parse($fromDate)->format('d'));
-                $toNepDate = $convertDate->eng_to_nep(Carbon::parse($toDate)->format('Y'), Carbon::parse($toDate)->format('m'), Carbon::parse($toDate)->format('d'));
-                $year = $fromNepDate['year'] % 1000 . '/' . $toNepDate['year'] % 100;
-            } else {
-                $year = $nepDate['year'] % 1000;
-            }
-            if ($nepDate['month'] < 10) {
-                $month = '-0' . $nepDate['month'];
-            } else {
-                $month = '-' . $nepDate['month'];
-            }
+            $values['status'] = 'Pending';
             if ($request->hasFile('file')) {
                 $fileHelper = new SamundraFileHelper();
                 $file = $fileHelper->saveFile($request->file, 'quotation');
@@ -88,7 +71,8 @@ class QuotationController extends Controller
             }
             $quotation = new Quotation($values);
             $quotation->save();
-            $quotation->reference_no = 'QUO-0'.$year . $month . '-' . $quotation->id;
+            $ref = ReferenceNoGenerator::referenceNo();
+            $quotation->reference_no = 'QUO-0' . $ref . '-' . $quotation->id;
             $quotation->save();
             event(new ActivityLogEvent('Add', 'Quotation', $quotation->id));
             $data['message'] = "Quotation added successfully.";
@@ -177,7 +161,20 @@ class QuotationController extends Controller
             $data['success'] = true;
             $quotation = Quotation::findOrFail($id);
             foreach ($quotation->quotationProducts as $product) {
+                foreach ($product->vendorQuotationProducts as $vendorQuotationProduct) {
+                    $vendorQuotationProduct->delete();
+                }
                 $product->delete();
+            }
+            foreach ($quotation->vendorQuotations as $vendorQuotation) {
+                $fileHelper1 = new SamundraFileHelper();
+                if ($quotation->file_id !== null) {
+                    $file = File::where('id', $vendorQuotation->file_id)->first();
+                    if ($file !== null) {
+                        $fileHelper1->deleteFile($file->path);
+                    }
+                }
+                $vendorQuotation->delete();
             }
             $fileHelper = new SamundraFileHelper();
             if ($quotation->file_id !== null) {
@@ -191,6 +188,31 @@ class QuotationController extends Controller
             $data['message'] = "Deleted successfully.";
         } catch (\Exception $e) {
             return response(['success' => false, "message" => trans('messages.error_server'), "data" => $e], 500);
+        }
+        return $data;
+    }
+
+    public function approvedList()
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $quotations = Quotation::whereIn('status', ['Approved', 'Partially Approved'])->get();
+            foreach ($quotations as $quotation) {
+                $quotationProducts = [];
+                $quotationProducts = \App\Http\Resources\QuotationProduct::collection($quotation->quotationProducts);
+                foreach ($quotationProducts as $quotationProduct) {
+                    if ($quotationProduct->status == 'Approved') {
+                        $quotationProducts[] = $quotationProduct;
+                    }
+                }
+                $quotation->quotationProducts = $quotationProducts;
+            }
+            $data['data'] = QuotationResource::collection($quotations);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred';
         }
         return $data;
     }

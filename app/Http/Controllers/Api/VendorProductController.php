@@ -22,6 +22,7 @@ class VendorProductController extends Controller
         $data['message'] = '';
         $data['data'] = [];
         try {
+            $arrayData = [];
             if ($type == 'product') {
                 if (auth()->user()->isVendor()) {
                     $user = User::findOrFail($id);
@@ -29,11 +30,22 @@ class VendorProductController extends Controller
                 } else {
                     $vendor = Vendor::findOrFail($id);
                 }
-                $data['data'] = VendorProduct::where('vendor_id', $vendor->id)->pluck('product_id');
+                $vendorProducts = VendorProduct::where('vendor_id', $vendor->id)->get();
+                foreach ($vendorProducts as $k => $vendorProduct) {
+                    $arrayData[$k]['id'] = $vendorProduct->id;
+                    $arrayData[$k]['product_id'] = $vendorProduct->product_id;
+                    $arrayData[$k]['status'] = $vendorProduct->status;
+                }
             } else {
                 $product = Product::findOrFail($id);
-                $data['data'] = VendorProduct::where('product_id', $product->id)->pluck('vendor_id');
+                $vendorProducts = VendorProduct::where('product_id', $product->id)->get();
+                foreach ($vendorProducts as $k => $vendorProduct) {
+                    $arrayData[$k]['id'] = $vendorProduct->id;
+                    $arrayData[$k]['vendor_id'] = $vendorProduct->vendor_id;
+                    $arrayData[$k]['status'] = $vendorProduct->status;
+                }
             }
+            $data['data'] = $arrayData;
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
@@ -67,8 +79,10 @@ class VendorProductController extends Controller
             if (auth()->user()->isVendor()) {
                 $user = User::findOrFail($request->id);
                 $vendor = $user->vendor;
+                $values['status'] = 'Pending';
             } else {
                 $vendor = Vendor::findOrFail($request->id);
+                $values['status'] = 'Verified';
             }
             $requestProductIds = json_decode($request->product_ids);
             $product_ids = VendorProduct::where('vendor_id', $vendor->id)->pluck('product_id');
@@ -78,12 +92,20 @@ class VendorProductController extends Controller
                     $values['product_id'] = $id;
                     $vendorProduct = new VendorProduct($values);
                     $vendorProduct->save();
+                } else {
+                    $vendorProduct = VendorProduct::where('vendor_id', $vendor->id)->where('product_id', $id)->firstOrFail();
+                    if (($vendorProduct->status == 'Unverified') or ($vendorProduct->status == 'Pending')) {
+                        $vendorProduct->status = $values['status'];
+                        $vendorProduct->save();
+                    }
                 }
             }
             foreach ($product_ids as $pid) {
                 if (!in_array($pid, $requestProductIds)) {
                     $vP = VendorProduct::where('vendor_id', $vendor->id)->where('product_id', $pid)->first();
-                    $vP->delete();
+                    if (auth()->user()->isVendor()) {
+                        $vP->delete();
+                    }
                 }
             }
 
@@ -139,5 +161,26 @@ class VendorProductController extends Controller
     public function destroy(VendorProduct $vendorProduct)
     {
         //
+    }
+
+    public function statusUpdate($id, Request $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $vendorProduct = VendorProduct::findOrFail($id);
+            $vendorProduct->status = $request->status;
+            $vendorProduct->save();
+//            } else {
+//                $vendorProduct->delete();
+//            }
+            $data['message'] = "Status changed successfully.";
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = "Error occurred.";
+            $data['data'] = $e;
+        }
+        return $data;
     }
 }

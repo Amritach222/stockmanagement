@@ -191,4 +191,9 @@ class User extends Authenticatable
     {
         return $this->hasRole('Department Head',);
     }
+
+    public function purchaseOrders()
+    {
+        return $this->hasMany(PurchaseOrder::class, 'user_id');
+    }
 }

@@ -21,11 +21,12 @@
             </CHeaderNavItem>
         </CHeaderNav>
         <CHeaderNav class="mr-4">
-            <CHeaderNavItem class="d-md-down-none mx-2">
-                <CHeaderNavLink>
-                    <CIcon name="cil-bell"/>
-                </CHeaderNavLink>
-            </CHeaderNavItem>
+<!--            <CHeaderNavItem class="d-md-down-none mx-2">-->
+<!--                <CHeaderNavLink>-->
+<!--                    <CIcon name="cil-bell"/>-->
+<!--                </CHeaderNavLink>-->
+<!--            </CHeaderNavItem>-->
+                <TheHeaderDropdownNotify/>
             <CHeaderNavItem>
                 <v-icon
                     color="blue darken-2"
@@ -53,6 +54,7 @@
 
 <script>
 import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
+import TheHeaderDropdownNotify from './TheHeaderDropdownNotify'
 import ApiServices from "../../services/ApiServices";
 import Language from "./Language";
 import permissions from "../../permissions";
@@ -61,7 +63,8 @@ export default {
     name: 'TheHeader',
     components: {
         Language,
-        TheHeaderDropdownAccnt
+        TheHeaderDropdownAccnt,
+        TheHeaderDropdownNotify,
     },
 
     data: () => ({

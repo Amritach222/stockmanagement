@@ -333,20 +333,20 @@ export default {
     },
     methods: {
         async loadDepartments() {
-            let res = await ApiServices.departmentIndex();
+            let res = await ApiServices.departmentList();
             if (res.success === true) {
                 this.departments = res.data;
             }
         },
 
         async loadItems() {
-            let res = await ApiServices.productIndex();
+            let res = await ApiServices.productList();
             if (res.success === true) {
                 this.products = res.data;
             }
         },
         async loadUnits() {
-            let res = await ApiServices.unitIndex();
+            let res = await ApiServices.unitList();
             if (res.success === true) {
                 this.units = res.data;
             }
@@ -355,7 +355,7 @@ export default {
 
         async getVariants(item) {
             let res = await ApiServices.productShow(item);
-            console.log('we get here',res);
+            console.log('we get here', res);
             if (res.success === true) {
                 if (res.data.product_variants.length > 0) {
                     this.hasVariants = true;
@@ -424,15 +424,28 @@ export default {
                     'unit_id': this.addPurchaseRequestProduct.unit.id,
                 })
             } else {
-                this.prProducts.push({
-                    'product_id': this.addPurchaseRequestProduct.product_id,
-                    'product_name': res.data.name,
-                    'product_variant_id': this.addPurchaseRequestProduct.product_variant_id,
-                    'product_variant': varName,
-                    'quantity': this.addPurchaseRequestProduct.quantity,
-                    'unit_name': this.addPurchaseRequestProduct.unit.name,
-                    'unit_id': this.addPurchaseRequestProduct.unit.id,
+                let searchData = this.prProducts.filter((single) => {
+                    if (this.addPurchaseRequestProduct.product_variant_id === undefined || this.addPurchaseRequestProduct.product_variant_id === '') {
+                        return single.product_id === this.addPurchaseRequestProduct.product_id
+                    }
+                    if (single.product_variant_id === this.addPurchaseRequestProduct.product_variant_id && single.product_id === this.addPurchaseRequestProduct.product_id) {
+                        return single.product_id === this.addPurchaseRequestProduct.product_id
+                    }
                 });
+                if (searchData.length === 0) {
+                    this.prProducts.push({
+                        'product_id': this.addPurchaseRequestProduct.product_id,
+                        'product_name': res.data.name,
+                        'product_variant_id': this.addPurchaseRequestProduct.product_variant_id,
+                        'product_variant': varName,
+                        'quantity': this.addPurchaseRequestProduct.quantity,
+                        'unit_name': this.addPurchaseRequestProduct.unit.name,
+                        'unit_id': this.addPurchaseRequestProduct.unit.id,
+                    });
+                } else {
+                    let indexOfSearch = this.prProducts.indexOf(searchData[0]);
+                    this.prProducts[indexOfSearch]['quantity'] = parseInt(this.prProducts[indexOfSearch]['quantity']) + parseInt(this.addPurchaseRequestProduct.quantity);
+                }
             }
             this.$refs.form.reset();
             this.close();
@@ -443,7 +456,7 @@ export default {
             this.createProgress = true;
             const data = new FormData();
             data.append('note', this.note);
-            if(this.due_date){
+            if (this.due_date) {
                 data.append('due_date', this.due_date);
             }
             if (this.admin) {
@@ -460,8 +473,8 @@ export default {
                 let dat = false;
                 if (this.prProducts.length > 0) {
                     dat = await this.createProduct(res.data.id);
-                    console.log("result from the purchase request" ,dat);
-                    if(dat){
+                    console.log("result from the purchase request", dat);
+                    if (dat) {
                         route.replace('/purchase/purchase-request-history/');
                         store.state.home.snackbar = true;
                         store.state.home.snackbarText = this.$i18n.t('successToSave');
@@ -485,11 +498,11 @@ export default {
                 productData.append('product_id', parseInt(this.prProducts[i].product_id));
                 productData.append('purchase_id', parseInt(id));
                 productData.append('unit_id', parseInt(this.prProducts[i].unit_id));
-                if (this.prProducts[i].product_variant_id !=='' && this.prProducts[i].product_variant_id !== undefined) {
+                if (this.prProducts[i].product_variant_id !== '' && this.prProducts[i].product_variant_id !== undefined) {
                     productData.append('product_variant_id', parseInt(this.prProducts[i].product_variant_id));
                 }
                 let res = await ApiServices.addPurchaseProductRequest(productData);
-                if(res.success === false){
+                if (res.success === false) {
                     returnValue = false;
                 }
             }

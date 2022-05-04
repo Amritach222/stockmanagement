@@ -90,12 +90,12 @@ class ItemController extends Controller
             $item->save();
 
             $product = Product::findOrFail($request->product_id);
-            if ($product->distribute_unit_id) {
+            if ($product->distribute_unit_id != null) {
                 $unit = Unit::findOrFail($product->distribute_unit_id);
             } else {
                 $unit = Unit::findOrFail($product->unit_id);
             }
-            if ($request->product_variant_id) {
+            if ($request->product_variant_id != null) {
                 $variant = ProductVariant::findOrFail($request->product_variant_id);
                 if ($unit->type == 'smaller') {
                     $quantity = ($variant->quantity * $unit->value) - $request->quantity;

@@ -29,18 +29,18 @@ class QuotationProductRequest extends FormRequest
                 'quotation_id' => 'int|exists:quotations,id',
                 'product_id' => 'int|exists:products,id',
                 'product_variant_id' => 'int|exists:product_variants,id',
+                'purchase_product_id' => 'int|exists:purchase_products,id',
                 'quantity' => 'int',
                 'tax_id' => 'int|exists:taxes,id',
-                'shipping_cost' => 'int',
             ];
         } else {
             return [
                 'quotation_id' => 'required|int|exists:quotations,id',
                 'product_id' => 'required|int|exists:products,id',
                 'product_variant_id' => 'int|exists:product_variants,id',
+                'purchase_product_id' => 'int|exists:purchase_products,id',
                 'quantity' => 'int',
                 'tax_id' => 'int|exists:taxes,id',
-                'shipping_cost' => 'int',
             ];
         }
     }

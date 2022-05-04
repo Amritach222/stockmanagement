@@ -12,7 +12,7 @@
             <tr>
                 <td>Line Items: {{ item.total_item }}</td>
                 <td>Due Date: {{ item.due_date }}</td>
-                <td>Status: {{ item.status }}</td>
+                <td>Status: <CButton size="sm" :color="getColor(item.status)">{{ item.status }}</CButton></td>
             </tr>
             <tr>
                 <td>File link:
@@ -22,7 +22,7 @@
                     <button v-else>No file</button>
                 </td>
                 <td>Department: {{ item.department_name }}</td>
-                <td>Delivery Status: {{ item.delivery_status }}</td>
+                <td>Delivery Status: <CButton size="sm" :color="getColor(item.status)">{{ item.delivery_status }}</CButton></td>
             </tr>
             </tbody>
         </table>
@@ -50,6 +50,11 @@ export default {
     methods: {
         openImage(data) {
             window.open(this.cdnURL + data, `_blank`);
+        },
+        getColor(status) {
+            if (status === 'Pending') return 'warning'
+            else if (status === 'Rejected') return 'danger'
+            else return 'success'
         },
     }
 }

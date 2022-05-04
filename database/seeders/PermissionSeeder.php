@@ -34,8 +34,12 @@ class PermissionSeeder extends Seeder
             $this->createAutoAllPermissions('quotations', $guard);
             $this->createAutoAllPermissions('quotationProducts', $guard);
             $this->createAutoAllPermissions('purchases', $guard);
+            $this->createAutoAllPermissions('purchaseHistory', $guard);
             $this->createAutoAllPermissions('purchaseProducts', $guard);
             $this->createAutoAllPermissions('purchaseProductsApproval', $guard);
+            $this->createAutoAllPermissions('purchaseProductsApprovalAdmin', $guard);
+            $this->createAutoAllPermissions('purchaseProductsApprovalDepartmentHead', $guard);
+            $this->createAutoAllPermissions('purchaseProductsApprovalStoreAdmin', $guard);
             $this->createAutoAllPermissions('vendors', $guard);
             $this->createAutoAllPermissions('returnProducts', $guard);
             $this->createAutoAllPermissions('consumes', $guard);
@@ -61,6 +65,10 @@ class PermissionSeeder extends Seeder
             $this->createAutoAllPermissions('mailTemplates', $guard);
             $this->createAutoAllPermissions('budgetDispatches', $guard);
             $this->createAutoAllPermissions('budgetRequestCategories', $guard);
+            $this->createAutoAllPermissions('purchaseOrders', $guard);
+            $this->createAutoAllPermissions('purchaseOrderProducts', $guard);
+            $this->createAutoAllPermissions('payments', $guard);
+            $this->createAutoAllPermissions('invoices', $guard);
             Permission::create([
                 'name' => 'roles',
                 'guard_name' => $guard

@@ -28,16 +28,12 @@ class VendorQuotationRequest extends FormRequest
         if ($this->id) {
             return [
                 'quotation_id' => 'int|exists:quotations,id',
-                'quotation_product_id' => 'int|exists:quotation_products,id',
-                'vendor_id' => 'int|exists:vendors,id',
                 'price' => 'sometimes|int',
                 'quantity' => 'sometimes|int',
             ];
         } else {
             return [
                 'quotation_id' => 'required|int|exists:quotations,id',
-                'quotation_product_id' => 'required|int|exists:quotation_products,id',
-                'vendor_id' => 'required|int|exists:vendors,id',
                 'price' => 'sometimes|int',
                 'quantity' => 'sometimes|int',
             ];

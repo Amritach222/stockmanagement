@@ -114,25 +114,70 @@
             {{ getProductName(item.product_id) }}
         </template>
         <template v-slot:item.product_variant_id="{ item }">
+
             {{ getVariantName(item.product_variant_id) }}
+        </template>
+        <template v-slot:item.quantity="{ item }">
+            <v-edit-dialog
+                :return-value.sync="item.quantity"
+                @save="saveDat(item)"
+                @cancel="cancel"
+            >
+                {{ item.quantity }}
+                <template v-slot:input>
+                    <v-text-field
+                        v-model="item.quantity"
+                        label="Edit"
+                        single-line
+                    ></v-text-field>
+                </template>
+            </v-edit-dialog>
         </template>
         <template v-slot:item.unit_id="{ item }">
             {{ getUnitName(item.unit_id) }}
         </template>
+        <template v-slot:item.department_status="{ item }">
+            <CButton size="sm" :color="getColor(item.department_status)">
+                {{ item.department_status }}
+            </CButton>
+        </template>
+        <template v-slot:item.status="{ item }">
+            <CButton size="sm" :color="getColor(item.status)">
+                {{ item.status }}
+            </CButton>
+        </template>
         <template v-slot:item.actions="{ item }">
-            <v-icon
-                small
-                class="mr-2"
-                @click="editItem(item)"
-            >
-                mdi-pencil
-            </v-icon>
-            <v-icon
-                small
-                @click="deleteItem(item)"
-            >
-                mdi-delete
-            </v-icon>
+            <div v-if="$can('purchaseProductsApprovalDepartmentHead')">
+                <CButton size="sm" color="success" @click="approveProduct(item)">
+                    Approve
+                </CButton>
+                <CButton size="sm" color="danger" @click="denyProduct(item)">
+                    Deny
+                </CButton>
+            </div>
+            <div v-if="$can('purchaseProductsApprovalStoreAdmin')">
+                <CButton size="sm" color="success" @click="addToApproveList(item)">
+                    Add to List
+                </CButton>
+                <CButton size="sm" color="danger" @click="removeFromApproveList(item)">
+                    Remove From List
+                </CButton>
+            </div>
+            <div v-if="!$can('purchaseProductsApprovalStoreAdmin') && !$can('purchaseProductsApprovalDepartmentHead')">
+                <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+                >
+                    mdi-pencil
+                </v-icon>
+                <v-icon
+                    small
+                    @click="deleteItem(item)"
+                >
+                    mdi-delete
+                </v-icon>
+            </div>
         </template>
         <template v-slot:no-data>
             <div>No Data</div>
@@ -155,13 +200,6 @@ export default {
         triggerSelectProduct: Boolean
     },
 
-    watch: {
-        triggerSelectProduct: async function(newVal, oldVal) {
-            let res = await store.dispatch('purchase/addSelectedProducts', this.selected);
-            console.log("selected rows hahha", res);
-        }
-    },
-
     data: () => ({
         cdnURL: config.cdnURL,
         admin: false,
@@ -176,6 +214,7 @@ export default {
             {text: 'Product Variant', value: 'product_variant_id'},
             {text: 'Quantity', value: 'quantity'},
             {text: 'Unit', value: 'unit_id'},
+            {text: 'Department Status', value: 'department_status'},
             {text: 'Status', value: 'status'},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
@@ -190,6 +229,7 @@ export default {
         productCount: 0,
         editedIndex: -1,
         prProducts: [],
+        prVariants: [],
         products: [],
         units: [],
         variants: [],
@@ -216,6 +256,11 @@ export default {
             value => !!value || 'Required.',
         ]
     }),
+    watch: {
+        triggerSelectProduct: async function (newVal, oldVal) {
+            let res = await store.dispatch('purchase/addSelectedProducts', this.selected);
+        }
+    },
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'Add Quotation Product' : 'Edit Quotation Product'
@@ -224,39 +269,81 @@ export default {
     async created() {
         this.loadItems();
         this.loadUnits();
+        this.loadVariants();
         this.prProducts = this.details;
     },
     methods: {
+        getColor(status) {
+            if (status === 'Pending') return 'warning'
+            else if (status === 'Rejected') return 'danger'
+            else return 'success'
+        },
+        async saveDat(item) {
+            let productData = new FormData();
+            productData.append('quantity', parseInt(item.quantity));
+            let res = await ApiServices.editPurchaseRequestProduct(item.id, productData);
+            if (res.success === true) {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Quantity Edited";
+                store.state.home.snackbarColor = 'green';
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Could not edit";
+                store.state.home.snackbarColor = 'red';
+            }
+        },
+        cancel() {
+            this.snack = true
+            this.snackColor = 'error'
+            this.snackText = 'Canceled'
+        },
+
         getProductName(item) {
             if (item === null || item === undefined) {
-                return "------"
+                return "---"
             }
             let result = this.products.filter(obj => {
                 return obj.id === item;
             });
             if (result[0] === null || result[0] === undefined) {
-                return "------"
+                return "---"
             }
             return result[0].name;
         },
 
         getUnitName(item) {
             if (item === null || item === undefined) {
-                return "------"
+                return "---"
             }
             let result = this.units.filter(obj => {
                 return obj.id === item;
             })
             if (result[0] === null || result[0] === undefined) {
-                return "------"
+                return "---"
             }
             return result[0].name;
         },
 
         getVariantName(item) {
             if (item === null || item === undefined) {
-                return "------"
+                return "---"
+            } else {
+                let result = this.prVariants.filter(obj => {
+                    return obj.id === item;
+                })
+                return result[0].name;
             }
+        },
+
+        loadVariants() {
+            this.details.forEach(async (singleData) => {
+                if (singleData.product_variant_id !== null) {
+                    let rtn = await ApiServices.productVariantShow(singleData.product_variant_id);
+                    rtn = rtn.data.name;
+                    let data = {'name': rtn, 'id': singleData.product_variant_id};
+                    this.prVariants.push(data);
+                }
+            });
         },
 
         async loadItems() {
@@ -294,6 +381,66 @@ export default {
             this.addPurchaseRequestProduct = Object.assign({}, item);
             this.addPurchaseRequestProduct.unit = result[0];
             this.dialog = true;
+        },
+
+        async denyProduct(item) {
+            let productData = new FormData();
+            productData.append('department_status', 'Rejected');
+            let res = await ApiServices.changePurchaseProductStatusRequest(item.id, productData);
+            if (res.success === true) {
+                this.editedIndex = this.prProducts.indexOf(item);
+                Object.assign(this.prProducts[this.editedIndex], res.data)
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Changed status";
+                store.state.home.snackbarColor = 'green';
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Could not change status";
+                store.state.home.snackbarColor = 'red';
+            }
+        },
+
+        async approveProduct(item) {
+            let productData = new FormData();
+            productData.append('department_status', 'Approved');
+            let res = await ApiServices.changePurchaseProductStatusRequest(item.id, productData);
+            if (res.success === true) {
+                this.editedIndex = this.prProducts.indexOf(item);
+                Object.assign(this.prProducts[this.editedIndex], res.data)
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Changed status";
+                store.state.home.snackbarColor = 'green';
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Could not change status";
+                store.state.home.snackbarColor = 'red';
+            }
+        },
+
+        async addToApproveList(item) {
+            let res = await store.dispatch('purchase/addSelectedProducts', [item]);
+            if (res === true) {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Added to list";
+                store.state.home.snackbarColor = 'green';
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Could not add to list";
+                store.state.home.snackbarColor = 'red';
+            }
+        },
+
+        async removeFromApproveList(item) {
+            let res = await store.dispatch('purchase/removeSelectedProduct', item);
+            if (res === true) {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Removed from list";
+                store.state.home.snackbarColor = 'green';
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = "Could not remove from list";
+                store.state.home.snackbarColor = 'red';
+            }
         },
 
         deleteItem(item) {

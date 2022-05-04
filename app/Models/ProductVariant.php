@@ -54,4 +54,9 @@ class ProductVariant extends Model
     {
         return $this->belongsTo(File::class, 'image_id');
     }
+
+    public function purchaseOrderProducts()
+    {
+        return $this->hasMany(PurchaseOrderProduct::class, 'product_variant_id');
+    }
 }

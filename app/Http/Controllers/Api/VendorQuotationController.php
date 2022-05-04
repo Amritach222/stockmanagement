@@ -3,10 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\ActivityLogEvent;
+use App\Events\VendorAssignQuoEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VendorQuotationRequest;
 use App\Http\Resources\VendorQuotation as VendorQuotationResource;
+use App\Models\Product;
+use App\Models\Quotation;
+use App\Models\QuotationProduct;
+use App\Models\User;
+use App\Models\Vendor;
+use App\Models\VendorProduct;
 use App\Models\VendorQuotation;
+use App\Models\VendorQuotationProduct;
 use Illuminate\Http\Request;
 
 class VendorQuotationController extends Controller
@@ -53,14 +61,57 @@ class VendorQuotationController extends Controller
         $data['data'] = [];
         try {
             $values = $request->all();
-            $vendorQuotation = new VendorQuotation($values);
-            $vendorQuotation->save();
-            $data['data'] = new VendorQuotationResource($vendorQuotation);
-            event(new ActivityLogEvent('Add', 'Vendor Quotation', $data['data']->id));
+            $reqProducts = json_decode($request->products);
+            $reqVendors = json_decode($request->vendors);
+            $vendorQuotations = [];
+            $quotation = Quotation::findOrFail($request->quotation_id);
+            foreach ($reqVendors as $reqVendor) {
+                $vendor = Vendor::findOrFail($reqVendor->id);
+                $vendorQuotation = new VendorQuotation([
+                    'vendor_id' => $vendor->id,
+                    'quotation_id' => $quotation->id,
+                ]);
+                $vendorQuotation->save();
+                $vendorQuotations[] = $vendorQuotation;
+            }
+            $relatedVendors = [];
+            foreach ($reqProducts as $reqProduct) {
+                $product = Product::findOrFail($reqProduct->product_id);
+                $vendor_ids = VendorProduct::where('product_id', $product->id)->pluck('vendor_id');
+                $quotationProduct = QuotationProduct::where('product_id', $product->id)->where('quotation_id', $quotation->id)->firstOrFail();
+                foreach ($vendorQuotations as $vendor) {
+                    foreach ($vendor_ids as $vendor_id) {
+                        if ($vendor->vendor_id == $vendor_id) {
+                            $vendorQuotationProduct = new VendorQuotationProduct([
+                                'vendor_quotation_id' => $vendor->id,
+                                'quotation_product_id' => $quotationProduct->id,
+                                'quantity' => $quotationProduct->quantity
+                            ]);
+                            $vendorQuotationProduct->save();
+                            $relatedVendors[] = $vendor;
+                            event(new ActivityLogEvent('Add', 'Vendor Quotation', $vendorQuotationProduct->id));
+                        }
+                    }
+                }
+            }
+
+            $uniqueVendors = array_unique($relatedVendors);
+            try {
+                foreach ($uniqueVendors as $uniqueVendor) {
+                    $user = User::findOrFail($uniqueVendor->user_id);
+                    event(new VendorAssignQuoEvent($user, $quotation));
+                }
+            } catch (\Exception $exception) {
+                $data['success'] = true;
+                $data['message'] = "Fail to send mail to vendors.";
+            }
+//            $data['data'] = new VendorQuotationResource($vendorQuotation);
+
             $data['message'] = "Vendor Quotation added successfully.";
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
         }
         return $data;
     }
@@ -139,6 +190,21 @@ class VendorQuotationController extends Controller
             $vendorQuotation->delete();
             event(new ActivityLogEvent('Delete', 'Vendor Quotation', $id));
             $data['message'] = 'Vendor Quotation deleted successfully.';
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
+        }
+        return $data;
+    }
+
+    public function vendorQuotation($id, $vendor_id)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $vendorQuotation = VendorQuotation::where('quotation_id', $id)->where('vendor_id', $vendor_id)->firstOrFail();
+            $data['data'] = new VendorQuotationResource($vendorQuotation);
         } catch (\Exception $e) {
             $data['success'] = false;
             $data['message'] = 'Error occurred.';

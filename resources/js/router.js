@@ -104,8 +104,11 @@ import VendorPermission from './components/vendor/Permissions'
 import VendorMyProducts from './components/vendor/vendorProduct/MyProducts'
 import VendorAddProductList from './components/vendor/vendorProduct/AddMyProducts'
 
-import VendorProductShow from './components/vendor/vendorProduct/ShowProduct'
+import VendorProductVerifyRequest from './components/Vendor/vendorProduct/VerifyRequestProduct'
 import VendorProductAdd from './components/vendor/vendorProduct/AddProduct'
+import VendorProductRequests from './components/Vendor/requestProposal/Index'
+import VendorProductRequest from './components/Vendor/requestProposal/Show'
+import VendorProductRequestEdit from './components/Vendor/requestProposal/Edit'
 
 import BudgetIndex from './components/budgets/budget/Index'
 import BudgetCreate from './components/budgets/budget/Create'
@@ -141,6 +144,28 @@ import QuotationIndex from './components/quotations/quotation/Index'
 import QuotationCreate from './components/quotations/quotation/Create'
 import QuotationEdit from './components/quotations/quotation/Edit'
 import QuotationShow from './components/quotations/quotation/Show'
+import VendorProduct from './components/quotations/quotation/VendorProduct'
+import ApprovedQuotationList from './components/quotations/quotation/ApprovedQuotationList'
+
+import PurchaseOrderIndex from './components/purchaseOrder/Index'
+import PurchaseOrderCreate from './components/purchaseOrder/Create'
+import PurchaseOrderEdit from './components/purchaseOrder/Edit'
+import PurchaseOrderShow from './components/purchaseOrder/Show'
+import PurchaseOrderBill from './components/purchaseOrder/payment/Bill'
+import PurchaseOrderInvoice from './components/purchaseOrder/payment/Invoices'
+import PurchaseOrderBillEdit from './components/purchaseOrder/payment/Edit'
+
+import InvoiceIndex from './components/payments/invoice/Index'
+import InvoiceShow from './components/payments/invoice/Show'
+
+import BillIndex from './components/payments/bill/Index'
+import BillShow from './components/payments/bill/Show'
+
+import VendorPurchaseOrderIndex from './components/Vendor/purchaseOrder/Index'
+import VendorPurchaseOrderEdit from './components/Vendor/purchaseOrder/Edit'
+import VendorPurchaseOrderShow from './components/Vendor/purchaseOrder/Show'
+
+import VendorBillShow from './components/Vendor/purchaseOrder/Bill'
 
 import RoleIndex from './components/Settings/role/Index'
 import RolePermission from './components/Settings/role/Permissions'
@@ -164,11 +189,16 @@ import ProfileSetting from './components/Settings/profile/Index'
 
 import i18n from './i18n'
 
+import DetailPurchaseRequest from './components/purchaseRequest/DetailPurchaseRequest'
 import NewPurchaseRequest from './components/purchaseRequest/NewPurchaseRequest'
 import PurchaseRequestHistory from './components/purchaseRequest/PurchaseRequestHistory'
 import EditPurchaseRequest from './components/purchaseRequest/EditPurchaseRequest'
 import PurchaseRequestProducts from './components/purchaseRequest/PurchaseRequestProducts'
 import PurchaseRequestAdmin from './components/purchaseRequest/PurchaseRequestProductsDetailsAdmin'
+import PurchaseRequestDepartmentHead from './components/purchaseRequest/PurchaseRequestProductsDetailsDh'
+import Notification from './components/notification/Notification'
+import ApiServices from "./services/ApiServices";
+import store from "./store";
 
 import NotFound from './components/errorPage/NotFound'
 
@@ -261,6 +291,19 @@ export default new Router({
             }
         },
         {
+            path: '/purchase/purchase-request/:id',
+            name: i18n.t('new') + ' ' + i18n.t('purchase') + ' ' + i18n.t('request'),
+            component: DetailPurchaseRequest,
+            beforeEnter: async (to, from, next) => {
+                let res = await ApiServices.showPurchaseRequest(to.params.id);
+                if (res.success === true) {
+                    store.state.purchase.itemDetail = res.data;
+                }
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
             path: '/purchase/new-purchase-request',
             name: i18n.t('new') + ' ' + i18n.t('purchase') + ' ' + i18n.t('request'),
             component: NewPurchaseRequest,
@@ -300,6 +343,15 @@ export default new Router({
             path: '/purchase/admin-purchase-request-approval',
             name: 'Purchase Requests Approval',
             component: PurchaseRequestAdmin,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchase/department-head-purchase-request-approval/',
+            name: 'Purchase Requests Approval',
+            component: PurchaseRequestDepartmentHead,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
@@ -983,9 +1035,9 @@ export default new Router({
             }
         },
         {
-            path: '/vendorProducts/:id',
-            name: i18n.t('vendor') + ' ' + i18n.t('product'),
-            component: VendorProductShow,
+            path: '/vendorProducts/verify/:id',
+            name: i18n.t('vendor') + ' ' + i18n.t('product') + ' ' + i18n.t('verify'),
+            component: VendorProductVerifyRequest,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
@@ -1013,6 +1065,33 @@ export default new Router({
             path: '/vendor/add-product-list',
             name: i18n.t('card_title.edit_vendor_product'),
             component: VendorAddProductList,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/new-product-request',
+            name: i18n.t('product') + ' ' + i18n.t('requests'),
+            component: VendorProductRequests,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/product-request/:id',
+            name: i18n.t('product') + ' ' + i18n.t('request'),
+            component: VendorProductRequest,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/product-request/edit/:id',
+            name: i18n.t('edit') + ' ' + i18n.t('product') + ' ' + i18n.t('request'),
+            component: VendorProductRequestEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
@@ -1342,6 +1421,163 @@ export default new Router({
                 next();
             }
         },
+        {
+            path: '/quotations/list/approved',
+            name: i18n.t('quotation') + ' ' + i18n.t('approved'),
+            component: ApprovedQuotationList,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/quotations/vendor/:id/:vendor',
+            name: i18n.t('vendor') + ' ' + i18n.t('quotation'),
+            component: VendorProduct,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/purchaseOrders',
+            name: i18n.t('purchase') + ' ' + i18n.t('order'),
+            component: PurchaseOrderIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchaseOrders/create',
+            name: 'Purchase Order Create',
+            component: PurchaseOrderCreate,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchaseOrders/edit/:id',
+            name: 'Purchase Order Edit',
+            component: PurchaseOrderEdit,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchaseOrders/show/:id',
+            name: 'Purchase Order Show',
+            component: PurchaseOrderShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchaseOrders/payment/:id',
+            name: 'Purchase Order bill',
+            component: PurchaseOrderBill,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchaseOrders/payment/invoices/:id',
+            name: 'Purchase Order Invoices',
+            component: PurchaseOrderInvoice,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/purchaseOrders/payment/edit/:id',
+            name: 'Purchase Order bill Edit',
+            component: PurchaseOrderBillEdit,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/bills',
+            name: 'Bills',
+            component: BillIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/bills/show/:id',
+            name: 'Bill Show',
+            component: BillShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/invoices',
+            name: 'Invoices',
+            component: InvoiceIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/invoices/show/:id',
+            name: 'Invoice Show',
+            component: InvoiceShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/vendor/purchase-orders',
+            name: i18n.t('purchase') + ' ' + i18n.t('order'),
+            component: VendorPurchaseOrderIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/purchase-order/edit/:id',
+            name: 'Purchase Order Edit',
+            component: VendorPurchaseOrderEdit,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/purchase-order/show/:id',
+            name: 'Purchase Order Show',
+            component: VendorPurchaseOrderShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/bill/show/:id',
+            name: 'Vendor Bill Show',
+            component: VendorBillShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
 
         {
             path: '/roles',
@@ -1402,6 +1638,16 @@ export default new Router({
             path: '/users/permission/:username',
             name: i18n.t('user') + ' ' + i18n.t('permission'),
             component: UserPermission,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/notification/:type',
+            name: i18n.t('notifications'),
+            component: Notification,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

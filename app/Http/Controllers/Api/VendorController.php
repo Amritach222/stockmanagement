@@ -63,6 +63,7 @@ class VendorController extends Controller
                 $values['image_id'] = $newFile->id;
                 $values['profile_picture_id'] = $newFile->id;
             }
+            $values['password'] = bcrypt($request->password);
             $user = new User($values);
             $user->save();
             $values['user_id'] = $user->id;
@@ -106,7 +107,7 @@ class VendorController extends Controller
         try {
             $data['success'] = true;
             $vendor = Vendor::findOrFail($id);
-            $user=null;
+            $user = null;
             if ($vendor->user_id !== null) {
                 $user = User::findOrFail($vendor->user_id);
             }

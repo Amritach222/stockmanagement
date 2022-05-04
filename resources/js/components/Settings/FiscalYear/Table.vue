@@ -164,7 +164,7 @@ export default {
         headers: [
             {text: 'Id', align: 'start', sortable: false, value: 'id'},
             {text: 'From', value: 'from'},
-            {text: 'To', value: 'to'},
+            {text: 'To', value: 'to', searchable:false},
             {text: 'Actions', value: 'actions', sortable: false},
         ],
         fiscalYears: [],

@@ -26,11 +26,10 @@ class FiscalYearRequest extends FormRequest
     {
         if ($this->id) {
             return [
-                'name' => 'string',
+                'from' => 'date',
             ];
         } else {
             return [
-                'name' => 'required|string',
                 'from' => 'required',
                 'to' => 'required'
             ];

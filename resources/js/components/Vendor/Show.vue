@@ -11,78 +11,78 @@
                             <CCardBody>
                                 <CRow>
                                     <CCol>
-                                <CRow>
-                                    <CCol md="3">
-                                        <h6>{{ $t('name') }}: </h6>
-                                        <p>{{ show.name }}</p>
-                                    </CCol>
-                                    <CCol md="3">
-                                        <h6>{{ $t('username') }}: </h6>
-                                        <p>{{ show.username }}</p>
-                                    </CCol>
-                                    <CCol md="3">
-                                        <h6>{{ $t('vat_no') }}: </h6>
-                                        <p v-if="show.vat_no">{{ show.vat_no }}</p>
-                                        <p v-else>---</p>
-                                    </CCol>
-                                    <CCol md="3">
-                                        <h6>{{ $t('email') }}: </h6>
-                                        <p v-if="show.email">{{ show.email }}</p>
-                                        <p v-else>---</p>
-                                    </CCol>
-                                </CRow>
-                                <CRow>
-                                    <CCol md="3">
-                                        <h6>{{ $t('landline') }}: </h6>
-                                        <p v-if="show.landline">{{ show.landline }}</p>
-                                        <p v-else>---</p>
-                                    </CCol>
-                                    <CCol md="3">
-                                        <h6>{{ $t('mobile') }}: </h6>
-                                        <p v-if="show.mobile">{{ show.mobile }}</p>
-                                        <p v-else>---</p>
-                                    </CCol>
-                                    <CCol md="3">
-                                        <h6>{{ $t('postal_code') }}: </h6>
-                                        <p v-if="show.postal_code">{{ show.postal_code }}</p>
-                                        <p v-else>---</p>
-                                    </CCol>
-                                    <CCol md="3">
-                                        <h6>{{ $t('category') }}: </h6>
-                                        <p v-if="show.category_id">{{ show.category.name }}</p>
-                                        <p v-else>---</p>
-                                    </CCol>
-                                </CRow>
-                                <CRow>
-                                    <CCol md="3">
-                                        <h6>{{ $t('country') }}: </h6>
-                                        <p v-if="show.country">{{ show.country.name }}</p>
-                                        <p v-else>---</p>
-                                    </CCol>
-                                    <CCol md="3">
-                                        <h6>{{ $t('state') }}: </h6>
-                                        <p v-if="show.state">{{ show.state.name }}</p>
-                                        <p v-else>---</p>
-                                    </CCol>
-                                    <CCol md="3">
-                                        <h6>{{ $t('city') }}: </h6>
-                                        <p v-if="show.city">{{ show.city.name }}</p>
-                                        <p v-else>---</p>
-                                    </CCol>
-                                    <CCol md="3">
-                                        <h6>{{ $t('status') }}: </h6>
-                                        <div v-if="show.is_active === 1" class="mb-2">
-                                            <CButton size="sm" color="success">
-                                                {{ $t('active') }}
-                                            </CButton>
-                                        </div>
-                                        <div v-else class="mb-2">
-                                            <CButton size="sm" color="danger">
-                                                {{ $t('inactive') }}
-                                            </CButton>
-                                        </div>
-                                    </CCol>
-                                </CRow>
+                                        <CRow>
+                                            <CCol md="3">
+                                                <h6>{{ $t('name') }}: </h6>
+                                                <p>{{ show.name }}</p>
+                                            </CCol>
+                                            <CCol md="3">
+                                                <h6>{{ $t('username') }}: </h6>
+                                                <p>{{ show.username }}</p>
+                                            </CCol>
+                                            <CCol md="3">
+                                                <h6>{{ $t('vat_no') }}: </h6>
+                                                <p v-if="show.vat_no">{{ show.vat_no }}</p>
+                                                <p v-else>---</p>
+                                            </CCol>
+                                            <CCol md="3">
+                                                <h6>{{ $t('email') }}: </h6>
+                                                <p v-if="show.email">{{ show.email }}</p>
+                                                <p v-else>---</p>
+                                            </CCol>
+                                        </CRow>
+                                        <CRow>
+                                            <CCol md="3">
+                                                <h6>{{ $t('landline') }}: </h6>
+                                                <p v-if="show.landline">{{ show.landline }}</p>
+                                                <p v-else>---</p>
+                                            </CCol>
+                                            <CCol md="3">
+                                                <h6>{{ $t('mobile') }}: </h6>
+                                                <p v-if="show.mobile">{{ show.mobile }}</p>
+                                                <p v-else>---</p>
+                                            </CCol>
+                                            <CCol md="3">
+                                                <h6>{{ $t('postal_code') }}: </h6>
+                                                <p v-if="show.postal_code">{{ show.postal_code }}</p>
+                                                <p v-else>---</p>
+                                            </CCol>
+                                            <CCol md="3">
+                                                <h6>{{ $t('category') }}: </h6>
+                                                <p v-if="show.category_id">{{ show.category.name }}</p>
+                                                <p v-else>---</p>
+                                            </CCol>
+                                        </CRow>
+                                        <CRow>
+                                            <CCol md="3">
+                                                <h6>{{ $t('country') }}: </h6>
+                                                <p v-if="show.country">{{ show.country.name }}</p>
+                                                <p v-else>---</p>
+                                            </CCol>
+                                            <CCol md="3">
+                                                <h6>{{ $t('state') }}: </h6>
+                                                <p v-if="show.state">{{ show.state.name }}</p>
+                                                <p v-else>---</p>
+                                            </CCol>
+                                            <CCol md="3">
+                                                <h6>{{ $t('city') }}: </h6>
+                                                <p v-if="show.city">{{ show.city.name }}</p>
+                                                <p v-else>---</p>
+                                            </CCol>
+                                            <CCol md="3">
+                                                <h6>{{ $t('status') }}: </h6>
+                                                <div v-if="show.is_active === 1" class="mb-2">
+                                                    <CButton size="sm" color="success">
+                                                        {{ $t('active') }}
+                                                    </CButton>
+                                                </div>
+                                                <div v-else class="mb-2">
+                                                    <CButton size="sm" color="danger">
+                                                        {{ $t('inactive') }}
+                                                    </CButton>
+                                                </div>
+                                            </CCol>
+                                        </CRow>
                                     </CCol>
                                     <CCol md="3" v-if="typeof(show.link) === 'string'">
                                         <v-col v-if="typeof(show.link) === 'string'">
@@ -103,7 +103,7 @@
                                 <hr>
                                 <CRow>
                                     <CCol md="12">
-                                        <v-card>
+                                        <v-card flat>
                                             <v-card-title>
                                                 {{ $t('products') }}
                                                 <v-spacer></v-spacer>
@@ -157,6 +157,26 @@
                                                 <template v-slot:item.category="{ item }">
                                                     {{ item.category.name }}
                                                 </template>
+                                                <template v-slot:item.status="{ item }">
+                                                    <div v-if="item.status === 'Unverified'">
+                                                        <CButton size="sm" color="danger" class="m-1">
+                                                            {{ item.status }}
+                                                        </CButton>
+                                                    </div>
+                                                    <div v-else-if="item.status === 'Pending'">
+                                                        <CButton size="sm" class="m-1" color="secondary">
+                                                            {{ item.status }}
+                                                        </CButton>
+                                                    </div>
+                                                    <div v-else-if="item.status === 'Verified'">
+                                                        <CButton size="sm" class="m-1" color="success">
+                                                            {{ item.status }}
+                                                        </CButton>
+                                                    </div>
+                                                    <div v-else>
+                                                        ----
+                                                    </div>
+                                                </template>
                                                 <template v-slot:no-data>
                                                     <div>No Data</div>
                                                 </template>
@@ -167,7 +187,8 @@
                                 <hr>
                                 <CForm>
                                     <CCardFooter>
-                                        <CButton size="sm" color="primary" :to="'/vendors/edit/'+show.id">
+                                        <CButton size="sm" color="primary" v-if="$can('vendors.edit')"
+                                                 :to="'/vendors/edit/'+show.id">
                                             <CIcon name="cil-check-circle"/>
                                             {{ $t('button.edit') }}
                                         </CButton>
@@ -219,6 +240,7 @@ export default {
             {text: i18n.t('image'), value: 'link', sortable: false},
             {text: i18n.t('brand'), value: 'brand', sortable: false},
             {text: i18n.t('category'), value: 'category', sortable: false},
+            {text: i18n.t('status'), value: 'status'},
         ],
         show: {
             id: null,
@@ -256,7 +278,7 @@ export default {
                 this.show.state = JSON.parse(this.show.state);
                 this.show.city = JSON.parse(this.show.city);
             }
-            let res = await ApiServices.productIndex();
+            let res = await ApiServices.productList();
             if (res.success === true) {
                 this.tableLoad = false;
                 this.allProducts = res.data;
@@ -264,13 +286,14 @@ export default {
             }
         },
         async loadVendorProductIds() {
-            let res = await ApiServices.vendorProductIds('product',this.$route.params.id);
+            let res = await ApiServices.vendorProductIds('product', this.$route.params.id);
             if (res.success === true) {
                 this.tableLoad = false;
-                this.product_ids = res.data;
-                for (let i = 0; i < this.product_ids.length; i++) {
+                this.vendor_products = res.data;
+                for (let i = 0; i < this.vendor_products.length; i++) {
                     for (let j = 0; j < this.allProducts.length; j++) {
-                        if (this.allProducts[j].id === this.product_ids[i]) {
+                        if (this.allProducts[j].id === this.vendor_products[i].product_id) {
+                            this.allProducts[j].status = this.vendor_products[i].status;
                             this.products.push(this.allProducts[j]);
                         }
                     }

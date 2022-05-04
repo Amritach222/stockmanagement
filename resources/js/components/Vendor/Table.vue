@@ -43,193 +43,13 @@
                                 dark
                                 class="mb-2"
                                 v-bind="attrs"
-                                v-on="on"
                                 :to="'/vendors/create'"
+                                v-on="on"
                                 v-if="$can('vendors.create')"
                             >
                                 Add New Vendor
                             </v-btn>
                         </template>
-                        <!--                        <v-card>-->
-                        <!--                            <v-form ref="form">-->
-                        <!--                                <v-card-title>-->
-                        <!--                                    <span class="headline">{{ formTitle }}</span>-->
-                        <!--                                </v-card-title>-->
-
-                        <!--                                <v-card-text>-->
-                        <!--                                    <v-container>-->
-                        <!--                                        <v-row>-->
-                        <!--                                            <v-col>-->
-                        <!--                                                <v-text-field-->
-                        <!--                                                    v-model="editedItem.name"-->
-                        <!--                                                    label="Name"-->
-                        <!--                                                    required-->
-                        <!--                                                    outlined-->
-                        <!--                                                    :rules="rules.name"-->
-                        <!--                                                    class="shrink"-->
-                        <!--                                                ></v-text-field>-->
-                        <!--                                            </v-col>-->
-                        <!--                                            <v-col>-->
-                        <!--                                                <v-text-field-->
-                        <!--                                                    v-model="editedItem.company_name"-->
-                        <!--                                                    label="Company Name"-->
-                        <!--                                                    required-->
-                        <!--                                                    outlined-->
-                        <!--                                                    :rules="rules.company_name"-->
-                        <!--                                                ></v-text-field>-->
-                        <!--                                            </v-col>-->
-                        <!--                                            <v-col>-->
-                        <!--                                                <v-text-field-->
-                        <!--                                                    v-model="editedItem.vat_no"-->
-                        <!--                                                    label="Vat/Pan No"-->
-                        <!--                                                    outlined-->
-                        <!--                                                    type="number"-->
-                        <!--                                                    :rules="rules.vat_no"-->
-                        <!--                                                ></v-text-field>-->
-                        <!--                                            </v-col>-->
-                        <!--                                        </v-row>-->
-                        <!--                                        <v-row>-->
-                        <!--                                            <v-col>-->
-                        <!--                                                <v-text-field-->
-                        <!--                                                    v-model="editedItem.email"-->
-                        <!--                                                    label="Email"-->
-                        <!--                                                    required-->
-                        <!--                                                    outlined-->
-                        <!--                                                    :rules="rules.email"-->
-                        <!--                                                ></v-text-field>-->
-                        <!--                                            </v-col>-->
-                        <!--                                            <v-col>-->
-                        <!--                                                <v-text-field-->
-                        <!--                                                    v-model="editedItem.landline"-->
-                        <!--                                                    label="Landline No."-->
-                        <!--                                                    required-->
-                        <!--                                                    outlined-->
-                        <!--                                                    type="number"-->
-                        <!--                                                    :rules="rules.landline"-->
-                        <!--                                                ></v-text-field>-->
-                        <!--                                            </v-col>-->
-                        <!--                                            <v-col>-->
-                        <!--                                                <v-text-field-->
-                        <!--                                                    v-model="editedItem.mobile"-->
-                        <!--                                                    label="Mobile No."-->
-                        <!--                                                    required-->
-                        <!--                                                    outlined-->
-                        <!--                                                    type="number"-->
-                        <!--                                                    :rules="rules.mobile"-->
-                        <!--                                                ></v-text-field>-->
-                        <!--                                            </v-col>-->
-                        <!--                                        </v-row>-->
-                        <!--                                        <v-row>-->
-                        <!--                                            <v-col>-->
-                        <!--                                                <v-select-->
-                        <!--                                                    v-model="editedItem.country"-->
-                        <!--                                                    :items="country"-->
-                        <!--                                                    item-text="name"-->
-                        <!--                                                    item-value="name"-->
-                        <!--                                                    label="Country"-->
-                        <!--                                                    dense-->
-                        <!--                                                    outlined-->
-                        <!--                                                    required-->
-                        <!--                                                    :rules="rules.country"-->
-                        <!--                                                    return-object-->
-                        <!--                                                    v-on:change=getStates(editedItem.country)-->
-                        <!--                                                ></v-select>-->
-                        <!--                                            </v-col>-->
-                        <!--                                            <v-col>-->
-                        <!--                                                <v-select-->
-                        <!--                                                    v-model="editedItem.state"-->
-                        <!--                                                    :items="state"-->
-                        <!--                                                    item-text="name"-->
-                        <!--                                                    item-value="name"-->
-                        <!--                                                    label="State"-->
-                        <!--                                                    dense-->
-                        <!--                                                    outlined-->
-                        <!--                                                    required-->
-                        <!--                                                    :rules="rules.state"-->
-                        <!--                                                    return-object-->
-                        <!--                                                    v-on:change=getCities(editedItem.state)-->
-                        <!--                                                ></v-select>-->
-                        <!--                                            </v-col>-->
-                        <!--                                            <v-col>-->
-                        <!--                                                <v-select-->
-                        <!--                                                    v-model="editedItem.city"-->
-                        <!--                                                    :items="city"-->
-                        <!--                                                    item-text="name"-->
-                        <!--                                                    item-value="name"-->
-                        <!--                                                    label="City"-->
-                        <!--                                                    dense-->
-                        <!--                                                    outlined-->
-                        <!--                                                    required-->
-                        <!--                                                    :rules="rules.city"-->
-                        <!--                                                    return-object-->
-                        <!--                                                ></v-select>-->
-                        <!--                                            </v-col>-->
-                        <!--                                        </v-row>-->
-                        <!--                                        <v-row>-->
-                        <!--                                            <v-col>-->
-                        <!--                                                <v-text-field-->
-                        <!--                                                    v-model="editedItem.postal_code"-->
-                        <!--                                                    label="Postal Code"-->
-                        <!--                                                    required-->
-                        <!--                                                    outlined-->
-                        <!--                                                    type="number"-->
-                        <!--                                                ></v-text-field>-->
-                        <!--                                            </v-col>-->
-                        <!--                                            <v-col>-->
-                        <!--                                                <v-select-->
-                        <!--                                                    v-model="editedItem.category_id"-->
-                        <!--                                                    :items="categories"-->
-                        <!--                                                    item-text="name"-->
-                        <!--                                                    item-value="id"-->
-                        <!--                                                    label="Categories"-->
-                        <!--                                                    dense-->
-                        <!--                                                    outlined-->
-                        <!--                                                    required-->
-                        <!--                                                    :rules="rules.category_id"-->
-                        <!--                                                ></v-select>-->
-                        <!--                                            </v-col>-->
-                        <!--                                            <v-col>-->
-                        <!--                                                <v-select-->
-                        <!--                                                    v-model="editedItem.is_active"-->
-                        <!--                                                    :items="activePassive"-->
-                        <!--                                                    item-text="text"-->
-                        <!--                                                    item-value="value"-->
-                        <!--                                                    label="Active or Inactive"-->
-                        <!--                                                    dense-->
-                        <!--                                                    outlined-->
-                        <!--                                                    required-->
-                        <!--                                                    :rules="rules.is_active"-->
-                        <!--                                                ></v-select>-->
-                        <!--                                            </v-col>-->
-                        <!--                                        </v-row>-->
-
-                        <!--                                    </v-container>-->
-                        <!--                                </v-card-text>-->
-
-                        <!--                                <v-card-actions>-->
-                        <!--                                    <v-progress-linear-->
-                        <!--                                        v-if="progressL"-->
-                        <!--                                        indeterminate-->
-                        <!--                                        color="green"-->
-                        <!--                                    ></v-progress-linear>-->
-                        <!--                                    <v-spacer></v-spacer>-->
-                        <!--                                    <v-btn-->
-                        <!--                                        color="blue darken-1"-->
-                        <!--                                        text-->
-                        <!--                                        @click="close"-->
-                        <!--                                    >-->
-                        <!--                                        Cancel-->
-                        <!--                                    </v-btn>-->
-                        <!--                                    <v-btn-->
-                        <!--                                        color="blue darken-1"-->
-                        <!--                                        text-->
-                        <!--                                        @click="save"-->
-                        <!--                                    >-->
-                        <!--                                        Save-->
-                        <!--                                    </v-btn>-->
-                        <!--                                </v-card-actions>-->
-                        <!--                            </v-form>-->
-                        <!--                        </v-card>-->
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
                         <v-card>
@@ -277,6 +97,16 @@
                     >
                         mdi-delete
                     </v-icon>
+                    <router-link
+                        :to="'/vendorProducts/verify/'+item.id"
+                    >
+                        <v-icon
+                            small
+                            class="mr-2"
+                        >
+                            mdi-alpha-r-circle
+                        </v-icon>
+                    </router-link>
                     <router-link
                         :to="'/vendorProducts/add/'+item.id"
                         v-if="$is('Store Keeper')"

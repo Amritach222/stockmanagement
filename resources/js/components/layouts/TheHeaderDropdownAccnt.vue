@@ -16,7 +16,7 @@
             </CHeaderNavLink>
         </template>
         <CDropdownHeader tag="div" class="text-center" color="light">
-            <strong>Account</strong>
+            <strong>{{username}}</strong>
         </CDropdownHeader>
         <CDropdownItem>
             <CIcon name="cil-bell"/>
@@ -61,10 +61,16 @@ export default {
     data() {
         return {
             itemsCount: 42,
-            profileImageUrl: 'images/avatars/7.jpg'
+            profileImageUrl: 'images/avatars/7.jpg',
+            username: 'Username'
         }
     },
     created() {
+        let userData = localStorage.getItem('userData');
+        if(userData !== ''){
+            userData = JSON.parse(userData);
+            this.username = userData.name;
+        }
         this.profileImage()
     },
     methods: {
@@ -76,12 +82,14 @@ export default {
             store.state.auth.password = '';
             let res = await store.dispatch('auth/logoutUser');
             if (res) {
-                // route.push('login');
                 route.push({path: '/login'})
             }
         },
         async profileImage() {
-            let profilePic = await ApiServices.getUserProfilePic();
+            let profilePic = false;
+            if(store.state.auth.isLoggedIn){
+                profilePic = await ApiServices.getUserProfilePic();
+            }
             if (profilePic.success === true) {
                 let link = profilePic.data;
                 this.profileImageUrl = config.cdnURL + link;

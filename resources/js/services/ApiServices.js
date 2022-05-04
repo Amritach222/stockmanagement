@@ -3,6 +3,7 @@
  * Date: 15/09/2021
  */
 import Api from './Api'
+import axios from 'axios'
 
 const POST = 'post'
 const GET = 'get'
@@ -98,6 +99,21 @@ export default {
     },
     async permissionRoleUpdate(data) {
         return await apiCall(POST, `api/update-role-permissions`, data)
+    },
+    async getVendorPendingQuotationCount() {
+        return await apiCall(GET, `api/vendor/pending-quotation-count`)
+    },
+    async getUnreadCount(type) {
+        return await apiCall(GET, `api/get-unread-count/${type}`)
+    },
+    async getAllNotifications() {
+        return await apiCall(GET, `api/get-all-notifications`)
+    },
+    async getNotifications(type) {
+        return await apiCall(GET, `api/get-notifications/${type}`)
+    },
+    async redirectNotification(id) {
+        return await apiCall(GET, `api/redirect-notification/${id}`)
     },
     async logout() {
         return await apiCall(GET, `api/user/logout`)
@@ -257,6 +273,44 @@ export default {
     },
     async itemDelete(id) {
         return await apiCall(DELETE, `api/product/item/items/${id}`)
+    },
+    async itemUsers(id) {
+        return await apiCall(GET, `api/product/item/getItemUsers/${id}`)
+    },
+
+    async paymentIndex() {
+        return await apiCall(GET, `api/payment/registerPayments`)
+    },
+    async paymentCreate(data) {
+        return await apiCall(POST, `api/payment/registerPayments`, data)
+    },
+    async paymentShow(id) {
+        return await apiCall(GET, `api/payment/registerPayments/${id}`)
+    },
+    async paymentEdit(id, data) {
+        return await apiCall(POST, `api/payment/registerPayments/${id}`, data)
+    },
+    async paymentDelete(id) {
+        return await apiCall(DELETE, `api/payment/registerPayments/${id}`)
+    },
+    async checkIfBillCreated(id) {
+        return await apiCall(GET, `api/payment/check-if-bill-created/${id}`)
+    },
+
+    async invoiceIndex() {
+        return await apiCall(GET, `api/payment/invoices`)
+    },
+    async invoiceCreate(data) {
+        return await apiCall(POST, `api/payment/invoices`, data)
+    },
+    async invoiceShow(id) {
+        return await apiCall(GET, `api/payment/invoices/${id}`)
+    },
+    async invoiceEdit(id, data) {
+        return await apiCall(POST, `api/payment/invoices/${id}`, data)
+    },
+    async invoiceDelete(id) {
+        return await apiCall(DELETE, `api/payment/invoices/${id}`)
     },
 
     async productAttributeGroupIndex() {
@@ -475,11 +529,47 @@ export default {
     async vendorProductDelete(id) {
         return await apiCall(DELETE, `api/vendorProducts/${id}`)
     },
+
+
+    async getVendorData() {
+        return await apiCall(GET, `api/vendor/get-vendor-data`)
+    },
+
     async allProductsVendor() {
         return await apiCall(GET, `api/vendor/all-products`)
     },
     async vendorProductList() {
         return await apiCall(GET, `api/vendor/product-list`)
+    },
+    async vendorProductStatusUpdate(id, data) {
+        return await apiCall(POST, `api/vendorProduct/status-update/${id}`, data)
+    },
+    async vendorQuotationList() {
+        return await apiCall(GET, `api/vendor/quotation-list`)
+    },
+    async vendorQuotation(id) {
+        return await apiCall(GET, `api/vendor/quotation/${id}`)
+    },
+    async vendorQuotationDetails(id, vendor) {
+        return await apiCall(GET, `api/quotation/quotations/vendor/${id}/${vendor}`)
+    },
+    async vendorQuotationUpdate(id, data) {
+        return await apiCall(POST, `api/vendor/quotation/update/${id}`, data)
+    },
+    async vendorQuotationProductUpdate(id, data) {
+        return await apiCall(POST, `api/vendor/quotation-product/update/${id}`, data)
+    },
+    async vendorQuotationProductStatusUpdate(id, data) {
+        return await apiCall(POST, `api/vendor/quotation-product-status/update/${id}`, data)
+    },
+    async vendorQuotationStatusUpdate(id, data) {
+        return await apiCall(POST, `api/vendor/quotation-status/update/${id}`, data)
+    },
+    async vendorPaymentShow(id) {
+        return await apiCall(GET, `api/vendor/purchase-order/payment/${id}`)
+    },
+    async vendorPaymentStatusUpdate(id, data) {
+        return await apiCall(POST, `api/vendor/purchase-order/payment-status-update/${id}`, data)
     },
 
     async budgetIndex() {
@@ -641,6 +731,9 @@ export default {
     async quotationDelete(id) {
         return await apiCall(DELETE, `api/quotation/quotations/${id}`)
     },
+    async getApprovedQuotationList() {
+        return await apiCall(GET, `api/quotation/quotations/list/approved`)
+    },
 
     async quotationProductIndex() {
         return await apiCall(GET, `api/quotation/quotationProducts`)
@@ -672,6 +765,58 @@ export default {
     },
     async vendorQuotationDelete(id) {
         return await apiCall(DELETE, `api/quotation/vendorQuotations/${id}`)
+    },
+
+    async vendorQuotationProductIndex() {
+        return await apiCall(GET, `api/quotation/vendorQuotationProducts`)
+    },
+    async vendorQuotationProductCreate(data) {
+        return await apiCall(POST, `api/quotation/vendorQuotationProducts`, data)
+    },
+    async vendorQuotationProductShow(id) {
+        return await apiCall(GET, `api/quotation/vendorQuotationProducts/${id}`)
+    },
+    async vendorQuotationProductEdit(id, data) {
+        return await apiCall(POST, `api/quotation/vendorQuotationProducts/${id}`, data)
+    },
+    async vendorQuotationProductDelete(id) {
+        return await apiCall(DELETE, `api/quotation/vendorQuotationProducts/${id}`)
+    },
+
+    async purchaseOrderIndex() {
+        return await apiCall(GET, `api/purchaseOrder/purchaseOrders`)
+    },
+    async purchaseOrderCreate(data) {
+        return await apiCall(POST, `api/purchaseOrder/purchaseOrders`, data)
+    },
+    async purchaseOrderShow(id) {
+        return await apiCall(GET, `api/purchaseOrder/purchaseOrders/${id}`)
+    },
+    async purchaseOrderEdit(id, data) {
+        return await apiCall(POST, `api/purchaseOrder/purchaseOrders/${id}`, data)
+    },
+    async purchaseOrderDelete(id) {
+        return await apiCall(DELETE, `api/purchaseOrder/purchaseOrders/${id}`)
+    },
+    async purchaseOrderStatusUpdate(id, data) {
+        return await apiCall(POST, `api/purchaseOrder/status-update/${id}`,data)
+    },
+    async purchaseOrderCreateBO(id) {
+        return await apiCall(POST, `api/purchaseOrder/create-back-order/${id}`)
+    },
+
+    async purchaseOrderProductEdit(id, data) {
+        return await apiCall(POST, `api/purchaseOrder/purchaseOrderProducts/${id}`, data)
+    },
+
+    async vendorPurchaseOrderList() {
+        return await apiCall(GET, `api/vendor/purchase-order-list`)
+    },
+    async vendorPurchaseOrderShow(id) {
+        return await apiCall(GET, `api/vendor/purchase-order/${id}`)
+    },
+    async vendorPurchaseOrderEdit(id, data) {
+        return await apiCall(POST, `api/vendor/purchase-order/edit/${id}`, data)
     },
 
     async createVariant(data) {
@@ -772,6 +917,16 @@ export default {
         return await apiCall(GET, `api/list/vendors`)
     },
 
+    async quotationFilter(data) {
+        return await apiCall(POST, `api/filter/quotations`, data)
+    },
+    async purchaseFilter(data) {
+        return await apiCall(POST, `api/filter/purchases`, data)
+    },
+    async purchaseOrderFilter(data) {
+        return await apiCall(POST, `api/filter/purchase-orders`, data)
+    },
+
     async addPurchaseRequest(data) {
         const config = {
             headers: {
@@ -783,13 +938,44 @@ export default {
     async addPurchaseProductRequest(data) {
         return await apiCall(POST, `api/purchase/purchaseProducts`, data)
     },
+    async changePurchaseProductStatusRequest(id, data) {
+        return await apiCall(POST, `api/purchase/purchaseProducts/change-status/${id}`, data)
+    },
+    async changePurchaseProductStatusRequestAd(id, data) {
+        return await apiCall(POST, `api/purchase/purchaseProducts/ad-change-status/${id}`, data)
+    },
     async getUserPurchaseProductRequestHistory() {
         return await apiCall(GET, `api/purchase/user-history`)
     },
     async getAdminPurchaseProductRequest() {
-        return await apiCall(GET, `api/purchase/purchase-list`)
+        return await apiCall(GET, `api/purchase/ad-purchase-list`)
+    },
+    async getAdminPurchaseProductRequestApproved() {
+        return await apiCall(GET, `api/purchase/ad-purchase-list?status=approved`)
+    },
+    async getAdminPurchaseProductRequestRejected() {
+        return await apiCall(GET, `api/purchase/ad-purchase-list?status=rejected`)
+    },
+    async getDepartmentHeadPurchaseProductRequest() {
+        return await apiCall(GET, `api/purchase/dh-purchase-list`)
+    },
+    async getDepartmentHeadPurchaseProductRequestApproved() {
+        return await apiCall(GET, `api/purchase/dh-purchase-list?status=approved`)
+    },
+    async getDepartmentHeadPurchaseProductRequestRejected() {
+        return await apiCall(GET, `api/purchase/dh-purchase-list?status=rejected`)
     },
     async deleteUserPurchaseRequest(id) {
         return await apiCall(DELETE, `api/purchase/purchases/${id}`)
+    },
+    async showPurchaseRequest(id) {
+        return await apiCall(GET, `api/purchase/purchases/${id}`)
+    },
+    async editPurchaseRequestProduct(id, data) {
+        return await apiCall(POST, `api/purchase/purchaseProducts/${id}`, data)
+    },
+
+    async getPanDetails(id) {
+        return await axios.get(`https://lc.lacc.website/search/pan?pan=${id}`);
     },
 }

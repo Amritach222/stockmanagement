@@ -148,11 +148,13 @@ export default {
             let res = await ApiServices.vendorProductIds('product', this.$route.params.id);
             if (res.success === true) {
                 this.tableLoad = false;
-                this.product_ids = res.data;
-                for (let i = 0; i < this.product_ids.length; i++) {
+                this.vendor_products = res.data;
+                for (let i = 0; i < this.vendor_products.length; i++) {
                     for (let j = 0; j < this.products.length; j++) {
-                        if (this.products[j].id === this.product_ids[i]) {
-                            this.selected.push(this.products[j]);
+                        if (this.products[j].id === this.vendor_products[i].product_id) {
+                            if (this.vendor_products[i].status === 'Verified') {
+                                this.selected.push(this.products[j]);
+                            }
                         }
                     }
                 }

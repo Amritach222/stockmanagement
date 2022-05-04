@@ -85,6 +85,26 @@
             <template v-slot:item.category="{ item }">
                 {{ item.category.name }}
             </template>
+            <template v-slot:item.status="{ item }">
+                <div v-if="item.status === 'Unverified'">
+                    <CButton size="sm" color="danger" class="m-1">
+                        {{ item.status }}
+                    </CButton>
+                </div>
+                <div v-else-if="item.status === 'Pending'">
+                    <CButton size="sm" class="m-1" color="secondary">
+                        {{ item.status }}
+                    </CButton>
+                </div>
+                <div v-else-if="item.status === 'Verified'">
+                    <CButton size="sm" class="m-1" color="success">
+                        {{ item.status }}
+                    </CButton>
+                </div>
+                <div v-else>
+                   ----
+                </div>
+            </template>
             <template v-slot:no-data>
                 <div>No Data</div>
             </template>
@@ -121,6 +141,7 @@ export default {
             {text: i18n.t('image'), value: 'link', sortable: false},
             {text: i18n.t('brand'), value: 'brand', sortable: false},
             {text: i18n.t('category'), value: 'category', sortable: false},
+            {text: i18n.t('status'), value: 'status', sortable: false},
         ],
         activePassive: [
             {text: 'Active', value: 1},
@@ -152,10 +173,11 @@ export default {
             let res = await ApiServices.vendorProductIds('product', this.user.id);
             if (res.success === true) {
                 this.tableLoad = false;
-                this.product_ids = res.data;
-                for (let i = 0; i < this.product_ids.length; i++) {
+                this.vendor_products = res.data;
+                for (let i = 0; i < this.vendor_products.length; i++) {
                     for (let j = 0; j < this.products.length; j++) {
-                        if (this.products[j].id === this.product_ids[i]) {
+                        if (this.products[j].id === this.vendor_products[i].product_id) {
+                            this.products[j].status = this.vendor_products[i].status;
                             this.selected.push(this.products[j]);
                         }
                     }

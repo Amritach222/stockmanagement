@@ -249,7 +249,7 @@ export default {
                     this.progressL = true;
                     const data = new FormData();
                     data.append('name', this.editedItem.name);
-                    let res = await ApiServices.itemAttributeGroupCreate(data);
+                    let res = await ApiServices.productAttributeGroupCreate(data);
                     if (res.success === true) {
                         this.productAttributeGroups.push(this.editedItem);
                         this.$refs.form.reset();
