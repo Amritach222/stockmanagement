@@ -45,7 +45,7 @@ class InvoiceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -61,6 +61,11 @@ class InvoiceController extends Controller
             $invoice->save();
             $payment = RegisterPayment::findOrFail($request->payment_id);
             $payment->due_amount = $payment->due_amount - $invoice->amount;
+            if ($payment->due_amount == 0) {
+                $payment->status = 'Paid';
+            } else {
+                $payment->status = 'Due';
+            }
             $payment->save();
             $ref = ReferenceNoGenerator::referenceNo();
             $invoice->reference_no = 'Inv-0' . $ref . '-' . $invoice->id;
@@ -77,7 +82,7 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Invoice  $invoice
+     * @param \App\Models\Invoice $invoice
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -97,7 +102,7 @@ class InvoiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Invoice  $invoice
+     * @param \App\Models\Invoice $invoice
      * @return \Illuminate\Http\Response
      */
     public function edit(Invoice $invoice)
@@ -108,8 +113,8 @@ class InvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Invoice  $invoice
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Invoice $invoice
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -134,7 +139,7 @@ class InvoiceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Invoice  $invoice
+     * @param \App\Models\Invoice $invoice
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

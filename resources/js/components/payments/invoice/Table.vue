@@ -52,16 +52,16 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.payment_id="{ item }">
-                <p v-if="item.payment_id">{{ item.payment.reference_no }}</p>
-                <p v-else>----</p>
+                <p v-if="item.payment_id" class="mt-3">{{ item.payment_reference }}</p>
+                <p v-else class="mt-3">----</p>
             </template>
             <template v-slot:item.issued_by="{ item }">
-                <p v-if="item.issued_by">{{ item.issuer.name }}</p>
-                <p v-else>----</p>
+                <p v-if="item.issued_by" class="mt-3">{{ item.issuer.name }}</p>
+                <p v-else class="mt-3">----</p>
             </template>
             <template v-slot:item.paid_to="{ item }">
-                <p v-if="item.paid_to">{{ item.vendor.name }}</p>
-                <p v-else>----</p>
+                <p v-if="item.paid_to" class="mt-3">{{ item.vendor.name }}</p>
+                <p v-else class="mt-3">----</p>
             </template>
             <template v-slot:item.actions="{ item }">
                 <router-link
