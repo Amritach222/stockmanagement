@@ -25,6 +25,7 @@ class CreateRegisterPaymentsTable extends Migration
             $table->integer('discount')->default(0)->nullable();
             $table->decimal('grand_total', 8, 2)->nullable()->default(0);
             $table->decimal('due_amount', 8, 2)->nullable()->default(0);
+            $table->enum('status', ['Pending', 'Accepted', 'Rejected', 'Due', 'Paid'])->nullable()->default('Pending');
             $table->timestamps();
         });
     }

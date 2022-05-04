@@ -58,6 +58,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($director, 'transfers');
             $this->giveAutoAllPermissions($director, 'users');
             $this->giveAutoAllPermissions($director, 'unusedProducts');
+            $this->giveAutoAllPermissions($director, 'payments');
+            $this->giveAutoAllPermissions($director, 'invoices');
             $director->givePermissionTo('settings');
 
             $financeDirector = Role::create([
@@ -74,6 +76,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($financeDirector, 'expenses');
             $this->giveAutoAllPermissions($director, 'purchaseOrders');
             $this->giveAutoAllPermissions($director, 'purchaseOrderProducts');
+            $this->giveAutoAllPermissions($director, 'payments');
+            $this->giveAutoAllPermissions($director, 'invoices');
             $financeDirector->givePermissionTo('budgetRequests.edit');
             $financeDirector->givePermissionTo('budgetRequests');
             $financeDirector->givePermissionTo('settings');
@@ -99,6 +103,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($departmentHead, 'budgetRequests');
             $this->giveAutoAllPermissions($departmentHead, 'budgetExtends');
             $this->giveAutoAllPermissions($departmentHead, 'unusedProducts');
+            $this->giveAutoAllPermissions($departmentHead, 'payments');
+            $this->giveAutoAllPermissions($departmentHead, 'invoices');
             $departmentHead->givePermissionTo('freezeBudgets');
             $departmentHead->givePermissionTo('settings');
             $departmentHead->givePermissionTo('units');
@@ -117,8 +123,6 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($staff, 'purchaseHistory');
             $this->giveAutoAllPermissions($staff, 'purchases');
             $this->giveAutoAllPermissions($staff, 'purchaseProducts');
-            $this->giveAutoAllPermissions($director, 'purchaseOrders');
-            $this->giveAutoAllPermissions($director, 'purchaseOrderProducts');
             $this->giveAutoAllPermissions($staff, 'productVariants');
             $this->giveAutoAllPermissions($staff, 'productVariantAttributes');
             $this->giveAutoAllPermissions($staff, 'quotations');
@@ -148,7 +152,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeKeeper, 'unusedProducts');
             $this->giveAutoAllPermissions($storeKeeper, 'transfers');
             $this->giveAutoAllPermissions($storeKeeper, 'returnProducts');
-            $this->giveAutoAllPermissions($storeKeeper, 'purchaseProductsApprovalStoreAdmin');
+            $this->giveAutoAllPermissions($storeKeeper, 'payments');
+            $this->giveAutoAllPermissions($storeKeeper, 'invoices');
             $storeKeeper->givePermissionTo('vendors');
             $storeKeeper->givePermissionTo('vendors.show');
             $storeKeeper->givePermissionTo('settings');
@@ -170,6 +175,8 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($director, 'purchaseOrders');
             $this->giveAutoAllPermissions($director, 'purchaseOrderProducts');
             $this->giveAutoAllPermissions($storeManager, 'consumes');
+            $this->giveAutoAllPermissions($storeManager, 'payments');
+            $this->giveAutoAllPermissions($storeManager, 'invoices');
             $storeManager->givePermissionTo('settings');
             $this->giveAutoAllPermissions($storeManager, 'purchaseProductsApprovalAdmin');
             $storeManager->givePermissionTo('units');
@@ -179,6 +186,10 @@ class RolesSeeder extends Seeder
                 'guard_name' => $guard
             ]);
             $this->giveAutoAllPermissions($financeStaff, 'expenses');
+            $this->giveAutoAllPermissions($financeStaff, 'purchaseOrders');
+            $this->giveAutoAllPermissions($financeStaff, 'purchaseOrderProducts');
+            $this->giveAutoAllPermissions($financeStaff, 'payments');
+            $this->giveAutoAllPermissions($financeStaff, 'invoices');
             $financeStaff->givePermissionTo('settings');
         }
         $user = new User([

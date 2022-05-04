@@ -18,17 +18,10 @@
                                             <h2>{{ settings.title }}</h2>
                                         </div><!--End Info-->
 
-                                        <div class="noprint ml-auto">
-                                            <CButton size="sm" color="primary"
-                                                     :to="'/purchaseOrders/payment/edit/'+payment.id">Edit
+                                        <div class="noprint ml-auto" v-if="payment.status === 'Pending'">
+                                            <CButton size="sm" color="primary" @click="statusUpdate('Accepted')">Accept
                                             </CButton>
-                                            <CButton size="sm" color="success" @click="openInvoice"
-                                                     v-if="payment.status === 'Accepted' || payment.status === 'Due'">
-                                                Register Payment
-                                            </CButton>
-                                            <CButton size="sm" color="warning"
-                                                     :to="'/purchaseOrders/payment/invoices/'+payment.id"
-                                                     v-if="invoices.length > 0">View Invoices
+                                            <CButton size="sm" color="danger" @click="statusUpdate('Rejected')">Reject
                                             </CButton>
                                         </div><!--End Info-->
 
@@ -167,66 +160,6 @@
                             </div><!-- End invoice Holder-->
                         </v-card>
 
-                        <v-dialog
-                            v-model="dialogRegPayment"
-                            max-width="850px"
-                            max-height="450px"
-                        >
-                            <v-card>
-                                <v-card-title>
-                                    Register Payment
-                                    <v-spacer></v-spacer>
-                                </v-card-title>
-
-                                <v-card-text>
-                                    <v-container>
-                                        <v-row>
-                                            <v-col>
-                                                <v-select
-                                                    v-model="invoice.payment_type"
-                                                    :label="$t('payment') + ' ' + $t('type')"
-                                                    :items="['Cash','Online Payment']"
-                                                    required
-                                                    outlined
-                                                ></v-select>
-                                                <v-text-field
-                                                    v-model="invoice.amount"
-                                                    :label="$t('amount')"
-                                                    type="number"
-                                                    outlined
-                                                ></v-text-field>
-                                                <v-text-field
-                                                    v-model="invoice.description"
-                                                    :label="$t('memo')"
-                                                    outlined
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                    </v-container>
-                                </v-card-text>
-
-                                <v-row class="m-4 d-flex justify-content-end">
-                                    <v-card-actions>
-                                        <v-btn
-                                            color="blue darken-1"
-                                            class="btn btn-danger card-btn"
-                                            text
-                                            @click="closeRegPayment"
-                                        >
-                                            {{ $t('button.cancel') }}
-                                        </v-btn>
-                                        <v-btn
-                                            color="blue darken-1"
-                                            class="btn btn-primary card-btn"
-                                            text
-                                            @click="createInvoice"
-                                        >
-                                            {{ $t('button.submit') }}
-                                        </v-btn>
-                                    </v-card-actions>
-                                </v-row>
-                            </v-card>
-                        </v-dialog>
                     </CCardGroup>
                 </CCol>
             </CRow>
@@ -288,17 +221,17 @@ export default {
             if (item.city !== null) return JSON.parse(item.city).name;
         },
         async loadData() {
-            let res = await ApiServices.paymentShow(this.$route.params.id);
+            let res = await ApiServices.vendorPaymentShow(this.$route.params.id);
             if (res.success === true) {
                 this.payment = res.data;
                 this.invoices = res.data.invoices;
             }
-            let rtn = await ApiServices.purchaseOrderShow(res.data.purchase_order_id);
+            let rtn = await ApiServices.vendorPurchaseOrderShow(res.data.purchase_order_id);
             if (rtn.success === true) {
                 this.editedItem = rtn.data;
                 this.poProducts = rtn.data.purchase_order_products;
             }
-            let ven = await ApiServices.vendorShow(rtn.data.vendor_id);
+            let ven = await ApiServices.getVendorData();
             if (ven.success === true) {
                 this.vendor = ven.data;
             }
@@ -314,58 +247,22 @@ export default {
             }
         },
 
-        async openInvoice() {
-            this.dialogRegPayment = true;
-            this.invoice.amount = this.payment.due_amount;
-            this.invoice.payment_type = 'Cash';
-        },
+        async statusUpdate(status) {
+            const data = new FormData();
+            data.append('status', status);
 
-        async closeRegPayment() {
-            this.dialogRegPayment = false;
-            this.clearData();
-        },
-
-        async createInvoice() {
-            this.validate();
-            if (this.validated === true) {
-                const data = new FormData();
-                data.append('amount', this.invoice.amount);
-                data.append('payment_type', this.invoice.payment_type);
-                data.append('description', this.invoice.description);
-                data.append('payment_id', this.$route.params.id);
-                let res = await ApiServices.invoiceCreate(data);
-                if (res.success === true) {
-                    this.payment = res.data;
-                    this.dialogRegPayment = false;
-                    this.clearData();
-                    store.state.home.snackbar = true;
-                    store.state.home.snackbarText = res.message;
-                    store.state.home.snackbarColor = 'green';
-                } else {
-                    store.state.home.snackbar = true;
-                    store.state.home.snackbarText = res.message;
-                    store.state.home.snackbarColor = 'red';
-                }
-            }
-        },
-
-        async validate() {
-            if (this.invoice.amount > 0) {
-                this.validated = true;
+            let res = await ApiServices.vendorPaymentStatusUpdate(this.payment.id, data);
+            this.changeProgress = false;
+            if (res.success === true) {
+                this.payment = res.data;
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = res.message;
+                store.state.home.snackbarColor = 'green';
             } else {
-                this.validated = false;
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = res.message;
+                store.state.home.snackbarColor = 'red';
             }
-            if (this.invoice.payment_type !== null) {
-                this.validated = true;
-            } else {
-                this.validated = false;
-            }
-        },
-
-        async clearData() {
-            this.invoice.payment_type = '';
-            this.invoice.amount = '';
-            this.invoice.description = '';
         },
     }
 }

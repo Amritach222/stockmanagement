@@ -206,6 +206,12 @@
                                             <CIcon name="cil-check-circle"/>
                                             Ship
                                         </CButton>
+                                        <CButton size="sm" color="warning"
+                                                 :to="'/vendor/bill/show/'+bill_id"
+                                                 v-if="hasBill === true">
+                                            <CIcon name="cil-check-circle"/>
+                                            View Bill
+                                        </CButton>
                                         <CButton :to="'/vendor/purchase-orders'" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>
                                             Back
@@ -287,6 +293,8 @@ export default {
         departments: [],
         variants: [],
         hasVariants: false,
+        hasBill: false,
+        bill_id: null,
         quotationItem: {
             id: null,
             description: '',
@@ -342,11 +350,27 @@ export default {
             if (res.success === true) {
                 this.editedItem = res.data;
                 this.quoProducts = res.data.purchase_order_products;
+                let bill = await this.checkIfBillCreated();
                 if (this.quoProducts.length > 0) {
                     this.vendorCard = true;
                 }
             }
         },
+
+        async checkIfBillCreated() {
+            let res = await ApiServices.checkIfBillCreated(this.editedItem.id);
+            if (res.success === true) {
+                if (res.data.count > 0) {
+                    this.hasBill = true;
+                    this.bill_id = res.data.id;
+                }
+            } else {
+                store.state.home.snackbar = true;
+                store.state.home.snackbarText = res.message;
+                store.state.home.snackbarColor = 'red';
+            }
+        },
+
         async loadUserName() {
             let user = JSON.parse(localStorage.getItem('userData'));
             this.requested_name = user.name;

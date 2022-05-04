@@ -67,6 +67,8 @@ class PermissionSeeder extends Seeder
             $this->createAutoAllPermissions('budgetRequestCategories', $guard);
             $this->createAutoAllPermissions('purchaseOrders', $guard);
             $this->createAutoAllPermissions('purchaseOrderProducts', $guard);
+            $this->createAutoAllPermissions('payments', $guard);
+            $this->createAutoAllPermissions('invoices', $guard);
             Permission::create([
                 'name' => 'roles',
                 'guard_name' => $guard

@@ -155,9 +155,17 @@ import PurchaseOrderBill from './components/purchaseOrder/payment/Bill'
 import PurchaseOrderInvoice from './components/purchaseOrder/payment/Invoices'
 import PurchaseOrderBillEdit from './components/purchaseOrder/payment/Edit'
 
+import InvoiceIndex from './components/payments/invoice/Index'
+import InvoiceShow from './components/payments/invoice/Show'
+
+import BillIndex from './components/payments/bill/Index'
+import BillShow from './components/payments/bill/Show'
+
 import VendorPurchaseOrderIndex from './components/Vendor/purchaseOrder/Index'
 import VendorPurchaseOrderEdit from './components/Vendor/purchaseOrder/Edit'
 import VendorPurchaseOrderShow from './components/Vendor/purchaseOrder/Show'
+
+import VendorBillShow from './components/Vendor/purchaseOrder/Bill'
 
 import RoleIndex from './components/Settings/role/Index'
 import RolePermission from './components/Settings/role/Permissions'
@@ -1028,7 +1036,7 @@ export default new Router({
         },
         {
             path: '/vendorProducts/verify/:id',
-            name: i18n.t('vendor') + ' ' + i18n.t('product') +' ' + i18n.t('verify'),
+            name: i18n.t('vendor') + ' ' + i18n.t('product') + ' ' + i18n.t('verify'),
             component: VendorProductVerifyRequest,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1082,7 +1090,7 @@ export default new Router({
         },
         {
             path: '/vendor/product-request/edit/:id',
-            name: i18n.t('edit') +' '+ i18n.t('product') + ' ' + i18n.t('request'),
+            name: i18n.t('edit') + ' ' + i18n.t('product') + ' ' + i18n.t('request'),
             component: VendorProductRequestEdit,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1415,7 +1423,7 @@ export default new Router({
         },
         {
             path: '/quotations/list/approved',
-            name: i18n.t('quotation')+' '+i18n.t('approved'),
+            name: i18n.t('quotation') + ' ' + i18n.t('approved'),
             component: ApprovedQuotationList,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1470,7 +1478,7 @@ export default new Router({
         },
         {
             path: '/purchaseOrders/payment/:id',
-            name: 'Purchase Order Bill',
+            name: 'Purchase Order bill',
             component: PurchaseOrderBill,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
@@ -1488,8 +1496,46 @@ export default new Router({
         },
         {
             path: '/purchaseOrders/payment/edit/:id',
-            name: 'Purchase Order Bill Edit',
+            name: 'Purchase Order bill Edit',
             component: PurchaseOrderBillEdit,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/bills',
+            name: 'Bills',
+            component: BillIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/bills/show/:id',
+            name: 'Bill Show',
+            component: BillShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+
+        {
+            path: '/invoices',
+            name: 'Invoices',
+            component: InvoiceIndex,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/invoices/show/:id',
+            name: 'Invoice Show',
+            component: InvoiceShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();
@@ -1518,6 +1564,15 @@ export default new Router({
             path: '/vendor/purchase-order/show/:id',
             name: 'Purchase Order Show',
             component: VendorPurchaseOrderShow,
+            beforeEnter: async (to, from, next) => {
+                await logMe(to, from);
+                next();
+            }
+        },
+        {
+            path: '/vendor/bill/show/:id',
+            name: 'Vendor Bill Show',
+            component: VendorBillShow,
             beforeEnter: async (to, from, next) => {
                 await logMe(to, from);
                 next();

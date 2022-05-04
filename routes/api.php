@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('get-unread-count/{type}', [\App\Http\Controllers\Api\NotificationController::class, 'unreadCount']);
     Route::get('redirect-notification/{id}', [\App\Http\Controllers\Api\NotificationController::class, 'redirect']);
     Route::group(['prefix' => '/vendor'], function () {
+        Route::get('get-vendor-data', [\App\Http\Controllers\Api\VendorPortalController::class, 'getVendorData']);
         Route::get('quotation-list', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationList']);
         Route::get('quotation/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationShow']);
         Route::post('quotation/update/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'quotationUpdate']);
@@ -50,6 +51,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('purchase-order-list', [\App\Http\Controllers\Api\VendorPortalController::class, 'getPurchaseOrderList']);
         Route::get('purchase-order/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'purchaseOrderShow']);
         Route::post('purchase-order/edit/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'purchaseOrderUpdate']);
+        Route::get('purchase-order/payment/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'paymentShow']);
+        Route::post('purchase-order/payment-status-update/{id}', [\App\Http\Controllers\Api\VendorPortalController::class, 'paymentStatusUpdate']);
     });
 
     Route::group(['prefix' => '/filter'], function () {

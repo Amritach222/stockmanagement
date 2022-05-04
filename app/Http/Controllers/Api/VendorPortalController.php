@@ -6,6 +6,7 @@ use App\Events\POVendorEvent;
 use App\Events\QuotationStatusChangeEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\QuotationProduct;
+use App\Http\Resources\RegisterPaymentResource;
 use App\Http\Resources\VendorQuotationProductResource;
 use App\Listeners\QuotationStatusChangeListener;
 use App\Models\File;
@@ -13,6 +14,7 @@ use App\Models\Product;
 use App\Http\Resources\Product as ProductResource;
 use App\Models\PurchaseOrder;
 use App\Models\Quotation;
+use App\Models\RegisterPayment;
 use App\Models\Tax;
 use App\Models\User;
 use App\Models\Vendor;
@@ -28,6 +30,23 @@ class VendorPortalController extends Controller
     public function __construct()
     {
         $this->middleware('permission:' . 'vendors.products')->only('productList', 'allProducts');
+    }
+
+    public function getVendorData()
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $user = User::findOrFail(auth()->user()->id);
+            $vendor = Vendor::where('user_id', $user->id)->firstOrFail();
+            $data['data'] = new \App\Http\Resources\Vendor($vendor);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
+            $data['data'] = $e;
+        }
+        return $data;
     }
 
     public function productList()
@@ -477,6 +496,39 @@ class VendorPortalController extends Controller
             $data['success'] = false;
             $data['message'] = 'Error occurred';
             $data['data'] = $e;
+        }
+        return $data;
+    }
+
+    public function paymentShow($id)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $data['data'] = new RegisterPaymentResource(RegisterPayment::findOrFail($id));
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
+        }
+        return $data;
+    }
+
+    public function paymentStatusUpdate($id, Request $request)
+    {
+        $data['success'] = true;
+        $data['message'] = '';
+        $data['data'] = [];
+        try {
+            $payment = RegisterPayment::findOrFail($id);
+            $values = $request->only(['status']);
+            $payment->update($values);
+            $data['message'] = 'This bill has been accepted successfully.';
+            $data['data'] = new RegisterPaymentResource($payment);
+        } catch (\Exception $e) {
+            $data['success'] = false;
+            $data['message'] = 'Error occurred.';
+            $data['data']=$e;
         }
         return $data;
     }

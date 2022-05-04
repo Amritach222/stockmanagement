@@ -21,7 +21,7 @@ class RegisterPaymentResource extends JsonResource
 //            $due_amount = $invoice->due_amount;
 //        }
         $invoices = InvoiceResource::collection($this->invoices);
-        $due_date = date('d/m/Y',strtotime($this->due_date));
+        $due_date = date('d/m/Y', strtotime($this->due_date));
         return [
             'id' => $this->id,
             'reference_no' => $this->reference_no,
@@ -33,6 +33,7 @@ class RegisterPaymentResource extends JsonResource
             'shipping_cost' => $this->shipping_cost,
             'grand_total' => $this->grand_total,
             'due_amount' => $this->due_amount,
+            'status' => $this->status,
             'invoices' => $invoices
         ];
     }

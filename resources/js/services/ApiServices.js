@@ -278,6 +278,9 @@ export default {
         return await apiCall(GET, `api/product/item/getItemUsers/${id}`)
     },
 
+    async paymentIndex() {
+        return await apiCall(GET, `api/payment/registerPayments`)
+    },
     async paymentCreate(data) {
         return await apiCall(POST, `api/payment/registerPayments`, data)
     },
@@ -294,6 +297,9 @@ export default {
         return await apiCall(GET, `api/payment/check-if-bill-created/${id}`)
     },
 
+    async invoiceIndex() {
+        return await apiCall(GET, `api/payment/invoices`)
+    },
     async invoiceCreate(data) {
         return await apiCall(POST, `api/payment/invoices`, data)
     },
@@ -523,6 +529,12 @@ export default {
     async vendorProductDelete(id) {
         return await apiCall(DELETE, `api/vendorProducts/${id}`)
     },
+
+
+    async getVendorData() {
+        return await apiCall(GET, `api/vendor/get-vendor-data`)
+    },
+
     async allProductsVendor() {
         return await apiCall(GET, `api/vendor/all-products`)
     },
@@ -552,6 +564,12 @@ export default {
     },
     async vendorQuotationStatusUpdate(id, data) {
         return await apiCall(POST, `api/vendor/quotation-status/update/${id}`, data)
+    },
+    async vendorPaymentShow(id) {
+        return await apiCall(GET, `api/vendor/purchase-order/payment/${id}`)
+    },
+    async vendorPaymentStatusUpdate(id, data) {
+        return await apiCall(POST, `api/vendor/purchase-order/payment-status-update/${id}`, data)
     },
 
     async budgetIndex() {

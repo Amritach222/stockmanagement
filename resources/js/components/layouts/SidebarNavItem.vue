@@ -362,7 +362,7 @@
                     </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item class="ml-3" v-if="$can('purchaseProductsApprovalDepartmentHead')">
+                <v-list-item class="ml-3" v-if="$can('purchaseProductsApprovalDepartmentHead') && $is('Department Head')">
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-shield-refresh</v-icon>
                     </v-list-item-icon>
@@ -408,7 +408,7 @@
                 </v-list-item>
             </v-list-group>
 
-            <v-list-group v-if="$can('quotations')">
+            <v-list-group v-if="$can('purchaseOrders')">
                 <template v-slot:activator>
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-cart</v-icon>
@@ -416,7 +416,7 @@
                     <v-list-item-title class="item-color">{{ $t('purchase') + ' ' + $t('orders') }}</v-list-item-title>
                 </template>
 
-                <v-list-item class="ml-3" v-if="$can('quotations')">
+                <v-list-item class="ml-3" v-if="$can('purchaseOrders')">
                     <v-list-item-icon class="mr-2">
                         <v-icon>mdi-alpha-p-circle</v-icon>
                     </v-list-item-icon>
@@ -424,6 +424,39 @@
                         <router-link
                             :to="'/purchaseOrders/'">
                             {{ $t('purchase') + ' ' + $t('order') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
+
+            <v-list-group v-if="$can('payments') || $can('invoices')">
+                <template v-slot:activator>
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-cash</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title class="item-color">{{ $t('payments') }}</v-list-item-title>
+                </template>
+
+                <v-list-item class="ml-3" v-if="$can('payments')">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-alpha-p-circle</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/bills/'">
+                            {{ $t('bills') }}
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item class="ml-3" v-if="$can('invoices')">
+                    <v-list-item-icon class="mr-2">
+                        <v-icon>mdi-alpha-p-circle</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                        <router-link
+                            :to="'/invoices/'">
+                            {{ $t('invoices') }}
                         </router-link>
                     </v-list-item-title>
                 </v-list-item>
