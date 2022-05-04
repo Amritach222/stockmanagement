@@ -116,6 +116,19 @@ class RolesSeeder extends Seeder
                 'name' => 'Staff',
                 'guard_name' => $guard
             ]);
+            $permissions = Permission::where('guard_name', $guard)->where('name', '!=', 'roles')->where('name', '!=', 'permissions')->get();
+            $staff->givePermissionTo($permissions);
+//            $this->giveAutoAllPermissions($staff, 'categories');
+//            $this->giveAutoAllPermissions($staff, 'items');
+//            $this->giveAutoAllPermissions($staff, 'productVariants');
+//            $this->giveAutoAllPermissions($staff, 'productVariantAttributes');
+//            $this->giveAutoAllPermissions($staff, 'quotations');
+//            $this->giveAutoAllPermissions($staff, 'quotationProducts');
+//            $this->giveAutoAllPermissions($staff, 'unusedProducts');
+//            $staff->givePermissionTo('units');
+//            $staff->givePermissionTo('brands');
+//            $staff->givePermissionTo('taxes');
+//            $staff->givePermissionTo('products');
             $this->giveAutoAllPermissions($staff, 'categories');
             $this->giveAutoAllPermissions($staff, 'products');
             $this->giveAutoAllPermissions($staff, 'items');
@@ -154,6 +167,7 @@ class RolesSeeder extends Seeder
             $this->giveAutoAllPermissions($storeKeeper, 'returnProducts');
             $this->giveAutoAllPermissions($storeKeeper, 'payments');
             $this->giveAutoAllPermissions($storeKeeper, 'invoices');
+            $this->giveAutoAllPermissions($storeKeeper, 'purchaseProductsApprovalStoreAdmin');
             $storeKeeper->givePermissionTo('vendors');
             $storeKeeper->givePermissionTo('vendors.show');
             $storeKeeper->givePermissionTo('settings');
@@ -180,6 +194,8 @@ class RolesSeeder extends Seeder
             $storeManager->givePermissionTo('settings');
             $this->giveAutoAllPermissions($storeManager, 'purchaseProductsApprovalAdmin');
             $storeManager->givePermissionTo('units');
+            $storeManager->givePermissionTo('products');
+            $storeManager->givePermissionTo('productVariants');
 
             $financeStaff = Role::create([
                 'name' => 'Finance Staff',
