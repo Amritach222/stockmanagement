@@ -15,6 +15,14 @@ class InvoiceResource extends JsonResource
     public function toArray($request)
     {
         $creation_date = $this->created_at->format('d/m/Y');
+        $issuer = null;
+        if ($this->issued_by !== null) {
+            $issuer = new AuthResource($this->issued_by);
+        }
+        $paidTo = null;
+        if ($this->paid_to !== null) {
+            $paidTo = new Vendor($this->paid_to);
+        }
         return [
             'id' => $this->id,
             'payment_id' => $this->payment_id,
@@ -26,6 +34,8 @@ class InvoiceResource extends JsonResource
             'description' => $this->description,
             'creation_date' => $creation_date,
             'due_amount' => '',
+            'issuer' => $issuer,
+            'vendor' => $paidTo,
         ];
     }
 }

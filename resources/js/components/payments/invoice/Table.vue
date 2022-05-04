@@ -41,12 +41,27 @@
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{
+                                        $t('button.confirm')
+                                    }}
+                                </v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
                 </v-toolbar>
+            </template>
+            <template v-slot:item.payment_id="{ item }">
+                <p v-if="item.payment_id">{{ item.payment.reference_no }}</p>
+                <p v-else>----</p>
+            </template>
+            <template v-slot:item.issued_by="{ item }">
+                <p v-if="item.issued_by">{{ item.issuer.name }}</p>
+                <p v-else>----</p>
+            </template>
+            <template v-slot:item.paid_to="{ item }">
+                <p v-if="item.paid_to">{{ item.vendor.name }}</p>
+                <p v-else>----</p>
             </template>
             <template v-slot:item.actions="{ item }">
                 <router-link
@@ -92,11 +107,12 @@ export default {
         dialogDelete: false,
         headers: [
             {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
-            {text: i18n.t('name'), value: 'name'},
-            {text: i18n.t('image'), value: 'link', sortable: false},
-            {text: i18n.t('brand'), value: 'brand', sortable: false},
-            {text: i18n.t('category'), value: 'category', sortable: false},
-            {text: i18n.t('type'), value: 'type'},
+            {text: i18n.t('reference') + ' ' + i18n.t('no.'), value: 'reference_no'},
+            {text: i18n.t('payment') + ' ' + i18n.t('reference'), value: 'payment_id'},
+            {text: i18n.t('amount'), value: 'amount'},
+            {text: i18n.t('issued_by'), value: 'issued_by', sortable: false},
+            {text: i18n.t('paid_to'), value: 'paid_to', sortable: false},
+            {text: i18n.t('payment_type'), value: 'payment_type'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         invoices: [],

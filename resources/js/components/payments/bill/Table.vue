@@ -39,17 +39,17 @@
                         max-width="600px"
                     >
                         <template v-slot:activator="{ on, attrs }">
-<!--                            <v-btn-->
-<!--                                color="green"-->
-<!--                                dark-->
-<!--                                class="mb-2"-->
-<!--                                v-bind="attrs"-->
-<!--                                v-on="on"-->
-<!--                                :to="'/products/create'"-->
-<!--                                v-if="$can('products.create')"-->
-<!--                            >-->
-<!--                                {{ $t('button.add_new_product') }}-->
-<!--                            </v-btn>-->
+                            <!--                            <v-btn-->
+                            <!--                                color="green"-->
+                            <!--                                dark-->
+                            <!--                                class="mb-2"-->
+                            <!--                                v-bind="attrs"-->
+                            <!--                                v-on="on"-->
+                            <!--                                :to="'/products/create'"-->
+                            <!--                                v-if="$can('products.create')"-->
+                            <!--                            >-->
+                            <!--                                {{ $t('button.add_new_product') }}-->
+                            <!--                            </v-btn>-->
                         </template>
                     </v-dialog>
                     <v-dialog v-model="dialogDelete" max-width="500px">
@@ -58,12 +58,19 @@
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" text @click="closeDelete">{{ $t('button.cancel') }}</v-btn>
-                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{ $t('button.confirm') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="deleteItemConfirm">{{
+                                        $t('button.confirm')
+                                    }}
+                                </v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
                 </v-toolbar>
+            </template>
+            <template v-slot:item.purchase_order_id="{ item }">
+                <p v-if="item.purchase_order_id">{{ item.purchase_order.reference }}</p>
+                <p v-else>---</p>
             </template>
             <template v-slot:item.actions="{ item }">
                 <router-link
@@ -109,11 +116,12 @@ export default {
         dialogDelete: false,
         headers: [
             {text: i18n.t('id'), align: 'start', sortable: true, value: 'id'},
-            {text: i18n.t('name'), value: 'name'},
-            {text: i18n.t('image'), value: 'link', sortable: false},
-            {text: i18n.t('brand'), value: 'brand', sortable: false},
-            {text: i18n.t('category'), value: 'category', sortable: false},
-            {text: i18n.t('type'), value: 'type'},
+            {text: i18n.t('reference') + ' ' + i18n.t('no.'), value: 'reference_no'},
+            {text: i18n.t('purchase') + ' ' + i18n.t('order'), value: 'purchase_order_id'},
+            {text: i18n.t('due_date'), value: 'due_date'},
+            {text: i18n.t('grand_total'), value: 'grand_total'},
+            {text: i18n.t('due_amount'), value: 'due_amount'},
+            {text: i18n.t('status'), value: 'status'},
             {text: i18n.t('actions'), value: 'actions', sortable: false},
         ],
         bills: [],

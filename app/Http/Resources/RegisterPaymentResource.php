@@ -22,6 +22,10 @@ class RegisterPaymentResource extends JsonResource
 //        }
         $invoices = InvoiceResource::collection($this->invoices);
         $due_date = date('d/m/Y', strtotime($this->due_date));
+        $purchaseOrder = null;
+        if ($this->purchase_order_id != null) {
+            $purchaseOrder = new PurchaseOrder(\App\Models\PurchaseOrder::findOrFail($this->purchase_order_id));
+        }
         return [
             'id' => $this->id,
             'reference_no' => $this->reference_no,
@@ -34,7 +38,8 @@ class RegisterPaymentResource extends JsonResource
             'grand_total' => $this->grand_total,
             'due_amount' => $this->due_amount,
             'status' => $this->status,
-            'invoices' => $invoices
+            'invoices' => $invoices,
+            'purchase_order' => $purchaseOrder,
         ];
     }
 }
