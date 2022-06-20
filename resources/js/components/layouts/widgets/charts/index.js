@@ -6,6 +6,9 @@ import CChartDoughnutExample from './CChartDoughnutExample'
 import CChartRadarExample from './CChartRadarExample'
 import CChartPieExample from './CChartPieExample'
 import CChartPolarAreaExample from './CChartPolarAreaExample'
+import BarChart from './BarChart.vue'
+import InvoiceChart from './InvoiceChart.vue'
+import VendorBarChart from "./VendorBarChart";
 
 export {
   CChartLineSimple,
@@ -15,5 +18,8 @@ export {
   CChartDoughnutExample,
   CChartRadarExample,
   CChartPieExample,
-  CChartPolarAreaExample
+  CChartPolarAreaExample,
+  BarChart,
+  InvoiceChart,
+    VendorBarChart
 }

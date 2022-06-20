@@ -945,7 +945,11 @@ export default {
         return await apiCall(POST, `api/purchase/purchaseProducts/ad-change-status/${id}`, data)
     },
     async getUserPurchaseProductRequestHistory() {
-        return await apiCall(GET, `api/purchase/user-history`)
+         return await apiCall(GET, `api/purchase/user-history`)
+
+    },
+    async getUserPurchaseProductRequest() {
+        return await apiCall(GET, `api/purchase/purchases`)
     },
     async getAdminPurchaseProductRequest() {
         return await apiCall(GET, `api/purchase/ad-purchase-list`)
@@ -967,6 +971,9 @@ export default {
     },
     async deleteUserPurchaseRequest(id) {
         return await apiCall(DELETE, `api/purchase/purchases/${id}`)
+    },
+    async displayPurchaseRequest() {
+        return await apiCall(GET, `api/purchase/purchases`)
     },
     async showPurchaseRequest(id) {
         return await apiCall(GET, `api/purchase/purchases/${id}`)
