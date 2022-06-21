@@ -1,7 +1,30 @@
 <template>
   <div>
-    <div class="statustitle">
+    <div class="statustitle d-flex align-items-center justify-content-between">
       <h5 class="ml-2">Purchase Order Status</h5>
+        <div
+            class="actionbutton d-lg-none d-xl-none d-xxl-none"
+        >
+            <v-btn
+                class="mr-2"
+                color="primary"
+                dark
+                :to="'/purchaseOrders/create'"
+                v-if="$can('quotations.create')"
+
+            >
+                Add New PO
+            </v-btn>
+            <v-btn
+                class="mr-2"
+                color="primary"
+                dark
+                :to="'/quotations/list/approved'"
+                v-if="$can('quotations.create')"
+            >
+                Add from AQ
+            </v-btn>
+        </div>
     </div>
     <!-- top status tab -->
     <div class="toptab d-flex position-relative">
@@ -37,7 +60,7 @@
       </div>
       <!-- Action Buttons Here like add purchase request -->
       <div
-        class="actionbutton ml-auto position-absolute"
+          class="actionbutton ml-auto position-absolute d-none d-lg-inline-block d-xl-inline-block d-xxl-inline-block"
         :style="{ bottom: '-15px', right: '16px', zIndex: '1' }"
       >
         <v-btn
@@ -48,7 +71,6 @@
                   v-if="$can('quotations.create')"
 
         >
-          <v-icon>mdi-plus</v-icon>
          Add New PO
         </v-btn>
         <v-btn
@@ -58,7 +80,6 @@
           :to="'/quotations/list/approved'"
                   v-if="$can('quotations.create')"
         >
-          <v-icon>mdi-plus</v-icon>
          Add from AQ
         </v-btn>
       </div>

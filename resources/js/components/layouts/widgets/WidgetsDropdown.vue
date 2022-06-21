@@ -9,8 +9,12 @@
             <h4>{{getCurrentData().name}}</h4>
 
           </div>
-
-          <BarChart />
+            <div v-if="getCurrentTab()== 'request'">
+                <PurchaseChart/>
+            </div>
+              <div v-else>
+                  <BarChart />
+              </div>
         </v-card>
         </v-col>
         <v-col class="d-flex align-items-center justify-content-center">
@@ -220,7 +224,7 @@
 </template>
 
 <script>
-import { CChartLineSimple, CChartBarSimple, BarChart } from "./charts/index.js";
+import { CChartLineSimple, CChartBarSimple, BarChart, PurchaseChart} from "./charts/index.js";
 import ApiServices from "../../../services/ApiServices.js";
 import i18n from "../../../i18n";
 import config from "../../../config";
@@ -229,7 +233,7 @@ import dataForChart from './charts/chartData'
 export default {
   name: "WidgetsDropdown",
   props: ["settData"],
-  components: { CChartLineSimple, CChartBarSimple, BarChart },
+  components: { CChartLineSimple, CChartBarSimple, BarChart, PurchaseChart },
   data: () => ({
     cdnURL: config.cdnURL,
     baseURL: config.baseURL,

@@ -28,13 +28,13 @@ export default {
               data: [this.invoice_data.paid, this.invoice_data.partially_paid,this.invoice_data.unpaid],
               backgroundColor: [
                 "rgba(25, 135, 84,0.2)",
-                "rgba(249,177,21,0.2)",
+                "rgba(0, 255, 255,0.2)",
                 "rgba(255, 0, 0,0.2)",
                 ,
               ],
               borderColor: [
                 "rgb(25, 135, 84)",
-                "rgb(249,177,21)",
+                "rgb(0, 255, 255)",
                 "rgb(255, 0, 0)",
                 ,
               ],

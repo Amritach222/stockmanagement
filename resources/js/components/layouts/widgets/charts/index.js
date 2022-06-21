@@ -9,6 +9,7 @@ import CChartPolarAreaExample from './CChartPolarAreaExample'
 import BarChart from './BarChart.vue'
 import InvoiceChart from './InvoiceChart.vue'
 import VendorBarChart from "./VendorBarChart";
+import PurchaseChart from "./PurchaseChart";
 
 export {
   CChartLineSimple,
@@ -21,5 +22,6 @@ export {
   CChartPolarAreaExample,
   BarChart,
   InvoiceChart,
-    VendorBarChart
+    VendorBarChart,
+    PurchaseChart
 }

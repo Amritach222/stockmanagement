@@ -1,7 +1,15 @@
 <template>
   <div>
-    <div class="statustitle">
+    <div class="statustitle d-flex justify-content-between align-items-center">
       <h5 class="ml-2 text-capitalize">Purchase Status</h5>
+        <v-btn
+            class="mr-2 d-lg-none d-xl-none d-xxl-none"
+            color="primary"
+            dark
+            :to="'/purchase/new-purchase-request'"
+        >
+            Add New Purchase Request
+        </v-btn>
     </div>
     <!-- top status tab -->
     <div class="toptab d-flex position-relative">
@@ -31,17 +39,16 @@
       </div>
       <!-- Action Buttons Here like add purchase request -->
       <div
-        class="actionbutton ml-auto position-absolute"
+        class="actionbutton ml-auto position-absolute d-none d-lg-inline-block d-xl-inline-block d-xxl-inline-block"
         :style="{ bottom: '-15px', right: '16px', zIndex: '1' }"
       >
         <v-btn
-          class="mr-2 d-sm-none d-md-none d-lg-inline-block d-xl-inline-block d-xxl-inline-block"
+          class="mr-2"
           color="primary"
           dark
           :to="'/purchase/new-purchase-request'"
 
         >
-          <v-icon>mdi-plus</v-icon>
           Add New Purchase Request
         </v-btn>
       </div>

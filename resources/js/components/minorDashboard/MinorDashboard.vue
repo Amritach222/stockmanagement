@@ -45,22 +45,22 @@ export default {
 }
 .tab_approved {
   color: rgb(25, 135, 84);
-  border: 2px solid rgb(25, 135, 84);
+  border: 1px solid rgb(25, 135, 84);
 }
 .tab_received{
     color: rgb(144, 238, 144);
-    border: 2px solid rgb(144, 238, 144);
+    border: 1px solid rgb(144, 238, 144);
 }
 .tab_pending{
     color: rgb(249,177,21);
-    border: 2px solid rgb(249,177,21);
+    border: 1px solid rgb(249,177,21);
 }
 .tab_rejected{
     color: rgb(255, 0, 0);
-    border: 2px solid rgb(255, 0, 0);
+    border: 1px solid rgb(255, 0, 0);
 }
 .tab_all{
     color: rgb(60 75 100);
-    border: 2px solid rgb(60 75 100);
+    border: 1px solid rgb(60 75 100);
 }
 </style>

@@ -2,7 +2,6 @@
   <div
     class="chart_container mt-2"
     style="position: relative; height: 260px; width: auto"
-    v-if="(currentState = 'requset')"
   >
     <canvas id="bar-chart" :style="{ height: '100%', width: '100%' }"></canvas>
   </div>
