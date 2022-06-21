@@ -9,7 +9,7 @@
             <h4>{{getCurrentData().name}}</h4>
           </div>
 
-          <InvoiceChart/>
+          <InvoiceChart :invoice_data="getCurrentData()"/>
         </v-card>
         </v-col>
         <v-col class="d-flex align-items-center justify-content-center">
@@ -28,7 +28,7 @@
               </div>
               <v-card-text >
                 <h2>
-                  <b>{{ getCurrentData().paid}}</b>
+                  <b>{{getCurrentData().paid}}</b>
                 </h2>
                 <p class="text-secondary">Paid</p>
               </v-card-text>
@@ -84,7 +84,7 @@
               </div>
               <v-card-text >
                 <h2>
-                  <b>{{ getCurrentData().unpaid}}</b>
+                  <b>{{getCurrentData().unpaid}}</b>
                 </h2>
                 <p class="text-secondary">Unpaid</p>
               </v-card-text>
@@ -145,7 +145,7 @@ export default {
     },
     getCurrentData(){
       const data=store.getters['home/getTabContent']
-      return data
+          return data
     },
     openImage(data) {
       window.open(config.cdnURL + data, `_blank`);

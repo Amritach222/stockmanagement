@@ -47,55 +47,103 @@ export default {
             return state.dashboard_tab;
         },
         getTabContent(state) {
+            const all_data=state.dashboard_data;
             if (state.dashboard_tab ==="request") {
-                const data = {
-                    name: "Purchase Request",
-                    approved: state.dashboard_data.purchase_approved_count,
-                    pending: state.dashboard_data.purchase_pending_count,
-                    rejected: state.dashboard_data.purchase_rejected_count,
-                    // name: "Purchase Request",
-                    // approved: 12,
-                    // pending: 15,
-                    // rejected: 5,
-                };
-                return data;
+                if(all_data===null || all_data===undefined || all_data===''){
+                    const data = {
+                        name: "Purchase Request",
+                        approved: 0,
+                        pending: 0,
+                        rejected: 0,
+
+                    };
+                    return data
+                }
+                else{
+                    const data = {
+                        name: "Purchase Request",
+                        approved: all_data.purchase_approved_count,
+                        pending: all_data.purchase_pending_count,
+                        rejected: all_data.purchase_rejected_count,
+                    };
+
+                    return  data
+                }
             }
             if (state.dashboard_tab === "order") {
-                const data = {
-                    name: "Purchase Order",
-                    approved: state.dashboard_data.po_approved_count,
-                    pending: state.dashboard_data.po_pending_count,
-                    rejected: state.dashboard_data.po_rejected_count,
-                    // name: "Purchase Order",
-                    // approved: 33,
-                    // pending: 12,
-                    // rejected: 32,
-                };
-                return data;
+                if(all_data===null || all_data===undefined || all_data===''){
+                    const data = {
+                        name: "Purchase Request",
+                        approved: 0,
+                        pending: 0,
+                        rejected: 0,
+
+                    };
+                    return data
+                }
+
+                else{
+                    const data = {
+                        name: "Purchase Order",
+                        approved: all_data.po_approved_count,
+                        pending: all_data.po_pending_count,
+                        rejected: all_data.po_rejected_count,
+                    };
+                    return  data
+                }
             }
             if (state.dashboard_tab === "quote") {
-                const data = {
-                    name: "Quotation",
-                    approved: state.dashboard_data.quotation_approved_count,
-                    pending: state.dashboard_data.quotation_pending_count,
-                    rejected: state.dashboard_data.po_rejected_count,
-                    // name: "Quotation",
-                    // approved: 23,
-                    // pending: 45,
-                    // rejected: 32,
-                };
-                return data;
+                if(all_data===null || all_data===undefined || all_data===''){
+                    const data = {
+                        name: "Purchase Request",
+                        approved: 0,
+                        pending: 0,
+                        rejected: 0,
+
+                    };
+                    return data
+                }
+                else{
+                    const data = {
+                        name: "Quotation",
+                        approved: all_data.quotation_approved_count,
+                        pending: all_data.quotation_pending_count,
+                        rejected: all_data.po_rejected_count,
+                    };
+                    return data;
+                }
             }
             if (state.dashboard_tab === "invoice") {
-                const data = state.dashboard_data.payment_status;
-                console.log("Invoices :",data);
-                const i_data={
-                    name: "Invoices",
-                    paid:data.paid,
-                    partially_paid:data.partially_paid,
-                    unpaid:data.unpaid,
+                const data = state.dashboard_data;
+                // When data not retrieving from database
+                if(data===null || data===undefined || data===''){
+                    const i_data={
+                        name: "Invoices",
+                        paid:0,
+                        partially_paid:0,
+                        unpaid:0,
+                    }
+                    return i_data
                 }
-                return i_data;
+                //if payment status also has no data
+                else if(data.payment_status===null || data.payment_status===undefined || data.payment_status===''){
+                    const i_data={
+                        name: "Invoices",
+                        paid:0,
+                        partially_paid:0,
+                        unpaid:0,
+                    }
+                    return i_data
+                }
+                else{
+                    const i_data={
+                        name: "Invoices",
+                        paid:data.paid,
+                        partially_paid:data.partially_paid,
+                        unpaid:data.unpaid,
+                    }
+                    return i_data
+                }
             }
         },
     },

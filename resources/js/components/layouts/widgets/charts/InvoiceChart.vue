@@ -12,6 +12,9 @@ import Chart from "chart.js/auto";
 import store from "../../../../store/index.js";
 export default {
   name: "InvoiceChart",
+    props:{
+      invoice_data:Object
+    },
   data() {
     return {
       chart: "",
@@ -22,7 +25,7 @@ export default {
           datasets: [
             {
               // label: 'Purchasing Request',
-              data: this.chartDataValue(),
+              data: [this.invoice_data.paid, this.invoice_data.partially_paid,this.invoice_data.unpaid],
               backgroundColor: [
                 "rgba(25, 135, 84,0.2)",
                 "rgba(249,177,21,0.2)",
