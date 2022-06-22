@@ -323,7 +323,7 @@
                             >
                         <b>Choose Status</b>
                         <v-row>
-
+                            <p>{{status}}</p>
                             <v-col v-if="getCurrentPage()=='all'">
                                 <v-checkbox
                                     v-model="status"

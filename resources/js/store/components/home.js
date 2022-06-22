@@ -138,9 +138,9 @@ export default {
                 else{
                     const i_data={
                         name: "Invoices",
-                        paid:data.paid,
-                        partially_paid:data.partially_paid,
-                        unpaid:data.unpaid,
+                        paid:data.payment_status.paid,
+                        partially_paid:data.payment_status.partially_paid,
+                        unpaid:data.payment_status.unpaid,
                     }
                     return i_data
                 }
