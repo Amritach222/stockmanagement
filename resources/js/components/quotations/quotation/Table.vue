@@ -1,7 +1,20 @@
 <template>
   <div>
-    <div class="statustitle">
+    <div class="statustitle d-flex align-items-center justify-content-between">
       <h5 class="ml-2">Quotation Status</h5>
+        <div
+            class="actionbutton d-lg-none d-xl-none d-xxl-none "
+        >
+            <v-btn
+                class="mr-2"
+                color="primary"
+                dark
+                :to="'/quotations/create'"
+                v-if="$can('quotations.create')"
+            >
+                Add New Quotation
+            </v-btn>
+        </div>
     </div>
     <!-- top status tab -->
     <div class="toptab d-flex position-relative">
@@ -37,7 +50,7 @@
       </div>
       <!-- Action Buttons Here like add purchase request -->
       <div
-        class="actionbutton ml-auto position-absolute"
+        class="actionbutton ml-auto position-absolute d-none d-lg-inline-block d-xl-inline-block d-xxl-inline-block"
         :style="{ bottom: '-15px', right: '16px', zIndex: '1' }"
       >
         <v-btn
@@ -47,7 +60,6 @@
           :to="'/quotations/create'"
           v-if="$can('quotations.create')"
         >
-          <v-icon>mdi-plus</v-icon>
           Add New Quotation
         </v-btn>
       </div>
